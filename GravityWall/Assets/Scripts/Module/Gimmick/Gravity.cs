@@ -1,12 +1,20 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace Module.Gimmick
 {
     public static class Gravity
     {
-        public static float GravityMultiplier = -800f;
-        public static Vector3 Value { get; private set; } = Physics.gravity * -GravityMultiplier;
+        [Flags]
+        public enum Type : uint
+        {
+            Player = 1 << 0,
+            Object = 1 << 1
+        }
+
+        public static Vector3 Value { get; private set; }
+        private static uint activeGravityMask;
 
         [InitializeOnLoadMethod]
         private static void Initialize()
@@ -15,14 +23,30 @@ namespace Module.Gimmick
             {
                 if (state == PlayModeStateChange.ExitingEditMode)
                 {
-                    Value = Physics.gravity * -GravityMultiplier;
+                    Value = Vector3.down;
+                    activeGravityMask = uint.MaxValue;
                 }
             };
         }
 
-        public static void SetDir(Vector3 value)
+        public static void SetValue(Vector3 gravity)
         {
-            Value = value * GravityMultiplier;
+            Value = gravity;
+        }
+
+        public static void SetEnable(Type mask)
+        {
+            activeGravityMask |= (uint)mask;
+        }
+
+        public static void SetDisable(Type mask)
+        {
+            activeGravityMask |= ~(activeGravityMask & (uint)mask);
+        }
+
+        public static bool IsEnable(Type mask)
+        {
+            return (activeGravityMask & (uint)mask) == (uint)mask;
         }
     }
 }

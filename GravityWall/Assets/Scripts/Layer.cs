@@ -29,6 +29,8 @@ namespace GravityWall
         public const int Water = 4;
         public const int UI = 5;
         public const int Gravity = 6;
+        public const int DetectConstraint = 7;
+        public const int Holdable = 8;
         /// <summary>
         /// Use this type in place of layer or layer mask values in code / scripts.
         /// </summary>
@@ -47,6 +49,8 @@ namespace GravityWall
             public const int Water = 16;
             public const int UI = 32;
             public const int Gravity = 64;
+            public const int DetectConstraint = 128;
+            public const int Holdable = 256;
         }
     }
 }

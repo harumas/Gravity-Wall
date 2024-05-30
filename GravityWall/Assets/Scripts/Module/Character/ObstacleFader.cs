@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using GravityWall;
-using UGizmo;
 using UnityEngine;
 
 namespace Module.Character
@@ -24,7 +22,6 @@ namespace Module.Character
             int count = Physics.SphereCastNonAlloc(transform.position, detectRadius, dir, resultsBuffer, distance, Layer.Mask.Gravity);
 
             Span<bool> founds = stackalloc bool[count];
-
 
             for (var t = 0; t < walls.Count;)
             {
@@ -62,6 +59,13 @@ namespace Module.Character
                 if (!founds[i])
                 {
                     GameObject gameObj = resultsBuffer[i].transform.gameObject;
+                    
+                    if (!gameObj.CompareTag("Wall"))
+                    {
+                        return;
+                    }
+
+
                     gameObj.GetComponent<Renderer>().enabled = false;
                     walls.Add(gameObj);
                 }
