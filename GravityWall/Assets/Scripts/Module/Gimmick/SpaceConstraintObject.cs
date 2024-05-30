@@ -50,6 +50,14 @@ namespace Module.Gimmick
             enabled = false;
         }
 
+        private void FixedUpdate()
+        {
+            if (isFalling)
+            {
+                rigBody.constraints = RigidbodyConstraints.FreezeRotation;
+            }
+        }
+
         private void OnTriggerStay(Collider other)
         {
             if (enabled && !isFalling && other.gameObject.CompareTag(Tag.Player))
