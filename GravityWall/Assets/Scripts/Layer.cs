@@ -31,6 +31,7 @@ namespace GravityWall
         public const int Gravity = 6;
         public const int DetectConstraint = 7;
         public const int Holdable = 8;
+ 
         /// <summary>
         /// Use this type in place of layer or layer mask values in code / scripts.
         /// </summary>
