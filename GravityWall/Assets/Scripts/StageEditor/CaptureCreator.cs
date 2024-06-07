@@ -1,198 +1,103 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
-using UnityEditor;
 
-
-public static class CaptureCreator
+namespace StageEditor
 {
-    /// <summary>
-    /// Gameobjectのサムネイル画像を作成する
-    /// </summary>
-    /// <param name="unit">対象Gameobject</param>
-    /// <param name="savePath">保存先の絶対パス</param>
-    /// <param name="width">サムネイル画像の幅(px)</param>
-    /// <param name="height">サムネイル画像の高さ(px)</param>
-    /// <param name="successMake">成功か失敗か</param>
-    /// <returns>成功か失敗か</returns>
-    public static bool Capture(GameObject unit, string savePath, int width, int height)
+    public static class CaptureCreator
     {
-        bool successMake = false;
-        int layerNo;
+        public static readonly int thumbnailWidth = 512;
+        public static readonly int thumbnailHeight = 512;
+        public static readonly string savePath = "Assets/Thumbnails/";
 
-        //対象の配置 レイヤーの設定
-        unit.transform.eulerAngles = new Vector3(-10.0f, -60.0f, 15.0f);
-        layerNo = UnityGameobjectThumbnailLayerClass.CreateLayer();
+        private static Camera thumbnailCamera;
+        private static RenderTexture renderTexture;
 
-        //全てのレイヤーが使われていた場合（戻り値が7の場合）、エラーを表示し、終了
-        if (layerNo == 7)
+        public static Texture2D[] GetThumbnails(GameObject[] objects)
         {
-            Debug.LogError("全てのレイヤーが使われているため、キャプチャできません。空きレイヤーを作ってください");
-            return false;
-        }
+            Texture2D[] thumbnails = new Texture2D[objects.Length];
 
-        unit.SetLayer(layerNo);
+            InitializeCamera();
 
-        //対象の大きさを測る
-        //子孫オブジェクトの中でMeshFilterを持っているか判定し、
-        //MeshFilterを持っている全てのオブジェクトを内包するboundsをつくる
-
-        Bounds maxBounds = new Bounds(Vector3.zero, Vector3.zero);
-
-        Component[] meshFilterList;
-        meshFilterList = unit.gameObject.GetComponentsInChildren(typeof(MeshFilter));
-
-        Component[] SkinnedMeshRendererList;
-        SkinnedMeshRendererList = unit.gameObject.GetComponentsInChildren(typeof(SkinnedMeshRenderer));
-
-        if (meshFilterList != null) //メッシュフィルターがあれば実行
-        {
-            foreach (MeshFilter child in meshFilterList)
+            for (var i = 0; i < objects.Length; i++)
             {
-                Transform t = child.transform;
-                Bounds bounds = child.sharedMesh.bounds;
-                Vector3 b2Size = new Vector3(bounds.size.x * t.lossyScale.x, bounds.size.y * t.lossyScale.y, bounds.size.z * t.lossyScale.z);
-                Bounds b2 = new Bounds(t.localToWorldMatrix.MultiplyPoint(bounds.center), b2Size); //ローカル座標からグローバル座標に変換
-                maxBounds.Encapsulate(b2);
-            }
-        }
-
-        if (maxBounds.size.x == 0f && maxBounds.size.y == 0f) //SkinnedMeshRendererのとき実行
-        {
-            foreach (SkinnedMeshRenderer child in SkinnedMeshRendererList)
-            {
-                Transform t = child.rootBone.transform;
-                Bounds bounds = child.localBounds;
-                Vector3 b2Size = new Vector3(bounds.size.x * t.lossyScale.x, bounds.size.y * t.lossyScale.y, bounds.size.z * t.lossyScale.z);
-                Bounds b2 = new Bounds(t.localToWorldMatrix.MultiplyPoint(bounds.center), b2Size); //ローカル座標からグローバル座標に変換
-                maxBounds.Encapsulate(b2);
-            }
-        }
-
-        //カメラのサイズを求める
-        float cameraSize;
-        cameraSize = System.Math.Max(maxBounds.extents.x, maxBounds.extents.y);
-
-        //撮影用カメラscを作成
-        GameObject secondCamera;
-        secondCamera = new GameObject("SecondCamera");
-        secondCamera.AddComponent<Camera>();
-        var sc = secondCamera.GetComponent<Camera>();
-
-        //撮影するレイヤーを指定
-        for (int i = 0; i <= 31; i++)
-        {
-            sc.cullingMask &= (1 << i);
-        }
-
-        sc.cullingMask |= (1 << layerNo);
-
-        //カメラを設定
-        secondCamera.transform.position = new Vector3(0, 0, -1000);
-        secondCamera.transform.LookAt(new Vector3(maxBounds.center.x, maxBounds.center.y, maxBounds.center.z));
-
-        sc.nearClipPlane = 0.001f;
-        sc.farClipPlane = 3000f;
-        sc.orthographic = true;
-        sc.orthographicSize = cameraSize * 1.5f;
-
-        //背景色をアルファ0に設定して透過するようにする
-        sc.clearFlags = CameraClearFlags.SolidColor;
-        sc.backgroundColor = new Color(255.0f, 255.0f, 255.0f, 0.0f);
-
-        //キャプチャ 
-        // RenderTextureを生成して、これに現在のSceneに映っているものを書き込む
-        RenderTexture renderTexture = new RenderTexture(width, height, 24);
-        sc.targetTexture = renderTexture;
-        sc.Render();
-        RenderTexture.active = renderTexture;
-        Texture2D texture2D = new Texture2D(width, height, TextureFormat.ARGB32, false); //ここでアルファチャンネルも保存(透過の設定を保存できる)
-        texture2D.ReadPixels(new Rect(0, 0, width, height), 0, 0);
-
-        // textureのbyteをファイルに出力
-        byte[] bytes = texture2D.EncodeToPNG();
-        try
-        {
-            System.IO.File.WriteAllBytes(savePath, bytes);
-            successMake = true;
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError(ex.Message);
-            successMake = false;
-        }
-
-        // 後処理
-        sc.targetTexture = null;
-        RenderTexture.active = null;
-        renderTexture.Release();
-        
-        Object.DestroyImmediate(unit);
-        Object.DestroyImmediate(secondCamera);
-
-        return successMake;
-    }
-}
-
-
-public static class UnityGameobjectThumbnailLayerClass
-{
-    /// <summary>
-    /// レイヤーを設定する
-    /// </summary>
-    /// <param name="needSetChildrens">子にもレイヤー設定を行うか</param>
-    public static void SetLayer(this GameObject gameObject, int layerNo, bool needSetChildrens = true)
-    {
-        if (gameObject == null)
-        {
-            return;
-        }
-
-        gameObject.layer = layerNo;
-
-        //子に設定する必要がない場合はここで終了
-        if (!needSetChildrens)
-        {
-            return;
-        }
-
-        //子のレイヤーにも設定する
-        foreach (Transform childTransform in gameObject.transform)
-        {
-            SetLayer(childTransform.gameObject, layerNo, needSetChildrens);
-        }
-    }
-
-
-    /// <summary>
-    /// Layerを追加するクラス　空いている最大値のレイヤーを"STYLYcaputure"として追加する
-    /// </summary>
-    public static int CreateLayer()
-    {
-        int layerNumber = 7;
-        SerializedObject tagManager = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset")[0]);
-        SerializedProperty layers = tagManager.FindProperty("layers");
-
-        //31番から順にレイヤーをみて、空白の場合にSTYLYcaputureレイヤーを設定する。
-        for (int i = 31; i > 0; i--)
-        {
-            if (layers.GetArrayElementAtIndex(i).stringValue == "" && i > 7)
-            {
-                Debug.Log("Setting up layers.  Layer " + i + " is now called " + "STYLYcaputure");
-                layers.GetArrayElementAtIndex(i).stringValue = "STYLYcaputure";
-                layerNumber = i;
-                break;
+                thumbnails[i] = GenerateThumbnail(objects[i]);
             }
 
-            if (i == 7)
-            {
-                Debug.Log("Layer list has no empty.");
-                layerNumber = i;
-                break;
-            }
+            CleanupCamera();
+
+            return thumbnails;
         }
 
-        tagManager.ApplyModifiedProperties();
-        return layerNumber;
+        private static void InitializeCamera()
+        {
+            // カメラを生成
+            GameObject cameraObject = new GameObject("ThumbnailCamera");
+            thumbnailCamera = cameraObject.AddComponent<Camera>();
+
+            // RenderTextureの設定
+            renderTexture = new RenderTexture(thumbnailWidth, thumbnailHeight, 24);
+            thumbnailCamera.targetTexture = renderTexture;
+            thumbnailCamera.clearFlags = CameraClearFlags.Depth;
+            thumbnailCamera.backgroundColor = new Color(0f, 0f, 0f, 0f);
+            thumbnailCamera.fieldOfView = 50;
+            thumbnailCamera.allowMSAA = true;
+            thumbnailCamera.allowHDR = false;
+            RenderTexture.active = renderTexture;
+        }
+
+        private static void CleanupCamera()
+        {
+            // 後片付け
+            thumbnailCamera.targetTexture = null;
+            RenderTexture.active = null;
+            Object.DestroyImmediate(renderTexture);
+
+            // カメラを破棄
+            Object.DestroyImmediate(thumbnailCamera.gameObject);
+        }
+
+        private static Texture2D GenerateThumbnail(GameObject prefab)
+        {
+            // Prefabのインスタンスを生成
+            GameObject instance = Object.Instantiate(prefab, new Vector3(10000, 10000, 10000), Quaternion.Euler(-20f, 30f, -10f));
+
+            // カメラの位置と向きをターゲットオブジェクトに向ける
+            Renderer renderer = instance.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                Bounds bounds = renderer.bounds;
+                thumbnailCamera.transform.position = bounds.center + new Vector3(0, 0, -2.3f); // 適切な位置に設定
+                thumbnailCamera.transform.LookAt(instance.transform);
+            }
+            else
+            {
+                Debug.LogError("Prefab does not have a Renderer component: " + prefab.name);
+            }
+
+            // カメラでレンダリング
+            thumbnailCamera.Render();
+
+            // Texture2DにRenderTextureの内容をコピー
+            Texture2D thumbnail = new Texture2D(thumbnailWidth, thumbnailHeight, TextureFormat.RGBA32, false);
+            thumbnail.ReadPixels(new Rect(0, 0, thumbnailWidth, thumbnailHeight), 0, 0);
+            thumbnail.filterMode = FilterMode.Bilinear;
+            thumbnail.alphaIsTransparency = true;
+            thumbnail.Apply();
+
+            // サムネイルをPNG形式で保存
+            byte[] bytes = thumbnail.EncodeToPNG();
+            if (!Directory.Exists(savePath))
+            {
+                Directory.CreateDirectory(savePath);
+            }
+
+            string fileName = prefab.name + "_thumbnail.png";
+            File.WriteAllBytes(Path.Combine(savePath, fileName), bytes);
+
+            // インスタンスを破棄
+            Object.DestroyImmediate(instance);
+
+            return thumbnail;
+        }
     }
 }
