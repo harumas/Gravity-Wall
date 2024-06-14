@@ -2,7 +2,6 @@
 using GravityWall;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace StageEditor
 {
@@ -10,7 +9,6 @@ namespace StageEditor
     {
         private GameObject gameObject;
         private Renderer renderer;
-        private Collider[] overlapBuffer = new Collider[32];
 
         public void PlaceObject(GameObject prefab)
         {
@@ -26,6 +24,12 @@ namespace StageEditor
         {
             Event ev = Event.current;
 
+            if (gameObject == null)
+            {
+                SceneView.duringSceneGui -= SequenceObjectPlace;
+                return;
+            }
+
             if (ev.type == EventType.MouseMove)
             {
                 var mousePos = new Vector3(ev.mousePosition.x,
@@ -38,13 +42,7 @@ namespace StageEditor
                 if (Physics.Raycast(ray, out RaycastHit hitInfo, distance))
                 {
                     Vector3 correction = Vector3.Scale(renderer.bounds.extents, hitInfo.normal);
-                    gameObject.transform.position = hitInfo.point + correction;
-
-                    bool isSnap = (ev.modifiers & EventModifiers.Control) != 0;
-                    if (isSnap)
-                    {
-                        gameObject.transform.position = Snapping.Snap(hitInfo.point + correction, EditorSnapSettings.move);
-                    }
+                    gameObject.transform.position = Snapping.Snap(hitInfo.point + correction, EditorSnapSettings.move);
                 }
                 else
                 {
@@ -61,6 +59,9 @@ namespace StageEditor
                 {
                     GameObject newObject = Object.Instantiate(gameObject);
                     newObject.name = "New Object";
+                    newObject.layer = Layer.Default;
+
+                    Undo.RegisterCreatedObjectUndo(newObject, "New Object");
                 }
 
                 SceneView.duringSceneGui -= SequenceObjectPlace;
