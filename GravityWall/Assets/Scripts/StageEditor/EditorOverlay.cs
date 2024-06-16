@@ -8,7 +8,9 @@ using Cysharp.Threading.Tasks;
 using UnityEditor;
 using UnityEditor.EditorTools;
 using UnityEditor.Overlays;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 namespace StageEditor
@@ -19,10 +21,13 @@ namespace StageEditor
         private Dictionary<string, VisualTreeAsset> cachedElements;
         private ObjectPlacer objectPlacer = new ObjectPlacer();
         private VisualElement root = new VisualElement();
-
+        private string sceneSavePath = "Assets/Scenes/Level";
+        
         public override VisualElement CreatePanelContent()
         {
             root = new VisualElement();
+
+            CreateStageButtons(root);
 
             CreateProBuilderButtons(root);
 
@@ -30,6 +35,8 @@ namespace StageEditor
 
             EditorApplication.playModeStateChanged -= OnPlayerModeStateChanged;
             EditorApplication.playModeStateChanged += OnPlayerModeStateChanged;
+
+            objectPlacer.Initialize();
 
             return root;
         }
@@ -40,9 +47,29 @@ namespace StageEditor
             {
                 await Task.Delay(100);
                 root.Clear();
+                CreateStageButtons(root);
                 CreateProBuilderButtons(root);
                 CreatePreviewButtons(root);
             }
+        }
+
+        private void CreateStageButtons(VisualElement root)
+        {
+            Button button = LoadUIElement<Button>("LargeButton");
+            button.text = "Create Level";
+
+            button.clicked += () =>
+            {
+                Scene activeScene = SceneManager.GetActiveScene();
+                Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Additive);
+                scene.name = "New Level";
+                EditorSceneManager.SaveScene(scene, $"{sceneSavePath}/{scene.name}.unity");
+                SceneManager.SetActiveScene(activeScene);
+                
+                objectPlacer.SetNewScene(scene);
+            };
+
+            root.Add(button);
         }
 
         private void CreateProBuilderButtons(VisualElement root)

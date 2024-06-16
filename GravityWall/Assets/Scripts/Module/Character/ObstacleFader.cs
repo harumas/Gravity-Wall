@@ -11,6 +11,7 @@ namespace Module.Character
         [SerializeField] private float detectRadius;
 
         private RaycastHit[] resultsBuffer = new RaycastHit[8];
+        private List<GameObject> hitWalls = new List<GameObject>();
         private List<GameObject> walls = new List<GameObject>();
 
         private void Update()
@@ -23,19 +24,16 @@ namespace Module.Character
 
             Span<bool> founds = stackalloc bool[count];
 
-            for (var t = 0; t < walls.Count;)
+            SelectWalls(resultsBuffer, count);
+
+            for (int t = 0; t < walls.Count;)
             {
                 bool found = false;
-                var wall = walls[t];
+                GameObject wall = walls[t];
 
                 for (int i = 0; i < count; i++)
                 {
                     GameObject target = resultsBuffer[i].transform.gameObject;
-
-                    if (!target.CompareTag("Wall"))
-                    {
-                        return;
-                    }
 
                     if (wall == target)
                     {
@@ -59,16 +57,27 @@ namespace Module.Character
                 if (!founds[i])
                 {
                     GameObject gameObj = resultsBuffer[i].transform.gameObject;
-                    
-                    if (!gameObj.CompareTag("Wall"))
-                    {
-                        return;
-                    }
-
 
                     gameObj.GetComponent<Renderer>().enabled = false;
                     walls.Add(gameObj);
                 }
+            }
+        }
+
+        private void SelectWalls(RaycastHit[] array, int count)
+        {
+            hitWalls.Clear();
+
+            for (int i = 0; i < count; i++)
+            {
+                GameObject gameObj = array[i].transform.gameObject;
+
+                if (!gameObj.CompareTag(Tag.Wall))
+                {
+                    return;
+                }
+
+                hitWalls.Add(gameObj);
             }
         }
     }

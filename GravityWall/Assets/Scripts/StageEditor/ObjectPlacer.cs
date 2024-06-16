@@ -1,7 +1,10 @@
-﻿using Cysharp.Threading.Tasks;
-using GravityWall;
+﻿using GravityWall;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.ProBuilder;
+using UnityEngine.SceneManagement;
+using EditorUtility = UnityEditor.ProBuilder.EditorUtility;
 
 namespace StageEditor
 {
@@ -9,15 +12,37 @@ namespace StageEditor
     {
         private GameObject gameObject;
         private Renderer renderer;
+        private Transform rootParent;
+
+        public void Initialize()
+        {
+            EditorUtility.meshCreated += OnProBuilderMeshCreated;
+        }
+
+        private void OnProBuilderMeshCreated(ProBuilderMesh proBuilderMesh)
+        {
+            Debug.Log(proBuilderMesh);
+            GameObject obj = proBuilderMesh.gameObject;
+            obj.transform.SetParent(rootParent);
+            obj.tag = Tag.Wall;
+        }
 
         public void PlaceObject(GameObject prefab)
         {
-            gameObject = Object.Instantiate(prefab);
+            gameObject = Object.Instantiate(prefab, rootParent);
             gameObject.layer = Layer.IgnoreRaycast;
 
             renderer = gameObject.GetComponent<Renderer>();
 
             SceneView.duringSceneGui += SequenceObjectPlace;
+        }
+
+        public void SetNewScene(Scene scene)
+        {
+            GameObject root = new GameObject("Level");
+            SceneManager.MoveGameObjectToScene(root, scene);
+
+            rootParent = root.transform;
         }
 
         private void SequenceObjectPlace(SceneView sceneView)
