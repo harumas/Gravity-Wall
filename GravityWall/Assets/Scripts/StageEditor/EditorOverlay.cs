@@ -15,7 +15,7 @@ using UnityEngine.UIElements;
 
 namespace StageEditor
 {
-    [Overlay(typeof(SceneView), "Editor", true, defaultDockZone = DockZone.RightToolbar)]
+    [Overlay(typeof(SceneView), "Level Editor", true, defaultDockZone = DockZone.RightToolbar)]
     public class EditorOverlay : Overlay
     {
         private Dictionary<string, VisualTreeAsset> cachedElements;
@@ -28,9 +28,7 @@ namespace StageEditor
             root = new VisualElement();
 
             CreateStageButtons(root);
-
             CreateProBuilderButtons(root);
-
             CreatePreviewButtons(root);
 
             EditorApplication.playModeStateChanged -= OnPlayerModeStateChanged;
@@ -62,7 +60,7 @@ namespace StageEditor
             {
                 Scene activeScene = SceneManager.GetActiveScene();
                 Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Additive);
-                scene.name = "New Level";
+                scene.name = $"New Level_{scene.GetHashCode()}";
                 EditorSceneManager.SaveScene(scene, $"{sceneSavePath}/{scene.name}.unity");
                 SceneManager.SetActiveScene(activeScene);
                 
