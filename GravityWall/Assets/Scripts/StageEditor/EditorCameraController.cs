@@ -83,7 +83,7 @@ namespace StageEditor
             calculateSets.ExceptWith(detectedObjects);
             foreach (GameObject hitObject in calculateSets)
             {
-                farthest.layer = Layer.Default;
+                hitObject.layer = Layer.Default;
                 hitObject.GetComponent<Renderer>().shadowCastingMode = ShadowCastingMode.On;
             }
 

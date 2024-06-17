@@ -12,6 +12,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace StageEditor
 {
@@ -22,12 +23,13 @@ namespace StageEditor
         private ObjectPlacer objectPlacer = new ObjectPlacer();
         private VisualElement root = new VisualElement();
         private string sceneSavePath = "Assets/Scenes/Level";
-        
+
         public override VisualElement CreatePanelContent()
         {
             root = new VisualElement();
 
             CreateStageButtons(root);
+            CreateLevelsDropdown(root);
             CreateProBuilderButtons(root);
             CreatePreviewButtons(root);
 
@@ -35,6 +37,7 @@ namespace StageEditor
             EditorApplication.playModeStateChanged += OnPlayerModeStateChanged;
 
             objectPlacer.Initialize();
+            objectPlacer.SetNewScene(GetCurrentLevel());
 
             return root;
         }
@@ -44,10 +47,14 @@ namespace StageEditor
             if (state == PlayModeStateChange.EnteredEditMode)
             {
                 await Task.Delay(100);
+
                 root.Clear();
                 CreateStageButtons(root);
+                CreateLevelsDropdown(root);
                 CreateProBuilderButtons(root);
                 CreatePreviewButtons(root);
+
+                objectPlacer.SetNewScene(GetCurrentLevel());
             }
         }
 
@@ -56,18 +63,88 @@ namespace StageEditor
             Button button = LoadUIElement<Button>("LargeButton");
             button.text = "Create Level";
 
+
             button.clicked += () =>
             {
+                Scene currentLevel = GetCurrentLevel();
+                EditorSceneManager.CloseScene(currentLevel, true);
+
                 Scene activeScene = SceneManager.GetActiveScene();
-                Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Additive);
-                scene.name = $"New Level_{scene.GetHashCode()}";
-                EditorSceneManager.SaveScene(scene, $"{sceneSavePath}/{scene.name}.unity");
+                Scene newScene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Additive);
+                newScene.name = $"Level_{newScene.GetHashCode()}";
+                EditorSceneManager.SaveScene(newScene, $"{sceneSavePath}/{newScene.name}.unity");
                 SceneManager.SetActiveScene(activeScene);
-                
-                objectPlacer.SetNewScene(scene);
+
+                objectPlacer.SetNewScene(newScene);
+
+                RefreshLevelsDropdown();
             };
 
             root.Add(button);
+        }
+
+        private void CreateLevelsDropdown(VisualElement root)
+        {
+            DropdownField levelField = new DropdownField("Levels");
+            levelField.name = "Levels";
+            levelField.RegisterValueChangedCallback(OnLevelSelected);
+
+            List<SceneAsset> assets = LoadAll<SceneAsset>(sceneSavePath);
+
+            foreach (SceneAsset asset in assets)
+            {
+                if (asset.name.Contains("Level"))
+                {
+                    levelField.choices.Add(asset.name);
+                }
+            }
+
+            levelField.index = 0;
+
+            root.Add(levelField);
+        }
+
+        private void OnLevelSelected(ChangeEvent<string> evt)
+        {
+            Scene activeScene = SceneManager.GetActiveScene();
+            Scene scene = SceneManager.GetSceneByPath($"{sceneSavePath}/{evt.newValue}.unity");
+            EditorSceneManager.OpenScene($"{sceneSavePath}/{evt.newValue}.unity", OpenSceneMode.Additive);
+            SceneManager.SetActiveScene(activeScene);
+
+            objectPlacer.SetNewScene(scene);
+        }
+
+        private void RefreshLevelsDropdown()
+        {
+            DropdownField levelField = root.Q<DropdownField>();
+            levelField.choices.Clear();
+
+            List<SceneAsset> assets = LoadAll<SceneAsset>(sceneSavePath);
+
+            foreach (SceneAsset asset in assets)
+            {
+                if (asset.name.Contains("Level"))
+                {
+                    levelField.choices.Add(asset.name);
+                }
+            }
+
+            levelField.index = 0;
+        }
+
+        private Scene GetCurrentLevel()
+        {
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                Scene scene = SceneManager.GetSceneAt(i);
+
+                if (scene.name.Contains("Level"))
+                {
+                    return scene;
+                }
+            }
+
+            return SceneManager.GetActiveScene();
         }
 
         private void CreateProBuilderButtons(VisualElement root)
@@ -135,7 +212,10 @@ namespace StageEditor
                     background.value = value;
                     button.style.backgroundImage = background;
 
-                    button.clicked += () => { objectPlacer.PlaceObject(obj); };
+                    button.clicked += () =>
+                    {
+                        objectPlacer.PlaceObject(obj);
+                    };
 
                     previewGroup.Add(button);
                 }
@@ -173,6 +253,25 @@ namespace StageEditor
             MethodInfo methodInfo = type.GetMethod("MenuOpenWindow", BindingFlags.Static | BindingFlags.NonPublic);
 
             methodInfo.Invoke(null, null);
+        }
+
+
+        private static List<T> LoadAll<T>(string directoryPath) where T : Object
+        {
+            List<T> assetList = new List<T>();
+
+            string[] filePathArray = Directory.GetFiles(directoryPath, "*", SearchOption.AllDirectories);
+
+            foreach (string filePath in filePathArray)
+            {
+                T asset = AssetDatabase.LoadAssetAtPath<T>(filePath);
+                if (asset != null)
+                {
+                    assetList.Add(asset);
+                }
+            }
+
+            return assetList;
         }
     }
 }

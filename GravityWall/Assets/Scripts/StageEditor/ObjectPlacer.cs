@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.SceneManagement;
 using EditorUtility = UnityEditor.ProBuilder.EditorUtility;
+using HandleUtility = UnityEditor.HandleUtility;
 
 namespace StageEditor
 {
@@ -39,10 +40,15 @@ namespace StageEditor
 
         public void SetNewScene(Scene scene)
         {
-            GameObject root = new GameObject("Level");
-            SceneManager.MoveGameObjectToScene(root, scene);
+            GameObject levelObject = GameObject.Find("Level");
 
-            rootParent = root.transform;
+            if (levelObject == null)
+            {
+                levelObject = new GameObject("Level");
+                SceneManager.MoveGameObjectToScene(levelObject, scene);
+            }
+
+            rootParent = levelObject.transform;
         }
 
         private void SequenceObjectPlace(SceneView sceneView)
@@ -57,11 +63,7 @@ namespace StageEditor
 
             if (ev.type == EventType.MouseMove)
             {
-                var mousePos = new Vector3(ev.mousePosition.x,
-                    Camera.current.pixelHeight - ev.mousePosition.y,
-                    0);
-
-                Ray ray = Camera.current.ScreenPointToRay(mousePos);
+                Ray ray = HandleUtility.GUIPointToWorldRay(ev.mousePosition);
                 float distance = 30f;
 
                 if (Physics.Raycast(ray, out RaycastHit hitInfo, distance))
@@ -82,7 +84,7 @@ namespace StageEditor
             {
                 if (isSet)
                 {
-                    GameObject newObject = Object.Instantiate(gameObject);
+                    GameObject newObject = Object.Instantiate(gameObject, rootParent);
                     newObject.name = "New Object";
                     newObject.layer = Layer.Default;
 
