@@ -40,6 +40,11 @@ namespace StageEditor
 
         public void SetNewScene(Scene scene)
         {
+            if (!scene.IsValid())
+            {
+                return;
+            }
+            
             GameObject levelObject = GameObject.Find("Level");
 
             if (levelObject == null)

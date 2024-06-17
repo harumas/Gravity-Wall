@@ -36,26 +36,38 @@ namespace StageEditor
             EditorApplication.playModeStateChanged -= OnPlayerModeStateChanged;
             EditorApplication.playModeStateChanged += OnPlayerModeStateChanged;
 
+            EditorSceneManager.sceneOpened += OnSceneOpened;
+
             objectPlacer.Initialize();
             objectPlacer.SetNewScene(GetCurrentLevel());
 
             return root;
         }
 
-        private async void OnPlayerModeStateChanged(PlayModeStateChange state)
+        private void OnSceneOpened(Scene scene, OpenSceneMode mode)
+        {
+            RefreshPanel();
+        }
+
+        private void OnPlayerModeStateChanged(PlayModeStateChange state)
         {
             if (state == PlayModeStateChange.EnteredEditMode)
             {
-                await Task.Delay(100);
-
-                root.Clear();
-                CreateStageButtons(root);
-                CreateLevelsDropdown(root);
-                CreateProBuilderButtons(root);
-                CreatePreviewButtons(root);
-
-                objectPlacer.SetNewScene(GetCurrentLevel());
+                RefreshPanel();
             }
+        }
+
+        private async void RefreshPanel()
+        {
+            await Task.Delay(100);
+
+            root.Clear();
+            CreateStageButtons(root);
+            CreateLevelsDropdown(root);
+            CreateProBuilderButtons(root);
+            CreatePreviewButtons(root);
+
+            objectPlacer.SetNewScene(GetCurrentLevel());
         }
 
         private void CreateStageButtons(VisualElement root)
@@ -63,11 +75,13 @@ namespace StageEditor
             Button button = LoadUIElement<Button>("LargeButton");
             button.text = "Create Level";
 
-
             button.clicked += () =>
             {
                 Scene currentLevel = GetCurrentLevel();
-                EditorSceneManager.CloseScene(currentLevel, true);
+                if (currentLevel.IsValid())
+                {
+                    EditorSceneManager.CloseScene(currentLevel, true);
+                }
 
                 Scene activeScene = SceneManager.GetActiveScene();
                 Scene newScene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Additive);
@@ -89,29 +103,37 @@ namespace StageEditor
             levelField.name = "Levels";
             levelField.RegisterValueChangedCallback(OnLevelSelected);
 
-            List<SceneAsset> assets = LoadAll<SceneAsset>(sceneSavePath);
-
-            foreach (SceneAsset asset in assets)
-            {
-                if (asset.name.Contains("Level"))
-                {
-                    levelField.choices.Add(asset.name);
-                }
-            }
-
-            levelField.index = 0;
-
             root.Add(levelField);
+
+            RefreshLevelsDropdown();
         }
 
         private void OnLevelSelected(ChangeEvent<string> evt)
         {
-            Scene activeScene = SceneManager.GetActiveScene();
-            Scene scene = SceneManager.GetSceneByPath($"{sceneSavePath}/{evt.newValue}.unity");
-            EditorSceneManager.OpenScene($"{sceneSavePath}/{evt.newValue}.unity", OpenSceneMode.Additive);
-            SceneManager.SetActiveScene(activeScene);
+            Scene current = GetCurrentLevel();
 
-            objectPlacer.SetNewScene(scene);
+            if (current.name == evt.newValue)
+            {
+                return;
+            }
+            
+            if (current.IsValid())
+            {
+                EditorSceneManager.CloseScene(current, true);
+            }
+
+            Scene activeScene = SceneManager.GetActiveScene();
+            Scene scene = EditorSceneManager.OpenScene($"{sceneSavePath}/{evt.newValue}.unity", OpenSceneMode.Additive);
+
+            if (scene.IsValid())
+            {
+                SceneManager.SetActiveScene(activeScene);
+                objectPlacer.SetNewScene(scene);
+            }
+            else
+            {
+                RefreshLevelsDropdown();
+            }
         }
 
         private void RefreshLevelsDropdown()
@@ -121,15 +143,21 @@ namespace StageEditor
 
             List<SceneAsset> assets = LoadAll<SceneAsset>(sceneSavePath);
 
-            foreach (SceneAsset asset in assets)
+            foreach (var asset in assets.Where(asset => asset.name.Contains("Level_")))
             {
-                if (asset.name.Contains("Level"))
-                {
-                    levelField.choices.Add(asset.name);
-                }
+                levelField.choices.Add(asset.name);
             }
 
-            levelField.index = 0;
+            Scene scene = GetCurrentLevel();
+            if (scene.IsValid())
+            {
+                string sceneName = scene.name;
+                levelField.index = levelField.choices.FindIndex(choice => choice == sceneName);
+            }
+            else
+            {
+                levelField.index = -1;
+            }
         }
 
         private Scene GetCurrentLevel()
@@ -138,13 +166,13 @@ namespace StageEditor
             {
                 Scene scene = SceneManager.GetSceneAt(i);
 
-                if (scene.name.Contains("Level"))
+                if (scene.name.Contains("Level_"))
                 {
                     return scene;
                 }
             }
 
-            return SceneManager.GetActiveScene();
+            return default;
         }
 
         private void CreateProBuilderButtons(VisualElement root)
@@ -212,10 +240,7 @@ namespace StageEditor
                     background.value = value;
                     button.style.backgroundImage = background;
 
-                    button.clicked += () =>
-                    {
-                        objectPlacer.PlaceObject(obj);
-                    };
+                    button.clicked += () => { objectPlacer.PlaceObject(obj); };
 
                     previewGroup.Add(button);
                 }
