@@ -5,9 +5,11 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.Overlays;
 using UnityEditor.SceneManagement;
+using UnityEditor.SceneTemplate;
 using UnityEditor.Toolbars;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
 namespace StageEditor
@@ -18,48 +20,43 @@ namespace StageEditor
         private LevelSelectorToolbar() : base(
             LevelSelectorButton.ID,
             LevelSelectorDropdown.ID
-        ) { }
+        )
+        {
+        }
     }
-
 
     [EditorToolbarElement(ID, typeof(SceneView))]
     internal class LevelSelectorButton : EditorToolbarButton
     {
         public const string ID = "LevelSelectorButton";
-        private string sceneSavePath = "Assets/Scenes/Level";
+
         public static event Action<Scene> OnLevelCreated;
 
         public LevelSelectorButton()
         {
+            TextField levelNameField = LevelEditorUtil.LoadUIElement<TextField>("LevelNameField");
+            Add(levelNameField);
+
             text = "Create Level";
-            clicked += CreateStageButtons;
+            clicked += () => CreateStageButtons(levelNameField);
         }
 
-        private void CreateStageButtons()
+        private void CreateStageButtons(TextField levelNameField)
         {
-            Scene currentLevel = LevelEditorUtil.GetCurrentLevel();
+            Scene currentLevel = SceneManager.GetActiveScene();
+            
             if (currentLevel.IsValid())
             {
                 EditorSceneManager.CloseScene(currentLevel, true);
             }
 
-            Scene activeScene = SceneManager.GetActiveScene();
-            Scene newScene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Additive);
-            newScene.name = $"Level_{newScene.GetHashCode()}";
-            EditorSceneManager.SaveScene(newScene, GetSceneAssetPath(newScene.name));
-
-
-            if (currentLevel.IsValid())
-            {
-                SceneManager.SetActiveScene(activeScene);
-            }
-
+            SceneTemplateAsset template = AssetDatabase.LoadAssetAtPath<SceneTemplateAsset>(LevelEditorUtil.SceneTemplatePath);
+            string assetPath = LevelEditorUtil.GetSceneAssetPath(levelNameField.text);
+            InstantiationResult result = SceneTemplateService.Instantiate(template, false, assetPath);
+            levelNameField.SetValueWithoutNotify(null);
+            
+            Scene newScene = result.scene;
             OnLevelCreated?.Invoke(newScene);
-        }
-
-        private string GetSceneAssetPath(string assetName)
-        {
-            return $"{sceneSavePath}/{assetName}.unity";
         }
     }
 
@@ -72,7 +69,8 @@ namespace StageEditor
 
         public LevelSelectorDropdown()
         {
-            text = LevelEditorUtil.GetCurrentLevel().name;
+            text = SceneManager.GetActiveScene().name;
+            LevelSelectorButton.OnLevelCreated += scene => text = scene.name;
             clicked += ShowDropdown;
         }
 
@@ -94,19 +92,14 @@ namespace StageEditor
             return assetList;
         }
 
-        private string GetSceneAssetPath(string assetName)
-        {
-            return $"{sceneSavePath}/{assetName}.unity";
-        }
-
-        void ShowDropdown()
+        private void ShowDropdown()
         {
             var menu = new GenericMenu();
 
             List<SceneAsset> assets = LoadAllAsset<SceneAsset>(sceneSavePath);
-            Scene current = LevelEditorUtil.GetCurrentLevel();
+            Scene current = SceneManager.GetActiveScene();
 
-            foreach (var asset in assets.Where(asset => asset.name.Contains("Level_")))
+            foreach (var asset in assets)
             {
                 menu.AddItem(new GUIContent(asset.name), asset.name == current.name, () => OnDropdownItemSelected(asset.name));
             }
@@ -116,28 +109,10 @@ namespace StageEditor
 
         private void OnDropdownItemSelected(string itemName)
         {
-            Scene current = LevelEditorUtil.GetCurrentLevel();
-
-            if (current.name == itemName)
-            {
-                return;
-            }
-
-            if (current.IsValid())
-            {
-                EditorSceneManager.CloseScene(current, true);
-            }
-
-            Scene activeScene = SceneManager.GetActiveScene();
-            Scene scene = EditorSceneManager.OpenScene(GetSceneAssetPath(itemName), OpenSceneMode.Additive);
-
+            string assetPath = LevelEditorUtil.GetSceneAssetPath(itemName);
+            Scene scene = EditorSceneManager.OpenScene(assetPath, OpenSceneMode.Single);
             text = scene.name;
-
-            if (activeScene.IsValid())
-            {
-                SceneManager.SetActiveScene(activeScene);
-                OnLevelChanged?.Invoke(scene);
-            }
+            OnLevelChanged?.Invoke(scene);
         }
     }
 }

@@ -7,22 +7,10 @@ namespace StageEditor
 {
     public static class LevelEditorUtil
     {
+        public const string SceneSavePath = "Assets/Scenes/Level";
+        public const string SceneTemplatePath = "Assets/Scenes/Template/LevelTemplate.scenetemplate";
+
         private static Dictionary<string, VisualTreeAsset> cachedElements;
-
-        public static Scene GetCurrentLevel()
-        {
-            for (int i = 0; i < SceneManager.sceneCount; i++)
-            {
-                Scene scene = SceneManager.GetSceneAt(i);
-
-                if (scene.name.Contains("Level_"))
-                {
-                    return scene;
-                }
-            }
-
-            return default;
-        }
 
         public static T LoadUIElement<T>(string uiName) where T : VisualElement
         {
@@ -35,6 +23,11 @@ namespace StageEditor
             }
 
             return cachedElements[uiName].CloneTree().Q<T>(uiName);
+        }
+
+        public static string GetSceneAssetPath(string assetName)
+        {
+            return $"{SceneSavePath}/{assetName}.unity";
         }
     }
 }

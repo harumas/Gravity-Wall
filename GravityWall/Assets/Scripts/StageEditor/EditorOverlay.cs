@@ -23,6 +23,9 @@ namespace StageEditor
             root = new VisualElement();
             LevelSelectorDropdown.OnLevelChanged -= objectPlacer.SetNewScene;
             LevelSelectorDropdown.OnLevelChanged += objectPlacer.SetNewScene;
+            
+            LevelSelectorButton.OnLevelCreated -= objectPlacer.SetNewScene;
+            LevelSelectorButton.OnLevelCreated += objectPlacer.SetNewScene;
 
             CreatePreviewButtons(root);
 
@@ -32,7 +35,7 @@ namespace StageEditor
             EditorSceneManager.sceneOpened += OnSceneOpened;
 
             objectPlacer.Initialize();
-            objectPlacer.SetNewScene(LevelEditorUtil.GetCurrentLevel());
+            objectPlacer.SetNewScene(SceneManager.GetActiveScene());
 
             return root;
         }
@@ -57,7 +60,7 @@ namespace StageEditor
             root.Clear();
             CreatePreviewButtons(root);
 
-            objectPlacer.SetNewScene(LevelEditorUtil.GetCurrentLevel());
+            objectPlacer.SetNewScene(SceneManager.GetActiveScene());
         }
 
         private void CreatePreviewButtons(VisualElement root)
