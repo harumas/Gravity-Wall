@@ -1,19 +1,20 @@
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEditor.Overlays;
 using UnityEditor.SceneManagement;
-using UnityEditor.Toolbars;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
-namespace StageEditor
+namespace LevelEditor
 {
+    /// <summary>
+    /// オブジェクトのサムネイルから選択するためのオーバーレイ
+    /// </summary>
     [Overlay(typeof(SceneView), "Level Editor", true, defaultDockZone = DockZone.RightToolbar)]
-    public class EditorOverlay : Overlay
+    public class ObjectSelectorOverlay : Overlay
     {
         private readonly ObjectPlacer objectPlacer = new ObjectPlacer();
         private readonly VisualElement root = new VisualElement();
@@ -23,15 +24,21 @@ namespace StageEditor
             root.Clear();
 
             //ObjectPlacerの対象シーンの更新イベントの登録
-            LevelSelectorDropdown.OnLevelChanged -= objectPlacer.SetNewScene;
             LevelSelectorDropdown.OnLevelChanged += objectPlacer.SetNewScene;
-            LevelSelectorButton.OnLevelCreated -= objectPlacer.SetNewScene;
-            LevelSelectorButton.OnLevelCreated += objectPlacer.SetNewScene;
+            LevelCreatorButton.OnLevelCreated += objectPlacer.SetNewScene;
 
             //オーバーレイのリフレッシュイベントの登録
-            EditorApplication.playModeStateChanged -= OnPlayerModeStateChanged;
-            EditorApplication.playModeStateChanged += OnPlayerModeStateChanged;
-            EditorSceneManager.sceneOpened += OnSceneOpened;
+            EditorApplication.playModeStateChanged += state =>
+            {
+                if (state == PlayModeStateChange.EnteredEditMode)
+                {
+                    RefreshPanel();
+                }
+            };
+            EditorSceneManager.sceneOpened += (_, _) =>
+            {
+                RefreshPanel();
+            };
 
             CreatePreviewButtons(root);
 
@@ -41,24 +48,13 @@ namespace StageEditor
             return root;
         }
 
-        private void OnSceneOpened(Scene scene, OpenSceneMode mode)
-        {
-            RefreshPanel();
-        }
-
-        private void OnPlayerModeStateChanged(PlayModeStateChange state)
-        {
-            if (state == PlayModeStateChange.EnteredEditMode)
-            {
-                RefreshPanel();
-            }
-        }
-
         private async void RefreshPanel()
         {
+            root.Clear();
+            
+            //撮影シーンのロードが完了を待つために少し待機
             await Task.Delay(100);
 
-            root.Clear();
             CreatePreviewButtons(root);
 
             objectPlacer.SetNewScene(SceneManager.GetActiveScene());
@@ -83,7 +79,7 @@ namespace StageEditor
                 //Prefabからサムネイル画像を生成する
                 string[] files = Directory.GetFiles(directoryPath, "*.prefab", SearchOption.AllDirectories);
                 GameObject[] objects = files.Select(AssetDatabase.LoadAssetAtPath<GameObject>).ToArray();
-                Texture2D[] thumbnails = CaptureCreator.GetThumbnails(objects);
+                Texture2D[] thumbnails = CaptureCreator.CreateThumbnails(objects);
 
                 for (var i = 0; i < objects.Length; i++)
                 {
@@ -110,7 +106,7 @@ namespace StageEditor
             background.value = value;
             button.style.backgroundImage = background;
 
-            button.clicked += () => { objectPlacer.PlaceObject(prefab); };
+            button.clicked += () => { objectPlacer.StartPlacingSequence(prefab); };
 
             return button;
         }

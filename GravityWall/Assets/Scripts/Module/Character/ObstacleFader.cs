@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using GravityWall;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Module.Character
 {
@@ -10,9 +11,8 @@ namespace Module.Character
         [SerializeField] private Transform playerTarget;
         [SerializeField] private float detectRadius;
 
-        private RaycastHit[] resultsBuffer = new RaycastHit[8];
-        private List<GameObject> hitWalls = new List<GameObject>();
-        private List<GameObject> walls = new List<GameObject>();
+        private readonly RaycastHit[] resultsBuffer = new RaycastHit[8];
+        private readonly List<GameObject> walls = new List<GameObject>();
 
         private void Update()
         {
@@ -20,11 +20,9 @@ namespace Module.Character
 
             float distance = diff.magnitude;
             Vector3 dir = diff / distance;
-            int count = Physics.SphereCastNonAlloc(transform.position, detectRadius, dir, resultsBuffer, distance, Layer.Mask.Gravity);
+            int count = Physics.SphereCastNonAlloc(transform.position, detectRadius, dir, resultsBuffer, distance, Layer.Mask.Base);
 
             Span<bool> founds = stackalloc bool[count];
-
-            SelectWalls(resultsBuffer, count);
 
             for (int t = 0; t < walls.Count;)
             {
@@ -46,11 +44,10 @@ namespace Module.Character
 
                 if (!found)
                 {
-                    walls[t].GetComponent<Renderer>().enabled = true;
+                    walls[t].GetComponent<Renderer>().shadowCastingMode = ShadowCastingMode.On;
                     walls.RemoveAt(t);
                 }
             }
-
 
             for (int i = 0; i < founds.Length; i++)
             {
@@ -58,26 +55,12 @@ namespace Module.Character
                 {
                     GameObject gameObj = resultsBuffer[i].transform.gameObject;
 
-                    gameObj.GetComponent<Renderer>().enabled = false;
-                    walls.Add(gameObj);
+                    if (gameObj != null && gameObj.TryGetComponent(out Renderer meshRenderer))
+                    {
+                        meshRenderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
+                        walls.Add(gameObj);
+                    }
                 }
-            }
-        }
-
-        private void SelectWalls(RaycastHit[] array, int count)
-        {
-            hitWalls.Clear();
-
-            for (int i = 0; i < count; i++)
-            {
-                GameObject gameObj = array[i].transform.gameObject;
-
-                if (!gameObj.CompareTag(Tag.Wall))
-                {
-                    return;
-                }
-
-                hitWalls.Add(gameObj);
             }
         }
     }

@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
-using UnityEngine.SceneManagement;
+using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace StageEditor
+namespace LevelEditor
 {
     public static class LevelEditorUtil
     {
@@ -29,6 +30,24 @@ namespace StageEditor
         public static string GetSceneAssetPath(string assetName)
         {
             return $"{SceneSavePath}/{assetName}.unity";
+        }
+
+        public static List<T> LoadAllAsset<T>(string directoryPath) where T : Object
+        {
+            List<T> assetList = new List<T>();
+
+            string[] filePathArray = Directory.GetFiles(directoryPath, "*", SearchOption.AllDirectories);
+
+            foreach (string filePath in filePathArray)
+            {
+                T asset = AssetDatabase.LoadAssetAtPath<T>(filePath);
+                if (asset != null)
+                {
+                    assetList.Add(asset);
+                }
+            }
+
+            return assetList;
         }
     }
 }
