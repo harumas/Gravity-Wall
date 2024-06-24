@@ -13,7 +13,7 @@ namespace LevelEditor
     /// <summary>
     /// オブジェクトのサムネイルから選択するためのオーバーレイ
     /// </summary>
-    [Overlay(typeof(SceneView), "Level Editor", true, defaultDockZone = DockZone.RightToolbar)]
+    [Overlay(typeof(SceneView), "ObjectSelector", true, defaultDockZone = DockZone.LeftColumn)]
     public class ObjectSelectorOverlay : Overlay
     {
         private readonly ObjectPlacer objectPlacer = new ObjectPlacer();

@@ -27,6 +27,7 @@ namespace LevelEditor
             GameObject obj = proBuilderMesh.gameObject;
             obj.transform.SetParent(rootParent);
             obj.tag = Tag.Wall;
+            obj.layer = Layer.Base;
         }
 
         public void StartPlacingSequence(GameObject prefab)
