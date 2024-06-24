@@ -5,9 +5,9 @@ namespace StageEditor
 {
     public static class CaptureCreator
     {
-        public static readonly int thumbnailWidth = 512;
-        public static readonly int thumbnailHeight = 512;
-        public static readonly string savePath = "Assets/Thumbnails/";
+        private const int ThumbnailWidth = 512;
+        private const int ThumbnailHeight = 512;
+        private const string SavePath = "Assets/Thumbnails/";
 
         private static Camera thumbnailCamera;
         private static RenderTexture renderTexture;
@@ -35,7 +35,7 @@ namespace StageEditor
             thumbnailCamera = cameraObject.AddComponent<Camera>();
 
             // RenderTextureの設定
-            renderTexture = new RenderTexture(thumbnailWidth, thumbnailHeight, 24);
+            renderTexture = new RenderTexture(ThumbnailWidth, ThumbnailHeight, 24);
             thumbnailCamera.targetTexture = renderTexture;
             thumbnailCamera.clearFlags = CameraClearFlags.Depth;
             thumbnailCamera.backgroundColor = new Color(0f, 0f, 0f, 0f);
@@ -78,21 +78,21 @@ namespace StageEditor
             thumbnailCamera.Render();
 
             // Texture2DにRenderTextureの内容をコピー
-            Texture2D thumbnail = new Texture2D(thumbnailWidth, thumbnailHeight, TextureFormat.RGBA32, false);
-            thumbnail.ReadPixels(new Rect(0, 0, thumbnailWidth, thumbnailHeight), 0, 0);
+            Texture2D thumbnail = new Texture2D(ThumbnailWidth, ThumbnailHeight, TextureFormat.RGBA32, false);
+            thumbnail.ReadPixels(new Rect(0, 0, ThumbnailWidth, ThumbnailHeight), 0, 0);
             thumbnail.filterMode = FilterMode.Bilinear;
             thumbnail.alphaIsTransparency = true;
             thumbnail.Apply();
 
             // サムネイルをPNG形式で保存
             byte[] bytes = thumbnail.EncodeToPNG();
-            if (!Directory.Exists(savePath))
+            if (!Directory.Exists(SavePath))
             {
-                Directory.CreateDirectory(savePath);
+                Directory.CreateDirectory(SavePath);
             }
 
             string fileName = prefab.name + "_thumbnail.png";
-            File.WriteAllBytes(Path.Combine(savePath, fileName), bytes);
+            File.WriteAllBytes(Path.Combine(SavePath, fileName), bytes);
 
             // インスタンスを破棄
             Object.DestroyImmediate(instance);

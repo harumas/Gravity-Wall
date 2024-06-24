@@ -1,17 +1,18 @@
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using GravityWall;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 
 namespace StageEditor
 {
-    public class EditorCameraController 
+    public class EditorCameraController
     {
-        private static readonly HashSet<GameObject> detectedObjects = new HashSet<GameObject>();
-        private static readonly HashSet<GameObject> hittingObjects = new HashSet<GameObject>();
-        private static readonly HashSet<GameObject> calculateSets = new HashSet<GameObject>();
-        private static readonly RaycastHit[] hitBuffer = new RaycastHit[32];
+        private static GameObject currentObject;
+        private static bool perspectiveMode;
+        private static bool previousFramePressed;
 
         [InitializeOnLoadMethod]
         private static void Init()
@@ -21,7 +22,30 @@ namespace StageEditor
 
         private static void ManualUpdate()
         {
-            OnSceneCameraGUI(SceneView.lastActiveSceneView);
+            bool currentFramePressed = Keyboard.current.cKey.IsPressed();
+
+            if (currentFramePressed && !previousFramePressed)
+            {
+                SwitchPerspectiveMode();
+            }
+
+            previousFramePressed = currentFramePressed;
+
+            if (perspectiveMode)
+            {
+                OnSceneCameraGUI(SceneView.lastActiveSceneView);
+            }
+        }
+
+        private static void SwitchPerspectiveMode()
+        {
+            perspectiveMode = !perspectiveMode;
+
+            if (!perspectiveMode && currentObject != null)
+            {
+                currentObject.GetComponent<Renderer>().shadowCastingMode = ShadowCastingMode.On;
+                currentObject = null;
+            }
         }
 
         private static void OnSceneCameraGUI(SceneView sceneView)
@@ -29,68 +53,26 @@ namespace StageEditor
             Vector3 origin = sceneView.camera.transform.position;
             Vector3 forward = sceneView.camera.transform.forward;
 
-            const int allMask = ~0;
-            int count = Physics.SphereCastNonAlloc(origin, 0.1f, forward, hitBuffer, float.PositiveInfinity, allMask);
+            GameObject hitObject = null;
 
-            if (count == 0)
+            if (Physics.Raycast(origin, forward, out RaycastHit hitInfo, 1000f, Layer.Mask.Base))
             {
-                hittingObjects.Clear();
-                return;
+                hitObject = hitInfo.transform.gameObject;
             }
 
-            detectedObjects.Clear();
-
-            GameObject farthest = null;
-            float farthestDistance = 0f;
-            for (int i = 0; i < count; i++)
+            if (hitObject != currentObject)
             {
-                GameObject hit = hitBuffer[i].transform.gameObject;
-
-                if (!hit.CompareTag(Tag.Wall))
+                if (hitObject != null)
                 {
-                    continue;
+                    hitObject.GetComponent<Renderer>().shadowCastingMode = ShadowCastingMode.ShadowsOnly;
                 }
 
-                float distance = (hit.transform.position - origin).sqrMagnitude;
-
-                if (distance > farthestDistance)
+                if (currentObject != null)
                 {
-                    farthest = hit;
-                    farthestDistance = distance;
+                    currentObject.GetComponent<Renderer>().shadowCastingMode = ShadowCastingMode.On;
                 }
 
-                detectedObjects.Add(hit);
-            }
-
-            foreach (GameObject hitObject in detectedObjects)
-            {
-                hitObject.layer = Layer.IgnoreRaycast;
-                hitObject.GetComponent<Renderer>().shadowCastingMode = ShadowCastingMode.ShadowsOnly;
-            }
-
-            if (farthest != null)
-            {
-                farthest.layer = Layer.Default;
-                farthest.GetComponent<Renderer>().shadowCastingMode = ShadowCastingMode.On;
-            }
-
-            calculateSets.Clear();
-            foreach (GameObject detectedObject in hittingObjects)
-            {
-                calculateSets.Add(detectedObject);
-            }
-
-            calculateSets.ExceptWith(detectedObjects);
-            foreach (GameObject hitObject in calculateSets)
-            {
-                hitObject.layer = Layer.Default;
-                hitObject.GetComponent<Renderer>().shadowCastingMode = ShadowCastingMode.On;
-            }
-
-            hittingObjects.Clear();
-            foreach (GameObject detectedObject in detectedObjects)
-            {
-                hittingObjects.Add(detectedObject);
+                currentObject = hitObject;
             }
         }
     }

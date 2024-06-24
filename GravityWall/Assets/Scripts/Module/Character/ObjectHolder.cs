@@ -27,7 +27,6 @@ namespace Module.Character
             holdEvent.Canceled += OnHoldEnd;
         }
 
-
         private void OnHoldStart(InputAction.CallbackContext ctx)
         {
             if (stayingCollider == null)

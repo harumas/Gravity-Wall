@@ -9,6 +9,7 @@ namespace StageEditor
     {
         public const string SceneSavePath = "Assets/Scenes/Level";
         public const string SceneTemplatePath = "Assets/Scenes/Template/LevelTemplate.scenetemplate";
+        public const string PrefabImportPath = "Assets/Prefabs/StageObject/";
 
         private static Dictionary<string, VisualTreeAsset> cachedElements;
 
