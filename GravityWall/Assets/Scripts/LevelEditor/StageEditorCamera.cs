@@ -35,6 +35,10 @@ namespace LevelEditor
                     doUpdate = true;
                 }
             };
+
+            perspectiveMode = false;
+            previousFramePressed = false;
+            doUpdate = true;
         }
 
         private static void EditorUpdate()
