@@ -70,7 +70,7 @@ namespace LevelEditor
 
             if (!perspectiveMode && currentObject != null)
             {
-                currentObject.GetComponent<Renderer>().shadowCastingMode = ShadowCastingMode.On;
+                ShowObject(currentObject);
                 currentObject = null;
             }
         }
@@ -106,6 +106,7 @@ namespace LevelEditor
             {
                 gameObject.layer = Layer.IgnoreRaycast;
                 gameObject.GetComponent<Renderer>().shadowCastingMode = ShadowCastingMode.ShadowsOnly;
+                Undo.ClearUndo(gameObject);
             }
         }
 
@@ -115,6 +116,7 @@ namespace LevelEditor
             {
                 gameObject.layer = Layer.Base;
                 gameObject.GetComponent<Renderer>().shadowCastingMode = ShadowCastingMode.On;
+                Undo.ClearUndo(gameObject);
             }
         }
     }
