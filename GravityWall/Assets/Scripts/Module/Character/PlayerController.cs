@@ -21,7 +21,6 @@ namespace Module.Character
 
         [SerializeField] private Rigidbody rigBody;
         [SerializeField] private Transform target;
-        [SerializeField] private float interpolateValue;
 
         private InputEvent controlEvent;
         private InputEvent jumpEvent;
