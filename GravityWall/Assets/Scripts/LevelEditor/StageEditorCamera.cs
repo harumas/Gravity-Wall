@@ -48,7 +48,10 @@ namespace LevelEditor
                 return;
             }
 
-            bool currentFramePressed = Keyboard.current.cKey.IsPressed();
+            bool pressedAlt = Keyboard.current.altKey.IsPressed();
+            bool pressedD = Keyboard.current.dKey.IsPressed();
+            bool currentFramePressed = pressedAlt && pressedD;
+            
 
             // Cキーを押した瞬間
             if (currentFramePressed && !previousFramePressed)
