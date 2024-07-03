@@ -28,7 +28,7 @@ namespace Module.Character
 
         private Vector2 input;
         private float jumpVelocity;
-       [SerializeField] private bool isJumping;
+        private bool isJumping;
 
         private Vector3 prevPos;
         private Vector3 nextPos;
@@ -58,7 +58,6 @@ namespace Module.Character
             prevPos = rigBody.position;
             nextPos = prevPos;
         }
-
 
         private void SampleDecreaseGravityVariation()
         {
@@ -110,7 +109,7 @@ namespace Module.Character
             }
 
             ClampVelocity();
-            PerformRotate();
+            PerformGravityRotate();
 
             UGizmos.DrawLine(prevPos, nextPos, Color.red, 5f);
             prevPos = nextPos;
@@ -139,7 +138,7 @@ namespace Module.Character
             rigBody.velocity = transform.TransformDirection(localVelocity);
         }
 
-        private void PerformRotate()
+        private void PerformGravityRotate()
         {
             Quaternion targetRotation = Quaternion.FromToRotation(transform.up, -Gravity.Value) * rigBody.rotation;
             rigBody.rotation = Quaternion.Slerp(rigBody.rotation, targetRotation, rotateSpeed);
