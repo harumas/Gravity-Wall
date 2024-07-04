@@ -53,7 +53,7 @@ namespace Module.Character
             Vector3 direction = -transform.up;
 
             isHit = Physics.Raycast(origin, direction, out hitInfo, downRayDistance);
-            
+
             UGizmos.DrawRay(origin, direction * downRayDistance, Color.blue);
 
             //床と自分のy軸が等しくない場合は、重力変更する必要がある
@@ -81,9 +81,23 @@ namespace Module.Character
 
         private void OnCollisionStay(Collision collision)
         {
+            ContactPoint contact = collision.GetContact(0);
+            float minDistance = Vector3.SqrMagnitude(contact.point - (transform.position + prevDir));
+
+            for (int i = 0; i < collision.contactCount - 1; i++)
+            {
+                ContactPoint current = collision.GetContact(i);
+                float distance = Vector3.SqrMagnitude(current.point - (transform.position + prevDir));
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    contact = current;
+                }
+            }
+
             if (isLegalStep && currentCollider == collision.collider)
             {
-                Gravity.SetValue(-collision.GetContact(0).normal);
+                Gravity.SetValue(-contact.normal);
             }
         }
     }
