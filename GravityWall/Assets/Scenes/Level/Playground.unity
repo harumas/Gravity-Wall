@@ -1143,6 +1143,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   multiplier: 30
   gravityType: 2
+--- !u!4 &484077385 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2238642831715315038, guid: b6b770b68bfd72b4c8009472cba1842e,
+    type: 3}
+  m_PrefabInstance: {fileID: 719958787}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &567101720
 GameObject:
   m_ObjectHideFlags: 0
@@ -2042,6 +2048,26 @@ PrefabInstance:
       propertyPath: pivotHorizontal
       value: 
       objectReference: {fileID: 1003078673}
+    - target: {fileID: 1808213111216230309, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: horizontalRange.max
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1808213111216230309, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: horizontalRange.min
+      value: -50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1808213111216230309, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: verticalSensibility
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1808213111216230309, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: horizontalSensibility
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 3863569561677538650, guid: b6b770b68bfd72b4c8009472cba1842e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2077,11 +2103,146 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
+    - target: {fileID: 4628414600691274223, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: multiplier
+      value: 120
+      objectReference: {fileID: 0}
     - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
         type: 3}
       propertyPath: target
       value: 
       objectReference: {fileID: 1003078673}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: jumpPower
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: airControl
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: controlSpeed
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: jumpingGravity
+      value: 55
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: decreaseGravityMultiplierCurve.m_Curve.Array.data[0].time
+      value: -0.05966568
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: decreaseGravityMultiplierCurve.m_Curve.Array.data[1].time
+      value: 50.06945
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: increaseGravityMultiplierCurve.m_Curve.Array.data[0].time
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: increaseGravityMultiplierCurve.m_Curve.Array.data[1].time
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: decreaseGravityMultiplierCurve.m_Curve.Array.data[0].value
+      value: 0.050109863
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: decreaseGravityMultiplierCurve.m_Curve.Array.data[1].value
+      value: 0.10098264
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: increaseGravityMultiplierCurve.m_Curve.Array.data[0].value
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: increaseGravityMultiplierCurve.m_Curve.Array.data[1].value
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: decreaseGravityMultiplierCurve.m_Curve.Array.data[0].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: decreaseGravityMultiplierCurve.m_Curve.Array.data[1].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: increaseGravityMultiplierCurve.m_Curve.Array.data[0].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: increaseGravityMultiplierCurve.m_Curve.Array.data[1].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: decreaseGravityMultiplierCurve.m_Curve.Array.data[0].outSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: decreaseGravityMultiplierCurve.m_Curve.Array.data[1].inWeight
+      value: 0.062122326
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: decreaseGravityMultiplierCurve.m_Curve.Array.data[1].outSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: increaseGravityMultiplierCurve.m_Curve.Array.data[0].outSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: increaseGravityMultiplierCurve.m_Curve.Array.data[1].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: increaseGravityMultiplierCurve.m_Curve.Array.data[1].outSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: decreaseGravityMultiplierCurve.m_Curve.Array.data[0].outWeight
+      value: 0.094381176
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: increaseGravityMultiplierCurve.m_Curve.Array.data[0].outWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: increaseGravityMultiplierCurve.m_Curve.Array.data[0].tangentMode
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: increaseGravityMultiplierCurve.m_Curve.Array.data[1].tangentMode
+      value: 34
+      objectReference: {fileID: 0}
     - target: {fileID: 5197386247627408906, guid: b6b770b68bfd72b4c8009472cba1842e,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -4051,7 +4212,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1223742867}
-  rotateSpeed: 1
+  axis: {fileID: 484077385}
+  damping: 0.05
 --- !u!43 &1981732392
 Mesh:
   m_ObjectHideFlags: 0

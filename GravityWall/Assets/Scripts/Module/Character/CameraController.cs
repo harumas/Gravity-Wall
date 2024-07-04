@@ -31,18 +31,18 @@ namespace Module.Character
 
         private void LateUpdate()
         {
-            float x = mouseDelta.y * verticalSensibility;
-            float y = mouseDelta.x * horizontalSensibility;
+            float x = mouseDelta.y * verticalSensibility * Time.deltaTime;
+            float y = mouseDelta.x * horizontalSensibility * Time.deltaTime;
 
             float eulerX = pivotHorizontal.localEulerAngles.x;
             float eulerY = pivotVertical.localEulerAngles.y;
 
-            eulerX = ClampAngle(eulerX + x, horizontalRange.Min, horizontalRange.Max);
+            eulerX = ClampAngle(eulerX - x, horizontalRange.Min, horizontalRange.Max);
             eulerY = ClampAngle(eulerY + y, verticalRange.Min, verticalRange.Max);
 
             pivotVertical.localEulerAngles = new Vector3(0f, eulerY, 0f);
             pivotHorizontal.localEulerAngles = new Vector3(eulerX, eulerY, 0f);
-            
+
             mouseDelta = Vector2.zero;
         }
 

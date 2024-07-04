@@ -1,13 +1,15 @@
 ﻿using System;
 using Core.Input;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Module.Character
 {
     public class PlayerTargetSyncer : MonoBehaviour
     {
         [SerializeField] private Transform target;
-        [SerializeField] private float rotateSpeed;
+        [SerializeField] private Transform axis;
+        [SerializeField] private float damping;
 
         private Vector2 input;
         private InputEvent controlEvent;
@@ -24,19 +26,33 @@ namespace Module.Character
 
         private void FixedUpdate()
         {
+            if (input == Vector2.zero)
+            {
+                return;
+            }
+
             PerformBodyRotate();
         }
 
         private void PerformBodyRotate()
         {
-            if (input != Vector2.zero)
-            {
-                Vector3 inputDirection = transform.rotation * new Vector3(input.x, 0f, input.y);
-                UGizmo.UGizmos.DrawArrow(transform.position, transform.position + inputDirection, Color.blue);
-                Quaternion targetRotation = Quaternion.LookRotation(inputDirection, transform.up) * transform.rotation;
+            Vector3 targetDirection = GetTargetDirection();
+            Quaternion targetRotation = Quaternion.LookRotation(targetDirection, axis.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, damping);
+        }
 
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotateSpeed);
-            }
+        private Vector3 GetTargetDirection()
+        {
+            Vector3 inputDirection = target.rotation * new Vector3(input.x, 0f, input.y);
+            Vector3 planedDirection = Vector3.ProjectOnPlane(inputDirection, axis.up);
+
+            return planedDirection;
+        }
+
+        private void OnDrawGizmos()
+        {
+            Vector3 targetDirection = GetTargetDirection();
+            UGizmo.UGizmos.DrawArrow(transform.position, transform.position + targetDirection.normalized, Color.blue, headLength: 0.4f, width: 0.2f);
         }
     }
 }
