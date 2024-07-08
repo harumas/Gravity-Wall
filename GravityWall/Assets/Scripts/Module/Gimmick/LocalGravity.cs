@@ -13,6 +13,9 @@ namespace Module.Gimmick
         private readonly Queue<float> externalMultipliers = new Queue<float>();
         private Rigidbody rigBody;
 
+        private bool isSetFrameMultiplier;
+        private float frameMultiplier;
+
         private void Awake()
         {
             rigBody = GetComponent<Rigidbody>();
@@ -23,7 +26,15 @@ namespace Module.Gimmick
             if (Gravity.IsEnable(gravityType))
             {
                 float externalMultiplier = externalMultipliers.Count == 0 ? 1f : externalMultipliers.Dequeue();
-                rigBody.AddForce(Gravity.Value * (multiplier * externalMultiplier), ForceMode.Acceleration);
+                float currentMultiplier = (multiplier * externalMultiplier);
+
+                if (isSetFrameMultiplier)
+                {
+                    currentMultiplier = frameMultiplier;
+                    isSetFrameMultiplier = false;
+                }
+
+                rigBody.AddForce(Gravity.Value * currentMultiplier, ForceMode.Acceleration);
             }
             else
             {
@@ -37,6 +48,12 @@ namespace Module.Gimmick
             {
                 externalMultipliers.Enqueue(m);
             }
+        }
+
+        public void SetMultiplierAtFrame(float multiplier)
+        {
+            frameMultiplier = multiplier;
+            isSetFrameMultiplier = true;
         }
 
         public void Enable()

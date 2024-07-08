@@ -14,6 +14,7 @@ namespace Module.Character
         [Header("回転速度")] [SerializeField] private float rotateSpeed;
         [Header("最大速度")] [SerializeField] private float maxSpeed;
         [Header("ジャンプ力")] [SerializeField] private float jumpPower;
+       [Header("ジャンプ中の重力")] [SerializeField] private float jumpingGravity;
         [SerializeField] private AnimationCurve decreaseGravityMultiplierCurve;
         [SerializeField] private AnimationCurve increaseGravityMultiplierCurve;
         private float[] decreaseGravityMultipliers;
@@ -28,7 +29,7 @@ namespace Module.Character
 
         private Vector2 input;
         private float jumpVelocity;
-       [SerializeField] private bool isJumping;
+        private bool isJumping;
 
         private Vector3 prevPos;
         private Vector3 nextPos;
@@ -42,15 +43,15 @@ namespace Module.Character
             jumpEvent = InputActionProvider.Instance.CreateEvent(ActionGuid.Player.Jump);
             localGravity = GetComponent<LocalGravity>();
 
-            SampleDecreaseGravityVariation();
-            SampleIncreaseGravityVariation();
+            // SampleDecreaseGravityVariation();
+            // SampleIncreaseGravityVariation();
 
             jumpEvent.Started += _ =>
             {
                 if (!isJumping)
                 {
                     rigBody.AddForce(transform.up * jumpPower, ForceMode.VelocityChange);
-                    localGravity.AddExternalMultiplier(decreaseGravityMultipliers);
+                    //localGravity.AddExternalMultiplier(decreaseGravityMultipliers);
                     isJumping = true;
                 }
             };
@@ -58,7 +59,6 @@ namespace Module.Character
             prevPos = rigBody.position;
             nextPos = prevPos;
         }
-
 
         private void SampleDecreaseGravityVariation()
         {
@@ -110,7 +110,7 @@ namespace Module.Character
             }
 
             ClampVelocity();
-            PerformRotate();
+            PerformGravityRotate();
 
             UGizmos.DrawLine(prevPos, nextPos, Color.red, 5f);
             prevPos = nextPos;
@@ -121,6 +121,7 @@ namespace Module.Character
         {
             Vector3 localVelocity = transform.InverseTransformVector(rigBody.velocity);
             localVelocity.y = 0f;
+            prevVelocity = 0f;
             rigBody.velocity = transform.TransformDirection(localVelocity);
             isJumping = false;
         }
@@ -134,12 +135,12 @@ namespace Module.Character
             localVelocity = Vector3.ClampMagnitude(localVelocity, maxSpeed);
             localVelocity.y = y;
 
-            IncreaseGravity(localVelocity);
+            AdjustGravity(localVelocity);
 
             rigBody.velocity = transform.TransformDirection(localVelocity);
         }
 
-        private void PerformRotate()
+        private void PerformGravityRotate()
         {
             Quaternion targetRotation = Quaternion.FromToRotation(transform.up, -Gravity.Value) * rigBody.rotation;
             rigBody.rotation = Quaternion.Slerp(rigBody.rotation, targetRotation, rotateSpeed);
@@ -158,19 +159,15 @@ namespace Module.Character
 
         private float prevVelocity;
 
-        private void IncreaseGravity(Vector3 localVelocity)
+        private void AdjustGravity(Vector3 localVelocity)
         {
-            prevVelocity = localVelocity.y;
             if (!isJumping)
             {
                 return;
             }
 
-            //上昇速度がマイナスに変わったとき
-            if ((int)Mathf.Sign(prevVelocity) == -1 && (int)Mathf.Sign(localVelocity.y) == 1)
-            {
-                localGravity.AddExternalMultiplier(increaseGravityMultipliers);
-            }
+            localGravity.SetMultiplierAtFrame(jumpingGravity);
+            prevVelocity = localVelocity.y;
         }
     }
 }
