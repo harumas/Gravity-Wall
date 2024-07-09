@@ -48,7 +48,10 @@ namespace LevelEditor
                 return;
             }
 
-            bool currentFramePressed = Keyboard.current.cKey.IsPressed();
+            bool pressedAlt = Keyboard.current.altKey.IsPressed();
+            bool pressedD = Keyboard.current.dKey.IsPressed();
+            bool currentFramePressed = pressedAlt && pressedD;
+            
 
             // Cキーを押した瞬間
             if (currentFramePressed && !previousFramePressed)
@@ -70,7 +73,7 @@ namespace LevelEditor
 
             if (!perspectiveMode && currentObject != null)
             {
-                currentObject.GetComponent<Renderer>().shadowCastingMode = ShadowCastingMode.On;
+                ShowObject(currentObject);
                 currentObject = null;
             }
         }
@@ -106,6 +109,7 @@ namespace LevelEditor
             {
                 gameObject.layer = Layer.IgnoreRaycast;
                 gameObject.GetComponent<Renderer>().shadowCastingMode = ShadowCastingMode.ShadowsOnly;
+                Undo.ClearUndo(gameObject);
             }
         }
 
@@ -115,6 +119,7 @@ namespace LevelEditor
             {
                 gameObject.layer = Layer.Base;
                 gameObject.GetComponent<Renderer>().shadowCastingMode = ShadowCastingMode.On;
+                Undo.ClearUndo(gameObject);
             }
         }
     }
