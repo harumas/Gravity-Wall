@@ -31,6 +31,7 @@ namespace GravityWall
         public const int Gravity = 6;
         public const int Base = 7;
         public const int Holdable = 8;
+        public const int Player = 9;
         /// <summary>
         /// Use this type in place of layer or layer mask values in code / scripts.
         /// </summary>
@@ -51,6 +52,7 @@ namespace GravityWall
             public const int Gravity = 64;
             public const int Base = 128;
             public const int Holdable = 256;
+            public const int Player = 512;
         }
     }
 }
