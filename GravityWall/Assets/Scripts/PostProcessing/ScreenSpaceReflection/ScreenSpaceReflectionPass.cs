@@ -8,7 +8,7 @@ namespace PostProcessing
     public class ScreenSpaceReflectionPass : ScriptableRenderPass
     {
         private readonly int intensityId = Shader.PropertyToID("_Intensity");
-        
+
         private RTHandle rtHandle;
         private Material effectMaterial;
 
@@ -34,18 +34,17 @@ namespace PostProcessing
             if (!customEffect.IsActive())
                 return;
 
-            renderingData.cameraData.camera.depthTextureMode = DepthTextureMode.DepthNormals;
-
             // CommandBufferを取得
             CommandBuffer cmd = CommandBufferPool.Get("ScreenSpaceReflection");
 
             effectMaterial.SetFloat(intensityId, customEffect.intensity.value);
+            effectMaterial.SetVector("_BlitScaleBias", new Vector4(1, 1, 0, 0));
 
             Blitter.BlitCameraTexture(cmd, rtHandle, rtHandle, effectMaterial, 0);
 
             context.ExecuteCommandBuffer(cmd);
             cmd.Clear();
-            
+
             CommandBufferPool.Release(cmd);
         }
     }
