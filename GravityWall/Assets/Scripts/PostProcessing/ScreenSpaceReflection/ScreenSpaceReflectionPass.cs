@@ -34,6 +34,8 @@ namespace PostProcessing
             if (!customEffect.IsActive())
                 return;
 
+            renderingData.cameraData.camera.depthTextureMode = DepthTextureMode.DepthNormals;
+
             // CommandBufferを取得
             CommandBuffer cmd = CommandBufferPool.Get("ScreenSpaceReflection");
 
