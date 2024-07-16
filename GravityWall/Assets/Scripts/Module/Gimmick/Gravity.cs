@@ -41,7 +41,7 @@ namespace Module.Gimmick
 
         public static void SetDisable(Type mask)
         {
-            activeGravityMask |= ~(activeGravityMask & (uint)mask);
+            activeGravityMask &= ~(uint)mask;
         }
 
         public static bool IsEnable(Type mask)
