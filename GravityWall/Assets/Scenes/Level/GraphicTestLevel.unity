@@ -20,12 +20,12 @@ RenderSettings:
   m_FogDensity: 0.05
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.18934675, g: 0.3490566, b: 0.34203342, a: 1}
+  m_AmbientSkyColor: {r: 0.19864132, g: 0.1974209, b: 0.28930807, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 0
   m_AmbientMode: 3
-  m_SubtractiveShadowColor: {r: 0, g: 0, b: 0, a: 1}
+  m_SubtractiveShadowColor: {r: 0.50009876, g: 0.51046556, b: 0.59119487, a: 1}
   m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.6
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 211419908}
-  m_IndirectSpecularColor: {r: 0.11004293, g: 0.13740133, b: 0.18361892, a: 0.6}
+  m_IndirectSpecularColor: {r: 0.11004323, g: 0.13740173, b: 0.18361956, a: 0.6}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -98,7 +98,8 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_LightingSettings: {fileID: 0}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 1192eb1be3a8ded44b30ee1341e950b1,
+    type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -333,6 +334,74 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 169652492}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &200451117
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1589298727533013233, guid: 2b4562b306d27994f84fbaef7a74a6ac,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -12.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1589298727533013233, guid: 2b4562b306d27994f84fbaef7a74a6ac,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.746
+      objectReference: {fileID: 0}
+    - target: {fileID: 1589298727533013233, guid: 2b4562b306d27994f84fbaef7a74a6ac,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 6.827
+      objectReference: {fileID: 0}
+    - target: {fileID: 1589298727533013233, guid: 2b4562b306d27994f84fbaef7a74a6ac,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1589298727533013233, guid: 2b4562b306d27994f84fbaef7a74a6ac,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1589298727533013233, guid: 2b4562b306d27994f84fbaef7a74a6ac,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1589298727533013233, guid: 2b4562b306d27994f84fbaef7a74a6ac,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1589298727533013233, guid: 2b4562b306d27994f84fbaef7a74a6ac,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1589298727533013233, guid: 2b4562b306d27994f84fbaef7a74a6ac,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1589298727533013233, guid: 2b4562b306d27994f84fbaef7a74a6ac,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2109235388683235915, guid: 2b4562b306d27994f84fbaef7a74a6ac,
+        type: 3}
+      propertyPath: m_Name
+      value: TableLight
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2b4562b306d27994f84fbaef7a74a6ac, type: 3}
 --- !u!1 &211419906
 GameObject:
   m_ObjectHideFlags: 0
@@ -392,13 +461,13 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 0.7
     m_Bias: 0.05
     m_NormalBias: 0.4
-    m_NearPlane: 0.2
+    m_NearPlane: 0.1
     m_CullingMatrixOverride:
       e00: 1
       e01: 0
@@ -698,7 +767,7 @@ VisualEffect:
   m_PropertySheet:
     m_Float:
       m_Array:
-      - m_Value: 2
+      - m_Value: 0.11
         m_Name: DustSize
         m_Overridden: 1
       - m_Value: 5.52
@@ -707,7 +776,7 @@ VisualEffect:
       - m_Value: 5
         m_Name: LightSize
         m_Overridden: 1
-      - m_Value: 5
+      - m_Value: 12.35
         m_Name: DustRate
         m_Overridden: 1
       - m_Value: 49.21
@@ -722,7 +791,7 @@ VisualEffect:
       m_Array: []
     m_Vector4f:
       m_Array:
-      - m_Value: {x: 1, y: 0.91285497, z: 0.81446534, w: 0}
+      - m_Value: {x: 7.4642644, y: 6.813791, z: 6.079385, w: 0}
         m_Name: DustColor
         m_Overridden: 1
       - m_Value: {x: 0.509434, y: 0.19189595, z: 0.06488074, w: 0}
@@ -20268,7 +20337,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_Intensity: 0.6
   m_Range: 10
   m_SpotAngle: 30
@@ -24440,3 +24509,4 @@ SceneRoots:
   - {fileID: 1241572602}
   - {fileID: 651837462}
   - {fileID: 742587067}
+  - {fileID: 200451117}
