@@ -1,0 +1,561 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2648558679557411663
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 910630534326102559}
+  - component: {fileID: 6366074670779982080}
+  - component: {fileID: 3488308487046615894}
+  m_Layer: 0
+  m_Name: ShockFloor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &910630534326102559
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2648558679557411663}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.94, z: -12.057}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!2083052967 &6366074670779982080
+VisualEffect:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2648558679557411663}
+  m_Enabled: 1
+  m_Asset: {fileID: 8926484042661614526, guid: c9a6bc5686bfc1c4a830aaa0a5a853e0, type: 3}
+  m_InitialEventName: OnPlay
+  m_InitialEventNameOverriden: 0
+  m_StartSeed: 0
+  m_ResetSeedOnPlay: 1
+  m_AllowInstancing: 1
+  m_ResourceVersion: 1
+  m_PropertySheet:
+    m_Float:
+      m_Array:
+      - m_Value: 2.06
+        m_Name: LifeTimeSetting
+        m_Overridden: 1
+      - m_Value: 12.3
+        m_Name: SpawnRate
+        m_Overridden: 1
+      - m_Value: 2.17
+        m_Name: AABoxSize
+        m_Overridden: 1
+      - m_Value: 2.44
+        m_Name: SetRange
+        m_Overridden: 1
+      - m_Value: 1.52
+        m_Name: SetFalseRange
+        m_Overridden: 1
+      - m_Value: 2.47
+        m_Name: GeneralRate
+        m_Overridden: 1
+      - m_Value: 3.87
+        m_Name: LimitCollidePositionZ
+        m_Overridden: 1
+      - m_Value: 1.57
+        m_Name: FireTrailSpeed
+        m_Overridden: 1
+      - m_Value: 9.92
+        m_Name: BombSize
+        m_Overridden: 1
+      - m_Value: 1.84
+        m_Name: FlashSize
+        m_Overridden: 1
+      - m_Value: 4.35
+        m_Name: SparkRate
+        m_Overridden: 1
+      - m_Value: 0.41
+        m_Name: BoltScrollSpeed
+        m_Overridden: 1
+      - m_Value: 1.7
+        m_Name: LightningScrollSpeed
+        m_Overridden: 1
+      - m_Value: 0.23
+        m_Name: LightnigSize
+        m_Overridden: 1
+      - m_Value: 0.34
+        m_Name: LightningLifeTime
+        m_Overridden: 1
+      - m_Value: 2
+        m_Name: New float
+        m_Overridden: 1
+      - m_Value: 0.15
+        m_Name: SparkSize
+        m_Overridden: 1
+    m_Vector2f:
+      m_Array: []
+    m_Vector3f:
+      m_Array:
+      - m_Value: {x: 0.05, y: 0, z: 0.05}
+        m_Name: LightnigAABoxSize
+        m_Overridden: 1
+      - m_Value: {x: 0, y: 0, z: 0}
+        m_Name: LightningRangePivot
+        m_Overridden: 1
+      - m_Value: {x: 1, y: 0, z: 1}
+        m_Name: LightnigRangeBoxSize
+        m_Overridden: 1
+      - m_Value: {x: 0, y: 0, z: 0}
+        m_Name: RangeBoxSize
+        m_Overridden: 1
+      - m_Value: {x: 0, y: -0.2, z: 0}
+        m_Name: RangePivot
+        m_Overridden: 1
+    m_Vector4f:
+      m_Array:
+      - m_Value: {x: 0.5418237, y: 1, z: 0.47798735, w: 0}
+        m_Name: CenterImpactColor
+        m_Overridden: 1
+      - m_Value: {x: 1.3690794, y: 3.2490098, z: 1.5235761, w: 0}
+        m_Name: ImpactColor1
+        m_Overridden: 1
+      - m_Value: {x: 1.0691823, y: 1.8758179, z: 2, w: 0}
+        m_Name: ParticleColor
+        m_Overridden: 1
+      - m_Value: {x: 56.42302, y: 37.09616, z: 84.26129, w: 0}
+        m_Name: LightnigTintColor
+        m_Overridden: 1
+    m_Uint:
+      m_Array: []
+    m_Int:
+      m_Array: []
+    m_Matrix4x4f:
+      m_Array: []
+    m_AnimationCurve:
+      m_Array:
+      - m_Value:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 0.3100344
+            value: 0.05958675
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 0.7490352
+            value: 0
+            inSlope: 0.09068575
+            outSlope: 0.09068575
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 0.8771864
+            value: 0.061267033
+            inSlope: 0.0007774195
+            outSlope: 0.0007774195
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        m_Name: FireSizeCurve
+        m_Overridden: 1
+      - m_Value:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 0.25
+            value: 0.25
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        m_Name: BombSizeCurve
+        m_Overridden: 1
+      - m_Value:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: Infinity
+            outSlope: Infinity
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 0.052911814
+            value: 1.9259081
+            inSlope: Infinity
+            outSlope: Infinity
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.099639505
+            value: -0.019240204
+            inSlope: 0.039228506
+            outSlope: 0.039228506
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.7582373
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.15983218
+            value: 1.8831813
+            inSlope: Infinity
+            outSlope: Infinity
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.22064932
+            value: -0.0016509593
+            inSlope: Infinity
+            outSlope: Infinity
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 0.27665347
+            value: 1.9315188
+            inSlope: Infinity
+            outSlope: Infinity
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.34323117
+            value: -0.0016509295
+            inSlope: Infinity
+            outSlope: Infinity
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.41101938
+            value: 1.9406375
+            inSlope: Infinity
+            outSlope: Infinity
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.4726231
+            value: -0.022092223
+            inSlope: Infinity
+            outSlope: Infinity
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.5296488
+            value: 1.9110775
+            inSlope: Infinity
+            outSlope: Infinity
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.59391725
+            value: -0.0023528636
+            inSlope: Infinity
+            outSlope: Infinity
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.6422256
+            value: 1.8852233
+            inSlope: Infinity
+            outSlope: Infinity
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.7039613
+            value: -0.011471629
+            inSlope: Infinity
+            outSlope: Infinity
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.75964457
+            value: 1.8487483
+            inSlope: Infinity
+            outSlope: Infinity
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.8116962
+            value: 0.015884638
+            inSlope: Infinity
+            outSlope: Infinity
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.8794844
+            value: 1.8168329
+            inSlope: Infinity
+            outSlope: Infinity
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.95332515
+            value: -0.0023528337
+            inSlope: Infinity
+            outSlope: Infinity
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 1
+            value: 1.9530869
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        m_Name: BoltAnimationCurve
+        m_Overridden: 1
+      - m_Value:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 0.25
+            value: 0.25
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        m_Name: LightnigAnimationCurve
+        m_Overridden: 1
+    m_Gradient:
+      m_Array:
+      - m_Value:
+          serializedVersion: 2
+          key0: {r: 3.1864073, g: 1.1034689, b: 0.1703423, a: 1}
+          key1: {r: 2.2734203, g: 0.90512294, b: 0.53562254, a: 1}
+          key2: {r: 4.651133, g: 0.27359605, b: 0, a: 0}
+          key3: {r: 5.688077, g: 0.05199775, b: 0.093308076, a: 0}
+          key4: {r: 5.9313946, g: 0, b: 0.115202695, a: 0}
+          key5: {r: 8.435761, g: 6.333376, b: 0.7692982, a: 0}
+          key6: {r: 0, g: 0, b: 0, a: 0}
+          key7: {r: 0, g: 0, b: 0, a: 0}
+          ctime0: 0
+          ctime1: 11735
+          ctime2: 29433
+          ctime3: 38667
+          ctime4: 65535
+          ctime5: 64571
+          ctime6: 0
+          ctime7: 0
+          atime0: 0
+          atime1: 65535
+          atime2: 0
+          atime3: 0
+          atime4: 0
+          atime5: 0
+          atime6: 0
+          atime7: 0
+          m_Mode: 0
+          m_ColorSpace: -1
+          m_NumColorKeys: 5
+          m_NumAlphaKeys: 2
+        m_Name: FireTailColorGradient
+        m_Overridden: 1
+      - m_Value:
+          serializedVersion: 2
+          key0: {r: 3.6605997, g: 0.40247425, b: 0.5354962, a: 0.8}
+          key1: {r: 56.298416, g: 6.7793903, b: 9.90989, a: 0.8}
+          key2: {r: 25.99207, g: 7.2046776, b: 6.8042064, a: 0}
+          key3: {r: 383.49805, g: 18.387323, b: 0, a: 0}
+          key4: {r: 166.9273, g: 6.74317, b: 0, a: 0}
+          key5: {r: 0, g: 2.17376, b: 7.756184, a: 0}
+          key6: {r: 0, g: 0, b: 0, a: 0}
+          key7: {r: 0.47187406, g: 0, b: 0.37934977, a: 0}
+          ctime0: 2306
+          ctime1: 23831
+          ctime2: 33825
+          ctime3: 58403
+          ctime4: 64571
+          ctime5: 64571
+          ctime6: 65535
+          ctime7: 65535
+          atime0: 0
+          atime1: 65535
+          atime2: 0
+          atime3: 0
+          atime4: 0
+          atime5: 0
+          atime6: 0
+          atime7: 0
+          m_Mode: 0
+          m_ColorSpace: 1
+          m_NumColorKeys: 5
+          m_NumAlphaKeys: 2
+        m_Name: SparkGradient
+        m_Overridden: 1
+    m_NamedObject:
+      m_Array:
+      - m_Value: {fileID: -1912342602937990492, guid: 05d65eb63fd73cc45b8be9f3e168d536,
+          type: 3}
+        m_Name: FireTrailMesh
+        m_Overridden: 1
+      - m_Value: {fileID: 2800000, guid: 017e47ab9d7f8f443a22ab08424fec30, type: 3}
+        m_Name: LightnigTexture
+        m_Overridden: 1
+      - m_Value: {fileID: 2800000, guid: 148ed756cb90b334fa0742fe43b55569, type: 3}
+        m_Name: LightningGradientMap
+        m_Overridden: 1
+      - m_Value: {fileID: 2800000, guid: 484dd7c38d92e504a9bf168f7ca7cff0, type: 3}
+        m_Name: SparkTexture
+        m_Overridden: 1
+    m_Bool:
+      m_Array: []
+--- !u!73398921 &3488308487046615894
+VFXRenderer:
+  serializedVersion: 1
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2648558679557411663}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 0
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
