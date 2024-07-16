@@ -86,6 +86,11 @@ namespace LevelEditor
 
         private void OnDropdownItemSelected(string itemName)
         {
+            //現在のシーンをセーブ
+            Scene currentScene = SceneManager.GetActiveScene();
+            string currentAssetPath = LevelEditorUtil.GetSceneAssetPath(currentScene.name);
+            EditorSceneManager.SaveScene(SceneManager.GetActiveScene(), currentAssetPath);
+
             //シーン名からシーンをロード
             string assetPath = LevelEditorUtil.GetSceneAssetPath(itemName);
             Scene scene = EditorSceneManager.OpenScene(assetPath, OpenSceneMode.Single);
@@ -101,8 +106,6 @@ namespace LevelEditor
         private LevelToolbar() : base(
             nameof(LevelCreatorButton),
             nameof(LevelSelectorDropdown)
-        )
-        {
-        }
+        ) { }
     }
 }
