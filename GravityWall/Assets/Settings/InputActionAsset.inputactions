@@ -27,7 +27,7 @@
                     "name": "Look",
                     "type": "Value",
                     "id": "a12e4f6d-2482-46a4-af46-87f68f3332db",
-                    "expectedControlType": "Axis",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -100,6 +100,17 @@
                 },
                 {
                     "name": "",
+                    "id": "40849120-e521-422c-9338-fca6b4faf086",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "ddef00bb-252f-4f31-8351-783fe1bcf9ed",
                     "path": "<Keyboard>/space",
                     "interactions": "",
@@ -110,37 +121,15 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "1D Axis",
-                    "id": "f6894fa9-7631-47c3-9dbc-5e26adfbc6db",
-                    "path": "1DAxis",
+                    "name": "",
+                    "id": "e6ecc3ad-6af5-48d4-a011-d893b1d0e17b",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Look",
-                    "isComposite": true,
+                    "action": "Jump",
+                    "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "positive",
-                    "id": "ff417d22-c8f8-49ae-b54a-5d2d4f3bf8ad",
-                    "path": "<Keyboard>/leftArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "negative",
-                    "id": "401d5a72-a9dd-465b-8053-d07f62580e97",
-                    "path": "<Keyboard>/rightArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": true
                 },
                 {
                     "name": "",
@@ -150,6 +139,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Hold",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b055ce92-8590-4fd3-8757-61094f722820",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d3c0f548-5775-40bc-a282-bacfc9ec983f",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "ScaleVector2(x=10,y=10)",
+                    "groups": "",
+                    "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
