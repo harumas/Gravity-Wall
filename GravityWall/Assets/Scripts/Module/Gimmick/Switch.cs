@@ -7,7 +7,6 @@ namespace Module.Gimmick
     {
         [SerializeField] private bool initializeIsOn = false;
         [SerializeField] private List<AbstractGimmickAffected> gimmickAffecteds = new List<AbstractGimmickAffected>();
-
         public override bool isOn { get => _isOn; protected set => _isOn = value; }
         private bool _isOn;
 
@@ -26,13 +25,20 @@ namespace Module.Gimmick
             }
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void OnTriggerEnter(Collider collider)
         {
-            if (other.CompareTag("BatteryBox"))
+            if (collider.CompareTag("BatteryBox"))
             {
                 OnSwitch(!isOn);
             }
         }
 
+        private void OnTriggerExit(Collider collider)
+        {
+            if (collider.CompareTag("BatteryBox"))
+            {
+                OnSwitch(!isOn);
+            }
+        }
     }
 }
