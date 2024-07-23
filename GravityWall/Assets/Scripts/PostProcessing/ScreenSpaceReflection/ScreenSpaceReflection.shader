@@ -44,7 +44,7 @@
             float SampleDepth(float2 uv)
             {
                 #if UNITY_REVERSED_Z
-                    return  SampleSceneDepth(uv);
+                return SampleSceneDepth(uv);
                 #else
                     return lerp(UNITY_NEAR_CLIP_VALUE, 1, SampleSceneDepth(uv));
                 #endif
@@ -59,7 +59,7 @@
                 float2 spos = uv * 2.0 - 1.0;
 
                 #if UNITY_UV_STARTS_AT_TOP
-                    spos.y = -spos.y;
+                spos.y = -spos.y;
                 #endif
 
                 float depth = SampleDepth(uv);
@@ -76,30 +76,30 @@
 
                 float3 camDir = normalize(worldPos - _WorldSpaceCameraPos);
                 float3 normal = SampleSceneNormals(uv);
-                
+
                 //法線のデバッグ
                 //return float4(normal, 1);
 
                 float3 reflectDir = reflect(camDir, normal);
 
                 //反射ベクトルのデバッグ
-                //return float4(reflectDir, 1);
+                return float4(reflectDir, 1);
 
                 int maxRayNum = 200;
                 float3 step = 2.0 / maxRayNum * reflectDir;
-                // float maxThickness = 0.3 / maxRayNum;
-                
+                float maxThickness = 0.3 / maxRayNum;
+
                 for (int n = 1; n <= maxRayNum; ++n)
                 {
                     float3 rayPos = worldPos + step * n;
                     float4 vpPos = mul(UNITY_MATRIX_VP, float4(rayPos, 1.0));
                     float2 rayUv = vpPos.xy / vpPos.w * 0.5 + 0.5;
-                    
+
                     float rayDepth = ComputeDepth(vpPos);
                     float gbufferDepth = SampleDepth(rayUv);
 
-                    if (rayDepth - gbufferDepth > 0)
-                    //if (rayDepth - gbufferDepth > 0 && rayDepth - gbufferDepth < maxThickness)
+                    //if (rayDepth - gbufferDepth > 0)
+                    if (rayDepth - gbufferDepth > 0 && rayDepth - gbufferDepth < maxThickness)
                     {
                         col += SAMPLE_TEXTURE2D_X(_CameraOpaqueTexture, sampler_CameraOpaqueTexture, rayUv) * 0.3;
                         break;

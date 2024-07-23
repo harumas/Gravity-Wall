@@ -37,12 +37,17 @@ namespace PostProcessing
             // CommandBufferを取得
             CommandBuffer cmd = CommandBufferPool.Get("ScreenSpaceReflection");
 
-            effectMaterial.SetFloat(intensityId, customEffect.intensity.value);
-            effectMaterial.SetVector("_BlitScaleBias", new Vector4(1, 1, 0, 0));
+            using (new ProfilingScope(cmd, profilingSampler))
+            {
+                effectMaterial.SetFloat(intensityId, customEffect.intensity.value);
+                effectMaterial.SetVector("_BlitScaleBias", new Vector4(1, 1, 0, 0));
 
-            Blitter.BlitCameraTexture(cmd, rtHandle, rtHandle, effectMaterial, 0);
+                Blitter.BlitCameraTexture(cmd, rtHandle, rtHandle, effectMaterial, 0);
+            }
 
             context.ExecuteCommandBuffer(cmd);
+
+
             cmd.Clear();
 
             CommandBufferPool.Release(cmd);
