@@ -104,24 +104,21 @@ namespace Module.Character
         {
             Quaternion targetRotation = Quaternion.FromToRotation(transform.up, -Gravity.Value) * rigBody.rotation;
             Matrix4x4 matrix = Matrix4x4.TRS(Vector3.zero, targetRotation, Vector3.one);
-            Vector3 localVelocity = matrix.MultiplyVector(rigBody.velocity);
+            Vector3 localVelocity = matrix.MultiplyPoint3x4(rigBody.velocity);
 
+            Debug.Log(localVelocity);
+            UGizmos.DrawArrow(transform.position, transform.position + localVelocity * 0.1f, Color.red);
 
-            //Vector3 localVelocity = rot * rigBody.velocity;
             //重力速度は保持する
             float y = localVelocity.y;
             localVelocity = Vector3.ClampMagnitude(localVelocity, maxSpeed);
             localVelocity.y = y;
 
-            UGizmos.DrawArrow(transform.position, transform.position + localVelocity * 0.1f, Color.red);
-
             AdjustGravity();
 
-            //rigBody.velocity = Quaternion.Inverse(rot) * localVelocity;
-            //Matrix4x4 inverseTransformMatrix = transformMatrix.inverse;
-            localVelocity = matrix.inverse.MultiplyVector(localVelocity);
-            Debug.Log(localVelocity);
-            Debug.Log(rigBody.velocity);
+            localVelocity = matrix.inverse.MultiplyPoint3x4(localVelocity);
+            
+            UGizmos.DrawArrow(transform.position, transform.position + localVelocity * 0.1f, Color.blue);
             rigBody.velocity = localVelocity;
         }
 
