@@ -1,10 +1,7 @@
-using System;
 using Core.Input;
-using DG.Tweening.Core.Easing;
 using Module.Gimmick;
 using UGizmo;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Module.Character
 {
@@ -15,13 +12,15 @@ namespace Module.Character
         [Header("回転速度")] [SerializeField] private float rotateSpeed;
         [Header("最大速度")] [SerializeField] private float maxSpeed;
         [Header("ジャンプ力")] [SerializeField] private float jumpPower;
-        [Header("最大ジャンプ速度")] [SerializeField] private float maxJumpSpeed;
         [Header("ジャンプ中の重力")] [SerializeField] private float jumpingGravity;
-        [Header("最大落下速度")] [SerializeField] private float maxFallSpeed;
 
-        [Header("ジャンプを許可する重力との角度の差")]
+        [Header("連続ジャンプを許可する間隔")]
         [SerializeField]
-        private float allowJumpAngle;
+        private float allowJumpInterval;
+
+        [Header("Debug View")]
+        [SerializeField]
+        private bool isJumping;
 
         [SerializeField] private Rigidbody rigBody;
         [SerializeField] private Transform target;
@@ -32,8 +31,7 @@ namespace Module.Character
 
         private Vector2 input;
         private float jumpVelocity;
-        private bool isJumping;
-        private bool canJump;
+        private float lastJumpTime;
 
         private Vector3 prevPos;
         private Vector3 nextPos;
@@ -49,10 +47,11 @@ namespace Module.Character
 
             jumpEvent.Started += _ =>
             {
-                if (!isJumping && canJump)
+                if (!isJumping)
                 {
                     rigBody.AddForce(-Gravity.Value * jumpPower, ForceMode.VelocityChange);
                     isJumping = true;
+                    lastJumpTime = Time.time;
                 }
             };
 
@@ -63,9 +62,6 @@ namespace Module.Character
         private void Update()
         {
             input = controlEvent.ReadValue<Vector2>();
-
-            Matrix4x4 transformMatrix = GetTransformationMatrix(-Gravity.Value);
-            UGizmos.DrawArrow(transform.position, transform.position + transformMatrix.MultiplyPoint3x4(Vector3.up), Color.green);
         }
 
         private void FixedUpdate()
@@ -92,34 +88,42 @@ namespace Module.Character
             nextPos = rigBody.position;
         }
 
-        private void OnCollisionEnter(Collision other)
+        private void OnCollisionEnter(Collision _)
         {
-            Vector3 localVelocity = transform.InverseTransformVector(rigBody.velocity);
-            localVelocity.y = 0f;
-            rigBody.velocity = transform.TransformDirection(localVelocity);
             isJumping = false;
+        }
+
+        private void OnCollisionStay(Collision _)
+        {
+            if (!isJumping)
+            {
+                return;
+            }
+
+            bool canJump = lastJumpTime + allowJumpInterval <= Time.time;
+            if (canJump)
+            {
+                isJumping = false;
+            }
         }
 
         private void ClampVelocity()
         {
-            Quaternion targetRotation = Quaternion.FromToRotation(transform.up, -Gravity.Value) * rigBody.rotation;
-            Matrix4x4 matrix = Matrix4x4.TRS(Vector3.zero, targetRotation, Vector3.one);
-            Vector3 localVelocity = matrix.MultiplyPoint3x4(rigBody.velocity);
+            Vector3 gravity = Gravity.Value;
+            Vector3 velocity = rigBody.velocity;
 
-            Debug.Log(localVelocity);
-            UGizmos.DrawArrow(transform.position, transform.position + localVelocity * 0.1f, Color.red);
+            float velocityAlongGravity = Vector3.Dot(velocity, gravity);
 
-            //重力速度は保持する
-            float y = localVelocity.y;
-            localVelocity = Vector3.ClampMagnitude(localVelocity, maxSpeed);
-            localVelocity.y = y;
+            Vector3 yVelocity = gravity * velocityAlongGravity;
+            Vector3 xVelocity = velocity - gravity * velocityAlongGravity;
+            xVelocity = Vector3.ClampMagnitude(xVelocity, maxSpeed);
+
+            // 元の座標系に戻すために、平行成分と垂直成分を合成
+            Vector3 originalVelocity = xVelocity + yVelocity;
 
             AdjustGravity();
 
-            localVelocity = matrix.inverse.MultiplyPoint3x4(localVelocity);
-            
-            UGizmos.DrawArrow(transform.position, transform.position + localVelocity * 0.1f, Color.blue);
-            rigBody.velocity = localVelocity;
+            rigBody.velocity = originalVelocity;
         }
 
         private void PerformGravityRotate()
@@ -127,8 +131,6 @@ namespace Module.Character
             Quaternion targetRotation = Quaternion.FromToRotation(transform.up, -Gravity.Value) * rigBody.rotation;
             rigBody.rotation = Quaternion.Slerp(rigBody.rotation, targetRotation, rotateSpeed);
             float angle = Vector3.Angle(transform.up, -Gravity.Value);
-
-            canJump = angle < allowJumpAngle;
 
             if (angle >= 1f)
             {
@@ -150,28 +152,6 @@ namespace Module.Character
             }
 
             localGravity.SetMultiplierAtFrame(jumpingGravity);
-        }
-
-        Matrix4x4 GetTransformationMatrix(Vector3 normal)
-        {
-            // 法線ベクトルを正規化
-            Vector3 normalizedNormal = normal.normalized;
-
-            // 新しい座標系のx軸を計算
-            Vector3 up = Vector3.up;
-            Vector3 newXAxis = Vector3.Cross(up, normalizedNormal).normalized;
-
-            // 新しい座標系のz軸を計算
-            Vector3 newZAxis = Vector3.Cross(normalizedNormal, newXAxis);
-
-            // 座標変換行列を作成
-            Matrix4x4 transformMatrix = new Matrix4x4();
-            transformMatrix.SetColumn(0, new Vector4(newXAxis.x, newXAxis.y, newXAxis.z, 0));
-            transformMatrix.SetColumn(1, new Vector4(normalizedNormal.x, normalizedNormal.y, normalizedNormal.z, 0));
-            transformMatrix.SetColumn(2, new Vector4(newZAxis.x, newZAxis.y, newZAxis.z, 0));
-            transformMatrix.SetColumn(3, new Vector4(0, 0, 0, 1));
-
-            return transformMatrix;
         }
     }
 }
