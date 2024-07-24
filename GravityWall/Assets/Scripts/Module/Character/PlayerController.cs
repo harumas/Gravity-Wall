@@ -1,9 +1,7 @@
-using System;
 using Core.Input;
 using Module.Gimmick;
 using UGizmo;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Module.Character
 {
@@ -14,10 +12,15 @@ namespace Module.Character
         [Header("回転速度")] [SerializeField] private float rotateSpeed;
         [Header("最大速度")] [SerializeField] private float maxSpeed;
         [Header("ジャンプ力")] [SerializeField] private float jumpPower;
-        [Header("最大ジャンプ速度")] [SerializeField] private float maxJumpSpeed;
         [Header("ジャンプ中の重力")] [SerializeField] private float jumpingGravity;
-        [Header("最大落下速度")] [SerializeField] private float maxFallSpeed;
-        [Header("ジャンプを許可する重力との角度の差")] [SerializeField] private float allowJumpAngle;
+
+        [Header("連続ジャンプを許可する間隔")]
+        [SerializeField]
+        private float allowJumpInterval;
+
+        [Header("Debug View")]
+        [SerializeField]
+        private bool isJumping;
 
         [SerializeField] private Rigidbody rigBody;
         [SerializeField] private Transform target;
@@ -28,8 +31,7 @@ namespace Module.Character
 
         private Vector2 input;
         private float jumpVelocity;
-        private bool isJumping;
-        private bool canJump;
+        private float lastJumpTime;
 
         private Vector3 prevPos;
         private Vector3 nextPos;
@@ -45,10 +47,11 @@ namespace Module.Character
 
             jumpEvent.Started += _ =>
             {
-                if (!isJumping && canJump)
+                if (!isJumping)
                 {
                     rigBody.AddForce(-Gravity.Value * jumpPower, ForceMode.VelocityChange);
                     isJumping = true;
+                    lastJumpTime = Time.time;
                 }
             };
 
@@ -85,35 +88,49 @@ namespace Module.Character
             nextPos = rigBody.position;
         }
 
-        private void OnCollisionEnter(Collision other)
+        private void OnCollisionEnter(Collision _)
         {
-            Vector3 localVelocity = transform.InverseTransformVector(rigBody.velocity);
-            localVelocity.y = 0f;
-            rigBody.velocity = transform.TransformDirection(localVelocity);
             isJumping = false;
+        }
+
+        private void OnCollisionStay(Collision _)
+        {
+            if (!isJumping)
+            {
+                return;
+            }
+
+            bool canJump = lastJumpTime + allowJumpInterval <= Time.time;
+            if (canJump)
+            {
+                isJumping = false;
+            }
         }
 
         private void ClampVelocity()
         {
-            Vector3 localVelocity = transform.InverseTransformVector(rigBody.velocity);
+            Vector3 gravity = Gravity.Value;
+            Vector3 velocity = rigBody.velocity;
 
-            //重力速度は保持する
-            float y = localVelocity.y;
-            localVelocity = Vector3.ClampMagnitude(localVelocity, maxSpeed);
-            localVelocity.y = Mathf.Clamp(y, maxFallSpeed, maxJumpSpeed);
+            float velocityAlongGravity = Vector3.Dot(velocity, gravity);
+
+            Vector3 yVelocity = gravity * velocityAlongGravity;
+            Vector3 xVelocity = velocity - gravity * velocityAlongGravity;
+            xVelocity = Vector3.ClampMagnitude(xVelocity, maxSpeed);
+
+            // 元の座標系に戻すために、平行成分と垂直成分を合成
+            Vector3 originalVelocity = xVelocity + yVelocity;
 
             AdjustGravity();
 
-            rigBody.velocity = transform.TransformDirection(localVelocity);
+            rigBody.velocity = originalVelocity;
         }
 
         private void PerformGravityRotate()
         {
             Quaternion targetRotation = Quaternion.FromToRotation(transform.up, -Gravity.Value) * rigBody.rotation;
             rigBody.rotation = Quaternion.Slerp(rigBody.rotation, targetRotation, rotateSpeed);
-            float angle = Vector3.Angle(transform.up, -Gravity.Value) ;
-
-            canJump = angle < allowJumpAngle;
+            float angle = Vector3.Angle(transform.up, -Gravity.Value);
 
             if (angle >= 1f)
             {
