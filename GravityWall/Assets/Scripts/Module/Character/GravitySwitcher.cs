@@ -1,4 +1,5 @@
-﻿using Module.Gimmick;
+﻿using GravityWall;
+using Module.Gimmick;
 using UGizmo;
 using UnityEngine;
 
@@ -93,10 +94,11 @@ namespace Module.Character
             bool isSafeAngle = Vector3.Angle(-transform.up, collision.GetContact(0).normal) > detectHoldAngle;
 
             //衝突したオブジェクトが重力の影響を受けるか判定
+            bool isGravityCollider = collision.gameObject.layer != Layer.IgnoreGravity;
             LocalGravity localGravity = collision.collider.GetComponent<LocalGravity>();
             bool isActive = localGravity == null || (localGravity != null && localGravity.enabled);
 
-            if (isSafeAngle && isActive)
+            if (isGravityCollider && isSafeAngle && isActive)
             {
                 currentCollider = collision.collider;
             }
