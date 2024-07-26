@@ -1,7 +1,11 @@
+using DG.Tweening;
+using DG.Tweening.Core.Easing;
 using Module.Gimmick;
 using Module.InputModule;
 using R3;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UIElements.Experimental;
 
 namespace Module.Character
 {
@@ -13,7 +17,8 @@ namespace Module.Character
         [Header("移動速度")] [SerializeField] private float controlSpeed;
         [Header("速度減衰")] [SerializeField] private float speedDamping;
         [Header("ジャンプ中移動係数")] [SerializeField] private float airControl;
-        [Header("回転速度")] [SerializeField] private float rotateSpeed;
+        [Header("回転のイージング")] [SerializeField] private Ease easeType;
+        [Header("回転のイージング係数")] [SerializeField] private float rotateStep;
         [Header("最大速度")] [SerializeField] private float maxSpeed;
         [Header("ジャンプ力")] [SerializeField] private float jumpPower;
         [Header("ジャンプ中の重力")] [SerializeField] private float jumpingGravity;
@@ -107,10 +112,16 @@ namespace Module.Character
         private void PerformGravityRotate()
         {
             Quaternion targetRotation = Quaternion.FromToRotation(transform.up, -Gravity.Value) * rigBody.rotation;
-            rigBody.rotation = Quaternion.Slerp(rigBody.rotation, targetRotation, rotateSpeed);
-            float angle = Vector3.Angle(transform.up, -Gravity.Value);
 
-            if (angle >= rotatingAngle)
+            //角度の差を求める
+            float angle = Vector3.Angle(transform.up, -Gravity.Value);
+            angle = Mathf.Max(angle, Mathf.Epsilon);
+            
+            //イージング関数を噛ませる
+            float t = easeType != Ease.Unset ? EaseManager.Evaluate(easeType, null, rotateStep, angle, 1f, 1f) : rotateStep;
+            rigBody.rotation = Quaternion.Slerp(rigBody.rotation, targetRotation, t);
+
+            if (angle - rotateStep >= rotatingAngle)
             {
                 //回転中はオブジェクトが落下しないようにする
                 Gravity.SetDisable(Gravity.Type.Object);
