@@ -6,6 +6,7 @@ namespace Module.Character
 {
     public class GravitySwitcher : MonoBehaviour
     {
+        [SerializeField] private bool isEnabled = true;
         [SerializeField] private float detectHoldAngle = 1f;
         [SerializeField] private float detectRayRadius = 0.6f;
         [SerializeField] private float detectRayRange = 0.6f;
@@ -18,7 +19,17 @@ namespace Module.Character
 
         private void Update()
         {
-            isLegalStep = IsLegalStep();
+            isLegalStep = isEnabled && IsLegalStep();
+        }
+
+        private void Enable()
+        {
+            isEnabled = true;
+        }
+        
+        private void Disable()
+        {
+            isEnabled = true;
         }
 
         /// <summary>

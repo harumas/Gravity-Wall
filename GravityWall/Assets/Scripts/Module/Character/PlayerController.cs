@@ -11,6 +11,7 @@ namespace Module.Character
     public class PlayerController : MonoBehaviour
     {
         [Header("移動速度")] [SerializeField] private float controlSpeed;
+        [Header("速度減衰")] [SerializeField] private float speedDamping;
         [Header("ジャンプ中移動係数")] [SerializeField] private float airControl;
         [Header("回転速度")] [SerializeField] private float rotateSpeed;
         [Header("最大速度")] [SerializeField] private float maxSpeed;
@@ -69,8 +70,17 @@ namespace Module.Character
             Vector3 yVelocity = gravity * velocityAlongGravity;
             Vector3 xVelocity = velocity - gravity * velocityAlongGravity;
 
-            //x軸の動きだけクランプ
-            xVelocity = Vector3.ClampMagnitude(xVelocity, maxSpeed);
+
+            if (input == Vector2.zero)
+            {
+                //入力がない時は減衰させる
+                xVelocity *= speedDamping;
+            }
+            else
+            {
+                //x軸の動きだけクランプ
+                xVelocity = Vector3.ClampMagnitude(xVelocity, maxSpeed);
+            }
 
             //元の座標系に戻す
             Vector3 originalVelocity = xVelocity + yVelocity;
@@ -84,7 +94,7 @@ namespace Module.Character
             Vector3 forward = target.forward * input.y;
             Vector3 right = target.right * input.x;
             Vector3 moveDirection = (forward + right).normalized;
-            
+
             //重力と垂直な速度ベクトルに変換
             Quaternion targetRotation = Quaternion.FromToRotation(target.up, -Gravity.Value);
             Vector3 moveVelocity = targetRotation * moveDirection * controlSpeed;
