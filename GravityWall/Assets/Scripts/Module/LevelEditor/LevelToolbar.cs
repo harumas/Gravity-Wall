@@ -38,6 +38,12 @@ namespace LevelEditor
                 EditorSceneManager.CloseScene(currentLevel, true);
             }
 
+            if (levelNameField.text == string.Empty)
+            {
+                Debug.LogError("Level名が設定されていないため、作成に失敗しました。");
+                return;
+            }
+
             //テンプレートからシーンを生成
             SceneTemplateAsset template = AssetDatabase.LoadAssetAtPath<SceneTemplateAsset>(LevelEditorUtil.SceneTemplatePath);
             string savePath = LevelEditorUtil.GetSceneAssetPath(levelNameField.text);
