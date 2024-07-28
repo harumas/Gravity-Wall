@@ -8,9 +8,24 @@ namespace Module.LevelEditor
 {
     public class BuildSettingScenesUpdater : AssetPostprocessor
     {
-        private const string sceneDirLevel = @"Scenes\Level";
-        private const string sceneDirTitle = @"Scenes\Title";
-        private const string initialLoadScene = @"Scenes\Title\Root.unity";
+        private static readonly string sceneDirLevel;
+        private static readonly string sceneDirTitle;
+        private static readonly string initialLoadScene;
+
+        static BuildSettingScenesUpdater()
+        {
+
+            //プラットフォーム毎に異なるpathを設定
+#if UNITY_EDITOR_WIN
+            sceneDirLevel = @"Scenes\Level";
+            sceneDirTitle = @"Scenes\Title";
+            initialLoadScene = @"Scenes\Title\Root.unity";
+#elif UNITY_EDITOR_OSX
+            sceneDirLevel = "Scenes/Level";
+            sceneDirTitle = "Scenes/Title";
+            initialLoadScene = "Scenes/Title/Root.unity";
+#endif
+        }
 
         public static void OnPostprocessAllAssets(
             string[] importedAssets,
@@ -56,7 +71,7 @@ namespace Module.LevelEditor
 
             if (!File.Exists(initialLoadSceneFullPath))
             {
-                Debug.LogError("Not Found Inital Load Scene : " + initialLoadSceneFullPath);
+                Debug.LogError("Not Found Initial Load Scene : " + initialLoadSceneFullPath);
                 return false;
             }
 
@@ -85,12 +100,20 @@ namespace Module.LevelEditor
 
         private static string GetFullPath(string path)
         {
+#if UNITY_EDITOR_WIN
             return Application.dataPath + "\\" + path;
+#elif UNITY_EDITOR_OSX
+            return Application.dataPath + "/" + path;
+#endif
         }
 
         private static string GetAssetsPath(string path)
         {
+#if UNITY_EDITOR_WIN
             return "Assets\\" + path;
+#elif UNITY_EDITOR_OSX
+            return "Assets/" + path;
+#endif
         }
     }
 }
