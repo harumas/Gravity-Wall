@@ -16,6 +16,7 @@ public class SavePointObject : MonoBehaviour
             respawnManager.RetryPosition = RetryPositionObject.transform.position;
             respawnManager.GravityScale = Gravity.Value;
             FirstTouch = true;
+            respawnManager.Respawn();
         }
             
         

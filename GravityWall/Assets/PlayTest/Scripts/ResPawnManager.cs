@@ -35,7 +35,7 @@ public class RespawnManager : MonoBehaviour
         }
     }
 
-    private void Respawn()
+    public void Respawn()
     {
         Player.transform.position = RetryPosition;
         Gravity.SetValue(GravityScale);
