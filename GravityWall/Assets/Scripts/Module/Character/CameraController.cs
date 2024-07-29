@@ -1,49 +1,52 @@
 using Core.Helper;
 using Core.Input;
+using Module.Core.Input;
+using Module.InputModule;
+using R3;
+using R3.Triggers;
 using UnityEngine;
 
 namespace Module.Character
 {
+    /// <summary>
+    /// カメラの回転を制御するクラス
+    /// </summary>
     public class CameraController : MonoBehaviour
     {
-        [SerializeField] private Transform pivotVertical;
+        [Header("ロールピッチの回転軸")]
+        [SerializeField]
+        private Transform pivotVertical;
+
         [SerializeField] private Transform pivotHorizontal;
-        [SerializeField] private float horizontalSensibility;
-        [SerializeField] private float verticalSensibility;
         [SerializeField] private MinMaxValue horizontalRange;
         [SerializeField] private MinMaxValue verticalRange;
 
-        private InputEvent mouseEvent;
-        private Vector2 mouseDelta;
-
         private void Start()
         {
+            //カーソルロック
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
 
-            mouseEvent = InputActionProvider.Instance.CreateEvent(ActionGuid.Player.Look);
+            //マウスの移動イベントを登録
+            this.LateUpdateAsObservable()
+                .Select(_ => GameInput.MouseDelta * Time.deltaTime)
+                .Subscribe(OnRotateCamera);
         }
 
-        private void Update()
+        private void OnRotateCamera(Vector2 mouseDelta)
         {
-            mouseDelta = mouseEvent.ReadValue<Vector2>();
-        }
-
-        private void LateUpdate()
-        {
-            float x = mouseDelta.y * verticalSensibility * Time.deltaTime;
-            float y = mouseDelta.x * horizontalSensibility * Time.deltaTime;
+            float dx = mouseDelta.x;
+            float dy = mouseDelta.y;
 
             float eulerX = pivotHorizontal.localEulerAngles.x;
             float eulerY = pivotVertical.localEulerAngles.y;
 
-            eulerX = ClampAngle(eulerX - x, horizontalRange.Min, horizontalRange.Max);
-            eulerY = ClampAngle(eulerY + y, verticalRange.Min, verticalRange.Max);
+            //回転を制限
+            eulerX = ClampAngle(eulerX - dy, horizontalRange.Min, horizontalRange.Max);
+            eulerY = ClampAngle(eulerY + dx, verticalRange.Min, verticalRange.Max);
 
             pivotVertical.localEulerAngles = new Vector3(0f, eulerY, 0f);
             pivotHorizontal.localEulerAngles = new Vector3(eulerX, eulerY, 0f);
-
-            mouseDelta = Vector2.zero;
         }
 
         private float ClampAngle(float angle, float from, float to)
