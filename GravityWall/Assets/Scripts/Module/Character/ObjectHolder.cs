@@ -1,5 +1,4 @@
 using Core.Input;
-using Module.Core.Input;
 using Module.Gimmick;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -23,7 +22,7 @@ namespace Module.Character
         {
             myBody = transform.parent.GetComponent<Rigidbody>();
 
-            holdEvent = InputActionProvider.CreateEvent(ActionGuid.Player.Hold);
+            holdEvent = InputActionProvider.Instance.CreateEvent(ActionGuid.Player.Hold);
             holdEvent.Started += OnHoldStart;
             holdEvent.Canceled += OnHoldEnd;
         }
