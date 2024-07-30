@@ -7,7 +7,7 @@ using System.IO;
 public class SelectScenes : MonoBehaviour
 {
     [SerializeField] private GameObject selectStageButton;
-    private string scenesPath = "";
+    private string scenesPath = @"Assets/Scenes/Level";
     private List<string> sceneNames = new List<string>();
 
     void Start()
@@ -15,7 +15,7 @@ public class SelectScenes : MonoBehaviour
         // 指定したフォルダの全てのファイルを取得してListに追加
         if (Directory.Exists(scenesPath))
         {
-            string[] files = Directory.GetFiles(scenesPath);
+            string[] files = Directory.GetFiles(scenesPath, "*", System.IO.SearchOption.AllDirectories);
             foreach (string file in files)
             {
                 sceneNames.Add(Path.GetFileName(file));
@@ -28,7 +28,7 @@ public class SelectScenes : MonoBehaviour
 
         for (int i = 0; i < sceneNames.Count; i++)
         {
-
+            Debug.Log(sceneNames[i]);
         }
     }
 
