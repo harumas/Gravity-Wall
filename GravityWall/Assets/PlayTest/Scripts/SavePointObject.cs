@@ -1,4 +1,3 @@
-using Module.Gimmick;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,16 +9,13 @@ public class SavePointObject : MonoBehaviour
     [SerializeField] private GameObject RetryPositionObject;
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player"&&!FirstTouch)
+        if (other.tag == "Player" && !FirstTouch)
         {
-            Debug.Log("•Û‘¶‚³‚ê‚Ü‚µ‚½");
+            Debug.Log("ï¿½Û‘ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½");
             respawnManager.RetryPosition = RetryPositionObject.transform.position;
             respawnManager.GravityScale = Gravity.Value;
             FirstTouch = true;
+            respawnManager.Respawn();
         }
-            
-        
     }
-
-   
 }
