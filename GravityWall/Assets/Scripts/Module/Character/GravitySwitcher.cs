@@ -30,7 +30,7 @@ namespace Module.Character
         
         private void Disable()
         {
-            isEnabled = true;
+            isEnabled = false;
         }
 
         /// <summary>
@@ -59,6 +59,8 @@ namespace Module.Character
             {
                 return transform.up != normal;
             }
+
+   
 
             //何もヒットしていない場合は、進行方向に何も存在しないため、重力変更する必要がある
             return true;
@@ -121,9 +123,11 @@ namespace Module.Character
                     contact = current;
                 }
             }
+            
+            bool isGravityCollider = collision.gameObject.layer != Layer.IgnoreGravity;
 
             //重力変更
-            if (isLegalStep && currentCollider == collision.collider)
+            if (isLegalStep && isGravityCollider)
             {
                 Gravity.SetValue(-contact.normal);
             }
