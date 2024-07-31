@@ -8,16 +8,13 @@ namespace Module.Config
     /// <summary>
     /// ゲーム設定をインスペクタ上で行うクラス
     /// </summary>
-    public class GameConfig : MonoBehaviour
+    public class GameConfigView : MonoBehaviour
     {
         [SerializeField] private ConfigData configData;
-
-        private ConfigChangedListener configChangedListener;
 
         private void Awake()
         {
             configData = SaveManager<ConfigData>.Instance;
-            configChangedListener = new ConfigChangedListener();
         }
 
         [Button(ButtonSizes.Large)]
