@@ -11,6 +11,8 @@ namespace Module.Core.Input
     /// </summary>
     public static class InputActionProvider
     {
+        public static InputActionAsset ActionAsset => inputActionAsset;
+        
         private static InputActionAsset inputActionAsset;
         private static readonly List<InputEvent> inputEvents = new();
 

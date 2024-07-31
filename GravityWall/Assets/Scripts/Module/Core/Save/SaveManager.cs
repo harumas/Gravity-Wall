@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Module.Core.Save
 {
-    public static class SaveManager<T> where T : ScriptableObject
+    public static class SaveManager<T> where T : new()
     {
         public static T Instance;
 
@@ -15,15 +15,13 @@ namespace Module.Core.Save
         {
             string name = typeof(T).Name;
 
-            Instance = ScriptableObject.CreateInstance<T>();
-
             if (SaveUtility.FileExists(name))
             {
-                await SaveUtility.LoadOverwrite(name, Instance);
+                Instance = await SaveUtility.Load<T>(name);
             }
             else
             {
-                Instance = Resources.Load<T>($"Default{name}");
+                Instance = new T();
             }
         }
 
