@@ -10,25 +10,32 @@ using VContainer.Unity;
 
 namespace Module.Config
 {
-    public class ConfigChangedListener : IInitializable
+    /// <summary>
+    /// 設定の変更を反映するクラス
+    /// </summary>
+    public class ConfigChangedListener : IStartable
     {
         private readonly InputBinding keyboardBinding = InputBinding.MaskByGroup("Keyboard");
         private readonly InputBinding gamepadBinding = InputBinding.MaskByGroup("GamePad");
 
         private readonly ConfigData configData;
-        private readonly InputAction mouseAction;
+        private readonly InputAction lookAction;
 
         [Inject]
-        public ConfigChangedListener()
+        public ConfigChangedListener(ConfigData configData, InputActionAsset inputActionAsset)
         {
-            configData = SaveManager<ConfigData>.Instance;
-            mouseAction = InputActionProvider.ActionAsset.FindAction(ActionGuid.Player.Look);
+            this.configData = configData;
+            
+            //視点移動のInputActionを取得する
+            lookAction = inputActionAsset.FindAction(ActionGuid.Player.Look);
         }
 
-        public void Initialize()
+        public void Start()
         {
+            //初期値を反映する
             ApplyParameters(configData);
 
+            //更新イベントを登録する
             configData.MouseSensibility.Subscribe(UpdateMouseSensibility);
             configData.PadSensibility.Subscribe(UpdateGamePadSensibility);
         }
@@ -41,14 +48,14 @@ namespace Module.Config
 
         private void UpdateMouseSensibility(Vector2 sensibility)
         {
-            mouseAction.ApplyParameterOverride((ScaleVector2Processor param) => param.x, sensibility.x, keyboardBinding);
-            mouseAction.ApplyParameterOverride((ScaleVector2Processor param) => param.y, sensibility.y, keyboardBinding);
+            lookAction.ApplyParameterOverride((ScaleVector2Processor param) => param.x, sensibility.x, keyboardBinding);
+            lookAction.ApplyParameterOverride((ScaleVector2Processor param) => param.y, sensibility.y, keyboardBinding);
         }
 
         private void UpdateGamePadSensibility(Vector2 sensibility)
         {
-            mouseAction.ApplyParameterOverride((ScaleVector2Processor param) => param.x, sensibility.x, gamepadBinding);
-            mouseAction.ApplyParameterOverride((ScaleVector2Processor param) => param.y, sensibility.y, gamepadBinding);
+            lookAction.ApplyParameterOverride((ScaleVector2Processor param) => param.x, sensibility.x, gamepadBinding);
+            lookAction.ApplyParameterOverride((ScaleVector2Processor param) => param.y, sensibility.y, gamepadBinding);
         }
     }
 }

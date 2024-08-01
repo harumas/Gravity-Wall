@@ -7,7 +7,10 @@ namespace Module.Config
     [Serializable]
     public class ConfigData
     {
-        public SerializableReactiveProperty<Vector2> MouseSensibility = new(Vector2.one);
-        public SerializableReactiveProperty<Vector2> PadSensibility = new(Vector2.one);
+        public ReadOnlyReactiveProperty<Vector2> MouseSensibility => mouseSensibility;
+        public ReadOnlyReactiveProperty<Vector2> PadSensibility => padSensibility;
+        
+        [SerializeField] SerializableReactiveProperty<Vector2> mouseSensibility = new(Vector2.one);
+        [SerializeField] SerializableReactiveProperty<Vector2> padSensibility = new(Vector2.one);
     }
 }

@@ -10,6 +10,8 @@ namespace GameMain
     /// </summary>
     public static class GameBoot
     {
+        public static bool IsBooted { get; private set; } = false;
+        
         private static string mainScene;
         private const string BootSceneName = "Root";
         
@@ -31,6 +33,8 @@ namespace GameMain
         /// <param name="cancellationToken"></param>
         public static async UniTask LoadMainSceneAsync(CancellationToken cancellationToken)
         {
+            IsBooted = true;
+            
             await SceneManager.LoadSceneAsync(mainScene).ToUniTask(cancellationToken: cancellationToken);
         }
     }
