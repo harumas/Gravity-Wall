@@ -1,12 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
+using R3;
+using UnityEngine;
 
 namespace Module.Config
 {
-    [CreateAssetMenu(fileName = "ConfigData", menuName = "ConfigData")]
-    public class ConfigData : ScriptableObject
+    [Serializable]
+    public class ConfigData
     {
-        public Vector2 Sensibility => sensibility;
-
-        [SerializeField] private Vector2 sensibility;
+        public ReadOnlyReactiveProperty<Vector2> MouseSensibility => mouseSensibility;
+        public ReadOnlyReactiveProperty<Vector2> PadSensibility => padSensibility;
+        
+        [SerializeField] SerializableReactiveProperty<Vector2> mouseSensibility = new(Vector2.one);
+        [SerializeField] SerializableReactiveProperty<Vector2> padSensibility = new(Vector2.one);
     }
 }

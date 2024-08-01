@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4588405046219770306
+--- !u!1 &9154290256477605698
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,41 +8,43 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3680500086884462383}
-  - component: {fileID: 7431782162819919807}
+  - component: {fileID: 1082724673727953613}
+  - component: {fileID: 335522709036505896}
   m_Layer: 0
-  m_Name: InputActionProvider
+  m_Name: GameBoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3680500086884462383
+--- !u!4 &1082724673727953613
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4588405046219770306}
+  m_GameObject: {fileID: 9154290256477605698}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.9635806, y: 5.6627254, z: 7.1590443}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.3362806, y: 2.3473084, z: 6.6759057}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7431782162819919807
+--- !u!114 &335522709036505896
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4588405046219770306}
+  m_GameObject: {fileID: 9154290256477605698}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bb8e9689f7b9e845ba40ba428a9e68e, type: 3}
+  m_Script: {fileID: 11500000, guid: 42c9fabafc9743978746d6ad56b8a6d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputActionAsset: {fileID: -944628639613478452, guid: 0ca0068d6c3c56346a4334ebd0de92cb,
-    type: 3}
+  parentReference:
+    TypeName: 
+  autoRun: 1
+  autoInjectGameObjects: []
