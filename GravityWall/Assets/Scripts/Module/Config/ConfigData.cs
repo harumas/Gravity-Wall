@@ -16,10 +16,11 @@ namespace Module.Config
 
         public ConfigData Clone()
         {
-            ConfigData configData = new ConfigData();
-            
-            configData.mouseSensibility = new SerializableReactiveProperty<Vector2>(configData.mouseSensibility.CurrentValue);
-            configData.padSensibility = new SerializableReactiveProperty<Vector2>(configData.padSensibility.CurrentValue);
+            ConfigData configData = new ConfigData
+            {
+                mouseSensibility = new SerializableReactiveProperty<Vector2>(mouseSensibility.CurrentValue),
+                padSensibility = new SerializableReactiveProperty<Vector2>(padSensibility.CurrentValue)
+            };
 
             return configData;
         }
