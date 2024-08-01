@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace Module.Core.Save
 {
-    public static class SaveManager<T> where T : new()
+    public static class SaveManager<T> where T : ICloneable<T>
     {
         public static T Instance;
 
         /// <summary>
         /// ロード処理。ファイルがなかった場合は、SaveDataクラスの初期値を使う
         /// </summary>
-        public static async UniTask Load()
+        public static async UniTask Load(T defaultData)
         {
             string name = typeof(T).Name;
 
@@ -21,7 +21,7 @@ namespace Module.Core.Save
             }
             else
             {
-                Instance = new T();
+                Instance = defaultData.Clone();
             }
         }
 

@@ -13,7 +13,18 @@ namespace GameMain
         public async UniTask StartAsync(CancellationToken cancellation = new CancellationToken())
         {
             //ゲームコンフィグのロード
-            await SaveManager<ConfigData>.Load();
+            ResourceRequest resourceRequest = Resources.LoadAsync<DefaultConfigData>("DefaultConfigData");
+            await resourceRequest.ToUniTask(cancellationToken: cancellation);
+            
+            DefaultConfigData defaultConfig = resourceRequest.asset as DefaultConfigData;
+
+            if (defaultConfig == null)
+            {
+                Debug.LogError("デフォルト設定のロードに失敗しました。");
+                return;
+            }
+            
+            await SaveManager<ConfigData>.Load(defaultConfig.GetData());
             
             //タイトルシーンのロード
             await GameBoot.LoadMainSceneAsync(cancellation);
