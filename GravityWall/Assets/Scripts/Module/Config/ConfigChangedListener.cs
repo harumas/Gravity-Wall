@@ -16,7 +16,7 @@ namespace Module.Config
     public class ConfigChangedListener : IStartable
     {
         private readonly InputBinding keyboardBinding = InputBinding.MaskByGroup("Keyboard");
-        private readonly InputBinding gamepadBinding = InputBinding.MaskByGroup("GamePad");
+        private readonly InputBinding gamepadBinding = InputBinding.MaskByGroup("Gamepad");
 
         private readonly ConfigData configData;
         private readonly InputAction lookAction;
@@ -25,7 +25,7 @@ namespace Module.Config
         public ConfigChangedListener(ConfigData configData, InputActionAsset inputActionAsset)
         {
             this.configData = configData;
-            
+
             //視点移動のInputActionを取得する
             lookAction = inputActionAsset.FindAction(ActionGuid.Player.Look);
         }

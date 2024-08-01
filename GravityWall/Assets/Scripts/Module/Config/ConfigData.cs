@@ -11,8 +11,8 @@ namespace Module.Config
         public ReadOnlyReactiveProperty<Vector2> MouseSensibility => mouseSensibility;
         public ReadOnlyReactiveProperty<Vector2> PadSensibility => padSensibility;
         
-        [SerializeField] SerializableReactiveProperty<Vector2> mouseSensibility;
-        [SerializeField] SerializableReactiveProperty<Vector2> padSensibility;
+        [SerializeField] private SerializableReactiveProperty<Vector2> mouseSensibility;
+        [SerializeField] private SerializableReactiveProperty<Vector2> padSensibility;
 
         public ConfigData Clone()
         {
