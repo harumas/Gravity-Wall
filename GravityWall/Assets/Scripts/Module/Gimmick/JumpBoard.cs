@@ -9,7 +9,7 @@ namespace Module.Gimmick
         [SerializeField] private float jumpPower;
 
         //TODO: Tagをプルダウンで選べるように
-        [SerializeField] private string[] targetTags;
+        [SerializeField, Tag] private string[] targetTags;
 
         private void OnTriggerEnter(Collider collider)
         {
