@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Module.Gimmick
@@ -7,6 +8,7 @@ namespace Module.Gimmick
     {
         [SerializeField] private bool initializeIsOn = false;
         [SerializeField] private List<AbstractGimmickAffected> gimmickAffecteds = new List<AbstractGimmickAffected>();
+        [SerializeField, Tag] private List<string> targetTags;
         public override bool isOn { get => _isOn; protected set => _isOn = value; }
         private bool _isOn;
 
@@ -27,7 +29,7 @@ namespace Module.Gimmick
 
         private void OnTriggerEnter(Collider collider)
         {
-            if (collider.CompareTag("BatteryBox"))
+            if (targetTags.Any(tag => collider.CompareTag(tag)))
             {
                 OnSwitch(!isOn);
             }
@@ -35,7 +37,7 @@ namespace Module.Gimmick
 
         private void OnTriggerExit(Collider collider)
         {
-            if (collider.CompareTag("BatteryBox"))
+            if (targetTags.Any(tag => collider.CompareTag(tag)))
             {
                 OnSwitch(!isOn);
             }
