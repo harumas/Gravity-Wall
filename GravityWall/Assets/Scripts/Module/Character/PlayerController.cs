@@ -42,9 +42,7 @@ namespace Module.Character
         {
             //入力イベントの生成
             GameInput.Move.Subscribe(value => input = value).AddTo(this);
-            GameInput.Jump.Subscribe(_ => OnJump()).AddTo(this);
-
-            variableJumpingGravity = jumpingGravity;
+            GameInput.Jump.Subscribe(_ => OnJump(-Gravity.Value * jumpPower, jumpingGravity)).AddTo(this);
         }
 
         private void FixedUpdate()
@@ -53,19 +51,6 @@ namespace Module.Character
             ClampVelocity();
             AdjustGravity();
             PerformGravityRotate();
-        }
-
-        private void OnJump()
-        {
-            if (isJumping)
-            {
-                return;
-            }
-
-            variableJumpingGravity = jumpingGravity;
-            rigBody.AddForce(-Gravity.Value * jumpPower, ForceMode.VelocityChange);
-            isJumping = true;
-            lastJumpTime = Time.time;
         }
 
         private void ClampVelocity()
@@ -166,7 +151,7 @@ namespace Module.Character
             }
         }
 
-        public void BoadJump(Vector3 jumpDire, float jumpingGravity)
+        public void OnJump(Vector3 jumpForce, float jumpingGravity)
         {
             if (isJumping)
             {
@@ -174,7 +159,7 @@ namespace Module.Character
             }
 
             variableJumpingGravity = jumpingGravity;
-            rigBody.AddForce(jumpDire, ForceMode.VelocityChange);
+            rigBody.AddForce(jumpForce, ForceMode.VelocityChange);
             isJumping = true;
             lastJumpTime = Time.time;
         }

@@ -18,7 +18,7 @@ namespace Module.Gimmick
             {
                 if (collision.gameObject.CompareTag("Player"))
                 {
-                    collision.gameObject.GetComponent<PlayerController>().BoadJump(transform.up * jumpPower, jumpingGravity);
+                    collision.gameObject.GetComponent<PlayerController>().OnJump(transform.up * jumpPower, jumpingGravity);
                 }
                 else
                 {
