@@ -14,9 +14,9 @@ namespace Module.Character
         [SerializeField] private float downRayDistance = 0.6f;
         [SerializeField] private PlayerTargetSyncer targetSyncer;
 
-        private Collider currentCollider;
         private Vector3 prevDir;
         private bool isLegalStep;
+        private bool isWallHit;
 
         private void Update()
         {
@@ -27,7 +27,7 @@ namespace Module.Character
         {
             isEnabled = true;
         }
-        
+
         private void Disable()
         {
             isEnabled = false;
@@ -60,7 +60,6 @@ namespace Module.Character
                 return transform.up != normal;
             }
 
-   
 
             //何もヒットしていない場合は、進行方向に何も存在しないため、重力変更する必要がある
             return true;
@@ -84,7 +83,7 @@ namespace Module.Character
             bool isHit = Physics.Raycast(origin, direction, out RaycastHit hitInfo, downRayDistance);
 
             UGizmos.DrawRay(origin, direction * downRayDistance, Color.blue);
-            
+
             normal = hitInfo.normal;
 
             return isHit;
@@ -100,10 +99,7 @@ namespace Module.Character
             LocalGravity localGravity = collision.collider.GetComponent<LocalGravity>();
             bool isActive = localGravity == null || (localGravity != null && localGravity.enabled);
 
-            if (isGravityCollider && isSafeAngle && isActive)
-            {
-                currentCollider = collision.collider;
-            }
+            isWallHit = isGravityCollider && isSafeAngle && isActive;
         }
 
         private void OnCollisionStay(Collision collision)
@@ -123,11 +119,11 @@ namespace Module.Character
                     contact = current;
                 }
             }
-            
+
             bool isGravityCollider = collision.gameObject.layer != Layer.IgnoreGravity;
 
             //重力変更
-            if (isLegalStep && isGravityCollider)
+            if (isLegalStep && isGravityCollider && isWallHit)
             {
                 Gravity.SetValue(-contact.normal);
             }
