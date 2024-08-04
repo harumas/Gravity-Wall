@@ -1,4 +1,5 @@
-﻿using Constants;
+﻿using System;
+using Constants;
 using Module.Gimmick;
 using UGizmo;
 using UnityEngine;
@@ -15,12 +16,25 @@ namespace Module.Character
         [SerializeField] private PlayerTargetSyncer targetSyncer;
 
         private Vector3 prevDir;
+        private ContactPoint nearestContact;
+        private bool doSwitchGravity;
+        private bool hasHeadObject;
         private bool isLegalStep;
-        private bool isWallHit;
 
         private void Update()
         {
             isLegalStep = isEnabled && IsLegalStep();
+        }
+
+        private void FixedUpdate()
+        {
+            if (doSwitchGravity && !hasHeadObject)
+            {
+                Gravity.SetValue(-nearestContact.normal);
+            }
+
+            doSwitchGravity = false;
+            hasHeadObject = false;
         }
 
         private void Enable()
@@ -60,7 +74,6 @@ namespace Module.Character
                 return transform.up != normal;
             }
 
-
             //何もヒットしていない場合は、進行方向に何も存在しないため、重力変更する必要がある
             return true;
         }
@@ -89,27 +102,63 @@ namespace Module.Character
             return isHit;
         }
 
-        private void OnCollisionEnter(Collision collision)
-        {
-            //真上にオブジェクトが衝突した場合は、角度によってくっつくかを判定する
-            bool isSafeAngle = Vector3.Angle(-transform.up, collision.GetContact(0).normal) > detectHoldAngle;
-
-            //衝突したオブジェクトが重力の影響を受けるか判定
-            bool isGravityCollider = collision.gameObject.layer != Layer.IgnoreGravity;
-            LocalGravity localGravity = collision.collider.GetComponent<LocalGravity>();
-            bool isActive = localGravity == null || (localGravity != null && localGravity.enabled);
-
-            isWallHit = isGravityCollider && isSafeAngle && isActive;
-        }
 
         private void OnCollisionStay(Collision collision)
         {
-            ContactPoint contact = collision.GetContact(0);
-            float minDistance = Vector3.SqrMagnitude(contact.point - (transform.position + prevDir));
+            nearestContact = GetNearestContact(collision);
+            (bool canTouch, _) = CheckCollision(nearestContact);
+
+            if (HasHeadObject(collision))
+            {
+                hasHeadObject = true;
+            }
+
+            //重力変更
+            if (isLegalStep && canTouch)
+            {
+                doSwitchGravity = true;
+            }
+        }
+
+        private bool HasHeadObject(Collision collision)
+        {
+            for (int i = 0; i < collision.contactCount; i++)
+            {
+                ContactPoint contact = collision.GetContact(i);
+                (_, bool isHeadObject) = CheckCollision(contact);
+
+                if (isHeadObject)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private (bool canTouch, bool isHeadObject) CheckCollision(in ContactPoint contact)
+        {
+            //真上にオブジェクトが衝突した場合は、角度によってくっつくかを判定する
+            bool isSafeAngle = Vector3.Angle(-transform.up, contact.normal) > detectHoldAngle;
+
+            //衝突したオブジェクトが重力の影響を受けるか判定
+            bool isGravityCollider = contact.otherCollider.gameObject.layer != Layer.IgnoreGravity;
+            LocalGravity localGravity = contact.otherCollider.GetComponent<LocalGravity>();
+
+            bool isObjectHit = localGravity != null && localGravity.enabled;
+            bool canTouch = isGravityCollider && (localGravity == null || isObjectHit && isSafeAngle);
+
+            return (canTouch, isObjectHit && !isSafeAngle);
+        }
+
+        private ContactPoint GetNearestContact(Collision collision)
+        {
+            ContactPoint contact = nearestContact;
+            float minDistance = float.MaxValue;
 
             //最も自分の体に近い壁を判定
             //CapsuleColliderのため、側面の壁が優先されるはず
-            for (int i = 0; i < collision.contactCount - 1; i++)
+            for (int i = 0; i < collision.contactCount; i++)
             {
                 ContactPoint current = collision.GetContact(i);
                 float distance = Vector3.SqrMagnitude(current.point - (transform.position + prevDir));
@@ -120,13 +169,7 @@ namespace Module.Character
                 }
             }
 
-            bool isGravityCollider = collision.gameObject.layer != Layer.IgnoreGravity;
-
-            //重力変更
-            if (isLegalStep && isGravityCollider && isWallHit)
-            {
-                Gravity.SetValue(-contact.normal);
-            }
+            return contact;
         }
     }
 }
