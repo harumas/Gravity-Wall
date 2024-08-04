@@ -23,12 +23,12 @@ namespace Module.Character
             isLegalStep = isEnabled && IsLegalStep();
         }
 
-        private void Enable()
+        public void Enable()
         {
             isEnabled = true;
         }
 
-        private void Disable()
+        public void Disable()
         {
             isEnabled = false;
         }
