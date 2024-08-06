@@ -105,18 +105,26 @@ namespace Module.Character
 
         private void OnCollisionStay(Collision collision)
         {
-            nearestContact = GetNearestContact(collision);
-            (bool canTouch, _) = CheckCollision(nearestContact);
+            ContactPoint contact = GetNearestContact(collision);
+            (bool canTouch, _) = CheckCollision(contact);
 
             if (HasHeadObject(collision))
             {
                 hasHeadObject = true;
             }
 
-            //重力変更
-            if (isLegalStep && canTouch)
+            if (canTouch)
             {
-                doSwitchGravity = true;
+                if (!hasHeadObject)
+                {
+                    nearestContact = GetNearestContact(collision);
+                }
+
+                //重力変更
+                if (isLegalStep)
+                {
+                    doSwitchGravity = true;
+                }
             }
         }
 
