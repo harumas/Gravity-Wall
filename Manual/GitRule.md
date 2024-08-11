@@ -14,4 +14,3 @@
 `level/hogehoge`: ステージの追加  
 `feature/hogehoge`: 新機能の追加  
 `fix/hogehoge`: バグ修正, 機能改善
-
