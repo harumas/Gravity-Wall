@@ -51,7 +51,7 @@ public class RespawnManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            Debug.Log("•œŠˆ‚µ‚Ü‚µ‚½");
+            Debug.Log("å¾©æ´»ã—ã¾ã—ãŸ");
             Respawn();
         }
     }
