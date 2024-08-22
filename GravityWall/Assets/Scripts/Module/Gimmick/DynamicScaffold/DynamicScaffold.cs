@@ -30,6 +30,7 @@ namespace Module.Gimmick.DynamicScaffold
         private Transform currentTarget;
         private PlayerController playerController;
         private float trappedTimer;
+        private int contactCount;
 
         private const float StopThreshold = 0.01f;
 
@@ -144,8 +145,10 @@ namespace Module.Gimmick.DynamicScaffold
 
         private void OnCollisionEnter(Collision other)
         {
+            contactCount++;
+
             //床に設置したプレイヤーを取得
-            if (other.gameObject.CompareTag(Tag.Player))
+            if (contactCount == 1 && other.gameObject.CompareTag(Tag.Player))
             {
                 playerController = other.gameObject.GetComponent<PlayerController>();
             }
@@ -153,7 +156,9 @@ namespace Module.Gimmick.DynamicScaffold
 
         private void OnCollisionExit(Collision other)
         {
-            if (other.gameObject.CompareTag(Tag.Player))
+            contactCount--;
+
+            if (contactCount == 0 && other.gameObject.CompareTag(Tag.Player))
             {
                 //コリジョンから離れる時は、慣性を付与する
                 playerController.AddInertia(moveDelta);
