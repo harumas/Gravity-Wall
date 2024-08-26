@@ -11,7 +11,6 @@ namespace Module.InputModule
 {
     public class PlayerInput : IGameInput
     {
-        private readonly ConfigData config;
         private readonly InputEvent mouseEvent;
         
         private readonly ReactiveProperty<Vector2> moveProperty = new ReactiveProperty<Vector2>();
@@ -19,7 +18,6 @@ namespace Module.InputModule
         
         public PlayerInput()
         {
-            config = SaveManager<ConfigData>.Instance;
             mouseEvent = InputActionProvider.CreateEvent(ActionGuid.Player.Look);
             
             InputEvent moveEvent = InputActionProvider.CreateEvent(ActionGuid.Player.Move);
@@ -31,7 +29,7 @@ namespace Module.InputModule
             jumpEvent.Started += _ => jumpSubject.OnNext(Unit.Default);
         }
 
-        public Vector2 MouseDelta => mouseEvent.ReadValue<Vector2>() * config.Sensibility;
+        public Vector2 MouseDelta => mouseEvent.ReadValue<Vector2>();
         public ReadOnlyReactiveProperty<Vector2> Move => moveProperty;
         public Observable<Unit> Jump => jumpSubject;
 

@@ -4,26 +4,24 @@ using UnityEngine;
 
 namespace Module.Core.Save
 {
-    public static class SaveManager<T> where T : ScriptableObject
+    public static class SaveManager<T> where T : ICloneable<T>
     {
         public static T Instance;
 
         /// <summary>
         /// ロード処理。ファイルがなかった場合は、SaveDataクラスの初期値を使う
         /// </summary>
-        public static async UniTask Load()
+        public static async UniTask Load(T defaultData)
         {
             string name = typeof(T).Name;
 
-            Instance = ScriptableObject.CreateInstance<T>();
-
             if (SaveUtility.FileExists(name))
             {
-                await SaveUtility.LoadOverwrite(name, Instance);
+                Instance = await SaveUtility.Load<T>(name);
             }
             else
             {
-                Instance = Resources.Load<T>($"Default{name}");
+                Instance = defaultData.Clone();
             }
         }
 

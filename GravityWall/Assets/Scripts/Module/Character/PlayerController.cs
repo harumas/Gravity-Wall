@@ -18,7 +18,11 @@ namespace Module.Character
         [Header("速度減衰")] [SerializeField] private float speedDamping;
         [Header("ジャンプ中移動係数")] [SerializeField] private float airControl;
         [Header("回転のイージング")] [SerializeField] private Ease easeType;
-        [Header("回転のイージング係数")] [SerializeField] private float rotateStep;
+
+        [Header("回転のイージング係数")]
+        [SerializeField]
+        private float rotateStep;
+
         [Header("最大速度")] [SerializeField] private float maxSpeed;
         [Header("ジャンプ力")] [SerializeField] private float jumpPower;
         [Header("ジャンプ中の重力")] [SerializeField] private float jumpingGravity;
@@ -35,36 +39,31 @@ namespace Module.Character
 
         private bool isJumping;
         private Vector2 input;
+        private Vector3 inertia;
         private float lastJumpTime;
+        private float variableJumpingGravity;
 
         private void Awake()
         {
             //入力イベントの生成
             GameInput.Move.Subscribe(value => input = value).AddTo(this);
-            GameInput.Jump.Subscribe(_ => OnJump()).AddTo(this);
+            GameInput.Jump.Subscribe(_ => OnJump(-Gravity.Value * jumpPower, jumpingGravity)).AddTo(this);
         }
 
         private void FixedUpdate()
         {
             PerformMove();
-            ClampVelocity();
+            AdjustVelocity();
             AdjustGravity();
             PerformGravityRotate();
-        }
 
-        private void OnJump()
-        {
-            if (isJumping)
+            if (input == Vector2.zero)
             {
-                return;
+                rigBody.MovePosition(rigBody.position + inertia);
             }
-
-            rigBody.AddForce(-Gravity.Value * jumpPower, ForceMode.VelocityChange);
-            isJumping = true;
-            lastJumpTime = Time.time;
         }
 
-        private void ClampVelocity()
+        private void AdjustVelocity()
         {
             Vector3 gravity = Gravity.Value;
             Vector3 velocity = rigBody.velocity;
@@ -74,7 +73,6 @@ namespace Module.Character
             //重力のベクトルに対してのローカル速度を取得
             Vector3 yVelocity = gravity * velocityAlongGravity;
             Vector3 xVelocity = velocity - gravity * velocityAlongGravity;
-
 
             if (input == Vector2.zero)
             {
@@ -116,7 +114,7 @@ namespace Module.Character
             //角度の差を求める
             float angle = Vector3.Angle(transform.up, -Gravity.Value);
             angle = Mathf.Max(angle, Mathf.Epsilon);
-            
+
             //イージング関数を噛ませる
             float t = easeType != Ease.Unset ? EaseManager.Evaluate(easeType, null, rotateStep, angle, 1f, 1f) : rotateStep;
             rigBody.rotation = Quaternion.Slerp(rigBody.rotation, targetRotation, t);
@@ -140,12 +138,13 @@ namespace Module.Character
                 return;
             }
 
-            localGravity.SetMultiplierAtFrame(jumpingGravity);
+            localGravity.SetMultiplierAtFrame(variableJumpingGravity);
         }
 
         private void OnCollisionEnter(Collision _)
         {
             isJumping = false;
+            inertia = Vector3.zero;
         }
 
         private void OnCollisionStay(Collision _)
@@ -160,6 +159,29 @@ namespace Module.Character
             {
                 isJumping = false;
             }
+        }
+
+        public void OnJump(Vector3 jumpForce, float jumpingGravity)
+        {
+            if (isJumping)
+            {
+                return;
+            }
+
+            variableJumpingGravity = jumpingGravity;
+            rigBody.AddForce(jumpForce, ForceMode.VelocityChange);
+            isJumping = true;
+            lastJumpTime = Time.time;
+        }
+
+        public void AddExternalPosition(Vector3 delta)
+        {
+            rigBody.MovePosition(rigBody.position + delta);
+        }
+
+        public void AddInertia(Vector3 inertia)
+        {
+            this.inertia += inertia;
         }
     }
 }

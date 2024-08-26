@@ -10,11 +10,9 @@ namespace Module.InputModule
     {
         private static IGameInput gameInput;
         
-        //TODO: DIに移す
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        private static async void Initialize()
+        private static void Initialize()
         {
-            await SaveManager<ConfigData>.Load();
             gameInput = new PlayerInput();
         }
 
