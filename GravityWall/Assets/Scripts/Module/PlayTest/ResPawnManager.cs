@@ -2,6 +2,7 @@ using Module.Gimmick;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Module.Gravity;
 using UnityEngine;
 
 namespace Module.PlayTest
@@ -25,7 +26,7 @@ namespace Module.PlayTest
         private void Start()
         {
             RetryPosition = Player.transform.position;
-            GravityScale = Gravity.Value;
+            GravityScale = WorldGravity.Instance.Gravity;
 
             if (MoveObject == null)
                 return;
@@ -40,7 +41,7 @@ namespace Module.PlayTest
         public void Respawn()
         {
             Player.transform.position = RetryPosition;
-            Gravity.SetValue(GravityScale);
+            WorldGravity.Instance.SetValue(GravityScale);
 
             if (MoveObject == null)
                 return;
@@ -54,7 +55,7 @@ namespace Module.PlayTest
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
-                Debug.Log("ïúäàÇµÇ‹ÇµÇΩ");
+                Debug.Log("Âæ©Ê¥ª„Åó„Åæ„Åó„Åü");
                 Respawn();
             }
         }

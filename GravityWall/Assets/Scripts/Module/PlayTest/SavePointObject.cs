@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Module.Gimmick;
+using Module.Gravity;
 
 namespace Module.PlayTest
 {
@@ -16,7 +17,7 @@ namespace Module.PlayTest
             {
                 Debug.Log("�ۑ�����܂���");
                 respawnManager.RetryPosition = RetryPositionObject.transform.position;
-                respawnManager.GravityScale = Gravity.Value;
+                respawnManager.GravityScale = WorldGravity.Instance.Gravity;
                 FirstTouch = true;
                 respawnManager.Respawn();
             }
