@@ -24,6 +24,7 @@ namespace Container
                 return;
             }
 
+            //重力の生成 (後で消す)
             WorldGravity.Create();
 
             builder.RegisterEntryPoint<InputConfigChangedListener>();
@@ -41,23 +42,9 @@ namespace Container
         private void RegisterPlayerComponents(IContainerBuilder builder)
         {
             //プレイヤーのコンポーネントを取得して登録
-            foreach (GameObject obj in GameObject.FindGameObjectsWithTag(Tag.Player))
-            {
-                if (obj.TryGetComponent(out PlayerController playerController))
-                {
-                    builder.RegisterComponent(playerController);
-                }
-
-                if (obj.TryGetComponent(out CameraController cameraController))
-                {
-                    builder.RegisterComponent(cameraController);
-                }
-
-                if (obj.TryGetComponent(out PlayerTargetSyncer playerTargetSyncer))
-                {
-                    builder.RegisterComponent(playerTargetSyncer);
-                }
-            }
+            builder.RegisterComponentInHierarchy<PlayerController>();
+            builder.RegisterComponentInHierarchy<CameraController>();
+            builder.RegisterComponentInHierarchy<PlayerTargetSyncer>();
         }
     }
 }
