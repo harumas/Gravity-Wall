@@ -1,6 +1,5 @@
-﻿using System;
-using Constants;
-using Module.Gimmick;
+﻿using Constants;
+using Module.Gravity;
 using UGizmo;
 using UnityEngine;
 
@@ -30,7 +29,7 @@ namespace Module.Character
         {
             if (doSwitchGravity && !hasHeadObject)
             {
-                Gravity.SetValue(-nearestContact.normal);
+                WorldGravity.Instance.SetValue(-nearestContact.normal);
             }
 
             doSwitchGravity = false;

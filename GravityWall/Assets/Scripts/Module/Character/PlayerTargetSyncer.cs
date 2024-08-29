@@ -1,10 +1,4 @@
-﻿using System;
-using Core.Input;
-using Module.Core.Input;
-using Module.InputModule;
-using R3;
-using UnityEngine;
-using UnityEngine.Serialization;
+﻿using UnityEngine;
 
 namespace Module.Character
 {
@@ -17,16 +11,16 @@ namespace Module.Character
         [SerializeField] private Transform axis;
         [SerializeField] private float damping;
 
-        private Vector2 input;
+        private Vector2 moveInput;
 
-        private void Start()
+        public void OnMoveInput(Vector2 moveInput)
         {
-            GameInput.Move.Subscribe(value => input = value).AddTo(this);
+            this.moveInput = moveInput;
         }
 
         public Vector3 GetTargetDirection()
         {
-            Vector3 inputDirection = target.rotation * new Vector3(input.x, 0f, input.y);
+            Vector3 inputDirection = target.rotation * new Vector3(moveInput.x, 0f, moveInput.y);
             Vector3 planedDirection = Vector3.ProjectOnPlane(inputDirection, axis.up);
 
             return planedDirection;
@@ -39,7 +33,7 @@ namespace Module.Character
 
         private void PerformBodyRotate()
         {
-            if (input == Vector2.zero)
+            if (moveInput == Vector2.zero)
             {
                 return;
             }
