@@ -1,9 +1,4 @@
-using Core.Helper;
-using Core.Input;
-using Module.Core.Input;
-using Module.InputModule;
-using R3;
-using R3.Triggers;
+using CoreModule.Helper;
 using UnityEngine;
 
 namespace Module.Character
@@ -26,14 +21,9 @@ namespace Module.Character
             //カーソルロック
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-
-            //マウスの移動イベントを登録
-            this.LateUpdateAsObservable()
-                .Select(_ => GameInput.MouseDelta * Time.deltaTime)
-                .Subscribe(OnRotateCamera);
         }
 
-        private void OnRotateCamera(Vector2 mouseDelta)
+        public void OnRotateCameraInput(Vector2 mouseDelta)
         {
             float dx = mouseDelta.x;
             float dy = mouseDelta.y;

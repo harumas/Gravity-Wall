@@ -1,18 +1,15 @@
 using DG.Tweening;
 using DG.Tweening.Core.Easing;
-using Module.Gimmick;
-using Module.InputModule;
-using R3;
+using Domain;
+using Module.Gravity;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UIElements.Experimental;
 
 namespace Module.Character
 {
     /// <summary>
     /// プレイヤーの移動と回転を制御するクラス
     /// </summary>
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, ICharacter
     {
         [Header("移動速度")] [SerializeField] private float controlSpeed;
         [Header("速度減衰")] [SerializeField] private float speedDamping;
@@ -38,16 +35,19 @@ namespace Module.Character
         [SerializeField] private LocalGravity localGravity;
 
         private bool isJumping;
-        private Vector2 input;
+        private Vector2 moveInput;
         private Vector3 inertia;
         private float lastJumpTime;
         private float variableJumpingGravity;
 
-        private void Awake()
+        public void OnMoveInput(Vector2 moveInput)
         {
-            //入力イベントの生成
-            GameInput.Move.Subscribe(value => input = value).AddTo(this);
-            GameInput.Jump.Subscribe(_ => OnJump(-Gravity.Value * jumpPower, jumpingGravity)).AddTo(this);
+            this.moveInput = moveInput;
+        }
+
+        public void OnJumpInput()
+        {
+            DoJump(-WorldGravity.Instance.Gravity * jumpPower, jumpingGravity);
         }
 
         private void FixedUpdate()
@@ -56,16 +56,12 @@ namespace Module.Character
             AdjustVelocity();
             AdjustGravity();
             PerformGravityRotate();
-
-            if (input == Vector2.zero)
-            {
-                rigBody.MovePosition(rigBody.position + inertia);
-            }
+            PerformInertia();
         }
 
         private void AdjustVelocity()
         {
-            Vector3 gravity = Gravity.Value;
+            Vector3 gravity = WorldGravity.Instance.Gravity;
             Vector3 velocity = rigBody.velocity;
 
             float velocityAlongGravity = Vector3.Dot(velocity, gravity);
@@ -74,7 +70,7 @@ namespace Module.Character
             Vector3 yVelocity = gravity * velocityAlongGravity;
             Vector3 xVelocity = velocity - gravity * velocityAlongGravity;
 
-            if (input == Vector2.zero)
+            if (moveInput == Vector2.zero)
             {
                 //入力がない時は減衰させる
                 xVelocity *= speedDamping;
@@ -94,12 +90,12 @@ namespace Module.Character
         private void PerformMove()
         {
             //移動方向の算出
-            Vector3 forward = target.forward * input.y;
-            Vector3 right = target.right * input.x;
+            Vector3 forward = target.forward * moveInput.y;
+            Vector3 right = target.right * moveInput.x;
             Vector3 moveDirection = (forward + right).normalized;
 
             //重力と垂直な速度ベクトルに変換
-            Quaternion targetRotation = Quaternion.FromToRotation(target.up, -Gravity.Value);
+            Quaternion targetRotation = Quaternion.FromToRotation(target.up, -WorldGravity.Instance.Gravity);
             Vector3 moveVelocity = targetRotation * moveDirection * controlSpeed;
 
             float airMultiplier = isJumping ? airControl : 1f;
@@ -109,25 +105,43 @@ namespace Module.Character
 
         private void PerformGravityRotate()
         {
-            Quaternion targetRotation = Quaternion.FromToRotation(transform.up, -Gravity.Value) * rigBody.rotation;
+            Quaternion targetRotation = Quaternion.FromToRotation(transform.up, -WorldGravity.Instance.Gravity) * rigBody.rotation;
 
             //角度の差を求める
-            float angle = Vector3.Angle(transform.up, -Gravity.Value);
+            float angle = Vector3.Angle(transform.up, -WorldGravity.Instance.Gravity);
             angle = Mathf.Max(angle, Mathf.Epsilon);
 
             //イージング関数を噛ませる
-            float t = easeType != Ease.Unset ? EaseManager.Evaluate(easeType, null, rotateStep, angle, 1f, 1f) : rotateStep;
+            float t = Evaluate(easeType, angle, rotateStep);
             rigBody.rotation = Quaternion.Slerp(rigBody.rotation, targetRotation, t);
 
             if (angle - rotateStep >= rotatingAngle)
             {
                 //回転中はオブジェクトが落下しないようにする
-                Gravity.SetDisable(Gravity.Type.Object);
+                WorldGravity.Instance.SetDisable(WorldGravity.Type.Object);
             }
             else
             {
                 rigBody.rotation = targetRotation;
-                Gravity.SetEnable(Gravity.Type.Object);
+                WorldGravity.Instance.SetEnable(WorldGravity.Type.Object);
+            }
+        }
+
+        private float Evaluate(Ease easeType, float angle, float step)
+        {
+            if (easeType == Ease.Unset)
+            {
+                return step;
+            }
+
+            return EaseManager.Evaluate(easeType, null, step, angle, 1f, 1f);
+        }
+
+        private void PerformInertia()
+        {
+            if (moveInput == Vector2.zero)
+            {
+                rigBody.MovePosition(rigBody.position + inertia);
             }
         }
 
@@ -161,7 +175,7 @@ namespace Module.Character
             }
         }
 
-        public void OnJump(Vector3 jumpForce, float jumpingGravity)
+        public void DoJump(Vector3 jumpForce, float jumpingGravity)
         {
             if (isJumping)
             {

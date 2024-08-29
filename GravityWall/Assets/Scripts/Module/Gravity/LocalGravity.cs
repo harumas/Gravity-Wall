@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Module.Gimmick
+namespace Module.Gravity
 {
     public class LocalGravity : MonoBehaviour
     {
-        public Gravity.Type GravityType => gravityType;
+        public WorldGravity.Type GravityType => gravityType;
 
         [SerializeField] private float multiplier = 1f;
-        [SerializeField] private Gravity.Type gravityType;
-        private readonly Queue<float> externalMultipliers = new Queue<float>();
+        [SerializeField] private WorldGravity.Type gravityType;
         private Rigidbody rigBody;
 
         private bool isSetFrameMultiplier;
@@ -23,10 +20,9 @@ namespace Module.Gimmick
 
         private void FixedUpdate()
         {
-            if (Gravity.IsEnable(gravityType))
+            if (WorldGravity.Instance.IsEnable(gravityType))
             {
-                float externalMultiplier = externalMultipliers.Count == 0 ? 1f : externalMultipliers.Dequeue();
-                float currentMultiplier = (multiplier * externalMultiplier);
+                float currentMultiplier = multiplier;
 
                 if (isSetFrameMultiplier)
                 {
@@ -34,19 +30,11 @@ namespace Module.Gimmick
                     isSetFrameMultiplier = false;
                 }
 
-                rigBody.AddForce(Gravity.Value * currentMultiplier, ForceMode.Acceleration);
+                rigBody.AddForce(WorldGravity.Instance.Gravity * currentMultiplier, ForceMode.Acceleration);
             }
             else
             {
                 rigBody.velocity = Vector3.zero;
-            }
-        }
-
-        public void AddExternalMultiplier(ReadOnlySpan<float> multipliers)
-        {
-            foreach (float m in multipliers)
-            {
-                externalMultipliers.Enqueue(m);
             }
         }
 

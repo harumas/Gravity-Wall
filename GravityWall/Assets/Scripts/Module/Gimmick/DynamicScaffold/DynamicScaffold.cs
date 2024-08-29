@@ -3,7 +3,7 @@ using System.Threading;
 using Constants;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using Module.Character;
+using Domain;
 using UnityEngine;
 
 namespace Module.Gimmick.DynamicScaffold
@@ -28,7 +28,7 @@ namespace Module.Gimmick.DynamicScaffold
         private Vector3 previousPosition;
         private Vector3 moveDelta;
         private Transform currentTarget;
-        private PlayerController playerController;
+        private ICharacter playerController;
         private float trappedTimer;
         private int contactCount;
 
@@ -150,7 +150,7 @@ namespace Module.Gimmick.DynamicScaffold
             //床に設置したプレイヤーを取得
             if (contactCount == 1 && other.gameObject.CompareTag(Tag.Player))
             {
-                playerController = other.gameObject.GetComponent<PlayerController>();
+                playerController = other.gameObject.GetComponent<ICharacter>();
             }
         }
 
