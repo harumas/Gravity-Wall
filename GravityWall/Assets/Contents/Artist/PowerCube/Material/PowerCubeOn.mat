@@ -25,15 +25,15 @@ Material:
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords:
-  - _ALPHAPREMULTIPLY_ON
-  - _SURFACE_TYPE_TRANSPARENT
+  m_ValidKeywords:
+  - _ALPHATEST_ON
+  m_InvalidKeywords: []
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
-  stringTagMap: {}
+  m_CustomRenderQueue: 2450
+  stringTagMap:
+    RenderType: TransparentCutout
   disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
@@ -48,7 +48,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionTexture:
-        m_Texture: {fileID: 2800000, guid: d268a8aa50e0e6242a2613c90384b026, type: 3}
+        m_Texture: {fileID: 2800000, guid: 383af85a0a61e304185fdc3f98a4dcd3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _METALNESS_MAP:
@@ -56,15 +56,19 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainColorTexture:
-        m_Texture: {fileID: 2800000, guid: d3188449e7a3b5644abe1b51e7bf9412, type: 3}
+        m_Texture: {fileID: 2800000, guid: 53263ca04647a4643a190f8c04a08c7f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicTexture:
-        m_Texture: {fileID: 2800000, guid: c19b143cf3a56ea4ba2540d60ee2ce0b, type: 3}
+        m_Texture: {fileID: 2800000, guid: 17b2061d950ba1144a201d0e3c78bb84, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NORMAL_MAP:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMapTexture:
+        m_Texture: {fileID: 2800000, guid: bb28ea625dca85e4fb23862cc93d3d78, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SPECULAR_COLOR_MAP:
@@ -88,7 +92,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SmoothnessTexture:
-        m_Texture: {fileID: 2800000, guid: ec7fe849724afed4b804d58380476ddb, type: 3}
+        m_Texture: {fileID: 2800000, guid: f1ade156b620db34c90c38c27ca81648, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -105,8 +109,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AlphaClip: 0
-    - _AlphaToMask: 0
+    - _AlphaClip: 1
+    - _AlphaToMask: 1
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
@@ -117,18 +121,19 @@ Material:
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _DstBlend: 10
+    - _DstBlend: 0
     - _DstBlendAlpha: 0
-    - _EmissionIntensity: 0.526
+    - _EmissionIntensity: 0.41
     - _EnvironmentReflections: 1
     - _GlossMapScale: 1
     - _Glossiness: 0.2
     - _GlossyReflections: 1
     - _METALNESS: 0.72
     - _Metallic: 0
-    - _MetallicIntensity: 2.2
+    - _MetallicIntensity: 0.88
     - _Mode: 3
     - _NoiseScale: 0
+    - _NormalStrength: 0.01
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _PolyDotNum: 60
@@ -140,25 +145,25 @@ Material:
     - _SPECULAR_IOR: 1.22
     - _SPECULAR_ROUGHNESS: 0.57
     - _ScrollDotNum: 3
-    - _ScrollSpeed: 0.12
+    - _ScrollSpeed: 3.69
     - _Smoothness: 0
-    - _SmoothnessIntensity: 2.18
+    - _SmoothnessIntensity: 1.65
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
-    - _Surface: 1
+    - _Surface: 0
     - _UVSec: 0
     - _WorkflowMode: 1
     - _ZTest: 4
-    - _ZWrite: 0
+    - _ZWrite: 1
     - _ZWriteControl: 0
     m_Colors:
     - _BASE_COLOR: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EMISSION_COLOR: {r: 0.6705112, g: 4.0613823, b: 0.7415243, a: 1}
-    - _EmissionColor: {r: 0, g: 3.4108665, b: 16.94838, a: 1}
+    - _EmissionColor: {r: 0.8196052, g: 3.5778465, b: 11.181761, a: 1}
     - _SPECULAR_COLOR: {r: 0.37765506, g: 0.77690333, b: 0.8962264, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _SpecularColor: {r: 0, g: 2.4864151, b: 3.2111163, a: 0}

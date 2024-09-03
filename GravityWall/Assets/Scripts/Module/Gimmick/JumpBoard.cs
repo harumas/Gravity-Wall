@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using Module.Character;
+using Domain;
 using UnityEngine;
 namespace Module.Gimmick
 {
@@ -18,7 +16,7 @@ namespace Module.Gimmick
             {
                 if (collision.gameObject.CompareTag("Player"))
                 {
-                    collision.gameObject.GetComponent<PlayerController>().OnJump(transform.up * jumpPower, jumpingGravity);
+                    collision.gameObject.GetComponent<ICharacter>().DoJump(transform.up * jumpPower, jumpingGravity);
                 }
                 else
                 {
