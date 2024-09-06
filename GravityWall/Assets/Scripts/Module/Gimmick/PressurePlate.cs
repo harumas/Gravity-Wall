@@ -8,8 +8,10 @@ public class PressurePlate : AbstractSwitch
 {
     [SerializeField] private List<AbstractGimmickAffected> gimmickAffecteds = new List<AbstractGimmickAffected>();
     [SerializeField, Tag] private string[] targetTags;
+    [SerializeField] private MeshRenderer meshRenderer;
     public override bool isOn { get => _isOn; protected set => _isOn = value; }
     private bool _isOn;
+    private float intensity = 8.0f;
 
     void Start()
     {
@@ -24,6 +26,14 @@ public class PressurePlate : AbstractSwitch
         {
             gimmick.Affect(this);
         }
+
+        meshRenderer.material.EnableKeyword("_EMISSION");
+
+        // 新しいEmissionカラーを設定 (例: 赤色)
+        Color emissionColor = isOn ? Color.green : Color.yellow;
+
+        // Emissionの色を変更
+        meshRenderer.material.SetColor("_EmissionColor", emissionColor * intensity);
 
         Debug.Log("OnSwitch");
     }
