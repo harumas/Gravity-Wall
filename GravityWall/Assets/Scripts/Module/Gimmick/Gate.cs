@@ -18,9 +18,40 @@ namespace Module.Gimmick
         private const float intensity = 8.0f;
         private void Start()
         {
+            InstantiateCounterLights();
+        }
+
+        public override void Affect(AbstractSwitch switchObject)
+        {
+            ChangeCounterLights(switchObject.isOn);
+
+            switchCount += switchObject.isOn ? 1 : -1;
+            isOpen = switchCount >= switchMaxCount;
+            gate.SetActive(!isOpen);
+
+            Debug.Log(switchCount);
+        }
+
+        void ChangeCounterLights(bool isOn)
+        {
+            if (isOn)
+            {
+                lightMaterials[switchCount].EnableKeyword("_EMISSION");
+                lightMaterials[switchCount].SetColor("_EmissionColor", Color.green * intensity);
+            }
+            else
+            {
+                lightMaterials[switchCount - 1].DisableKeyword("_EMISSION");
+            }
+        }
+
+        void InstantiateCounterLights()
+        {
             if (switchMaxCount <= 1)
             {
-                Debug.LogWarning("オブジェクトの数が2つ以上必要です。");
+                var light = Instantiate(Counterlight, transform);
+                light.transform.localPosition = lightBasePosition.localPosition;
+                lightMaterials.Add(light.GetComponent<MeshRenderer>().material);
                 return;
             }
 
@@ -33,18 +64,6 @@ namespace Module.Gimmick
                 light.transform.localPosition = new Vector3(startX + i * spacing, lightBasePosition.localPosition.y, lightBasePosition.localPosition.z);
                 lightMaterials.Add(light.GetComponent<MeshRenderer>().material);
             }
-        }
-
-        public override void Affect(AbstractSwitch switchObject)
-        {
-            switchCount += switchObject.isOn ? 1 : -1;
-            isOpen = switchCount >= switchMaxCount;
-            gate.SetActive(!isOpen);
-
-            Debug.Log(switchCount);
-
-            lightMaterials[switchCount - 1].EnableKeyword("_EMISSION");
-            lightMaterials[switchCount - 1].SetColor("_EmissionColor", Color.green * intensity);
         }
     }
 }
