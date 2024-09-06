@@ -401,61 +401,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controlSpeed: 45
+  speedDamping: 0
   airControl: 5
-  rotateSpeed: 0.1
+  easeType: 0
+  rotateStep: 0
   maxSpeed: 8
   jumpPower: 13
-  decreaseGravityMultiplierCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: -0.009158796
-      outSlope: -0.009158796
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.15452467
-    - serializedVersion: 3
-      time: 10
-      value: 1
-      inSlope: 0.23505302
-      outSlope: 0.23505302
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.084337905
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  increaseGravityMultiplierCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 4
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  jumpingGravity: 0
+  allowJumpInterval: 0
+  rotatingAngle: 0
   rigBody: {fileID: 351188152342069297}
   target: {fileID: 4971330620265186111}
-  isJumping: 0
+  localGravity: {fileID: 0}
 --- !u!114 &3606148194078380536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -468,7 +425,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f396df24cf74de88529aaea598ab15a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isEnabled: 1
   detectHoldAngle: 5
+  detectRayRadius: 0.6
+  detectRayRange: 0.6
+  downRayDistance: 0.6
+  targetSyncer: {fileID: 0}
 --- !u!114 &2552734447185149137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -491,7 +453,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8347702909660774484}
   serializedVersion: 4
-  m_Mass: 3000
+  m_Mass: 100
   m_Drag: 0.3
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -543,10 +505,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc6ba3621c8335947b06d676e43e1922, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bodyRotateAxis: {fileID: 8955140890610712672}
-  cameraPivot: {fileID: 1713448873595699499}
-  horizontalSensibility: 1
-  verticalSensibility: 1
+  pivotVertical: {fileID: 0}
+  pivotHorizontal: {fileID: 0}
   horizontalRange:
     min: -30
     max: 30

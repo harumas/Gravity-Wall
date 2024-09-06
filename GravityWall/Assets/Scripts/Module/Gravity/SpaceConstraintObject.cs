@@ -2,7 +2,7 @@ using Constants;
 using UGizmo;
 using UnityEngine;
 
-namespace Module.Gimmick
+namespace Module.Gravity
 {
     public class SpaceConstraintObject : MonoBehaviour
     {
@@ -18,7 +18,7 @@ namespace Module.Gimmick
 
         private void Update()
         {
-            Vector3 gravityDir = Gravity.Value.normalized;
+            Vector3 gravityDir = WorldGravity.Instance.Gravity.normalized;
             Vector3 origin = transform.position + gravityDir * fallDetectOffset;
 
             bool isHit = Physics.BoxCast(origin,

@@ -1,21 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
+using Domain;
 using UnityEngine;
 namespace Module.Gimmick
 {
     public class JumpBoard : MonoBehaviour
     {
-        [SerializeField] private float jumpPower;
+        [Header("ジャンプ力")][SerializeField] private float jumpPower;
 
-        //TODO: Tagをプルダウンで選べるように
+        [Header("ジャンプ中の重力")][SerializeField] private float jumpingGravity;
         [SerializeField, Tag] private string[] targetTags;
 
-        private void OnTriggerEnter(Collider collider)
+        private void OnCollisionEnter(Collision collision)
         {
-            if (targetTags.Any(tag => collider.CompareTag(tag)))
+            if (targetTags.Any(tag => collision.gameObject.CompareTag(tag)))
             {
-                collider.GetComponent<Rigidbody>().AddForce(transform.up * jumpPower, ForceMode.VelocityChange);
+                if (collision.gameObject.CompareTag("Player"))
+                {
+                    collision.gameObject.GetComponent<ICharacter>().DoJump(transform.up * jumpPower, jumpingGravity);
+                }
+                else
+                {
+                    collision.gameObject.GetComponent<Rigidbody>().AddForce(transform.up * jumpPower, ForceMode.VelocityChange);
+                }
             }
         }
     }
