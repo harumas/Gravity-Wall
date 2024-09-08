@@ -1,15 +1,15 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-namespace Module.Gimmick
+namespace Module.PlayTest
 {
     public class DeathFloor : MonoBehaviour
     {
+        private RespawnManager respawnManager => RespawnManager.instance;
         private void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.CompareTag("Player"))
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                respawnManager.Respawn();
             }
         }
     }
