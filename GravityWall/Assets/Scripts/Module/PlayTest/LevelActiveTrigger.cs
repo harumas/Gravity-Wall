@@ -1,22 +1,25 @@
-using Module.PlayTest;
+using Constants;
 using UnityEngine;
 
-public class LevelActiveTrigger : MonoBehaviour
+namespace Module.PlayTest
 {
-    [SerializeField] private GameObject[] levelObjects;
-    private LevelActiveChanger levelActiveChanger;
-
-    // Start is called before the first frame update
-    void Start()
+    public class LevelActiveTrigger : MonoBehaviour
     {
-        levelActiveChanger = transform.parent.GetComponent<LevelActiveChanger>();
-    }
+        [SerializeField] private GameObject[] levelObjects;
+        private LevelActiveChanger levelActiveChanger;
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Player"))
+        // Start is called before the first frame update
+        void Start()
         {
-            levelActiveChanger.SetActiveLevel(levelObjects);
+            levelActiveChanger = transform.parent.GetComponent<LevelActiveChanger>();
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag(Tag.Player))
+            {
+                levelActiveChanger.SetActiveLevel(levelObjects);
+            }
         }
     }
 }

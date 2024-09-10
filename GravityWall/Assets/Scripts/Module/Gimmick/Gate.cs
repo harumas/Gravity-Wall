@@ -15,7 +15,7 @@ namespace Module.Gimmick
         [SerializeField] private int switchMaxCount = 1;
         private int switchCount = 0;
         private List<Material> lightMaterials = new List<Material>();
-        private bool isOpen;
+        public bool isOpen { get; private set; }
 
         private const float intensity = 8.0f;
         private void Start()
@@ -35,8 +35,6 @@ namespace Module.Gimmick
             {
                 gateOpenEvent.Invoke();
             }
-
-            Debug.Log(switchCount);
         }
 
         void ChangeCounterLights(bool isOn)

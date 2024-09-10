@@ -1,35 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
+using Constants;
+using Module.Gimmick;
 using UnityEngine;
 
-public class HallwaysActiveChanger : MonoBehaviour
+namespace Module.PlayTest
 {
-    private MeshRenderer meshRenderer;
-
-    void Start()
+    public class HallwaysActiveChanger : MonoBehaviour
     {
-        meshRenderer = GetComponent<MeshRenderer>();
-        meshRenderer.enabled = false;
-    }
+        [SerializeField] private Gate gate;
+        private MeshRenderer meshRenderer;
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
+        void Start()
         {
-            SetRenderEnabled(true);
+            meshRenderer = GetComponent<MeshRenderer>();
+            meshRenderer.enabled = false;
         }
-    }
 
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
+        private void OnCollisionEnter(Collision collision)
         {
-            SetRenderEnabled(false);
+            if (collision.gameObject.CompareTag(Tag.Player))
+            {
+                SetRenderEnabled(true);
+            }
         }
-    }
 
-    public void SetRenderEnabled(bool isEnable)
-    {
-        meshRenderer.enabled = isEnable;
+        private void OnCollisionExit(Collision collision)
+        {
+            if (collision.gameObject.CompareTag(Tag.Player))
+            {
+                SetRenderEnabled(false);
+            }
+        }
+
+        public void SetRenderEnabled(bool isEnable)
+        {
+            meshRenderer.enabled = isEnable;
+        }
     }
 }
