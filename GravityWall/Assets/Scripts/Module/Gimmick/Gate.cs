@@ -37,6 +37,13 @@ namespace Module.Gimmick
             }
         }
 
+        public void ResetGate()
+        {
+            switchCount = 0;
+            isOpen = false;
+            gate.SetActive(isOpen);
+        }
+
         void ChangeCounterLights(bool isOn)
         {
             if (isOn)
