@@ -9,6 +9,7 @@ namespace Module.Gimmick
     public class Gate : AbstractGimmickAffected
     {
         [SerializeField] private UnityEvent gateOpenEvent;
+        [SerializeField] private UnityEvent gateCloseEvent;
         [SerializeField] private GameObject gate;
         [SerializeField] private Transform lightBasePosition;
         [SerializeField] private GameObject Counterlight;
@@ -28,6 +29,12 @@ namespace Module.Gimmick
             ChangeCounterLights(switchObject.isOn);
 
             switchCount += switchObject.isOn ? 1 : -1;
+
+            if (isOpen && switchCount < switchMaxCount)
+            {
+                gateCloseEvent.Invoke();
+            }
+
             isOpen = switchCount >= switchMaxCount;
             gate.SetActive(!isOpen);
 
