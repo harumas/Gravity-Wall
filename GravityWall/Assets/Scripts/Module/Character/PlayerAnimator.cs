@@ -18,10 +18,7 @@ namespace Module.Character
             // ジャンプのイベント登録
             playerController.IsJumping.Subscribe(isJumping =>
             {
-                if (isJumping)
-                {
-                    playerWrapper.SetJumpTrigger();
-                }
+                playerWrapper.IsJumping = isJumping;
             }).AddTo(this);
 
             // 歩行のイベント登録
@@ -34,6 +31,11 @@ namespace Module.Character
                 {
                     playerWrapper.SetRotatingTrigger();
                 }
+            }).AddTo(this);
+
+            playerController.MoveSpeed.Subscribe(velocity =>
+            {
+                playerWrapper.Speed = velocity;
             }).AddTo(this);
         }
     }

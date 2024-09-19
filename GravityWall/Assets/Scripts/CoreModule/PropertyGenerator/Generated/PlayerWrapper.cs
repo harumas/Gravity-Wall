@@ -26,9 +26,16 @@ namespace PropertyGenerator.Generated
 			target.SetTrigger(-1328712894);
 		}
 		
-		public void SetJumpTrigger()
+		public float Speed
 		{
-			target.SetTrigger(125937960);
+			get => target.GetFloat(-823668238);
+			set => target.SetFloat(-823668238, value);
+		}
+		
+		public bool IsJumping
+		{
+			get => target.GetBool(1749078233);
+			set => target.SetBool(1749078233, value);
 		}
 	}
 }

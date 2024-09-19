@@ -45,6 +45,9 @@ namespace Module.Character
         public ReadOnlyReactiveProperty<bool> IsRotating => isRotating;
         private readonly ReactiveProperty<bool> isRotating = new ReactiveProperty<bool>();
 
+        public ReadOnlyReactiveProperty<float> MoveSpeed => moveSpeed;
+        private readonly ReactiveProperty<float> moveSpeed = new ReactiveProperty<float>();
+
         private Vector2 moveInput;
         private Vector3 inertia;
         private float lastJumpTime;
@@ -109,6 +112,7 @@ namespace Module.Character
 
             //元の座標系に戻す
             Vector3 originalVelocity = xVelocity + yVelocity;
+            moveSpeed.Value = xVelocity.sqrMagnitude / (maxSpeed * maxSpeed);
 
             rigBody.velocity = originalVelocity;
         }
