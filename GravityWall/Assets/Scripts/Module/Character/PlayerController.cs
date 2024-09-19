@@ -92,7 +92,7 @@ namespace Module.Character
             //移動方向の算出
             Vector3 forward = target.forward * moveInput.y;
             Vector3 right = target.right * moveInput.x;
-            Vector3 moveDirection = (forward + right).normalized;
+            Vector3 moveDirection = Vector3.ClampMagnitude(forward + right, 1f);
 
             //重力と垂直な速度ベクトルに変換
             Quaternion targetRotation = Quaternion.FromToRotation(target.up, -WorldGravity.Instance.Gravity);
