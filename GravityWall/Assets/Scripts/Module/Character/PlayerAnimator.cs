@@ -21,16 +21,10 @@ namespace Module.Character
                 playerWrapper.IsJumping = isJumping;
             }).AddTo(this);
 
-            // 歩行のイベント登録
-            playerController.IsWalking.Subscribe(isWalking => { playerWrapper.Walk = isWalking; }).AddTo(this);
-
             // 回転のイベント登録
             playerController.IsRotating.Subscribe(isRotating =>
             {
-                if (isRotating)
-                {
-                    playerWrapper.SetRotatingTrigger();
-                }
+                playerWrapper.IsRotating = isRotating;
             }).AddTo(this);
 
             playerController.MoveSpeed.Subscribe(velocity =>

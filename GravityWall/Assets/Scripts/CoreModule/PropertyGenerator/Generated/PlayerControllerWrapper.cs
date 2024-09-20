@@ -6,11 +6,11 @@ using UnityEngine;
 
 namespace PropertyGenerator.Generated
 {
-	public readonly struct PlayerWrapper
+	public readonly struct PlayerControllerWrapper
 	{
 		private readonly Animator target;
 		
-		public PlayerWrapper(Animator target)
+		public PlayerControllerWrapper(Animator target)
 		{
 			this.target = target;
 		}

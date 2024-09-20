@@ -39,9 +39,6 @@ namespace Module.Character
         public ReadOnlyReactiveProperty<bool> IsJumping => isJumping;
         private readonly ReactiveProperty<bool> isJumping = new ReactiveProperty<bool>();
 
-        public ReadOnlyReactiveProperty<bool> IsWalking => isWalking;
-        private readonly ReactiveProperty<bool> isWalking = new ReactiveProperty<bool>();
-
         public ReadOnlyReactiveProperty<bool> IsRotating => isRotating;
         private readonly ReactiveProperty<bool> isRotating = new ReactiveProperty<bool>();
 
@@ -130,8 +127,6 @@ namespace Module.Character
 
             float airMultiplier = isJumping.Value ? airControl : 1f;
             rigBody.AddForce(moveVelocity * airMultiplier, ForceMode.Acceleration);
-
-            isWalking.Value = moveVelocity.magnitude != 0;
         }
 
         private void PerformGravityRotate()
