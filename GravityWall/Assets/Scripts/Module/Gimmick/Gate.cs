@@ -2,11 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Module.Gimmick
 {
     public class Gate : AbstractGimmickAffected
     {
+        [SerializeField] private UnityEvent gateOpenEvent;
         [SerializeField] private GameObject gate;
         [SerializeField] private Transform lightBasePosition;
         [SerializeField] private GameObject Counterlight;
@@ -28,6 +30,11 @@ namespace Module.Gimmick
             switchCount += switchObject.isOn ? 1 : -1;
             isOpen = switchCount >= switchMaxCount;
             gate.SetActive(!isOpen);
+
+            if (isOpen)
+            {
+                gateOpenEvent.Invoke();
+            }
 
             Debug.Log(switchCount);
         }
