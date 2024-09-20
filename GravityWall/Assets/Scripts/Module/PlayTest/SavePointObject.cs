@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Module.Gimmick;
 using Module.Gravity;
-
+using Constants;
 namespace Module.PlayTest
 {
     public class SavePointObject : MonoBehaviour
@@ -13,7 +13,7 @@ namespace Module.PlayTest
         [SerializeField] private GameObject RetryPositionObject;
         private void OnTriggerEnter(Collider other)
         {
-            if (other.tag == "Player" && !FirstTouch)
+            if (other.CompareTag(Tag.Player))
             {
                 Debug.Log("�ۑ�����܂���");
                 respawnManager.RetryPosition = RetryPositionObject.transform.position;
