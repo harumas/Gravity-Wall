@@ -2,16 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActiveSetter : MonoBehaviour
+namespace Module.PlayTest
 {
-    [SerializeField] private bool startActive;
-    void Start()
+    public class ActiveSetter : MonoBehaviour
     {
-        gameObject.SetActive(startActive);
-    }
+        [SerializeField] private bool startActive;
+        void Start()
+        {
+            gameObject.SetActive(startActive);
+        }
 
-    public void SetActive(bool isActive)
-    {
-        gameObject.SetActive(isActive);
+        public void SetActive(bool isActive)
+        {
+            gameObject.SetActive(isActive);
+        }
     }
 }
