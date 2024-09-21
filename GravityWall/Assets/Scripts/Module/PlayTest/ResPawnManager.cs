@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Module.Gravity;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 namespace Module.PlayTest
 {
@@ -17,7 +18,8 @@ namespace Module.PlayTest
         [NonSerialized] public Vector3 GravityScale;
         public static RespawnManager instance;
 
-        [SerializeField] private GameObject DeadCanvas;
+        [SerializeField] private GameObject LoadingCanvas;
+       
 
         private void Awake()
         {
@@ -45,8 +47,8 @@ namespace Module.PlayTest
 
         public void Damage()
         {
-            DeadCanvas.SetActive(true);
-            Invoke("WorldReset", 1f);
+            LoadingCanvas.SetActive(true);
+            Invoke("WorldReset", 0.3f);
         }
 
         public void WorldReset()
@@ -56,7 +58,7 @@ namespace Module.PlayTest
         }
         public void ObjectReset()
         {
-            DeadCanvas.SetActive(false);
+            LoadingCanvas.SetActive(false);
 
             if (MoveObject == null)
                 return;
@@ -69,18 +71,27 @@ namespace Module.PlayTest
 
         public void PlayerReset()
         {
-            DeadCanvas.SetActive(false);
+            LoadingCanvas.SetActive(false);
             Player.transform.position = RetryPosition;
             WorldGravity.Instance.SetValue(GravityScale);
 
+        }
+
+        public void ReloadScene()
+        {
+           SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
-                Debug.Log("復活しました");
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                LoadingCanvas.SetActive(true);
+                Invoke("ReloadScene", 0.3f);
+
             }
+
+            else if(Input.GetKeyDown(KeyCode.U))
+                Damage();
         }
     }
 }
