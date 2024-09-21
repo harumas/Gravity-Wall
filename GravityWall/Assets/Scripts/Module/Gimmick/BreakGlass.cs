@@ -5,6 +5,7 @@ using UnityEngine.Playables;
 using Module.Gravity;
 using DG.Tweening;
 using Constants;
+using UnityEngine.SceneManagement;
 namespace Module.Gimmick
 {
     public class BreakGlass : MonoBehaviour
@@ -27,14 +28,15 @@ namespace Module.Gimmick
                 {
                     glass.SetActive(false);
                     breakedGlass.SetActive(true);
-                    Time.timeScale = 0.1f;
-                    Time.fixedDeltaTime = 0.002f;
+                    Time.timeScale = 0.05f;
+                    Time.fixedDeltaTime = 0.001f;
                     collider.enabled = false;
 
                     breakedGlass.transform.localScale = scale;
                     breakedGlass.transform.DOScaleZ(0.7f, 2.0f).SetUpdate(true).OnComplete(() =>
                     {
-                        director.Play();
+                        SceneManager.LoadScene("Tutorial01");
+                        //director.Play();
                     });
                 }
             }
