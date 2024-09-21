@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Module.Gravity;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Module.PlayTest
 {
@@ -45,13 +46,17 @@ namespace Module.PlayTest
         public void Damage()
         {
             DeadCanvas.SetActive(true);
-            Invoke("Respawn", 1f);
+            Invoke("WorldReset", 1f);
         }
-        public void Respawn()
+
+        public void WorldReset()
+        {
+            ObjectReset();
+            PlayerReset();
+        }
+        public void ObjectReset()
         {
             DeadCanvas.SetActive(false);
-            Player.transform.position = RetryPosition;
-            WorldGravity.Instance.SetValue(GravityScale);
 
             if (MoveObject == null)
                 return;
@@ -61,12 +66,20 @@ namespace Module.PlayTest
                 MoveObject[i].transform.position = MoveObjectPosition[i];
             }
         }
+
+        public void PlayerReset()
+        {
+            DeadCanvas.SetActive(false);
+            Player.transform.position = RetryPosition;
+            WorldGravity.Instance.SetValue(GravityScale);
+
+        }
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
                 Debug.Log("復活しました");
-                Damage();
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
         }
     }

@@ -13,13 +13,13 @@ namespace Module.PlayTest
         [SerializeField] private GameObject RetryPositionObject;
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag(Tag.Player))
+            if (other.CompareTag(Tag.Player)&&!FirstTouch)
             {
-                Debug.Log("�ۑ�����܂���");
+                Debug.Log("セーブしました");
                 respawnManager.RetryPosition = RetryPositionObject.transform.position;
                 respawnManager.GravityScale = WorldGravity.Instance.Gravity;
                 FirstTouch = true;
-                respawnManager.Respawn();
+                respawnManager.ObjectReset();
             }
         }
     }
