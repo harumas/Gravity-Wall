@@ -13,6 +13,7 @@ namespace Module.Gimmick
         [SerializeField] private GameObject glass, breakedGlass;
         [SerializeField] private Collider collider;
         [SerializeField] private PlayableDirector director;
+        [SerializeField] private GameObject clearCanvas;
         Vector3 scale;
 
         void Start()
@@ -32,11 +33,14 @@ namespace Module.Gimmick
                     Time.fixedDeltaTime = 0.001f;
                     collider.enabled = false;
 
+                    clearCanvas.SetActive(true);
+
                     breakedGlass.transform.localScale = scale;
-                    breakedGlass.transform.DOScaleZ(0.7f, 2.0f).SetUpdate(true).OnComplete(() =>
+                    breakedGlass.transform.DOScaleZ(0.7f, 3.0f).SetUpdate(true).OnComplete(() =>
                     {
-                        SceneManager.LoadScene("Tutorial01");
-                        //director.Play();
+                        Time.timeScale = 1.0f;
+                        Time.fixedDeltaTime = 0.01f;
+                        SceneManager.LoadScene("StageSelect");
                     });
                 }
             }
