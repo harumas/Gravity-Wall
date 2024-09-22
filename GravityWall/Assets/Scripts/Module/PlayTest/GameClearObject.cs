@@ -7,13 +7,17 @@ namespace Module.PlayTest
 {
     public class GameClearObject : MonoBehaviour
     {
-        [SerializeField] private string SceneName;
+        private RespawnManager respawnManager => RespawnManager.instance;
+        [SerializeField]private GameObject ClearCanvas;
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.tag == "Player")
-                SceneManager.LoadScene(SceneName);
-
+            {
+                respawnManager.isClear = true;
+                ClearCanvas.SetActive(true);
+            }
+              
         }
     }
 }
