@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Constants;
 
 namespace Module.PlayTest
 {
@@ -12,7 +13,7 @@ namespace Module.PlayTest
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.tag == "Player")
+            if (other.CompareTag(Tag.Player))
             {
                 respawnManager.isClear = true;
                 ClearCanvas.SetActive(true);
