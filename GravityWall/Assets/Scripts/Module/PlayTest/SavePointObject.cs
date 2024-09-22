@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Module.Gimmick;
 using Module.Gravity;
-
+using Constants;
 namespace Module.PlayTest
 {
     public class SavePointObject : MonoBehaviour
@@ -14,14 +14,13 @@ namespace Module.PlayTest
         [SerializeField] private GameObject puzzleBox;
         private void OnTriggerEnter(Collider other)
         {
-            if (other.tag == "Player" && !FirstTouch)
+            if (other.CompareTag(Tag.Player) && !FirstTouch)
             {
-                puzzleBox.gameObject.SetActive(true);
-                Debug.Log("�ۑ�����܂���");
+                Debug.Log("セーブしました");
                 respawnManager.RetryPosition = RetryPositionObject.transform.position;
                 respawnManager.GravityScale = WorldGravity.Instance.Gravity;
                 FirstTouch = true;
-                respawnManager.Respawn();
+                respawnManager.ObjectReset();
             }
         }
     }

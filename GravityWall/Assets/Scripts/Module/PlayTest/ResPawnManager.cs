@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Module.Gravity;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 namespace Module.PlayTest
 {
@@ -16,6 +18,9 @@ namespace Module.PlayTest
         [NonSerialized] public Vector3 GravityScale;
         public static RespawnManager instance;
 
+        [SerializeField] private GameObject LoadingCanvas;
+       
+
         private void Awake()
         {
             if (instance != null)
@@ -23,6 +28,8 @@ namespace Module.PlayTest
             else
                 instance = this;
         }
+
+       
         private void Start()
         {
             RetryPosition = Player.transform.position;
@@ -38,10 +45,20 @@ namespace Module.PlayTest
             }
         }
 
-        public void Respawn()
+        public void Damage()
         {
-            Player.transform.position = RetryPosition;
-            WorldGravity.Instance.SetValue(GravityScale);
+            LoadingCanvas.SetActive(true);
+            Invoke("WorldReset", 0.3f);
+        }
+
+        public void WorldReset()
+        {
+            ObjectReset();
+            PlayerReset();
+        }
+        public void ObjectReset()
+        {
+            LoadingCanvas.SetActive(false);
 
             if (MoveObject == null)
                 return;
@@ -51,13 +68,30 @@ namespace Module.PlayTest
                 MoveObject[i].transform.position = MoveObjectPosition[i];
             }
         }
+
+        public void PlayerReset()
+        {
+            LoadingCanvas.SetActive(false);
+            Player.transform.position = RetryPosition;
+            WorldGravity.Instance.SetValue(GravityScale);
+
+        }
+
+        public void ReloadScene()
+        {
+           SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
-                Debug.Log("復活しました");
-                Respawn();
+                LoadingCanvas.SetActive(true);
+                Invoke("ReloadScene", 0.3f);
+
             }
+
+            else if(Input.GetKeyDown(KeyCode.U))
+                Damage();
         }
     }
 }

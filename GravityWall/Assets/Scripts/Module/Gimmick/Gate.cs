@@ -2,18 +2,21 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Module.Gimmick
 {
     public class Gate : AbstractGimmickAffected
     {
+        [SerializeField] private UnityEvent gateOpenEvent;
+        [SerializeField] private UnityEvent gateCloseEvent;
         [SerializeField] private GameObject gate;
         [SerializeField] private Transform lightBasePosition;
         [SerializeField] private GameObject Counterlight;
         [SerializeField] private int switchMaxCount = 1;
         private int switchCount = 0;
         private List<Material> lightMaterials = new List<Material>();
-        private bool isOpen;
+        public bool isOpen { get; private set; }
 
         private const float intensity = 8.0f;
         private void Start()
@@ -26,10 +29,26 @@ namespace Module.Gimmick
             ChangeCounterLights(switchObject.isOn);
 
             switchCount += switchObject.isOn ? 1 : -1;
+
+            if (isOpen && switchCount < switchMaxCount)
+            {
+                gateCloseEvent.Invoke();
+            }
+
             isOpen = switchCount >= switchMaxCount;
             gate.SetActive(!isOpen);
 
-            Debug.Log(switchCount);
+            if (isOpen)
+            {
+                gateOpenEvent.Invoke();
+            }
+        }
+
+        public override void Reset()
+        {
+            switchCount = 0;
+            isOpen = false;
+            gate.SetActive(!isOpen);
         }
 
         void ChangeCounterLights(bool isOn)

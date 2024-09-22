@@ -9,7 +9,7 @@ namespace Module.PlayTest
         {
             if (collision.gameObject.CompareTag("Player"))
             {
-                respawnManager.Respawn();
+                //respawnManager.Respawn();
             }
         }
     }
