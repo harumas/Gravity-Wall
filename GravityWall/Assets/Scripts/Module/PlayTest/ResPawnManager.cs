@@ -19,7 +19,8 @@ namespace Module.PlayTest
         public static RespawnManager instance;
 
         [SerializeField] private GameObject LoadingCanvas;
-       
+
+        public bool isClear = false;
 
         private void Awake()
         {
@@ -81,6 +82,11 @@ namespace Module.PlayTest
         {
            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
+
+        public void LoadStageSelectScene()
+        {
+            SceneManager.LoadScene("StageSelect");
+        }
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.R))
@@ -90,7 +96,13 @@ namespace Module.PlayTest
 
             }
 
-            else if(Input.GetKeyDown(KeyCode.U))
+            else if(Input.GetKeyDown(KeyCode.P))
+            {
+                LoadingCanvas.SetActive(true);
+                Invoke("LoadStageSelectScene", 0.3f);
+            }
+
+            else if(Input.GetKeyDown(KeyCode.U)&&!isClear)
                 Damage();
         }
     }

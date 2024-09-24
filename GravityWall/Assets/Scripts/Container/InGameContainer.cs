@@ -27,6 +27,8 @@ namespace Container
             //重力の生成 (後で消す)
             WorldGravity.Create();
 
+            UnityEngine.Application.targetFrameRate = 60;
+
             builder.RegisterEntryPoint<InputConfigChangedListener>();
             builder.RegisterEntryPoint<PlayerInputPresenter>();
 
