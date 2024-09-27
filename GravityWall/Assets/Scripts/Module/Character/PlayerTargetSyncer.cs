@@ -1,63 +1,49 @@
-﻿using System;
-using Core.Input;
-using UnityEngine;
-using UnityEngine.Serialization;
+﻿using UnityEngine;
 
 namespace Module.Character
 {
+    /// <summary>
+    /// 移動方向にプレイヤーの体を回転させるクラス
+    /// </summary>
     public class PlayerTargetSyncer : MonoBehaviour
     {
         [SerializeField] private Transform target;
         [SerializeField] private Transform axis;
         [SerializeField] private float damping;
 
-        private Vector2 input;
-        private InputEvent controlEvent;
+        private Vector2 moveInput;
+
+        public void OnMoveInput(Vector2 moveInput)
+        {
+            this.moveInput = moveInput;
+        }
 
         public Vector3 GetTargetDirection()
         {
-            if (input == Vector2.zero)
-            {
-                return Vector3.zero;
-            }
-
-            Vector3 inputDirection = target.rotation * new Vector3(input.x, 0f, input.y);
+            Vector3 inputDirection = target.rotation * new Vector3(moveInput.x, 0f, moveInput.y);
             Vector3 planedDirection = Vector3.ProjectOnPlane(inputDirection, axis.up);
 
             return planedDirection;
         }
 
-        private void Start()
-        {
-            controlEvent = InputActionProvider.Instance.CreateEvent(ActionGuid.Player.Move);
-        }
-
-        private void Update()
-        {
-            input = controlEvent.ReadValue<Vector2>();
-        }
-
         private void FixedUpdate()
         {
-            if (input == Vector2.zero)
-            {
-                return;
-            }
-
             PerformBodyRotate();
         }
 
         private void PerformBodyRotate()
         {
+            if (moveInput == Vector2.zero)
+            {
+                return;
+            }
+
+            //目標の回転方向を算出
             Vector3 targetDirection = GetTargetDirection();
             Quaternion targetRotation = Quaternion.LookRotation(targetDirection, axis.up);
+            
+            //補完して回転
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, damping);
-        }
-
-        private void OnDrawGizmos()
-        {
-            Vector3 targetDirection = GetTargetDirection();
-            UGizmo.UGizmos.DrawArrow(transform.position, transform.position + targetDirection.normalized, Color.blue, headLength: 0.4f, width: 0.2f);
         }
     }
 }

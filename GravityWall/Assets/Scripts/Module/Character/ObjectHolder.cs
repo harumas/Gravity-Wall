@@ -1,5 +1,6 @@
 using Core.Input;
-using Module.Gimmick;
+using CoreModule.Input;
+using Module.Gravity;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -22,7 +23,7 @@ namespace Module.Character
         {
             myBody = transform.parent.GetComponent<Rigidbody>();
 
-            holdEvent = InputActionProvider.Instance.CreateEvent(ActionGuid.Player.Hold);
+            holdEvent = InputActionProvider.CreateEvent(ActionGuid.Player.Hold);
             holdEvent.Started += OnHoldStart;
             holdEvent.Canceled += OnHoldEnd;
         }
@@ -35,9 +36,9 @@ namespace Module.Character
             }
 
             dependingGravity = stayingCollider.GetComponent<LocalGravity>();
-            Gravity.Type gravityType = dependingGravity.GravityType;
+            Gravity.WorldGravity.Type gravityType = dependingGravity.GravityType;
 
-            if (gravityType != Gravity.Type.Object)
+            if (gravityType != Gravity.WorldGravity.Type.Object)
             {
                 return;
             }
