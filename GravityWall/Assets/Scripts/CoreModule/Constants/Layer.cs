@@ -16,6 +16,7 @@ namespace Constants
 		public const int Base = 7;
 		public const int Holdable = 8;
 		public const int IgnoreGravity = 9;
+		public const int IgnoreGimmick = 10;
 		
 		public sealed class Mask
 		{
@@ -28,6 +29,7 @@ namespace Constants
 			public const int Base = 128;
 			public const int Holdable = 256;
 			public const int IgnoreGravity = 512;
+			public const int IgnoreGimmick = 1024;
 		}
 	}
 }
