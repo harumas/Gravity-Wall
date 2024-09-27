@@ -1,7 +1,9 @@
+using System;
 using DG.Tweening;
 using DG.Tweening.Core.Easing;
 using Domain;
 using Module.Gravity;
+using R3;
 using UnityEngine;
 
 namespace Module.Character
@@ -34,11 +36,35 @@ namespace Module.Character
         [SerializeField] private Transform target;
         [SerializeField] private LocalGravity localGravity;
 
-        private bool isJumping;
+        public ReadOnlyReactiveProperty<bool> IsJumping => isJumping;
+        private readonly ReactiveProperty<bool> isJumping = new ReactiveProperty<bool>();
+
+        public ReadOnlyReactiveProperty<bool> IsRotating => isRotating;
+        private readonly ReactiveProperty<bool> isRotating = new ReactiveProperty<bool>();
+
+        public ReadOnlyReactiveProperty<float> MoveSpeed => moveSpeed;
+        private readonly ReactiveProperty<float> moveSpeed = new ReactiveProperty<float>();
+
         private Vector2 moveInput;
         private Vector3 inertia;
         private float lastJumpTime;
         private float variableJumpingGravity;
+
+        private void Start()
+        {
+            isRotating.Subscribe(isRotating =>
+            {
+                if (isRotating)
+                {
+                    //回転中はオブジェクトが落下しないようにする
+                    WorldGravity.Instance.SetDisable(WorldGravity.Type.Object);
+                }
+                else
+                {
+                    WorldGravity.Instance.SetEnable(WorldGravity.Type.Object);
+                }
+            });
+        }
 
         public void OnMoveInput(Vector2 moveInput)
         {
@@ -83,6 +109,7 @@ namespace Module.Character
 
             //元の座標系に戻す
             Vector3 originalVelocity = xVelocity + yVelocity;
+            moveSpeed.Value = xVelocity.sqrMagnitude / (maxSpeed * maxSpeed);
 
             rigBody.velocity = originalVelocity;
         }
@@ -98,8 +125,7 @@ namespace Module.Character
             Quaternion targetRotation = Quaternion.FromToRotation(target.up, -WorldGravity.Instance.Gravity);
             Vector3 moveVelocity = targetRotation * moveDirection * controlSpeed;
 
-            float airMultiplier = isJumping ? airControl : 1f;
-
+            float airMultiplier = isJumping.Value ? airControl : 1f;
             rigBody.AddForce(moveVelocity * airMultiplier, ForceMode.Acceleration);
         }
 
@@ -115,15 +141,11 @@ namespace Module.Character
             float t = Evaluate(easeType, angle, rotateStep);
             rigBody.rotation = Quaternion.Slerp(rigBody.rotation, targetRotation, t);
 
-            if (angle - rotateStep >= rotatingAngle)
-            {
-                //回転中はオブジェクトが落下しないようにする
-                WorldGravity.Instance.SetDisable(WorldGravity.Type.Object);
-            }
-            else
+            isRotating.Value = angle - rotateStep >= rotatingAngle;
+
+            if (!isRotating.Value)
             {
                 rigBody.rotation = targetRotation;
-                WorldGravity.Instance.SetEnable(WorldGravity.Type.Object);
             }
         }
 
@@ -147,7 +169,7 @@ namespace Module.Character
 
         private void AdjustGravity()
         {
-            if (!isJumping)
+            if (!isJumping.Value)
             {
                 return;
             }
@@ -157,13 +179,13 @@ namespace Module.Character
 
         private void OnCollisionEnter(Collision _)
         {
-            isJumping = false;
+            isJumping.Value = false;
             inertia = Vector3.zero;
         }
 
         private void OnCollisionStay(Collision _)
         {
-            if (!isJumping)
+            if (!isJumping.Value)
             {
                 return;
             }
@@ -171,20 +193,20 @@ namespace Module.Character
             bool canJump = lastJumpTime + allowJumpInterval <= Time.time;
             if (canJump)
             {
-                isJumping = false;
+                isJumping.Value = false;
             }
         }
 
         public void DoJump(Vector3 jumpForce, float jumpingGravity)
         {
-            if (isJumping)
+            if (isJumping.Value)
             {
                 return;
             }
 
             variableJumpingGravity = jumpingGravity;
             rigBody.AddForce(jumpForce, ForceMode.VelocityChange);
-            isJumping = true;
+            isJumping.Value = true;
             lastJumpTime = Time.time;
         }
 
