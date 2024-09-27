@@ -13,24 +13,24 @@ namespace Module.Character
     /// </summary>
     public class PlayerController : MonoBehaviour, ICharacter
     {
-        [Header("移動速度")] [SerializeField] private float controlSpeed;
-        [Header("速度減衰")] [SerializeField] private float speedDamping;
-        [Header("ジャンプ中移動係数")] [SerializeField] private float airControl;
-        [Header("回転のイージング")] [SerializeField] private Ease easeType;
+        [Header("移動速度")][SerializeField] private float controlSpeed;
+        [Header("速度減衰")][SerializeField] private float speedDamping;
+        [Header("ジャンプ中移動係数")][SerializeField] private float airControl;
+        [Header("回転のイージング")][SerializeField] private Ease easeType;
 
         [Header("回転のイージング係数")]
         [SerializeField]
         private float rotateStep;
 
-        [Header("最大速度")] [SerializeField] private float maxSpeed;
-        [Header("ジャンプ力")] [SerializeField] private float jumpPower;
-        [Header("ジャンプ中の重力")] [SerializeField] private float jumpingGravity;
+        [Header("最大速度")][SerializeField] private float maxSpeed;
+        [Header("ジャンプ力")][SerializeField] private float jumpPower;
+        [Header("ジャンプ中の重力")][SerializeField] private float jumpingGravity;
 
         [Header("連続ジャンプを許可する間隔")]
         [SerializeField]
         private float allowJumpInterval;
 
-        [Header("回転中とみなす角度")] [SerializeField] private float rotatingAngle;
+        [Header("回転中とみなす角度")][SerializeField] private float rotatingAngle;
 
         [SerializeField] private Rigidbody rigBody;
         [SerializeField] private Transform target;
