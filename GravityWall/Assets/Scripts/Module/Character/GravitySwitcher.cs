@@ -8,6 +8,12 @@ namespace Module.Character
     public class GravitySwitcher : MonoBehaviour
     {
         [SerializeField] private bool isEnabled = true;
+
+        [Header("重力変化の制限がかかる角度")]
+        [SerializeField]
+        private float constrainedAngleThreshold;
+
+        [Header("重力変化までの秒数")] [SerializeField] private float angleChangeDuration;
         [SerializeField] private float detectHoldAngle = 1f;
         [SerializeField] private float detectRayRadius = 0.6f;
         [SerializeField] private float detectRayRange = 0.6f;
@@ -19,6 +25,13 @@ namespace Module.Character
         private bool doSwitchGravity;
         private bool hasHeadObject;
         private bool isLegalStep;
+        private ThresholdChecker rotateAngleChecker;
+
+        private void Awake()
+        {
+            rotateAngleChecker = new ThresholdChecker(constrainedAngleThreshold, angleChangeDuration);
+            rotateAngleChecker.Enable();
+        }
 
         private void Update()
         {
@@ -27,6 +40,19 @@ namespace Module.Character
 
         private void FixedUpdate()
         {
+            //角度の差を求める
+            float angle = Vector3.Angle(transform.up, -nearestContact.normal);
+            angle = Mathf.Max(angle, Mathf.Epsilon);
+
+            if (rotateAngleChecker.IsOverThreshold(angle))
+            {
+                Debug.Log("Disa"); 
+                Disable();
+                return;
+            }
+
+            Enable();
+
             if (doSwitchGravity && !hasHeadObject)
             {
                 WorldGravity.Instance.SetValue(-nearestContact.normal);
@@ -36,12 +62,12 @@ namespace Module.Character
             hasHeadObject = false;
         }
 
-        private void Enable()
+        public void Enable()
         {
             isEnabled = true;
         }
 
-        private void Disable()
+        public void Disable()
         {
             isEnabled = false;
         }

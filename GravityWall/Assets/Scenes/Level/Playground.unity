@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028326, g: 0.22571333, b: 0.30692202, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3943,6 +3943,31 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 8.8882013e-10
       objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: gravitySwitcher
+      value: 
+      objectReference: {fileID: 846832017}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: angleChangeDuration
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4984162288576153998, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: constrainedAngleThreshold
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 5863071365648989382, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: angleChangeDuration
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5863071365648989382, guid: b6b770b68bfd72b4c8009472cba1842e,
+        type: 3}
+      propertyPath: constrainedAngleThreshold
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 5979203719876794136, guid: b6b770b68bfd72b4c8009472cba1842e,
         type: 3}
       propertyPath: m_LocalRotation.x
@@ -4465,6 +4490,18 @@ Transform:
   - {fileID: 1828279508}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &846832017 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5863071365648989382, guid: b6b770b68bfd72b4c8009472cba1842e,
+    type: 3}
+  m_PrefabInstance: {fileID: 719958787}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f396df24cf74de88529aaea598ab15a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &913964132
 GameObject:
   m_ObjectHideFlags: 0

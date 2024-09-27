@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using DG.Tweening.Core.Easing;
 using Domain;
@@ -39,6 +40,8 @@ namespace Module.Character
         private Vector3 inertia;
         private float lastJumpTime;
         private float variableJumpingGravity;
+        
+        public event Action OnRotate 
 
         public void OnMoveInput(Vector2 moveInput)
         {
