@@ -50,8 +50,6 @@ namespace Module.Character
         private float lastJumpTime;
         private float variableJumpingGravity;
         
-        public event Action OnRotate 
-
         private void Start()
         {
             isRotating.Subscribe(isRotating =>

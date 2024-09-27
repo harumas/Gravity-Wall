@@ -1,5 +1,6 @@
 ﻿using Constants;
 using Module.Gravity;
+using R3;
 using UGizmo;
 using UnityEngine;
 
@@ -19,6 +20,7 @@ namespace Module.Character
         [SerializeField] private float detectRayRange = 0.6f;
         [SerializeField] private float downRayDistance = 0.6f;
         [SerializeField] private PlayerTargetSyncer targetSyncer;
+        [SerializeField] private PlayerController playerController;
 
         private Vector3 prevDir;
         private ContactPoint nearestContact;
@@ -31,6 +33,24 @@ namespace Module.Character
         {
             rotateAngleChecker = new ThresholdChecker(constrainedAngleThreshold, angleChangeDuration);
             rotateAngleChecker.Enable();
+
+            //プレイヤーの回転が終わったらチェッカーを有効化する
+            playerController.IsRotating.Subscribe(value =>
+            {
+                if (!value)
+                {
+                    rotateAngleChecker.Enable();
+                }
+            }).AddTo(this);
+
+            //ジャンプ中はチェッカーを無効化する
+            playerController.IsJumping.Subscribe(value =>
+            {
+                if (value)
+                {
+                    rotateAngleChecker.Disable();
+                }
+            }).AddTo(this);
         }
 
         private void Update()
@@ -44,9 +64,9 @@ namespace Module.Character
             float angle = Vector3.Angle(transform.up, -nearestContact.normal);
             angle = Mathf.Max(angle, Mathf.Epsilon);
 
-            if (rotateAngleChecker.IsOverThreshold(angle))
+            //角度が一定以下の場合は重力変更を行わない
+            if (rotateAngleChecker.IsUnderThreshold(angle))
             {
-                Debug.Log("Disa"); 
                 Disable();
                 return;
             }

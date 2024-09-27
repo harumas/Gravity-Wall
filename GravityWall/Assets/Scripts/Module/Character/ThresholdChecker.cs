@@ -17,28 +17,28 @@ namespace Module.Character
             this.duration = duration;
         }
 
-        public bool IsOverThreshold(float value)
+        public bool IsUnderThreshold(float value)
         {
             if (!enabled)
             {
                 return false;
             }
             
-            bool isOverThreshold = value > threshold;
+            bool isUnderThreshold = value < threshold;
 
             if (isCounting)
             {
                 bool isOverTime = Time.time - startTime > duration;
-                if (!isOverThreshold || isOverTime)
+                if (!isUnderThreshold || isOverTime)
                 {
                     Disable();
                     isCounting = false;
                 }
 
-                return isOverThreshold;
+                return isUnderThreshold;
             }
 
-            if (isOverThreshold)
+            if (isUnderThreshold)
             {
                 startTime = Time.time;
                 isCounting = true;
