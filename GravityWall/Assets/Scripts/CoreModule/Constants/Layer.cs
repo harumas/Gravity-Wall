@@ -15,6 +15,7 @@ namespace Constants
 		public const int UI = 5;
 		public const int Gravity = 6;
 		public const int Base = 7;
+		public const int IgnoreGimmick = 8;
 		public const int IgnoreGravity = 9;
 		public const int Volume = 10;
 		
@@ -28,6 +29,7 @@ namespace Constants
 			public const int UI = 32;
 			public const int Gravity = 64;
 			public const int Base = 128;
+			public const int IgnoreGimmick = 256;
 			public const int IgnoreGravity = 512;
 			public const int Volume = 1024;
 		}
