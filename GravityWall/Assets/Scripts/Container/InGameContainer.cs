@@ -1,6 +1,7 @@
 ﻿using Application;
 using Constants;
 using Module.Character;
+using Module.Gimmick;
 using Module.Gravity;
 using Module.InputModule;
 using Presentation;
@@ -39,6 +40,18 @@ namespace Container
             builder.Register<PlayerInput>(Lifetime.Singleton).As<IGameInput>();
 
             RegisterPlayerComponents(builder);
+
+            builder.RegisterBuildCallback(container =>
+            {
+                Transform playerTransform = container.Resolve<PlayerController>().transform;
+                CameraController cameraController = container.Resolve<CameraController>();
+                LevelVolumeCamera[] cameras = FindObjectsByType<LevelVolumeCamera>(FindObjectsSortMode.None);
+
+                foreach (var cam in cameras)
+                {
+                    cam.AssignPlayerTransform(playerTransform, cameraController);
+                }
+            });
         }
 
         private void RegisterPlayerComponents(IContainerBuilder builder)
