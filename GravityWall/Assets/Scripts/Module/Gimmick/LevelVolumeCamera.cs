@@ -20,17 +20,20 @@ namespace Module.Gimmick
         private float rotateStep;
 
         [SerializeField] private bool isEnabled;
-        [SerializeField] private bool isRotating;
+        [SerializeField] private bool isPlayerRotating;
+        [SerializeField] private bool isInputRotating;
 
         private MaskVolume maskVolume;
         private Transform playerTransform;
         private CameraController cameraController;
+        private PlayerController playerController;
         private Vector3 currentUpVector;
 
-        public void AssignPlayerTransform(Transform playerTransform, CameraController cameraController)
+        public void AssignPlayerTransform(Transform playerTransform, CameraController cameraController, PlayerController playerController)
         {
             this.playerTransform = playerTransform;
             this.cameraController = cameraController;
+            this.playerController = playerController;
 
             currentUpVector = playerTransform.up;
             cameraController.SetCameraRotation(cameraPivot.rotation);
@@ -43,33 +46,81 @@ namespace Module.Gimmick
                 return;
             }
 
+            if (isInputRotating)
+            {
+                PerformAdditionalRotate();
+            }
+            else 
+            {
+                RotatePlayerCamera();
+            }
+        }
+
+        private void RotatePlayerCamera()
+        {
             float angle = Vector3.Angle(currentUpVector, playerTransform.up);
             bool canRotate = Mathf.Abs(angle - 90f) < 0.1f;
 
-            Debug.Log(angle);
-
             //90度になったらカメラの向きを変える
-            if (isRotating || canRotate)
+            if (isPlayerRotating || canRotate)
             {
+                float rotationAngle = Vector3.Angle(cameraPivot.up, playerTransform.up);
                 Quaternion rotation = Quaternion.FromToRotation(cameraPivot.up, playerTransform.up) * cameraPivot.rotation;
-                Quaternion nextRotation;
 
-                if (Mathf.Abs(angle) < 0.1f)
+                bool isLastRotation = PerformRotate(rotation, rotationAngle);
+                if (isLastRotation)
                 {
-                    nextRotation = rotation;
-                    currentUpVector = playerTransform.up;
-                    Debug.Log("false!!!");
-                    isRotating = false;
+                    isPlayerRotating = false;
                 }
-                else
-                {
-                    float t = Evaluate(easeType, angle, rotateStep);
-                    nextRotation = Quaternion.Slerp(cameraPivot.rotation, rotation, t * Time.deltaTime);
-                    isRotating = true;
-                }
+            }
+        }
 
-                cameraPivot.rotation = nextRotation;
-                cameraController.SetCameraRotation(nextRotation);
+        private bool PerformRotate(Quaternion targetRotation, float rotationAngle)
+        {
+            bool isLastRotation;
+            Quaternion nextRotation;
+
+            if (Mathf.Abs(rotationAngle) < 0.1f)
+            {
+                nextRotation = targetRotation;
+                currentUpVector = playerTransform.up;
+                playerController.IsRotationLocked = false;
+                isLastRotation = true;
+            }
+            else
+            {
+                float t = Evaluate(easeType, rotationAngle, rotateStep);
+                nextRotation = Quaternion.Slerp(cameraPivot.rotation, targetRotation, t * Time.deltaTime);
+                playerController.IsRotationLocked = true;
+                isLastRotation = false;
+            }
+
+            cameraPivot.rotation = nextRotation;
+            cameraController.SetCameraRotation(nextRotation);
+
+            return isLastRotation;
+        }
+
+        private Quaternion additionalRotation;
+
+        public void EnableAdditionalRotate(int value)
+        {
+            if (isPlayerRotating || isInputRotating)
+            {
+                return;
+            }
+            
+            additionalRotation = Quaternion.AngleAxis(value * 90f, cameraPivot.up) * cameraPivot.rotation;
+            isInputRotating = true;
+        }
+
+        private void PerformAdditionalRotate()
+        {
+            float rotationAngle = Quaternion.Angle(cameraPivot.rotation, additionalRotation);
+            bool isLastRotation = PerformRotate(additionalRotation, rotationAngle);
+            if (isLastRotation)
+            {
+                isInputRotating = false;
             }
         }
 

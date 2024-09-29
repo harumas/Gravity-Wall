@@ -44,6 +44,8 @@ namespace Module.Character
 
         public ReadOnlyReactiveProperty<float> MoveSpeed => moveSpeed;
         private readonly ReactiveProperty<float> moveSpeed = new ReactiveProperty<float>();
+        
+        public bool IsRotationLocked { get; set; }
 
         private Vector2 moveInput;
         private Vector3 inertia;
@@ -131,6 +133,11 @@ namespace Module.Character
 
         private void PerformGravityRotate()
         {
+            if (IsRotationLocked)
+            {
+                return;
+            }
+            
             Quaternion targetRotation = Quaternion.FromToRotation(transform.up, -WorldGravity.Instance.Gravity) * rigBody.rotation;
 
             //角度の差を求める

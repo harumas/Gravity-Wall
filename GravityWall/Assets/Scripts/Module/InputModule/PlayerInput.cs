@@ -1,4 +1,4 @@
-﻿using Core.Input;
+﻿using System;
 using CoreModule.Input;
 using R3;
 using UnityEngine;
@@ -10,6 +10,7 @@ namespace Module.InputModule
     {
         private readonly ReactiveProperty<Vector2> lookDeltaProperty = new ReactiveProperty<Vector2>();
         private readonly ReactiveProperty<Vector2> moveProperty = new ReactiveProperty<Vector2>();
+        private readonly Subject<int> cameraRotateSubject = new Subject<int>();
         private readonly Subject<Unit> jumpSubject = new Subject<Unit>();
 
         public PlayerInput()
@@ -30,10 +31,21 @@ namespace Module.InputModule
             //ジャンプ入力のイベントを登録
             InputEvent jumpEvent = InputActionProvider.CreateEvent(ActionGuid.Player.Jump);
             jumpEvent.Started += _ => jumpSubject.OnNext(Unit.Default);
+            
+            //カメラ回転入力のイベントを登録
+            InputEvent rotateCameraEvent = InputActionProvider.CreateEvent(ActionGuid.Player.CameraRotate);
+            rotateCameraEvent.Started += _ =>
+            {
+                float input = rotateCameraEvent.ReadValue<float>(); 
+                int value = input == 0f ? 0 : Math.Sign(input);
+                
+                cameraRotateSubject.OnNext(value); 
+            };
         }
 
         public ReadOnlyReactiveProperty<Vector2> LookDelta => lookDeltaProperty;
         public ReadOnlyReactiveProperty<Vector2> Move => moveProperty;
+        public Observable<int> CameraRotate => cameraRotateSubject;
         public Observable<Unit> Jump => jumpSubject;
 
         private void OnMove(InputAction.CallbackContext ctx)

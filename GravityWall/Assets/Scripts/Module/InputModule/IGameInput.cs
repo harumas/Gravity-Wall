@@ -7,6 +7,7 @@ namespace Module.InputModule
     {
         ReadOnlyReactiveProperty<Vector2> LookDelta { get; }
         ReadOnlyReactiveProperty<Vector2> Move { get; }
+        Observable<int> CameraRotate { get; }
         Observable<Unit> Jump { get; }
     }
 }

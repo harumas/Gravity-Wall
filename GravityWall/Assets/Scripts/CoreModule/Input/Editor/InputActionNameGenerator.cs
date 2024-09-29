@@ -15,7 +15,7 @@ namespace CoreModule.Input.Editor
         private const string className = "ActionGuid";
 
         private const string requiredNamespace = "using System;\n";
-        private static readonly string savePath = $"Assets/Scripts/Module/Core/Input/Generated/{className}.cs";
+        private static readonly string savePath = $"Assets/Scripts/CoreModule/Input/Generated/{className}.cs";
         private static readonly string profilePath = Application.dataPath + "/Resources";
 
         private static InputActionAssetProfile profileAsset;

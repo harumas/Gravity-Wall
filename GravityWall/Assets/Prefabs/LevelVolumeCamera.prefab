@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6531180243481953101}
   - component: {fileID: 3075911191271973421}
   m_Layer: 10
-  m_Name: VolumeCamera
+  m_Name: LevelVolumeCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,8 +48,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   virtualCamera: {fileID: 1066367168946789526}
   cameraPivot: {fileID: 24626775940116873}
-  rotationDamping: 0.001
+  easeType: 1
+  rotateStep: 600
   isEnabled: 0
+  isPlayerRotating: 0
+  isInputRotating: 0
 --- !u!1 &2876946585241880338
 GameObject:
   m_ObjectHideFlags: 0

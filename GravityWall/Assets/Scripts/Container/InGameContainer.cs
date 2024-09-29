@@ -32,6 +32,7 @@ namespace Container
 
             builder.RegisterEntryPoint<InputConfigChangedListener>();
             builder.RegisterEntryPoint<PlayerInputPresenter>();
+            builder.RegisterEntryPoint<LevelVolumeCameraPresenter>();
 
 #if UNITY_EDITOR
             builder.RegisterEntryPoint<ExternalAccessor>();
@@ -40,18 +41,6 @@ namespace Container
             builder.Register<PlayerInput>(Lifetime.Singleton).As<IGameInput>();
 
             RegisterPlayerComponents(builder);
-
-            builder.RegisterBuildCallback(container =>
-            {
-                Transform playerTransform = container.Resolve<PlayerController>().transform;
-                CameraController cameraController = container.Resolve<CameraController>();
-                LevelVolumeCamera[] cameras = FindObjectsByType<LevelVolumeCamera>(FindObjectsSortMode.None);
-
-                foreach (var cam in cameras)
-                {
-                    cam.AssignPlayerTransform(playerTransform, cameraController);
-                }
-            });
         }
 
         private void RegisterPlayerComponents(IContainerBuilder builder)
