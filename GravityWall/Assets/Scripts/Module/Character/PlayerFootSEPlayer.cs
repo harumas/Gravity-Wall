@@ -11,7 +11,7 @@ namespace Module.Character
         public void FootSE()
         {
             Debug.Log("SE");
-            audioSource.pitch = Random.Range(0.5f, 1.5f);
+            audioSource.pitch = Random.Range(0.7f, 1.3f);
             audioSource.Play();
         }
     }
