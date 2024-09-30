@@ -34,9 +34,31 @@ namespace Module.Gimmick
             this.playerTransform = playerTransform;
             this.cameraController = cameraController;
             this.playerController = playerController;
+        }
 
-            currentUpVector = playerTransform.up;
-            cameraController.SetCameraRotation(cameraPivot.rotation);
+        private readonly Vector3[] directions =
+        {
+            Vector3.up,
+            Vector3.down,
+            Vector3.right,
+            Vector3.left,
+            Vector3.forward,
+            Vector3.back,
+        };
+
+        private Vector3 GetNearestDirection(Vector3 origin)
+        {
+            const float error = 0.01f;
+
+            foreach (Vector3 direction in directions)
+            {
+                if (1f - Vector3.Dot(direction, origin) < error)
+                {
+                    return direction;
+                }
+            }
+
+            return Vector3.zero;
         }
 
         private void Update()
@@ -50,7 +72,7 @@ namespace Module.Gimmick
             {
                 PerformAdditionalRotate();
             }
-            else 
+            else
             {
                 RotatePlayerCamera();
             }
@@ -58,14 +80,19 @@ namespace Module.Gimmick
 
         private void RotatePlayerCamera()
         {
-            float angle = Vector3.Angle(currentUpVector, playerTransform.up);
-            bool canRotate = Mathf.Abs(angle - 90f) < 0.1f;
+            Vector3 direction = GetNearestDirection(playerTransform.up);
 
             //90度になったらカメラの向きを変える
-            if (isPlayerRotating || canRotate)
+            if (isPlayerRotating || direction != currentUpVector)
             {
-                float rotationAngle = Vector3.Angle(cameraPivot.up, playerTransform.up);
-                Quaternion rotation = Quaternion.FromToRotation(cameraPivot.up, playerTransform.up) * cameraPivot.rotation;
+                if (!isPlayerRotating)
+                {
+                    currentUpVector = direction;
+                    isPlayerRotating = true;
+                }
+
+                float rotationAngle = Vector3.Angle(cameraPivot.up, currentUpVector);
+                Quaternion rotation = Quaternion.FromToRotation(cameraPivot.up, currentUpVector) * cameraPivot.rotation;
 
                 bool isLastRotation = PerformRotate(rotation, rotationAngle);
                 if (isLastRotation)
@@ -75,6 +102,7 @@ namespace Module.Gimmick
             }
         }
 
+
         private bool PerformRotate(Quaternion targetRotation, float rotationAngle)
         {
             bool isLastRotation;
@@ -83,7 +111,6 @@ namespace Module.Gimmick
             if (Mathf.Abs(rotationAngle) < 0.1f)
             {
                 nextRotation = targetRotation;
-                currentUpVector = playerTransform.up;
                 playerController.IsRotationLocked = false;
                 isLastRotation = true;
             }
@@ -109,7 +136,7 @@ namespace Module.Gimmick
             {
                 return;
             }
-            
+
             additionalRotation = Quaternion.AngleAxis(value * 90f, cameraPivot.up) * cameraPivot.rotation;
             isInputRotating = true;
         }
@@ -150,16 +177,17 @@ namespace Module.Gimmick
         private void AssignVolumeEvent()
         {
             maskVolume.IsEnable.Subscribe(isEnable =>
-            {
-                if (isEnable)
                 {
-                    Enable();
-                }
-                else
-                {
-                    Disable();
-                }
-            }).AddTo(this);
+                    if (isEnable)
+                    {
+                        Enable();
+                    }
+                    else
+                    {
+                        Disable();
+                    }
+                })
+                .AddTo(this);
         }
 
         private void Enable()
@@ -170,6 +198,9 @@ namespace Module.Gimmick
             if (cameraController != null)
             {
                 cameraController.SetFreeCamera(false);
+
+                currentUpVector = GetNearestDirection(playerTransform.up);
+                cameraController.SetCameraRotation(cameraPivot.rotation);
             }
         }
 

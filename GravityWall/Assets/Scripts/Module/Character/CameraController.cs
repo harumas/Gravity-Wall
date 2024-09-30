@@ -9,9 +9,6 @@ namespace Module.Character
     public class CameraController : MonoBehaviour
     {
         [Header("ロールピッチの回転軸")]
-        [SerializeField]
-        private Transform pivotVertical;
-
         [SerializeField] private Transform pivotHorizontal;
         [SerializeField] private MinMaxValue horizontalRange;
         [SerializeField] private MinMaxValue verticalRange;
