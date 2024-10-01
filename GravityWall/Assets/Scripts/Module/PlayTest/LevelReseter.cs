@@ -24,6 +24,7 @@ namespace Module.PlayTest
         {
             for (int i = 0; i < levelObjects.Length; i++)
             {
+                levelObjects[i].gameObject.SetActive(true);
                 levelObjects[i].transform.position = levelObjectPositions[i];
             }
 

@@ -57,7 +57,6 @@ namespace Module.Character
         {
             isLegalStep = isEnabled && IsLegalStep();
         }
-
         private void FixedUpdate()
         {
             //角度の差を求める
