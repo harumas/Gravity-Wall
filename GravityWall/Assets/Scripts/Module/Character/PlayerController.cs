@@ -49,7 +49,7 @@ namespace Module.Character
         private Vector3 inertia;
         private float lastJumpTime;
         private float variableJumpingGravity;
-
+        
         private void Start()
         {
             isRotating.Subscribe(isRotating =>

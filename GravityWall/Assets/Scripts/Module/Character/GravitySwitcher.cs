@@ -1,5 +1,6 @@
 ﻿using Constants;
 using Module.Gravity;
+using R3;
 using UGizmo;
 using UnityEngine;
 
@@ -8,17 +9,49 @@ namespace Module.Character
     public class GravitySwitcher : MonoBehaviour
     {
         [SerializeField] private bool isEnabled = true;
+
+        [Header("重力変化の制限がかかる角度")]
+        [SerializeField]
+        private float constrainedAngleThreshold;
+
+        [Header("重力変化までの秒数")] [SerializeField] private float angleChangeDuration;
         [SerializeField] private float detectHoldAngle = 1f;
         [SerializeField] private float detectRayRadius = 0.6f;
         [SerializeField] private float detectRayRange = 0.6f;
         [SerializeField] private float downRayDistance = 0.6f;
         [SerializeField] private PlayerTargetSyncer targetSyncer;
+        [SerializeField] private PlayerController playerController;
 
         private Vector3 prevDir;
         private ContactPoint nearestContact;
         private bool doSwitchGravity;
         private bool hasHeadObject;
         private bool isLegalStep;
+        private ThresholdChecker rotateAngleChecker;
+
+        private void Awake()
+        {
+            rotateAngleChecker = new ThresholdChecker(constrainedAngleThreshold, angleChangeDuration);
+            rotateAngleChecker.Enable();
+
+            //プレイヤーの回転が終わったらチェッカーを有効化する
+            playerController.IsRotating.Subscribe(value =>
+            {
+                if (!value)
+                {
+                    rotateAngleChecker.Enable();
+                }
+            }).AddTo(this);
+
+            //ジャンプ中はチェッカーを無効化する
+            playerController.IsJumping.Subscribe(value =>
+            {
+                if (value)
+                {
+                    rotateAngleChecker.Disable();
+                }
+            }).AddTo(this);
+        }
 
         private void Update()
         {
@@ -26,6 +59,19 @@ namespace Module.Character
         }
         private void FixedUpdate()
         {
+            //角度の差を求める
+            float angle = Vector3.Angle(transform.up, -nearestContact.normal);
+            angle = Mathf.Max(angle, Mathf.Epsilon);
+
+            //角度が一定以下の場合は重力変更を行わない
+            if (rotateAngleChecker.IsUnderThreshold(angle))
+            {
+                Disable();
+                return;
+            }
+
+            Enable();
+
             if (doSwitchGravity && !hasHeadObject)
             {
                 WorldGravity.Instance.SetValue(-nearestContact.normal);
