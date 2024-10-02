@@ -7,12 +7,15 @@ namespace Module.Character
     public class PlayerFootSEPlayer : MonoBehaviour
     {
         [SerializeField] private AudioSource audioSource;
+        [SerializeField] private Animator anim;
 
         public void FootSE()
         {
-            Debug.Log("SE");
-            audioSource.pitch = Random.Range(0.7f, 1.3f);
-            audioSource.Play();
+            if (anim.GetFloat("Speed") > 0.1f)
+            {
+                audioSource.pitch = Random.Range(0.7f, 1.3f);
+                audioSource.Play();
+            }
         }
     }
 }
