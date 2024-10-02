@@ -27,13 +27,8 @@ public class PressurePlate : AbstractSwitch
             gimmick.Affect(this);
         }
 
-        meshRenderer.material.EnableKeyword("_EMISSION");
-
-        // 新しいEmissionカラーを設定 (例: 赤色)
-        Color emissionColor = isOn ? Color.green : Color.yellow;
-
         // Emissionの色を変更
-        meshRenderer.material.SetColor("_EmissionColor", emissionColor * intensity);
+        meshRenderer.material.SetFloat("_PushRatio", isOn ? 1.0f : 0.0f);
 
         Debug.Log("OnSwitch");
     }
