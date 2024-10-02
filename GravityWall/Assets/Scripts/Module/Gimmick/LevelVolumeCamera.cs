@@ -1,14 +1,17 @@
 using System;
 using Cinemachine;
+using CoreModule.Helper;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using DG.Tweening.Core.Easing;
-using Module.Character;
 using Module.Gimmick.LevelMask;
 using R3;
 using UnityEngine;
 
 namespace Module.Gimmick
 {
+    /// <summary>
+    /// レベルボリュームを俯瞰するカメラ
+    /// </summary>
     public class LevelVolumeCamera : MonoBehaviour
     {
         [SerializeField] private CinemachineVirtualCamera virtualCamera;
@@ -19,151 +22,30 @@ namespace Module.Gimmick
         [SerializeField]
         private float rotateStep;
 
-        [SerializeField] private bool isEnabled;
-        [SerializeField] private bool isPlayerRotating;
-        [SerializeField] private bool isInputRotating;
+        [SerializeField] private SerializableReactiveProperty<bool> isEnabled;
+        [SerializeField] private SerializableReactiveProperty<bool> isPlayerRotating;
+        [SerializeField] private SerializableReactiveProperty<bool> isInputRotating;
+
+        public ReadOnlyReactiveProperty<bool> IsEnabled => isEnabled;
+        public Observable<bool> IsRotating => Observable.Merge(isPlayerRotating, isInputRotating);
+        public Observable<Quaternion> Rotation => Observable.EveryValueChanged(cameraPivot, target => target.rotation);
 
         private MaskVolume maskVolume;
+        private CinemachineBrain cameraBrain;
+        private VerticalAdjuster verticalAdjuster;
         private Transform playerTransform;
-        private CameraController cameraController;
-        private PlayerController playerController;
         private Vector3 currentUpVector;
 
-        public void AssignPlayerTransform(Transform playerTransform, CameraController cameraController, PlayerController playerController)
+        public void AssignPlayerTransform(Transform playerTransform)
         {
             this.playerTransform = playerTransform;
-            this.cameraController = cameraController;
-            this.playerController = playerController;
-        }
-
-        private readonly Vector3[] directions =
-        {
-            Vector3.up,
-            Vector3.down,
-            Vector3.right,
-            Vector3.left,
-            Vector3.forward,
-            Vector3.back,
-        };
-
-        private Vector3 GetNearestDirection(Vector3 origin)
-        {
-            const float error = 0.01f;
-
-            foreach (Vector3 direction in directions)
-            {
-                if (1f - Vector3.Dot(direction, origin) < error)
-                {
-                    return direction;
-                }
-            }
-
-            return Vector3.zero;
-        }
-
-        private void Update()
-        {
-            if (!isEnabled || playerTransform == null)
-            {
-                return;
-            }
-
-            if (isInputRotating)
-            {
-                PerformAdditionalRotate();
-            }
-            else
-            {
-                RotatePlayerCamera();
-            }
-        }
-
-        private void RotatePlayerCamera()
-        {
-            Vector3 direction = GetNearestDirection(playerTransform.up);
-
-            //90度になったらカメラの向きを変える
-            if (isPlayerRotating || direction != currentUpVector)
-            {
-                if (!isPlayerRotating)
-                {
-                    currentUpVector = direction;
-                    isPlayerRotating = true;
-                }
-
-                float rotationAngle = Vector3.Angle(cameraPivot.up, currentUpVector);
-                Quaternion rotation = Quaternion.FromToRotation(cameraPivot.up, currentUpVector) * cameraPivot.rotation;
-
-                bool isLastRotation = PerformRotate(rotation, rotationAngle);
-                if (isLastRotation)
-                {
-                    isPlayerRotating = false;
-                }
-            }
-        }
-
-
-        private bool PerformRotate(Quaternion targetRotation, float rotationAngle)
-        {
-            bool isLastRotation;
-            Quaternion nextRotation;
-
-            if (Mathf.Abs(rotationAngle) < 0.1f)
-            {
-                nextRotation = targetRotation;
-                playerController.IsRotationLocked = false;
-                isLastRotation = true;
-            }
-            else
-            {
-                float t = Evaluate(easeType, rotationAngle, rotateStep);
-                nextRotation = Quaternion.Slerp(cameraPivot.rotation, targetRotation, t * Time.deltaTime);
-                playerController.IsRotationLocked = true;
-                isLastRotation = false;
-            }
-
-            cameraPivot.rotation = nextRotation;
-            cameraController.SetCameraRotation(nextRotation);
-
-            return isLastRotation;
-        }
-
-        private Quaternion additionalRotation;
-
-        public void EnableAdditionalRotate(int value)
-        {
-            if (isPlayerRotating || isInputRotating)
-            {
-                return;
-            }
-
-            additionalRotation = Quaternion.AngleAxis(value * 90f, cameraPivot.up) * cameraPivot.rotation;
-            isInputRotating = true;
-        }
-
-        private void PerformAdditionalRotate()
-        {
-            float rotationAngle = Quaternion.Angle(cameraPivot.rotation, additionalRotation);
-            bool isLastRotation = PerformRotate(additionalRotation, rotationAngle);
-            if (isLastRotation)
-            {
-                isInputRotating = false;
-            }
-        }
-
-        private float Evaluate(Ease easeType, float angle, float step)
-        {
-            if (easeType == Ease.Unset)
-            {
-                return step;
-            }
-
-            return EaseManager.Evaluate(easeType, null, step, angle, 1f, 1f);
         }
 
         private void Awake()
         {
+            verticalAdjuster = new VerticalAdjuster();
             maskVolume = transform.parent.GetComponent<MaskVolume>();
+            cameraBrain = Camera.main.GetComponent<CinemachineBrain>();
 
             if (maskVolume == null)
             {
@@ -172,6 +54,108 @@ namespace Module.Gimmick
             }
 
             AssignVolumeEvent();
+
+            enableCount = 0;
+        }
+
+        private void Update()
+        {
+            if (!isEnabled.Value || playerTransform == null)
+            {
+                return;
+            }
+
+            EnablePlayerRotate();
+
+            PerformAdditionalRotate();
+            PerformPlayerRotate();
+        }
+
+        private void EnablePlayerRotate()
+        {
+            if (isPlayerRotating.Value || isInputRotating.Value)
+            {
+                return;
+            }
+
+            Vector3 direction = verticalAdjuster.GetVerticalDirection(playerTransform.up);
+
+            //90度になったらカメラの向きを変える
+            if (direction != currentUpVector)
+            {
+                currentUpVector = direction;
+                isPlayerRotating.Value = true;
+            }
+        }
+
+        public void EnableAdditionalRotate(int value)
+        {
+            if (isPlayerRotating.Value || isInputRotating.Value)
+            {
+                return;
+            }
+
+            //プレイヤーの入力によって回転させる
+            additionalRotation = Quaternion.AngleAxis(value * 90f, cameraPivot.up) * cameraPivot.rotation;
+            isInputRotating.Value = true;
+        }
+
+        private void PerformPlayerRotate()
+        {
+            if (!isPlayerRotating.Value)
+            {
+                return;
+            }
+
+            float rotationAngle = Vector3.Angle(cameraPivot.up, currentUpVector);
+            Quaternion rotation = Quaternion.FromToRotation(cameraPivot.up, currentUpVector) * cameraPivot.rotation;
+
+            bool isLastRotation = PerformRotate(rotation, rotationAngle);
+            if (isLastRotation)
+            {
+                isPlayerRotating.Value = false;
+            }
+        }
+
+        private Quaternion additionalRotation;
+
+        private void PerformAdditionalRotate()
+        {
+            if (!isInputRotating.Value)
+            {
+                return;
+            }
+
+            float rotationAngle = Quaternion.Angle(cameraPivot.rotation, additionalRotation);
+            bool isLastRotation = PerformRotate(additionalRotation, rotationAngle);
+            if (isLastRotation)
+            {
+                isInputRotating.Value = false;
+            }
+        }
+
+        private bool PerformRotate(Quaternion targetRotation, float rotationAngle)
+        {
+            bool isLastRotation;
+            Quaternion nextRotation;
+
+            //カメラとプレイヤーの角度の差がほぼなくなったら終了
+            if (Mathf.Abs(rotationAngle) < 0.1f)
+            {
+                nextRotation = targetRotation;
+                isLastRotation = true;
+            }
+            else
+            {
+                //イージング関数を噛ませる
+                float t = EaseUtility.Evaluate(easeType, rotationAngle, rotateStep);
+                nextRotation = Quaternion.Slerp(cameraPivot.rotation, targetRotation, t * Time.deltaTime);
+                isLastRotation = false;
+            }
+
+            cameraPivot.rotation = nextRotation;
+
+            return isLastRotation;
         }
 
         private void AssignVolumeEvent()
@@ -190,29 +174,38 @@ namespace Module.Gimmick
                 .AddTo(this);
         }
 
-        private void Enable()
+        //TODO: 後で消す
+        private static int enableCount = 0;
+
+        private async void Enable()
         {
-            isEnabled = true;
+            InitializeDirection();
             virtualCamera.Priority = 11;
 
-            if (cameraController != null)
+            if (enableCount > 0)
             {
-                cameraController.SetFreeCamera(false);
-
-                currentUpVector = GetNearestDirection(playerTransform.up);
-                cameraController.SetCameraRotation(cameraPivot.rotation);
+                //ブレンドしてる間は有効化しない
+                await UniTask.Delay(TimeSpan.FromSeconds(cameraBrain.m_DefaultBlend.BlendTime), cancellationToken: destroyCancellationToken);
             }
+
+            enableCount++;
+            isEnabled.Value = true;
+        }
+
+        private void InitializeDirection()
+        {
+            //カメラに一番近い前方ベクトルを取得
+            Vector3 forward = verticalAdjuster.GetNearestDirection(cameraBrain.transform.forward);
+            currentUpVector = verticalAdjuster.GetVerticalDirection(playerTransform.up);
+
+            //カメラの前方ベクトルにバーチャルカメラの基準を設定
+            cameraPivot.rotation = Quaternion.LookRotation(forward, currentUpVector);
         }
 
         private void Disable()
         {
-            isEnabled = false;
+            isEnabled.Value = false;
             virtualCamera.Priority = 0;
-
-            if (cameraController != null)
-            {
-                cameraController.SetFreeCamera(true);
-            }
         }
     }
 }
