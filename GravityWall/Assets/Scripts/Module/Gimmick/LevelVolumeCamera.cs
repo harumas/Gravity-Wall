@@ -64,6 +64,8 @@ namespace Module.Gimmick
             {
                 return;
             }
+            
+            Debug.Log(cameraPivot.forward);
 
             EnablePlayerRotate();
 
@@ -79,12 +81,17 @@ namespace Module.Gimmick
             }
 
             Vector3 direction = verticalAdjuster.GetVerticalDirection(playerTransform.up);
+            
+            Debug.Log(cameraPivot.forward);
 
             //90度になったらカメラの向きを変える
-            if (direction != currentUpVector)
+            if (direction != Vector3.zero && direction != currentUpVector)
             {
+                Debug.Log(direction);
+                Debug.Log(currentUpVector);
                 currentUpVector = direction;
                 isPlayerRotating.Value = true;
+                Debug.Log("true!");
             }
         }
 
@@ -98,6 +105,7 @@ namespace Module.Gimmick
             //プレイヤーの入力によって回転させる
             additionalRotation = Quaternion.AngleAxis(value * 90f, cameraPivot.up) * cameraPivot.rotation;
             isInputRotating.Value = true;
+                Debug.Log("true!");
         }
 
         private void PerformPlayerRotate()
@@ -107,9 +115,9 @@ namespace Module.Gimmick
                 return;
             }
 
-            float rotationAngle = Vector3.Angle(cameraPivot.up, currentUpVector);
             Quaternion rotation = Quaternion.FromToRotation(cameraPivot.up, currentUpVector) * cameraPivot.rotation;
 
+            float rotationAngle = Vector3.Angle(cameraPivot.up, currentUpVector);
             bool isLastRotation = PerformRotate(rotation, rotationAngle);
             if (isLastRotation)
             {
@@ -185,7 +193,8 @@ namespace Module.Gimmick
             if (enableCount > 0)
             {
                 //ブレンドしてる間は有効化しない
-                await UniTask.Delay(TimeSpan.FromSeconds(cameraBrain.m_DefaultBlend.BlendTime), cancellationToken: destroyCancellationToken);
+                TimeSpan blendSpan = TimeSpan.FromSeconds(cameraBrain.m_DefaultBlend.BlendTime + 0.1f);
+                await UniTask.Delay(blendSpan, cancellationToken: destroyCancellationToken);
             }
 
             enableCount++;
@@ -198,8 +207,13 @@ namespace Module.Gimmick
             Vector3 forward = verticalAdjuster.GetNearestDirection(cameraBrain.transform.forward);
             currentUpVector = verticalAdjuster.GetVerticalDirection(playerTransform.up);
 
+            Debug.Log(forward);
+
             //カメラの前方ベクトルにバーチャルカメラの基準を設定
             cameraPivot.rotation = Quaternion.LookRotation(forward, currentUpVector);
+            
+            
+            Debug.Log(cameraPivot.forward);
         }
 
         private void Disable()
