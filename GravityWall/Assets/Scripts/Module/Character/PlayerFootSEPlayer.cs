@@ -11,7 +11,7 @@ namespace Module.Character
 
         public void FootSE()
         {
-            if (anim.GetFloat("Speed") > 0.1f)
+            if (anim.GetFloat("Speed") > 0.1f || anim.GetBool("IsJumping"))
             {
                 audioSource.pitch = Random.Range(0.7f, 1.3f);
                 audioSource.Play();
