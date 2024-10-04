@@ -1,12 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using PropertyGenerator.Generated;
 using R3;
+
 namespace Module.Character
 {
-    public class PlayerSEPlayer : MonoBehaviour
+    public class PlayerRotateSEPlayer : MonoBehaviour
     {
+        [SerializeField] private float volume = 0.8f;
+        [SerializeField] private AudioClip audioClip;
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private PlayerController playerController;
         private bool isRotating = true;
@@ -18,6 +18,8 @@ namespace Module.Character
             {
                 if (this.isRotating == false)
                 {
+                    audioSource.volume = volume;
+                    audioSource.clip = audioClip;
                     audioSource.Play();
                 }
 

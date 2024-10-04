@@ -10,7 +10,6 @@ namespace Module.Gimmick
         [SerializeField] private bool initializeIsOn = false;
         [SerializeField] private List<AbstractGimmickAffected> gimmickAffecteds = new List<AbstractGimmickAffected>();
         [SerializeField, Tag] private List<string> targetTags;
-        [SerializeField] private Material material;
         [SerializeField] private UnityEvent onEvent, offEvent;
         [SerializeField] private MeshRenderer meshRenderer, RayMeshRenderer;
         public override bool isOn { get => _isOn; protected set => _isOn = value; }
