@@ -1,4 +1,3 @@
-using Core.Input;
 using CoreModule.Input;
 using Module.Gravity;
 using UnityEngine;
