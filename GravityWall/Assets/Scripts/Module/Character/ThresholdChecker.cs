@@ -23,7 +23,7 @@ namespace Module.Character
             {
                 return false;
             }
-            
+
             bool isUnderThreshold = value < threshold;
 
             if (isCounting)
@@ -32,7 +32,6 @@ namespace Module.Character
                 if (!isUnderThreshold || isOverTime)
                 {
                     Disable();
-                    isCounting = false;
                 }
 
                 return isUnderThreshold;
@@ -47,15 +46,16 @@ namespace Module.Character
 
             return false;
         }
-        
+
         public void Enable()
         {
             enabled = true;
         }
-        
+
         public void Disable()
         {
             enabled = false;
+            isCounting = false;
         }
     }
 }

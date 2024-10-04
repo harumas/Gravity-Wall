@@ -49,6 +49,7 @@ namespace Container
             builder.RegisterComponentInHierarchy<PlayerController>();
             builder.RegisterComponentInHierarchy<CameraController>();
             builder.RegisterComponentInHierarchy<PlayerTargetSyncer>();
+            builder.RegisterComponentInHierarchy<GravitySwitcher>();
         }
     }
 }

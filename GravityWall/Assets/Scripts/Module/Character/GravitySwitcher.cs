@@ -1,4 +1,5 @@
 ﻿using Constants;
+using CoreModule.Helper;
 using Module.Gravity;
 using R3;
 using UGizmo;
@@ -14,6 +15,10 @@ namespace Module.Character
         [SerializeField]
         private float constrainedAngleThreshold;
 
+        [Header("入力が開始されてから重力変更が可能になるまでの秒数")]
+        [SerializeField]
+        private float allowAngleChangeDuration;
+
         [Header("重力変化までの秒数")] [SerializeField] private float angleChangeDuration;
         [SerializeField] private float detectHoldAngle = 1f;
         [SerializeField] private float detectRayRadius = 0.6f;
@@ -27,7 +32,9 @@ namespace Module.Character
         private bool doSwitchGravity;
         private bool hasHeadObject;
         private bool isLegalStep;
+        private bool isInputMoving;
         private ThresholdChecker rotateAngleChecker;
+        private DelayableProperty<bool> canRotateProperty = new();
 
         private void Awake()
         {
@@ -53,10 +60,21 @@ namespace Module.Character
             }).AddTo(this);
         }
 
+        public void OnMoveInput(Vector2 input)
+        {
+            bool isMoving = input != Vector2.zero;
+            float delay = isMoving ? allowAngleChangeDuration : 0f;
+
+            canRotateProperty.Assign(isMoving, delay);
+        }
+
         private void Update()
         {
             isLegalStep = isEnabled && IsLegalStep();
+            
+            canRotateProperty.Update();
         }
+
         private void FixedUpdate()
         {
             //角度の差を求める
@@ -64,7 +82,7 @@ namespace Module.Character
             angle = Mathf.Max(angle, Mathf.Epsilon);
 
             //角度が一定以下の場合は重力変更を行わない
-            if (rotateAngleChecker.IsUnderThreshold(angle))
+            if (!canRotateProperty.Value || rotateAngleChecker.IsUnderThreshold(angle))
             {
                 Disable();
                 return;
