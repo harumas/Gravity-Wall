@@ -40,6 +40,12 @@ namespace Module.Character
 
             //目標の回転方向を算出
             Vector3 targetDirection = GetTargetDirection();
+
+            if (targetDirection == Vector3.zero)
+            {
+                return;
+            }
+            
             Quaternion targetRotation = Quaternion.LookRotation(targetDirection, axis.up);
             
             //補完して回転

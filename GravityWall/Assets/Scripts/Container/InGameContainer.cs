@@ -1,6 +1,7 @@
 ﻿using Application;
 using Constants;
 using Module.Character;
+using Module.Gimmick;
 using Module.Gravity;
 using Module.InputModule;
 using Presentation;
@@ -31,6 +32,7 @@ namespace Container
 
             builder.RegisterEntryPoint<InputConfigChangedListener>();
             builder.RegisterEntryPoint<PlayerInputPresenter>();
+            builder.RegisterEntryPoint<LevelVolumeCameraPresenter>();
 
 #if UNITY_EDITOR
             builder.RegisterEntryPoint<ExternalAccessor>();
