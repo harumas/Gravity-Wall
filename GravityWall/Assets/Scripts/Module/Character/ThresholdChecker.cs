@@ -50,6 +50,7 @@ namespace Module.Character
         public void Enable()
         {
             enabled = true;
+            isCounting = false;
         }
 
         public void Disable()

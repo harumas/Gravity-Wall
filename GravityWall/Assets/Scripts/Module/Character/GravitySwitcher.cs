@@ -10,6 +10,7 @@ namespace Module.Character
     public class GravitySwitcher : MonoBehaviour
     {
         [SerializeField] private bool isEnabled = true;
+        [SerializeField] private bool canSwitchGravity = true;
 
         [Header("重力変化の制限がかかる角度")]
         [SerializeField]
@@ -70,25 +71,33 @@ namespace Module.Character
 
         private void Update()
         {
-            isLegalStep = isEnabled && IsLegalStep();
-            
+            isLegalStep = isEnabled && canSwitchGravity && IsLegalStep();
+
             canRotateProperty.Update();
         }
 
         private void FixedUpdate()
+        {
+            if (isEnabled)
+            {
+                SwitchGravity();
+            }
+        }
+
+        private void SwitchGravity()
         {
             //角度の差を求める
             float angle = Vector3.Angle(transform.up, -nearestContact.normal);
             angle = Mathf.Max(angle, Mathf.Epsilon);
 
             //角度が一定以下の場合は重力変更を行わない
-            if (!canRotateProperty.Value || rotateAngleChecker.IsUnderThreshold(angle))
+            if (playerController.IsRotating.CurrentValue || !canRotateProperty.Value || rotateAngleChecker.IsUnderThreshold(angle))
             {
-                Disable();
+                canSwitchGravity = false;
                 return;
             }
 
-            Enable();
+            canSwitchGravity = true;
 
             if (doSwitchGravity && !hasHeadObject)
             {
