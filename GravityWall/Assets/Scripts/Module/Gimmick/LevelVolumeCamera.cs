@@ -54,8 +54,6 @@ namespace Module.Gimmick
             }
 
             AssignVolumeEvent();
-
-            enableCount = 0;
         }
 
         private void Update()
@@ -64,8 +62,6 @@ namespace Module.Gimmick
             {
                 return;
             }
-            
-            Debug.Log(cameraPivot.forward);
 
             EnablePlayerRotate();
 
@@ -81,23 +77,18 @@ namespace Module.Gimmick
             }
 
             Vector3 direction = verticalAdjuster.GetVerticalDirection(playerTransform.up);
-            
-            Debug.Log(cameraPivot.forward);
 
             //90度になったらカメラの向きを変える
             if (direction != Vector3.zero && direction != currentUpVector)
             {
-                Debug.Log(direction);
-                Debug.Log(currentUpVector);
                 currentUpVector = direction;
                 isPlayerRotating.Value = true;
-                Debug.Log("true!");
             }
         }
 
         public void EnableAdditionalRotate(int value)
         {
-            if (isPlayerRotating.Value || isInputRotating.Value)
+            if (!isEnabled.Value || isPlayerRotating.Value || isInputRotating.Value)
             {
                 return;
             }
@@ -105,7 +96,6 @@ namespace Module.Gimmick
             //プレイヤーの入力によって回転させる
             additionalRotation = Quaternion.AngleAxis(value * 90f, cameraPivot.up) * cameraPivot.rotation;
             isInputRotating.Value = true;
-                Debug.Log("true!");
         }
 
         private void PerformPlayerRotate()
@@ -182,22 +172,10 @@ namespace Module.Gimmick
                 .AddTo(this);
         }
 
-        //TODO: 後で消す
-        private static int enableCount = 0;
-
-        private async void Enable()
+        private void Enable()
         {
             InitializeDirection();
             virtualCamera.Priority = 11;
-
-            if (enableCount > 0)
-            {
-                //ブレンドしてる間は有効化しない
-                TimeSpan blendSpan = TimeSpan.FromSeconds(cameraBrain.m_DefaultBlend.BlendTime + 0.1f);
-                await UniTask.Delay(blendSpan, cancellationToken: destroyCancellationToken);
-            }
-
-            enableCount++;
             isEnabled.Value = true;
         }
 
@@ -207,13 +185,8 @@ namespace Module.Gimmick
             Vector3 forward = verticalAdjuster.GetNearestDirection(cameraBrain.transform.forward);
             currentUpVector = verticalAdjuster.GetVerticalDirection(playerTransform.up);
 
-            Debug.Log(forward);
-
             //カメラの前方ベクトルにバーチャルカメラの基準を設定
             cameraPivot.rotation = Quaternion.LookRotation(forward, currentUpVector);
-            
-            
-            Debug.Log(cameraPivot.forward);
         }
 
         private void Disable()
