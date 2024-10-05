@@ -25,8 +25,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3529979922540826397}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.05093711, y: -0, z: -0, w: 0.9987019}
-  m_LocalPosition: {x: 0, y: 2, z: -4.4}
+  m_LocalRotation: {x: 0.017829517, y: -1e-45, z: -0, w: 0.9998411}
+  m_LocalPosition: {x: 0, y: 0.70648634, z: -4.4565554}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -195,8 +195,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6207124707952122881}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.05093711, y: -0, z: -0, w: 0.9987019}
-  m_LocalPosition: {x: 0, y: 2, z: -4.4}
+  m_LocalRotation: {x: 0.017829517, y: -1e-45, z: -0, w: 0.9998411}
+  m_LocalPosition: {x: 0, y: 0.70648634, z: -4.4565554}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -325,7 +325,7 @@ MonoBehaviour:
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
     m_Style: 1
-    m_Time: 2
+    m_Time: 1
     m_CustomCurve:
       serializedVersion: 2
       m_Curve: []
@@ -389,7 +389,7 @@ PrefabInstance:
     - target: {fileID: 2552734447185149137, guid: 66e11150f66154c4ebbd9178fedceadf,
         type: 3}
       propertyPath: multiplier
-      value: 170
+      value: 250
       objectReference: {fileID: 0}
     - target: {fileID: 2773374917998683312, guid: 66e11150f66154c4ebbd9178fedceadf,
         type: 3}
@@ -615,6 +615,21 @@ PrefabInstance:
         type: 3}
       propertyPath: downRayDistance
       value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3606148194078380536, guid: 66e11150f66154c4ebbd9178fedceadf,
+        type: 3}
+      propertyPath: angleChangeDuration
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3606148194078380536, guid: 66e11150f66154c4ebbd9178fedceadf,
+        type: 3}
+      propertyPath: allowAngleChangeDuration
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3606148194078380536, guid: 66e11150f66154c4ebbd9178fedceadf,
+        type: 3}
+      propertyPath: constrainedAngleThreshold
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 8347702909660774484, guid: 66e11150f66154c4ebbd9178fedceadf,
         type: 3}

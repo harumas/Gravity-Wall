@@ -10,6 +10,7 @@ namespace Module.Character
         private bool enabled;
         private float startTime;
         private bool isCounting;
+        private float previousValue;
 
         public ThresholdChecker(float threshold, float duration)
         {
@@ -17,14 +18,21 @@ namespace Module.Character
             this.duration = duration;
         }
 
-        public bool IsUnderThreshold(float value)
+        public bool IsUnderThreshold(float value, bool diffCheck)
         {
+            if (diffCheck && previousValue != value)
+            {
+                Enable();
+                startTime = Time.time;
+                previousValue = value;
+            }
+
             if (!enabled)
             {
                 return false;
             }
-            
-            bool isUnderThreshold = value < threshold;
+
+            bool isUnderThreshold = value > threshold;
 
             if (isCounting)
             {
@@ -32,7 +40,6 @@ namespace Module.Character
                 if (!isUnderThreshold || isOverTime)
                 {
                     Disable();
-                    isCounting = false;
                 }
 
                 return isUnderThreshold;
@@ -42,20 +49,23 @@ namespace Module.Character
             {
                 startTime = Time.time;
                 isCounting = true;
+                previousValue = value;
                 return true;
             }
 
             return false;
         }
-        
+
         public void Enable()
         {
             enabled = true;
+            isCounting = false;
         }
-        
+
         public void Disable()
         {
             enabled = false;
+            isCounting = false;
         }
     }
 }
