@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Cysharp.Threading.Tasks;
 using R3;
 using UnityEngine;
 
@@ -7,16 +10,21 @@ namespace Module.Gimmick
     public class ObjectHider : MonoBehaviour
     {
         [Header("オブジェクトを隠す角度")]
-        [SerializeField] private float hideAngle = 80f;
+        [SerializeField]
+        private float hideAngle = 80f;
 
         private Camera mainCamera;
-        private Renderer[] renderers;
+        private List<Renderer> renderers = new List<Renderer>();
         private ReactiveProperty<bool> isHide = new ReactiveProperty<bool>();
 
-        private void Start()
+        private async void Start()
         {
             mainCamera = Camera.main;
-            renderers = gameObject.GetComponentsInChildren<Renderer>(true);
+
+            //生成されたオブジェクトも登録するため数フレーム遅らせる
+            await UniTask.DelayFrame(3);
+
+            renderers.AddRange(gameObject.GetComponentsInChildren<Renderer>(true));
 
             //隠すイベントを登録
             isHide.Subscribe(isHide =>
@@ -37,11 +45,16 @@ namespace Module.Gimmick
             isHide.Value = angle < hideAngle;
         }
 
+        public void AddRenderer(Renderer renderer)
+        {
+            renderers.Add(renderer);
+        }
+
         public void Enable()
         {
             enabled = true;
         }
-        
+
         public void Disable()
         {
             enabled = false;
