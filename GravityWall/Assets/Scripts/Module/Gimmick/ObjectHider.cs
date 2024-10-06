@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace Module.Gimmick
 {
+    [DefaultExecutionOrder(10)]
     public class ObjectHider : MonoBehaviour
     {
         [Header("オブジェクトを隠す角度")]
@@ -17,12 +18,9 @@ namespace Module.Gimmick
         private List<Renderer> renderers = new List<Renderer>();
         private ReactiveProperty<bool> isHide = new ReactiveProperty<bool>();
 
-        private async void Start()
+        private void Start()
         {
             mainCamera = Camera.main;
-
-            //生成されたオブジェクトも登録するため数フレーム遅らせる
-            await UniTask.DelayFrame(3);
 
             renderers.AddRange(gameObject.GetComponentsInChildren<Renderer>(true));
 
