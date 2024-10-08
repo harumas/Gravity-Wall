@@ -16,7 +16,8 @@ namespace Presentation
             IGameInput gameInput,
             PlayerController playerController,
             CameraController cameraController,
-            PlayerTargetSyncer playerTargetSyncer)
+            PlayerTargetSyncer playerTargetSyncer,
+            GravitySwitcher gravitySwitcher)
         {
             gameInput.Move.Subscribe(playerController.OnMoveInput).AddTo(playerController);
             gameInput.Jump.Subscribe(_ => playerController.OnJumpInput()).AddTo(playerController);
@@ -24,6 +25,7 @@ namespace Presentation
             gameInput.LookDelta.Subscribe(cameraController.OnRotateCameraInput).AddTo(cameraController);
 
             gameInput.Move.Subscribe(playerTargetSyncer.OnMoveInput).AddTo(playerTargetSyncer);
+            gameInput.Move.Subscribe(gravitySwitcher.OnMoveInput).AddTo(playerTargetSyncer);
         }
 
         public void Initialize()
