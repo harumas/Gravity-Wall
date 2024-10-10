@@ -47,24 +47,26 @@ namespace Module.Character
 
             //プレイヤーの回転が終わったらチェッカーを有効化する
             playerController.IsRotating.Subscribe(value =>
-            {
-                if (!value)
                 {
-                    rotateAngleChecker.Enable();
-                    isGrounding = true;
-                }
-            }).AddTo(this);
+                    if (!value)
+                    {
+                        rotateAngleChecker.Enable();
+                        isGrounding = true;
+                    }
+                })
+                .AddTo(this);
 
             //ジャンプ中はチェッカーを無効化する
             playerController.IsJumping.Subscribe(value =>
-            {
-                if (value)
                 {
-                    rotateAngleChecker.Disable();
-                    isGrounding = false;
-                    beforeJumpContact = nearestContact;
-                }
-            }).AddTo(this);
+                    if (value)
+                    {
+                        rotateAngleChecker.Disable();
+                        isGrounding = false;
+                        beforeJumpContact = nearestContact;
+                    }
+                })
+                .AddTo(this);
         }
 
         public void OnMoveInput(Vector2 input)
@@ -97,9 +99,10 @@ namespace Module.Character
             angle = Mathf.Max(angle, Mathf.Epsilon);
 
             //角度が一定以下の場合は重力変更を行わない
-            if (playerController.IsRotating.CurrentValue ||
-                !canRotateProperty.Value ||
-                rotateAngleChecker.IsUnderThreshold(angle, isGrounding))
+            if ((playerController.IsRotating.CurrentValue ||
+                 !canRotateProperty.Value ||
+                 rotateAngleChecker.IsUnderThreshold(angle, isGrounding)) &&
+                isGrounding)
             {
                 canSwitchGravity = false;
                 return;
