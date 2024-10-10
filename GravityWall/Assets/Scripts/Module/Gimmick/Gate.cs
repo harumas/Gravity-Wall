@@ -90,7 +90,7 @@ namespace Module.Gimmick
                 var light = Instantiate(Counterlight, transform);
 
                 light.transform.localPosition = lightBasePosition.localPosition;
-                light.transform.localRotation = lightBasePosition.rotation;
+                light.transform.localRotation = lightBasePosition.localRotation;
 
                 lightMaterials.Add(light.GetComponent<MeshRenderer>().material);
                 return;
@@ -104,7 +104,7 @@ namespace Module.Gimmick
                 var light = Instantiate(Counterlight, transform);
 
                 light.transform.localPosition = new Vector3(startX + i * spacing, lightBasePosition.localPosition.y, lightBasePosition.localPosition.z);
-                light.transform.localRotation = lightBasePosition.rotation;
+                light.transform.localRotation = lightBasePosition.localRotation;
 
                 lightMaterials.Add(light.GetComponent<MeshRenderer>().material);
             }
