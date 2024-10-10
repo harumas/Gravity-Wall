@@ -100,8 +100,8 @@ namespace Module.Character
 
             //角度が一定以下の場合は重力変更を行わない
             if ((playerController.IsRotating.CurrentValue ||
-                 !canRotateProperty.Value ||
-                 rotateAngleChecker.IsUnderThreshold(angle, isGrounding)) &&
+                 rotateAngleChecker.IsOverThreshold(angle) && !canRotateProperty.Value ||
+                 rotateAngleChecker.TryThresholdCount(angle, isGrounding)) &&
                 isGrounding)
             {
                 canSwitchGravity = false;
