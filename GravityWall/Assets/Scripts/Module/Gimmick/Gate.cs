@@ -40,6 +40,7 @@ namespace Module.Gimmick
 
             if (isOpen)
             {
+                Debug.Log("isOpenNow");
                 gateOpenEvent.Invoke();
             }
         }
