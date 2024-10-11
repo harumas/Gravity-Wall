@@ -11,6 +11,8 @@ namespace Module.PlayTest
     {
         private RespawnManager respawnManager => RespawnManager.instance;
         [SerializeField]private GameObject ClearCanvas;
+        [SerializeField] private GameObject Player;
+        [SerializeField] private string NextStage;
 
         private void OnTriggerEnter(Collider other)
         {
@@ -18,8 +20,14 @@ namespace Module.PlayTest
             {
                 respawnManager.isClear = true;
                 ClearCanvas.SetActive(true);
+                Invoke("LoadScene",3);
             }
               
+        }
+
+        private void LoadScene()
+        {
+            SceneManager.LoadScene(NextStage);
         }
     }
 }
