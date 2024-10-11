@@ -22,6 +22,7 @@ namespace Module.PlayTest
 
         public bool isClear = false;
 
+
         private void Awake()
         {
             if (instance != null)
@@ -89,6 +90,9 @@ namespace Module.PlayTest
         }
         private void Update()
         {
+            if (isClear)
+                return;
+
             if (Input.GetKeyDown(KeyCode.R))
             {
                 LoadingCanvas.SetActive(true);
