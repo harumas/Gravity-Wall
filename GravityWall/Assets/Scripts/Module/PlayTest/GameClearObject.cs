@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Constants;
-using UnityEngine.SceneManagement;
 
 namespace Module.PlayTest
 {
@@ -19,6 +18,7 @@ namespace Module.PlayTest
             if (other.CompareTag(Tag.Player))
             {
                 respawnManager.isClear = true;
+                Player.SetActive(false);
                 ClearCanvas.SetActive(true);
                 Invoke("LoadScene",3);
             }
