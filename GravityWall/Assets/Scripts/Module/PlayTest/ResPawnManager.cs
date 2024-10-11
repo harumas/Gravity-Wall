@@ -22,6 +22,7 @@ namespace Module.PlayTest
 
         public bool isClear = false;
 
+
         private void Awake()
         {
             if (instance != null)
@@ -49,7 +50,7 @@ namespace Module.PlayTest
         public void Damage()
         {
             LoadingCanvas.SetActive(true);
-            Invoke("WorldReset", 1.0f);
+            Invoke("WorldReset", 1.5f);
         }
 
         public void WorldReset()
@@ -88,6 +89,9 @@ namespace Module.PlayTest
         }
         private void Update()
         {
+            if (isClear)
+                return;
+
             if (Input.GetKeyDown(KeyCode.R))
             {
                 LoadingCanvas.SetActive(true);

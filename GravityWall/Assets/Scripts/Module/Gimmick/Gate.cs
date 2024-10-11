@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,6 +15,7 @@ namespace Module.Gimmick
         [SerializeField] private Transform gateLeft, gateRight;
         [SerializeField] private GameObject Counterlight;
         [SerializeField] private int switchMaxCount = 1;
+        [SerializeField] private AudioSource audioSource;
         private int switchCount = 0;
         private List<Material> lightMaterials = new List<Material>();
         public bool isOpen { get; private set; }
@@ -35,6 +35,7 @@ namespace Module.Gimmick
             if (isOpen && switchCount < switchMaxCount)
             {
                 gateCloseEvent.Invoke();
+                audioSource.Play();
                 GateAnimation(false);
             }
 
@@ -47,6 +48,7 @@ namespace Module.Gimmick
             {
                 Debug.Log("isOpenNow");
                 gateOpenEvent.Invoke();
+                audioSource.Play();
                 GateAnimation(true);
             }
         }

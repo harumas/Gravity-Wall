@@ -9,11 +9,11 @@ namespace Module.Character
         [SerializeField] private Animator animator;
         [SerializeField] private PlayerController playerController;
 
-        private PlayerWrapper playerWrapper;
+        private PlayerControllerWrapper playerWrapper;
 
         private void Start()
         {
-            playerWrapper = new PlayerWrapper(animator);
+            playerWrapper = new PlayerControllerWrapper(animator);
 
             // ジャンプのイベント登録
             playerController.IsJumping.Subscribe(isJumping =>
@@ -30,6 +30,11 @@ namespace Module.Character
             playerController.MoveSpeed.Subscribe(velocity =>
             {
                 playerWrapper.Speed = velocity;
+            }).AddTo(this);
+
+            playerController.IsDeath.Subscribe(isDeath =>
+            {
+                playerWrapper.IsDeath = isDeath;
             }).AddTo(this);
         }
     }

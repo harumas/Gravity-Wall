@@ -217,6 +217,17 @@ namespace Module.Character
             rigBody.MovePosition(rigBody.position + delta);
         }
 
+        public void Death()
+        {
+            isDeath.Value = true;
+            rigBody.velocity = Vector3.zero;
+        }
+
+        public void Respawn()
+        {
+            isDeath.Value = false;
+        }
+
         public void AddInertia(Vector3 inertia)
         {
             this.inertia += inertia;
