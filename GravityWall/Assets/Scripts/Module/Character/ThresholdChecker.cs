@@ -17,8 +17,13 @@ namespace Module.Character
             this.threshold = threshold;
             this.duration = duration;
         }
+        
+        public bool IsOverThreshold(float value)
+        {
+            return value > threshold;
+        }
 
-        public bool IsUnderThreshold(float value, bool diffCheck)
+        public bool TryThresholdCount(float value, bool diffCheck)
         {
             if (diffCheck && previousValue != value)
             {
