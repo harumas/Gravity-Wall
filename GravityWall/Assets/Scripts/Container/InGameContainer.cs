@@ -31,6 +31,7 @@ namespace Container
             UnityEngine.Application.targetFrameRate = 120;
 
             builder.RegisterEntryPoint<InputConfigChangedListener>();
+            builder.RegisterEntryPoint<AudioConfigChangedListener>();
             builder.RegisterEntryPoint<PlayerInputPresenter>();
             builder.RegisterEntryPoint<LevelVolumeCameraPresenter>();
 
