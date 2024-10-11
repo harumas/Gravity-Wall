@@ -9,7 +9,8 @@ namespace Module.PlayTest
         {
             if (collision.gameObject.CompareTag("Player"))
             {
-                //respawnManager.Respawn();
+                collision.gameObject.GetComponent<Animator>().SetBool("IsDeath", true);
+                respawnManager.Damage();
             }
         }
     }
