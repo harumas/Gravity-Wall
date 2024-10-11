@@ -36,8 +36,6 @@ public class PressurePlate : AbstractSwitch
 
         // Emissionの色を変更
         meshRenderer.material.SetFloat("_PushRatio", isOn ? 1.0f : 0.0f);
-
-        Debug.Log("OnSwitch");
     }
 
     private void OnTriggerEnter(Collider collider)
