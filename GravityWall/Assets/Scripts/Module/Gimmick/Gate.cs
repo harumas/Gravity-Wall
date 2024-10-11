@@ -12,6 +12,7 @@ namespace Module.Gimmick
         [SerializeField] private Transform lightBasePosition;
         [SerializeField] private GameObject Counterlight;
         [SerializeField] private int switchMaxCount = 1;
+        [SerializeField] private AudioSource audioSource;
         private int switchCount = 0;
         private List<Material> lightMaterials = new List<Material>();
         public bool isOpen { get; private set; }
@@ -31,6 +32,7 @@ namespace Module.Gimmick
             if (isOpen && switchCount < switchMaxCount)
             {
                 gateCloseEvent.Invoke();
+                audioSource.Play();
             }
 
             isOpen = switchCount >= switchMaxCount;
@@ -39,6 +41,7 @@ namespace Module.Gimmick
             if (isOpen)
             {
                 gateOpenEvent.Invoke();
+                audioSource.Play();
             }
         }
 

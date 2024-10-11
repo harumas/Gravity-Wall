@@ -10,7 +10,7 @@ namespace Module.Gimmick
         [SerializeField] private bool initializeIsOn = false;
         [SerializeField] private List<AbstractGimmickAffected> gimmickAffecteds = new List<AbstractGimmickAffected>();
         [SerializeField, Tag] private List<string> targetTags;
-        [SerializeField] private UnityEvent onEvent, offEvent;
+        [SerializeField] private AudioSource audioSource;
         [SerializeField] private MeshRenderer meshRenderer, RayMeshRenderer;
         public override bool isOn { get => _isOn; protected set => _isOn = value; }
         private bool _isOn;
@@ -26,11 +26,11 @@ namespace Module.Gimmick
 
             if (isOn)
             {
-                onEvent.Invoke();
+                audioSource.Play();
             }
             else
             {
-                offEvent.Invoke();
+                //offEvent.Invoke();
             }
 
 
