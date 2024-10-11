@@ -14,6 +14,7 @@ namespace Module.Gimmick
         [SerializeField] private Collider collider;
         [SerializeField] private PlayableDirector director;
         [SerializeField] private GameObject clearCanvas;
+        [SerializeField] private AudioSource audioSource;
         Vector3 scale;
 
         void Start()
@@ -34,6 +35,8 @@ namespace Module.Gimmick
                     collider.enabled = false;
 
                     clearCanvas.SetActive(true);
+
+                    audioSource.Play();
 
                     breakedGlass.transform.localScale = scale;
                     breakedGlass.transform.DOScaleZ(0.7f, 3.0f).SetUpdate(true).OnComplete(() =>
