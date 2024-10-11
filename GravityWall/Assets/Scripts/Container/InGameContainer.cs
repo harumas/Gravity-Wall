@@ -1,6 +1,7 @@
 ﻿using Application;
 using Constants;
 using Module.Character;
+using Module.Gimmick;
 using Module.Gravity;
 using Module.InputModule;
 using Presentation;
@@ -27,10 +28,12 @@ namespace Container
             //重力の生成 (後で消す)
             WorldGravity.Create();
 
-            UnityEngine.Application.targetFrameRate = 60;
+            UnityEngine.Application.targetFrameRate = 120;
 
             builder.RegisterEntryPoint<InputConfigChangedListener>();
+            builder.RegisterEntryPoint<AudioConfigChangedListener>();
             builder.RegisterEntryPoint<PlayerInputPresenter>();
+            builder.RegisterEntryPoint<LevelVolumeCameraPresenter>();
 
 #if UNITY_EDITOR
             builder.RegisterEntryPoint<ExternalAccessor>();
@@ -47,6 +50,7 @@ namespace Container
             builder.RegisterComponentInHierarchy<PlayerController>();
             builder.RegisterComponentInHierarchy<CameraController>();
             builder.RegisterComponentInHierarchy<PlayerTargetSyncer>();
+            builder.RegisterComponentInHierarchy<GravitySwitcher>();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Constants;
+﻿using System;
+using Constants;
+using CoreModule.Helper;
 using Module.Gravity;
 using R3;
 using UGizmo;
@@ -9,10 +11,15 @@ namespace Module.Character
     public class GravitySwitcher : MonoBehaviour
     {
         [SerializeField] private bool isEnabled = true;
+        [SerializeField] private bool canSwitchGravity = true;
 
         [Header("重力変化の制限がかかる角度")]
         [SerializeField]
         private float constrainedAngleThreshold;
+
+        [Header("入力が開始されてから重力変更が可能になるまでの秒数")]
+        [SerializeField]
+        private float allowAngleChangeDuration;
 
         [Header("重力変化までの秒数")] [SerializeField] private float angleChangeDuration;
         [SerializeField] private float detectHoldAngle = 1f;
@@ -23,11 +30,15 @@ namespace Module.Character
         [SerializeField] private PlayerController playerController;
 
         private Vector3 prevDir;
+        private ContactPoint beforeJumpContact;
         private ContactPoint nearestContact;
         private bool doSwitchGravity;
         private bool hasHeadObject;
         private bool isLegalStep;
+        private bool isInputMoving;
+        private bool isGrounding;
         private ThresholdChecker rotateAngleChecker;
+        private DelayableProperty<bool> canRotateProperty = new();
 
         private void Awake()
         {
@@ -36,42 +47,69 @@ namespace Module.Character
 
             //プレイヤーの回転が終わったらチェッカーを有効化する
             playerController.IsRotating.Subscribe(value =>
-            {
-                if (!value)
                 {
-                    rotateAngleChecker.Enable();
-                }
-            }).AddTo(this);
+                    if (!value)
+                    {
+                        rotateAngleChecker.Enable();
+                        isGrounding = true;
+                    }
+                })
+                .AddTo(this);
 
             //ジャンプ中はチェッカーを無効化する
             playerController.IsJumping.Subscribe(value =>
-            {
-                if (value)
                 {
-                    rotateAngleChecker.Disable();
-                }
-            }).AddTo(this);
+                    if (value)
+                    {
+                        rotateAngleChecker.Disable();
+                        isGrounding = false;
+                        beforeJumpContact = nearestContact;
+                    }
+                })
+                .AddTo(this);
+        }
+
+        public void OnMoveInput(Vector2 input)
+        {
+            bool isMoving = input != Vector2.zero;
+            float delay = isMoving ? allowAngleChangeDuration : 0f;
+
+            canRotateProperty.Assign(isMoving, delay);
         }
 
         private void Update()
         {
-            isLegalStep = isEnabled && IsLegalStep();
+            isLegalStep = isEnabled && canSwitchGravity && IsLegalStep();
+
+            canRotateProperty.Update();
         }
 
         private void FixedUpdate()
         {
+            if (isEnabled)
+            {
+                SwitchGravity();
+            }
+        }
+
+        private void SwitchGravity()
+        {
             //角度の差を求める
-            float angle = Vector3.Angle(transform.up, -nearestContact.normal);
+            float angle = Vector3.Angle(transform.up, nearestContact.normal);
             angle = Mathf.Max(angle, Mathf.Epsilon);
 
             //角度が一定以下の場合は重力変更を行わない
-            if (rotateAngleChecker.IsUnderThreshold(angle))
+            if ((playerController.IsRotating.CurrentValue ||
+                 rotateAngleChecker.IsOverThreshold(angle) && !canRotateProperty.Value ||
+                 rotateAngleChecker.TryThresholdCount(angle, isGrounding)) &&
+                isGrounding)
             {
-                Disable();
+                canSwitchGravity = false;
                 return;
             }
 
-            Enable();
+            canSwitchGravity = true;
+            rotateAngleChecker.Disable();
 
             if (doSwitchGravity && !hasHeadObject)
             {
@@ -119,6 +157,7 @@ namespace Module.Character
                 return transform.up != normal;
             }
 
+
             //何もヒットしていない場合は、進行方向に何も存在しないため、重力変更する必要がある
             return true;
         }
@@ -147,6 +186,15 @@ namespace Module.Character
             return isHit;
         }
 
+        private void OnCollisionEnter(Collision collision)
+        {
+            Vector3 normal = collision.GetContact(0).normal;
+
+            if (normal == beforeJumpContact.normal)
+            {
+                isGrounding = true;
+            }
+        }
 
         private void OnCollisionStay(Collision collision)
         {

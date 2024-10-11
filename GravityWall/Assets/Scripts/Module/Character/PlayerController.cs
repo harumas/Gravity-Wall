@@ -1,4 +1,5 @@
 using System;
+using CoreModule.Helper;
 using DG.Tweening;
 using DG.Tweening.Core.Easing;
 using Domain;
@@ -13,24 +14,24 @@ namespace Module.Character
     /// </summary>
     public class PlayerController : MonoBehaviour, ICharacter
     {
-        [Header("移動速度")][SerializeField] private float controlSpeed;
-        [Header("速度減衰")][SerializeField] private float speedDamping;
-        [Header("ジャンプ中移動係数")][SerializeField] private float airControl;
-        [Header("回転のイージング")][SerializeField] private Ease easeType;
+        [Header("移動速度")] [SerializeField] private float controlSpeed;
+        [Header("速度減衰")] [SerializeField] private float speedDamping;
+        [Header("ジャンプ中移動係数")] [SerializeField] private float airControl;
+        [Header("回転のイージング")] [SerializeField] private Ease easeType;
 
         [Header("回転のイージング係数")]
         [SerializeField]
         private float rotateStep;
 
-        [Header("最大速度")][SerializeField] private float maxSpeed;
-        [Header("ジャンプ力")][SerializeField] private float jumpPower;
-        [Header("ジャンプ中の重力")][SerializeField] private float jumpingGravity;
+        [Header("最大速度")] [SerializeField] private float maxSpeed;
+        [Header("ジャンプ力")] [SerializeField] private float jumpPower;
+        [Header("ジャンプ中の重力")] [SerializeField] private float jumpingGravity;
 
         [Header("連続ジャンプを許可する間隔")]
         [SerializeField]
         private float allowJumpInterval;
 
-        [Header("回転中とみなす角度")][SerializeField] private float rotatingAngle;
+        [Header("回転中とみなす角度")] [SerializeField] private float rotatingAngle;
 
         [SerializeField] private Rigidbody rigBody;
         [SerializeField] private Transform target;
@@ -44,6 +45,8 @@ namespace Module.Character
 
         public ReadOnlyReactiveProperty<float> MoveSpeed => moveSpeed;
         private readonly ReactiveProperty<float> moveSpeed = new ReactiveProperty<float>();
+
+        public bool IsRotationLocked { get; set; }
 
         private Vector2 moveInput;
         private Vector3 inertia;
@@ -131,6 +134,11 @@ namespace Module.Character
 
         private void PerformGravityRotate()
         {
+            if (IsRotationLocked)
+            {
+                return;
+            }
+
             Quaternion targetRotation = Quaternion.FromToRotation(transform.up, -WorldGravity.Instance.Gravity) * rigBody.rotation;
 
             //角度の差を求める
@@ -138,7 +146,7 @@ namespace Module.Character
             angle = Mathf.Max(angle, Mathf.Epsilon);
 
             //イージング関数を噛ませる
-            float t = Evaluate(easeType, angle, rotateStep);
+            float t = EaseUtility.Evaluate(easeType, angle, rotateStep);
             rigBody.rotation = Quaternion.Slerp(rigBody.rotation, targetRotation, t);
 
             isRotating.Value = angle - rotateStep >= rotatingAngle;
@@ -147,16 +155,6 @@ namespace Module.Character
             {
                 rigBody.rotation = targetRotation;
             }
-        }
-
-        private float Evaluate(Ease easeType, float angle, float step)
-        {
-            if (easeType == Ease.Unset)
-            {
-                return step;
-            }
-
-            return EaseManager.Evaluate(easeType, null, step, angle, 1f, 1f);
         }
 
         private void PerformInertia()
