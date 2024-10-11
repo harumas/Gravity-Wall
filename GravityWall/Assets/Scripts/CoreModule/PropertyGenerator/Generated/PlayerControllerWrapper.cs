@@ -32,5 +32,11 @@ namespace PropertyGenerator.Generated
 			get => target.GetFloat(-823668238);
 			set => target.SetFloat(-823668238, value);
 		}
+		
+		public bool IsDeath
+		{
+			get => target.GetBool(569220492);
+			set => target.SetBool(569220492, value);
+		}
 	}
 }

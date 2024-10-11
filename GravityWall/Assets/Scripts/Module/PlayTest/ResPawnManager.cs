@@ -31,7 +31,7 @@ namespace Module.PlayTest
                 instance = this;
         }
 
-       
+
         private void Start()
         {
             RetryPosition = Player.transform.position;
@@ -50,7 +50,7 @@ namespace Module.PlayTest
         public void Damage()
         {
             LoadingCanvas.SetActive(true);
-            Invoke("WorldReset", 0.3f);
+            Invoke("WorldReset", 1.5f);
         }
 
         public void WorldReset()
@@ -76,12 +76,11 @@ namespace Module.PlayTest
             LoadingCanvas.SetActive(false);
             Player.transform.position = RetryPosition;
             WorldGravity.Instance.SetValue(GravityScale);
-
         }
 
         public void ReloadScene()
         {
-           SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
         public void LoadStageSelectScene()
@@ -100,13 +99,13 @@ namespace Module.PlayTest
 
             }
 
-            else if(Input.GetKeyDown(KeyCode.P))
+            else if (Input.GetKeyDown(KeyCode.P))
             {
                 LoadingCanvas.SetActive(true);
                 Invoke("LoadStageSelectScene", 0.3f);
             }
 
-            else if(Input.GetKeyDown(KeyCode.U)&&!isClear)
+            else if (Input.GetKeyDown(KeyCode.U) && !isClear)
                 Damage();
         }
     }
