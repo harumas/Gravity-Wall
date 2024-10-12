@@ -59,6 +59,7 @@ public class ObsManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
+        StopOBS();
         ScreenobsController?.Close();
         FaceobsController?.Close();
     }

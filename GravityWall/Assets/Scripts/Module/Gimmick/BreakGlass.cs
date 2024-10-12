@@ -43,7 +43,7 @@ namespace Module.Gimmick
                     {
                         Time.timeScale = 1.0f;
                         Time.fixedDeltaTime = 0.01f;
-                        SceneManager.LoadScene("StageSelect");
+                        SceneManager.LoadScene("Test_stairs_01");
                     });
                 }
             }
