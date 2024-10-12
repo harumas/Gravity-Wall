@@ -167,7 +167,9 @@ namespace Module.Character
             Ray ray = new Ray(transform.position, targetDir);
             bool isHit = Physics.SphereCast(ray, detectRayRadius, out RaycastHit hitInfo, detectRayRange);
 
+#if UNITY_EDITOR
             UGizmos.DrawSphereCast(ray.origin, detectRayRadius, ray.direction, detectRayRange, isHit, hitInfo);
+#endif 
 
             return isHit;
         }
@@ -179,7 +181,9 @@ namespace Module.Character
 
             bool isHit = Physics.Raycast(origin, direction, out RaycastHit hitInfo, downRayDistance);
 
+#if UNITY_EDITOR
             UGizmos.DrawRay(origin, direction * downRayDistance, Color.blue);
+#endif 
 
             normal = hitInfo.normal;
 
