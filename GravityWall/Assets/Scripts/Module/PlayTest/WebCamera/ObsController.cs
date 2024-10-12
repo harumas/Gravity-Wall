@@ -14,6 +14,12 @@ namespace Module.PlayTest.WebCamera
 
         public void StartRecording(string fileName)
         {
+            if (obsWebSocket == null)
+            {
+                Debug.LogError("OBSに接続されていないため、録画を開始できませんでした。");
+                return;
+            }
+
             var message = new ObsWebSocket.MessageRequest("StartRecord", "1", null);
             obsWebSocket.SendMessage(message);
 
@@ -25,6 +31,12 @@ namespace Module.PlayTest.WebCamera
 
         public void StopRecording()
         {
+            if (obsWebSocket == null)
+            {
+                Debug.LogError("OBSに接続されていないため、録画を停止できませんでした。");
+                return;
+            }
+
             var message = new ObsWebSocket.MessageRequest("StopRecord", "2", null);
             obsWebSocket.SendMessage(message);
             Debug.Log("録画を停止しました。");
@@ -32,6 +44,12 @@ namespace Module.PlayTest.WebCamera
 
         public void Close()
         {
+            if (obsWebSocket == null)
+            {
+                Debug.LogError("OBSに接続されていないため、Closeできませんでした。");
+                return;
+            }
+
             obsWebSocket.Close();
         }
     }
