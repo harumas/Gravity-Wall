@@ -44,6 +44,7 @@ public class ObsManager : MonoBehaviour
     public void StartOBS()
     {
         FaceobsController.StartRecording(FacefileName);
+        ScreenobsController.StartRecording(ScreenfileName);
     }
 
    public void StopOBS()

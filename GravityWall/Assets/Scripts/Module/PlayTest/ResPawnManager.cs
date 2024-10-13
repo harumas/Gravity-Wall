@@ -19,7 +19,7 @@ namespace Module.PlayTest
         public static RespawnManager instance;
 
         [SerializeField] private GameObject LoadingCanvas;
-
+        private ObsManager obsManager => ObsManager.instance;
         public bool isClear = false;
 
 
@@ -85,7 +85,7 @@ namespace Module.PlayTest
 
         public void LoadStageSelectScene()
         {
-            SceneManager.LoadScene("StageSelect");
+            SceneManager.LoadScene("PlayTestTitle");
         }
         private void Update()
         {
@@ -102,6 +102,7 @@ namespace Module.PlayTest
             else if (Input.GetKeyDown(KeyCode.P))
             {
                 LoadingCanvas.SetActive(true);
+                obsManager.StopOBS();
                 Invoke("LoadStageSelectScene", 0.3f);
             }
 
