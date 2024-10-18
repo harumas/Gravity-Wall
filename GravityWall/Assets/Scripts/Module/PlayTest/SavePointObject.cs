@@ -4,7 +4,6 @@ using UnityEngine;
 using Module.Gimmick;
 using Module.Gravity;
 using Constants;
-using Cinemachine;
 namespace Module.PlayTest
 
 {
