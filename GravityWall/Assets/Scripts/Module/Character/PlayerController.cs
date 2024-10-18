@@ -239,7 +239,6 @@ namespace Module.Character
             lastJumpTime = Time.time;
         }
 
-
         public void AddExternalPosition(Vector3 delta)
         {
             rigBody.MovePosition(rigBody.position + delta);
