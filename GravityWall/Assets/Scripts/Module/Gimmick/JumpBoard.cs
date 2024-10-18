@@ -1,5 +1,5 @@
 using System.Linq;
-using Domain;
+using Module.Character;
 using UnityEngine;
 namespace Module.Gimmick
 {
@@ -16,7 +16,7 @@ namespace Module.Gimmick
             {
                 if (collision.gameObject.CompareTag("Player"))
                 {
-                    collision.gameObject.GetComponent<ICharacter>().DoJump(transform.up * jumpPower, jumpingGravity);
+                    collision.gameObject.GetComponent<PlayerController>().DoBoardJump(transform.up * jumpPower, jumpingGravity);
                 }
                 else
                 {
