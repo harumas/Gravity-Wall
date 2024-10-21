@@ -97,6 +97,8 @@ namespace Module.Character
             AdjustGravity();
             PerformGravityRotate();
             PerformInertia();
+
+            Debug.Log($"isjump : {isJumping.Value}");
         }
 
         private void CheckJump()
@@ -231,7 +233,11 @@ namespace Module.Character
         //仮実装です
         public void DoBoardJump(Vector3 jumpForce, float jumpingGravity)
         {
-            rigBody.velocity = Vector3.zero;
+            if (isJumping.Value)
+            {
+                rigBody.velocity = Vector3.zero;
+                isJumping.Value = false;
+            }
 
             variableJumpingGravity = jumpingGravity;
             rigBody.AddForce(jumpForce, ForceMode.VelocityChange);
