@@ -35,11 +35,6 @@ namespace LevelEditor
         {
             Scene currentLevel = SceneManager.GetActiveScene();
 
-            if (currentLevel.IsValid())
-            {
-                EditorSceneManager.CloseScene(currentLevel, true);
-            }
-
             if (!ValidateLevelName(levelNameField.text))
             {
                 return;
@@ -49,6 +44,11 @@ namespace LevelEditor
             SceneTemplateAsset template = AssetDatabase.LoadAssetAtPath<SceneTemplateAsset>(LevelEditorUtil.SceneTemplatePath);
             string savePath = LevelEditorUtil.GetSceneAssetPath(levelNameField.text);
             InstantiationResult result = SceneTemplateService.Instantiate(template, false, savePath);
+
+            if (currentLevel.IsValid())
+            {
+                EditorSceneManager.CloseScene(currentLevel, true);
+            }
 
             //入力欄の初期化
             levelNameField.SetValueWithoutNotify(null);
@@ -129,10 +129,10 @@ namespace LevelEditor
                 .First(path =>
                 {
                     string fileName = Path.GetFileName(path);
-                    
+
                     //.unityを削除する
                     var slicedName = fileName.Substring(0, fileName.Length - 6);
-                    
+
                     //シーン名とアセット名が等しかったらそのパスを返す
                     return slicedName == sceneName;
                 });
