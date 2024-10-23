@@ -169,7 +169,7 @@ namespace Module.Character
 
 #if UNITY_EDITOR
             UGizmos.DrawSphereCast(ray.origin, detectRayRadius, ray.direction, detectRayRange, isHit, hitInfo);
-#endif 
+#endif
 
             return isHit;
         }
@@ -183,7 +183,7 @@ namespace Module.Character
 
 #if UNITY_EDITOR
             UGizmos.DrawRay(origin, direction * downRayDistance, Color.blue);
-#endif 
+#endif
 
             normal = hitInfo.normal;
 
@@ -273,6 +273,8 @@ namespace Module.Character
                     contact = current;
                 }
             }
+
+            UGizmos.DrawLine(contact.point, contact.point + contact.normal, Color.red, 3f);
 
             return contact;
         }

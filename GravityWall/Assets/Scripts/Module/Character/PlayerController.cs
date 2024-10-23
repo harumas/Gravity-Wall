@@ -97,8 +97,6 @@ namespace Module.Character
             AdjustGravity();
             PerformGravityRotate();
             PerformInertia();
-
-            Debug.Log($"isjump : {isJumping.Value}");
         }
 
         private void CheckJump()
