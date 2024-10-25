@@ -32,7 +32,7 @@ namespace Module.Gimmick.DynamicScaffold
         private Vector3 previousPosition;
         private Vector3 moveDelta;
         private Transform currentTarget;
-        private ICharacter playerController;
+        private IPushable pushement;
         private float trappedTimer;
         private int contactCount;
 
@@ -145,11 +145,11 @@ namespace Module.Gimmick.DynamicScaffold
 
         private void MovePlayer()
         {
-            if (playerController != null)
+            if (pushement != null)
             {
                 //床の移動量分、プレイヤーを動かす
                 moveDelta = rigBody.position - previousPosition;
-                playerController.AddExternalPosition(moveDelta);
+                pushement.AddExternalPosition(moveDelta);
             }
 
             previousPosition = rigBody.position;
@@ -162,7 +162,7 @@ namespace Module.Gimmick.DynamicScaffold
             //床に設置したプレイヤーを取得
             if (contactCount == 1 && other.gameObject.CompareTag(Tag.Player))
             {
-                playerController = other.gameObject.GetComponent<ICharacter>();
+                pushement = other.gameObject.GetComponent<IPushable>();
             }
         }
 
@@ -173,8 +173,8 @@ namespace Module.Gimmick.DynamicScaffold
             if (contactCount == 0 && other.gameObject.CompareTag(Tag.Player))
             {
                 //コリジョンから離れる時は、慣性を付与する
-                playerController.AddInertia(moveDelta);
-                playerController = null;
+                pushement.AddInertia(moveDelta);
+                pushement = null;
             }
         }
     }

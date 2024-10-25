@@ -13,9 +13,7 @@ namespace Module.Character
         [SerializeField] private bool isEnabled = true;
         [SerializeField] private bool canSwitchGravity = true;
 
-        [Header("重力変化の制限がかかる角度")]
-        [SerializeField]
-        private float constrainedAngleThreshold;
+        [Header("重力変化の制限がかかる角度")] [SerializeField] private float constrainedAngleThreshold;
 
         [Header("入力が開始されてから重力変更が可能になるまでの秒数")]
         [SerializeField]
@@ -28,15 +26,17 @@ namespace Module.Character
         [SerializeField] private float downRayDistance = 0.6f;
         [SerializeField] private PlayerTargetSyncer targetSyncer;
         [SerializeField] private PlayerController playerController;
+        [SerializeField] private bool isGrounding;
 
         private Vector3 prevDir;
-        private ContactPoint beforeJumpContact;
+        private Vector3 lastMovement;
+        private Vector3 nearestNormal;
         private ContactPoint nearestContact;
         private bool doSwitchGravity;
         private bool hasHeadObject;
         private bool isLegalStep;
         private bool isInputMoving;
-        private bool isGrounding;
+
         private ThresholdChecker rotateAngleChecker;
         private DelayableProperty<bool> canRotateProperty = new();
 
@@ -51,7 +51,6 @@ namespace Module.Character
                     if (!value)
                     {
                         rotateAngleChecker.Enable();
-                        isGrounding = true;
                     }
                 })
                 .AddTo(this);
@@ -62,11 +61,13 @@ namespace Module.Character
                     if (value)
                     {
                         rotateAngleChecker.Disable();
-                        isGrounding = false;
-                        beforeJumpContact = nearestContact;
                     }
+
+                    isGrounding = !value;
                 })
                 .AddTo(this);
+
+            playerController.OnMove.Subscribe(value => { lastMovement = value; }).AddTo(this);
         }
 
         public void OnMoveInput(Vector2 input)
@@ -95,7 +96,7 @@ namespace Module.Character
         private void SwitchGravity()
         {
             //角度の差を求める
-            float angle = Vector3.Angle(transform.up, nearestContact.normal);
+            float angle = Vector3.Angle(transform.up, nearestNormal);
             angle = Mathf.Max(angle, Mathf.Epsilon);
 
             //角度が一定以下の場合は重力変更を行わない
@@ -113,7 +114,7 @@ namespace Module.Character
 
             if (doSwitchGravity && !hasHeadObject)
             {
-                WorldGravity.Instance.SetValue(-nearestContact.normal);
+                WorldGravity.Instance.SetValue(-nearestNormal);
             }
 
             doSwitchGravity = false;
@@ -190,16 +191,6 @@ namespace Module.Character
             return isHit;
         }
 
-        private void OnCollisionEnter(Collision collision)
-        {
-            Vector3 normal = collision.GetContact(0).normal;
-
-            if (normal == beforeJumpContact.normal)
-            {
-                isGrounding = true;
-            }
-        }
-
         private void OnCollisionStay(Collision collision)
         {
             ContactPoint contact = GetNearestContact(collision);
@@ -215,6 +206,15 @@ namespace Module.Character
                 if (!hasHeadObject)
                 {
                     nearestContact = GetNearestContact(collision);
+
+                    if (DetectWall(out Vector3 correctNormal))
+                    {
+                        nearestNormal = correctNormal;
+                    }
+                    else
+                    {
+                        nearestNormal = nearestContact.normal;
+                    }
                 }
 
                 //重力変更
@@ -222,6 +222,38 @@ namespace Module.Character
                 {
                     doSwitchGravity = true;
                 }
+            }
+        }
+
+        private bool DetectWall(out Vector3 correctNormal)
+        {
+            float detectRange = 0.2f;
+            float detectDistance = 0.55f;
+            Vector3 moveDirection = lastMovement.normalized;
+            Vector3 right = Vector3.Cross(transform.up, moveDirection);
+            Vector3 origin = transform.position;
+
+            int layerMask = Layer.Mask.Base | Layer.Mask.IgnoreGravity | Layer.Mask.Gravity;
+            Vector3 rOrigin = origin + right * detectRange;
+            bool isHitR = Physics.Raycast(rOrigin, moveDirection, out RaycastHit hitR, detectDistance, layerMask);
+
+            Vector3 lOrigin = origin + -right * detectRange;
+            bool isHitL = Physics.Raycast(lOrigin, moveDirection, out RaycastHit hitL, detectDistance, layerMask);
+
+#if UNITY_EDITOR
+            UGizmos.DrawLine(rOrigin, rOrigin + moveDirection * detectDistance, Color.green);
+            UGizmos.DrawLine(lOrigin, lOrigin + moveDirection * detectDistance, Color.green);
+#endif
+
+            if (isHitL && isHitR && hitR.normal == hitL.normal)
+            {
+                correctNormal = hitR.normal;
+                return true;
+            }
+            else
+            {
+                correctNormal = Vector3.zero;
+                return false;
             }
         }
 
@@ -273,8 +305,6 @@ namespace Module.Character
                     contact = current;
                 }
             }
-
-            UGizmos.DrawLine(contact.point, contact.point + contact.normal, Color.red, 3f);
 
             return contact;
         }

@@ -1,28 +1,29 @@
-using System.Linq;
-using Module.Character;
+using System;
+using Cysharp.Threading.Tasks;
+using Domain;
 using UnityEngine;
+
 namespace Module.Gimmick
 {
     public class JumpBoard : MonoBehaviour
     {
-        [Header("ジャンプ力")][SerializeField] private float jumpPower;
+        [Header("ジャンプ力")] [SerializeField] private float jumpPower;
+        [Header("ジャンプ中の重力")] [SerializeField] private float jumpingGravity;
+        [Header("ジャンプまでの遅延")] [SerializeField] private float jumpDelay;
 
-        [Header("ジャンプ中の重力")][SerializeField] private float jumpingGravity;
-        [SerializeField, Tag] private string[] targetTags;
-
-        private void OnCollisionEnter(Collision collision)
+        private void OnTriggerEnter(Collider collider)
         {
-            if (targetTags.Any(tag => collision.gameObject.CompareTag(tag)))
+            if (collider.gameObject.TryGetComponent(out IPushable pushable))
             {
-                if (collision.gameObject.CompareTag("Player"))
-                {
-                    collision.gameObject.GetComponent<PlayerController>().DoBoardJump(transform.up * jumpPower, jumpingGravity);
-                }
-                else
-                {
-                    collision.gameObject.GetComponent<Rigidbody>().AddForce(transform.up * jumpPower, ForceMode.VelocityChange);
-                }
+                Push(pushable).Forget();
             }
+        }
+
+        private async UniTaskVoid Push(IPushable pushable)
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(jumpDelay));
+            
+            pushable.AddForce(transform.up * jumpPower, ForceMode.VelocityChange, jumpingGravity);
         }
     }
 }

@@ -6,21 +6,30 @@ namespace Module.Character
     public class PlayerRotateSEPlayer : MonoBehaviour
     {
         [SerializeField] private float volume = 0.8f;
+        [SerializeField] private float playInterval = 0.3f;
         [SerializeField] private AudioClip audioClip;
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private PlayerController playerController;
         private bool isRotating = true;
-        // Start is called before the first frame update
+        
+        private float lastPlayTime;
+        
         void Start()
         {
             // 回転のイベント登録
             playerController.IsRotating.Subscribe(isRotating =>
             {
+                if (lastPlayTime + playInterval > Time.time)
+                {
+                    return;
+                }
+                
                 if (this.isRotating == false)
                 {
                     audioSource.volume = volume;
                     audioSource.clip = audioClip;
                     audioSource.Play();
+                    lastPlayTime = Time.time;
                 }
 
                 this.isRotating = isRotating;

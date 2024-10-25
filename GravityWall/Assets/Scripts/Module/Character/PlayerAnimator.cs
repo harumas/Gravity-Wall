@@ -8,34 +8,38 @@ namespace Module.Character
     {
         [SerializeField] private Animator animator;
         [SerializeField] private PlayerController playerController;
+        [SerializeField] private float damping;
 
         private PlayerControllerWrapper playerWrapper;
+        private float currentSpeed;
+        private float prevSpeed;
 
         private void Start()
         {
             playerWrapper = new PlayerControllerWrapper(animator);
 
             // ジャンプのイベント登録
-            playerController.IsJumping.Subscribe(isJumping =>
-            {
-                playerWrapper.IsJumping = isJumping;
-            }).AddTo(this);
+            playerController.IsJumping.Subscribe(isJumping => { playerWrapper.IsJumping = isJumping; }).AddTo(this);
 
             // 回転のイベント登録
-            playerController.IsRotating.Subscribe(isRotating =>
-            {
-                playerWrapper.IsRotating = isRotating;
-            }).AddTo(this);
+            playerController.IsRotating.Subscribe(isRotating => { playerWrapper.IsRotating = isRotating; }).AddTo(this);
 
-            playerController.MoveSpeed.Subscribe(velocity =>
-            {
-                playerWrapper.Speed = velocity;
-            }).AddTo(this);
+            playerController.OnMove.Subscribe(velocity => { currentSpeed = velocity.magnitude; }).AddTo(this);
 
-            playerController.IsDeath.Subscribe(isDeath =>
+            playerController.IsDeath.Subscribe(isDeath => { playerWrapper.IsDeath = isDeath; }).AddTo(this);
+        }
+
+        private void OnAnimatorMove()
+        {
+            float speed = Mathf.Lerp(prevSpeed, currentSpeed, damping * Time.deltaTime);
+
+            if (speed <= 0.01f)
             {
-                playerWrapper.IsDeath = isDeath;
-            }).AddTo(this);
+                speed = 0f;
+            }
+            
+            playerWrapper.Speed = speed;
+            prevSpeed = speed;
         }
     }
 }
