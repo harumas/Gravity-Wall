@@ -2,10 +2,10 @@
 
 namespace Domain
 {
-    public interface ICharacter
+    public interface IPushable
     {
-        void DoJump(Vector3 jumpForce, float jumpingGravity);
         void AddExternalPosition(Vector3 delta);
+        void AddForce(Vector3 force, ForceMode mode, float forcedGravity);
         void AddInertia(Vector3 inertia);
     }
 }
