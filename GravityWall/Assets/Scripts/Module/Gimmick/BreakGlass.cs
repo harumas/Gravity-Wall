@@ -14,6 +14,7 @@ namespace Module.Gimmick
         [SerializeField] private Collider collider;
         [SerializeField] private PlayableDirector director;
         [SerializeField] private GameObject clearCanvas;
+        [SerializeField] private AudioSource audioSource;
         Vector3 scale;
 
         void Start()
@@ -35,12 +36,14 @@ namespace Module.Gimmick
 
                     clearCanvas.SetActive(true);
 
+                    audioSource.Play();
+
                     breakedGlass.transform.localScale = scale;
                     breakedGlass.transform.DOScaleZ(0.7f, 3.0f).SetUpdate(true).OnComplete(() =>
                     {
                         Time.timeScale = 1.0f;
                         Time.fixedDeltaTime = 0.01f;
-                        SceneManager.LoadScene("StageSelect");
+                        SceneManager.LoadScene("Test_stairs_01");
                     });
                 }
             }

@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Module.Gimmick.DynamicScaffold
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class DynamicScaffold : MonoBehaviour
+    public class DynamicScaffold : AbstractGimmickAffected
     {
         [SerializeField] private Transform pointA;
         [SerializeField] private Transform pointB;
@@ -22,6 +22,10 @@ namespace Module.Gimmick.DynamicScaffold
         [Header("引っかかりを待つ時間")]
         [SerializeField]
         private float reverseDuration;
+
+        [Header("最初から動かすか")]
+        [SerializeField]
+        private bool FirstMove = true;
 
         private Rigidbody rigBody;
         private Vector3 previousTargetPosition;
@@ -52,9 +56,17 @@ namespace Module.Gimmick.DynamicScaffold
 
         private void Start()
         {
+            if(FirstMove)
+                MoveLoop().Forget();
+        }
+        public override void Affect(AbstractSwitch switchObject)
+        {
             MoveLoop().Forget();
         }
-
+        public override void Reset()
+        {
+           
+        }
         private async UniTaskVoid MoveLoop()
         {
             CancellationToken cancellationToken = this.GetCancellationTokenOnDestroy();

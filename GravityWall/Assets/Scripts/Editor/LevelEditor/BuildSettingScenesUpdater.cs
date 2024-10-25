@@ -17,11 +17,11 @@ namespace Module.LevelEditor
 
             //プラットフォーム毎に異なるpathを設定
 #if UNITY_EDITOR_WIN
-            sceneDirLevel = @"Scenes\Level";
+            sceneDirLevel = @"Scenes\Level\Main";
             sceneDirTitle = @"Scenes\Title";
             initialLoadScene = @"Scenes\Title\Root.unity";
 #elif UNITY_EDITOR_OSX
-            sceneDirLevel = "Scenes/Level";
+            sceneDirLevel = "Scenes/Level/Main";
             sceneDirTitle = "Scenes/Title";
             initialLoadScene = "Scenes/Title/Root.unity";
 #endif
@@ -53,7 +53,7 @@ namespace Module.LevelEditor
             return assets.Any(asset =>
             {
                 string directoryName = Path.GetDirectoryName(asset);
-                return directoryName == GetAssetsPath(sceneDirLevel) || directoryName == GetAssetsPath(sceneDirTitle);
+                return directoryName == GetAssetsPath(sceneDirLevel) ;
             });
         }
 

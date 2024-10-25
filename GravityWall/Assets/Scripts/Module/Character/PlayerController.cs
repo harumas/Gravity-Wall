@@ -1,10 +1,12 @@
 using System;
+using Constants;
 using CoreModule.Helper;
 using DG.Tweening;
 using DG.Tweening.Core.Easing;
 using Domain;
 using Module.Gravity;
 using R3;
+using UGizmo;
 using UnityEngine;
 
 namespace Module.Character
@@ -14,24 +16,28 @@ namespace Module.Character
     /// </summary>
     public class PlayerController : MonoBehaviour, ICharacter
     {
-        [Header("移動速度")] [SerializeField] private float controlSpeed;
-        [Header("速度減衰")] [SerializeField] private float speedDamping;
-        [Header("ジャンプ中移動係数")] [SerializeField] private float airControl;
-        [Header("回転のイージング")] [SerializeField] private Ease easeType;
+        [Header("移動速度")][SerializeField] private float controlSpeed;
+        [Header("速度減衰")][SerializeField] private float speedDamping;
+        [Header("ジャンプ中移動係数")][SerializeField] private float airControl;
+        [Header("回転のイージング")][SerializeField] private Ease easeType;
 
         [Header("回転のイージング係数")]
         [SerializeField]
         private float rotateStep;
 
-        [Header("最大速度")] [SerializeField] private float maxSpeed;
-        [Header("ジャンプ力")] [SerializeField] private float jumpPower;
-        [Header("ジャンプ中の重力")] [SerializeField] private float jumpingGravity;
+        [Header("最大速度")][SerializeField] private float maxSpeed;
+        [Header("ジャンプ力")][SerializeField] private float jumpPower;
+        [Header("ジャンプ中の重力")][SerializeField] private float jumpingGravity;
 
         [Header("連続ジャンプを許可する間隔")]
         [SerializeField]
         private float allowJumpInterval;
 
-        [Header("回転中とみなす角度")] [SerializeField] private float rotatingAngle;
+        [Header("ジャンプを許可する地面との距離")]
+        [SerializeField]
+        private float allowJumpDistance;
+
+        [Header("回転中とみなす角度")][SerializeField] private float rotatingAngle;
 
         [SerializeField] private Rigidbody rigBody;
         [SerializeField] private Transform target;
@@ -46,13 +52,16 @@ namespace Module.Character
         public ReadOnlyReactiveProperty<float> MoveSpeed => moveSpeed;
         private readonly ReactiveProperty<float> moveSpeed = new ReactiveProperty<float>();
 
+        public ReadOnlyReactiveProperty<bool> IsDeath => isDeath;
+        private readonly ReactiveProperty<bool> isDeath = new ReactiveProperty<bool>();
+
         public bool IsRotationLocked { get; set; }
 
         private Vector2 moveInput;
         private Vector3 inertia;
         private float lastJumpTime;
         private float variableJumpingGravity;
-        
+
         private void Start()
         {
             isRotating.Subscribe(isRotating =>
@@ -81,11 +90,38 @@ namespace Module.Character
 
         private void FixedUpdate()
         {
+            if (isDeath.Value) return;
+            CheckJump();
             PerformMove();
             AdjustVelocity();
             AdjustGravity();
             PerformGravityRotate();
             PerformInertia();
+
+            Debug.Log($"isjump : {isJumping.Value}");
+        }
+
+        private void CheckJump()
+        {
+            if (!isJumping.Value)
+            {
+                return;
+            }
+
+            bool canJump = lastJumpTime + allowJumpInterval <= Time.time;
+            if (!canJump)
+            {
+                return;
+            }
+
+            int layerMask = Layer.Mask.Base | Layer.Mask.IgnoreGravity;
+            Vector3 rayDirection = WorldGravity.Instance.Gravity.normalized;
+            bool isHit = Physics.Raycast(transform.position, rayDirection, allowJumpDistance, layerMask);
+
+            if (isHit)
+            {
+                isJumping.Value = false;
+            }
         }
 
         private void AdjustVelocity()
@@ -177,22 +213,7 @@ namespace Module.Character
 
         private void OnCollisionEnter(Collision _)
         {
-            isJumping.Value = false;
             inertia = Vector3.zero;
-        }
-
-        private void OnCollisionStay(Collision _)
-        {
-            if (!isJumping.Value)
-            {
-                return;
-            }
-
-            bool canJump = lastJumpTime + allowJumpInterval <= Time.time;
-            if (canJump)
-            {
-                isJumping.Value = false;
-            }
         }
 
         public void DoJump(Vector3 jumpForce, float jumpingGravity)
@@ -208,9 +229,36 @@ namespace Module.Character
             lastJumpTime = Time.time;
         }
 
+        //ジャンプボードでジャンプする時に呼ばれる関数
+        //仮実装です
+        public void DoBoardJump(Vector3 jumpForce, float jumpingGravity)
+        {
+            if (isJumping.Value)
+            {
+                rigBody.velocity = Vector3.zero;
+                isJumping.Value = false;
+            }
+
+            variableJumpingGravity = jumpingGravity;
+            rigBody.AddForce(jumpForce, ForceMode.VelocityChange);
+            isJumping.Value = true;
+            lastJumpTime = Time.time;
+        }
+
         public void AddExternalPosition(Vector3 delta)
         {
             rigBody.MovePosition(rigBody.position + delta);
+        }
+
+        public void Death()
+        {
+            isDeath.Value = true;
+            rigBody.velocity = Vector3.zero;
+        }
+
+        public void Respawn()
+        {
+            isDeath.Value = false;
         }
 
         public void AddInertia(Vector3 inertia)

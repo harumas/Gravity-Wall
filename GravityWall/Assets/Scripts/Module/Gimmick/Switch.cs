@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Module.Gimmick
 {
@@ -9,6 +10,7 @@ namespace Module.Gimmick
         [SerializeField] private bool initializeIsOn = false;
         [SerializeField] private List<AbstractGimmickAffected> gimmickAffecteds = new List<AbstractGimmickAffected>();
         [SerializeField, Tag] private List<string> targetTags;
+        [SerializeField] private AudioSource audioSource;
         [SerializeField] private MeshRenderer meshRenderer, RayMeshRenderer;
         public override bool isOn { get => _isOn; protected set => _isOn = value; }
         private bool _isOn;
@@ -21,6 +23,16 @@ namespace Module.Gimmick
         public override void OnSwitch(bool isOn)
         {
             this.isOn = isOn;
+
+            if (isOn)
+            {
+                audioSource.Play();
+            }
+            else
+            {
+                //offEvent.Invoke();
+            }
+
 
             meshRenderer.material.SetFloat("_EmissionIntensity", isOn ? 1.0f : 0.0f);
             RayMeshRenderer.material.SetInt("_PowerOn", isOn ? 0 : 1);
