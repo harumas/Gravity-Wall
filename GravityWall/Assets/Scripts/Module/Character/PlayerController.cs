@@ -15,26 +15,21 @@ namespace Module.Character
         [SerializeField] private Transform cameraPivot;
         [SerializeField] private LocalGravity localGravity;
 
+        [SerializeField] private SerializableReactiveProperty<bool> isJumping = new SerializableReactiveProperty<bool>();
+        [SerializeField] private SerializableReactiveProperty<bool> isRotating = new SerializableReactiveProperty<bool>();
+        [SerializeField] private SerializableReactiveProperty<Vector3> onMove = new SerializableReactiveProperty<Vector3>();
+        [SerializeField] private SerializableReactiveProperty<bool> isDeath = new SerializableReactiveProperty<bool>();
+
         public bool IsRotationLocked { get; set; }
+        public PlayerState State { get; private set; }
         private SimpleInertia simpleInertia;
         private PlayerFunction playerFunction;
-
-        public ReadOnlyReactiveProperty<bool> IsJumping => isJumping;
-        [SerializeField] private SerializableReactiveProperty<bool> isJumping = new SerializableReactiveProperty<bool>();
-
-        public ReadOnlyReactiveProperty<bool> IsRotating => isRotating;
-        [SerializeField] private SerializableReactiveProperty<bool> isRotating = new SerializableReactiveProperty<bool>();
-
-        public ReadOnlyReactiveProperty<Vector3> OnMove => onMove;
-        [SerializeField] private SerializableReactiveProperty<Vector3> onMove = new SerializableReactiveProperty<Vector3>();
-
-        public ReadOnlyReactiveProperty<bool> IsDeath => isDeath;
-        [SerializeField] private SerializableReactiveProperty<bool> isDeath = new SerializableReactiveProperty<bool>();
         private Vector2 moveInput;
 
         private void Start()
         {
             simpleInertia = new SimpleInertia(rigBody);
+            State = new PlayerState(isJumping, isRotating, onMove, isDeath);
             playerFunction = new PlayerFunction(transform, cameraPivot, rigBody, localGravity, parameter);
 
             isRotating.Subscribe(isRotating =>

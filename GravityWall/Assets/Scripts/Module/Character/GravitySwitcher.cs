@@ -24,6 +24,8 @@ namespace Module.Character
         [SerializeField] private float detectRayRadius = 0.6f;
         [SerializeField] private float detectRayRange = 0.6f;
         [SerializeField] private float downRayDistance = 0.6f;
+        [SerializeField] private float wallDetectRange = 0.2f;
+        [SerializeField] private float wallDetectDistance = 0.55f;
         [SerializeField] private PlayerTargetSyncer targetSyncer;
         [SerializeField] private PlayerController playerController;
         [SerializeField] private bool isGrounding;
@@ -39,14 +41,16 @@ namespace Module.Character
 
         private ThresholdChecker rotateAngleChecker;
         private DelayableProperty<bool> canRotateProperty = new();
+        private PlayerState playerState;
 
         private void Awake()
         {
+            playerState = playerController.State;
             rotateAngleChecker = new ThresholdChecker(constrainedAngleThreshold, angleChangeDuration);
             rotateAngleChecker.Enable();
 
             //プレイヤーの回転が終わったらチェッカーを有効化する
-            playerController.IsRotating.Subscribe(value =>
+            playerState.IsRotating.Subscribe(value =>
                 {
                     if (!value)
                     {
@@ -56,7 +60,7 @@ namespace Module.Character
                 .AddTo(this);
 
             //ジャンプ中はチェッカーを無効化する
-            playerController.IsJumping.Subscribe(value =>
+            playerState.IsJumping.Subscribe(value =>
                 {
                     if (value)
                     {
@@ -67,7 +71,7 @@ namespace Module.Character
                 })
                 .AddTo(this);
 
-            playerController.OnMove.Subscribe(value => { lastMovement = value; }).AddTo(this);
+            playerState.OnMove.Subscribe(value => { lastMovement = value; }).AddTo(this);
         }
 
         public void OnMoveInput(Vector2 input)
@@ -100,7 +104,7 @@ namespace Module.Character
             angle = Mathf.Max(angle, Mathf.Epsilon);
 
             //角度が一定以下の場合は重力変更を行わない
-            if ((playerController.IsRotating.CurrentValue ||
+            if ((playerState.IsRotating.CurrentValue ||
                  rotateAngleChecker.IsOverThreshold(angle) && !canRotateProperty.Value ||
                  rotateAngleChecker.TryThresholdCount(angle, isGrounding)) &&
                 isGrounding)
@@ -121,15 +125,6 @@ namespace Module.Character
             hasHeadObject = false;
         }
 
-        public void Enable()
-        {
-            isEnabled = true;
-        }
-
-        public void Disable()
-        {
-            isEnabled = false;
-        }
 
         /// <summary>
         /// 重力変更が可能のな床かどうかを判定します
@@ -227,34 +222,26 @@ namespace Module.Character
 
         private bool DetectWall(out Vector3 correctNormal)
         {
-            float detectRange = 0.2f;
-            float detectDistance = 0.55f;
             Vector3 moveDirection = lastMovement.normalized;
             Vector3 right = Vector3.Cross(transform.up, moveDirection);
             Vector3 origin = transform.position;
 
             int layerMask = Layer.Mask.Base | Layer.Mask.IgnoreGravity | Layer.Mask.Gravity;
-            Vector3 rOrigin = origin + right * detectRange;
-            bool isHitR = Physics.Raycast(rOrigin, moveDirection, out RaycastHit hitR, detectDistance, layerMask);
+            Vector3 rOrigin = origin + right * wallDetectRange;
+            bool isHitR = Physics.Raycast(rOrigin, moveDirection, out RaycastHit hitR, wallDetectDistance, layerMask);
 
-            Vector3 lOrigin = origin + -right * detectRange;
-            bool isHitL = Physics.Raycast(lOrigin, moveDirection, out RaycastHit hitL, detectDistance, layerMask);
+            Vector3 lOrigin = origin + -right * wallDetectRange;
+            bool isHitL = Physics.Raycast(lOrigin, moveDirection, out RaycastHit hitL, wallDetectDistance, layerMask);
 
 #if UNITY_EDITOR
-            UGizmos.DrawLine(rOrigin, rOrigin + moveDirection * detectDistance, Color.green);
-            UGizmos.DrawLine(lOrigin, lOrigin + moveDirection * detectDistance, Color.green);
+            UGizmos.DrawLine(rOrigin, rOrigin + moveDirection * wallDetectDistance, Color.green);
+            UGizmos.DrawLine(lOrigin, lOrigin + moveDirection * wallDetectDistance, Color.green);
 #endif
 
-            if (isHitL && isHitR && hitR.normal == hitL.normal)
-            {
-                correctNormal = hitR.normal;
-                return true;
-            }
-            else
-            {
-                correctNormal = Vector3.zero;
-                return false;
-            }
+            bool isCorrectWall = isHitL && isHitR && hitR.normal == hitL.normal;
+            correctNormal = isCorrectWall ? hitR.normal : Vector3.zero;
+
+            return isCorrectWall;
         }
 
         private bool HasHeadObject(Collision collision)
@@ -294,7 +281,7 @@ namespace Module.Character
             float minDistance = float.MaxValue;
 
             //最も自分の体に近い壁を判定
-            //CapsuleColliderのため、側面の壁が優先されるはず
+            //CapsuleColliderのため、側面の壁が優先される
             for (int i = 0; i < collision.contactCount; i++)
             {
                 ContactPoint current = collision.GetContact(i);
@@ -307,6 +294,16 @@ namespace Module.Character
             }
 
             return contact;
+        }
+
+        public void Enable()
+        {
+            isEnabled = true;
+        }
+
+        public void Disable()
+        {
+            isEnabled = false;
         }
     }
 }

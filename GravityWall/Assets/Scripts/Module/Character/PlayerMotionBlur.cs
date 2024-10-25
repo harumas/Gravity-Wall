@@ -14,7 +14,7 @@ namespace Module.Character
         {
             volume = GameObject.Find("Global Volume").GetComponent<Volume>();
             // 回転のイベント登録
-            playerController.IsRotating.Subscribe(isRotating =>
+            playerController.State.IsRotating.Subscribe(isRotating =>
             {
                 if (volume.profile.TryGet<MotionBlur>(out blur))
                 {

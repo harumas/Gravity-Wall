@@ -17,7 +17,8 @@ namespace Module.Character
         void Start()
         {
             // 回転のイベント登録
-            playerController.IsRotating.Subscribe(isRotating =>
+            PlayerState playerState = playerController.State;
+            playerState.IsRotating.Subscribe(isRotating =>
             {
                 if (lastPlayTime + playInterval > Time.time)
                 {

@@ -17,16 +17,17 @@ namespace Module.Character
         private void Start()
         {
             playerWrapper = new PlayerControllerWrapper(animator);
+            PlayerState playerState = playerController.State;
 
             // ジャンプのイベント登録
-            playerController.IsJumping.Subscribe(isJumping => { playerWrapper.IsJumping = isJumping; }).AddTo(this);
+            playerState.IsJumping.Subscribe(isJumping => { playerWrapper.IsJumping = isJumping; }).AddTo(this);
 
             // 回転のイベント登録
-            playerController.IsRotating.Subscribe(isRotating => { playerWrapper.IsRotating = isRotating; }).AddTo(this);
+            playerState.IsRotating.Subscribe(isRotating => { playerWrapper.IsRotating = isRotating; }).AddTo(this);
 
-            playerController.OnMove.Subscribe(velocity => { currentSpeed = velocity.magnitude; }).AddTo(this);
+            playerState.OnMove.Subscribe(velocity => { currentSpeed = velocity.magnitude; }).AddTo(this);
 
-            playerController.IsDeath.Subscribe(isDeath => { playerWrapper.IsDeath = isDeath; }).AddTo(this);
+            playerState.IsDeath.Subscribe(isDeath => { playerWrapper.IsDeath = isDeath; }).AddTo(this);
         }
 
         private void OnAnimatorMove()

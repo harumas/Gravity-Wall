@@ -105,7 +105,7 @@ namespace Module.PlayTest.PlayAnalyze
 
             if (controller != null)
             {
-                controller.IsRotating.Subscribe(value =>
+                controller.State.IsRotating.Subscribe(value =>
                 {
                     if (value)
                     {
@@ -113,7 +113,7 @@ namespace Module.PlayTest.PlayAnalyze
                     }
                 }).AddTo(cancellationTokenSource.Token);
                 
-                controller.IsDeath.Subscribe(value =>
+                controller.State.IsDeath.Subscribe(value =>
                 {
                     if (value)
                     {
