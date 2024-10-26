@@ -1,4 +1,7 @@
-﻿using Application;
+﻿using System;
+using Application;
+using Application.Respawn;
+using Application.Sequence;
 using Constants;
 using Module.Character;
 using Module.Gimmick;
@@ -17,6 +20,8 @@ namespace Container
     /// </summary>
     public class InGameContainer : LifetimeScope
     {
+        [SerializeField] private UISequencer uiSequencer;
+        
         protected override void Configure(IContainerBuilder builder)
         {
             //ゲームが初期化されていなかったらコンテナを構築しない
@@ -34,14 +39,26 @@ namespace Container
             builder.RegisterEntryPoint<AudioConfigChangedListener>();
             builder.RegisterEntryPoint<PlayerInputPresenter>();
             builder.RegisterEntryPoint<LevelVolumeCameraPresenter>();
+            builder.RegisterEntryPoint<RespawnManager>();
 
 #if UNITY_EDITOR
             builder.RegisterEntryPoint<ExternalAccessor>();
 #endif
 
             builder.Register<PlayerInput>(Lifetime.Singleton).As<IGameInput>();
+            RegisterInstanceWithNullCheck(builder, uiSequencer);
 
             RegisterPlayerComponents(builder);
+        }
+        
+        private void RegisterInstanceWithNullCheck<T>(IContainerBuilder builder, T instance) where T : class
+        {
+            if (instance == null)
+            {
+                throw new NullReferenceException($"{typeof(T).Name} がアタッチされていません");
+            }
+            
+            builder.RegisterInstance(instance);
         }
 
         private void RegisterPlayerComponents(IContainerBuilder builder)

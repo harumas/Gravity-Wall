@@ -1,48 +1,44 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using Module.Gimmick;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class PressurePlate : AbstractSwitch
+namespace Module.Gimmick
 {
-    [SerializeField] private List<AbstractGimmickAffected> gimmickAffecteds = new List<AbstractGimmickAffected>();
-    [SerializeField, Tag] private string[] targetTags;
-    [SerializeField] private MeshRenderer meshRenderer;
-    [SerializeField] private UnityEvent onEvent;
-    public override bool isOn { get => _isOn; protected set => _isOn = value; }
-    private bool _isOn;
-    private float intensity = 8.0f;
-
-    void Start()
+    public class PressurePlate : GimmickObject
     {
-        isOn = false;
-    }
+        [SerializeField, Tag] private string[] targetTags;
+        [SerializeField] private MeshRenderer meshRenderer;
+        [SerializeField] private UnityEvent onEvent;
 
-    public override void OnSwitch(bool isOn)
-    {
-        this.isOn = isOn;
+        private void Start()
+        {
+            Reset();
+        }
 
-        if (isOn)
+        private void OnTriggerEnter(Collider collider)
+        {
+            if (targetTags.Any(tag => collider.CompareTag(tag)) && !isEnabled.Value)
+            {
+                Enable();
+            }
+        }
+
+        public override void Enable(bool doEffect = true)
         {
             onEvent.Invoke();
+
+            // Emissionの色を変更
+            meshRenderer.material.SetFloat("_PushRatio", 1.0f);
         }
 
-        foreach (var gimmick in gimmickAffecteds)
+        public override void Disable(bool doEffect = true)
         {
-            gimmick.Affect(this);
+            meshRenderer.material.SetFloat("_PushRatio", 0f);
         }
 
-        // Emissionの色を変更
-        meshRenderer.material.SetFloat("_PushRatio", isOn ? 1.0f : 0.0f);
-    }
-
-    private void OnTriggerEnter(Collider collider)
-    {
-        if (targetTags.Any(tag => collider.CompareTag(tag)) && !isOn)
+        public override void Reset()
         {
-            OnSwitch(true);
+            Disable(false);
         }
     }
 }

@@ -5,28 +5,24 @@ using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
 using Domain;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Module.Gimmick.DynamicScaffold
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class DynamicScaffold : AbstractGimmickAffected
+    public class DynamicScaffold : GimmickObject
     {
         [SerializeField] private Transform pointA;
         [SerializeField] private Transform pointB;
         [Header("移動速度")] [SerializeField] private float moveSpeed;
 
-        [Header("目標地点で待機する時間")]
-        [SerializeField]
-        private float stopDuration;
+        [Header("目標地点で待機する時間")] [SerializeField] private float stopDuration;
 
-        [Header("引っかかりを待つ時間")]
-        [SerializeField]
-        private float reverseDuration;
+        [Header("引っかかりを待つ時間")] [SerializeField] private float reverseDuration;
 
-        [Header("最初から動かすか")]
-        [SerializeField]
-        private bool FirstMove = true;
+        [Header("最初から動かすか")] [SerializeField] private bool enableOnAwake = true;
 
+        private CancellationTokenSource cTokenSource;
         private Rigidbody rigBody;
         private Vector3 previousTargetPosition;
         private Vector3 previousPosition;
@@ -49,27 +45,51 @@ namespace Module.Gimmick.DynamicScaffold
             rigBody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
             rigBody.constraints = RigidbodyConstraints.FreezeRotation;
 
+            Reset();
+        }
+
+        private void Start()
+        {
+            if (enableOnAwake)
+            {
+                Enable();
+            }
+        }
+
+        public override void Enable(bool doEffect = true)
+        {
+            if (isEnabled.Value)
+            {
+                return;
+            }
+
+            cTokenSource = new CancellationTokenSource();
+            MoveLoop().Forget();
+        }
+
+        public override void Disable(bool doEffect = true)
+        {
+            if (!isEnabled.Value)
+            {
+                return;
+            }
+
+            cTokenSource.Cancel();
+        }
+
+        public override void Reset()
+        {
+            cTokenSource?.Cancel();
             rigBody.position = pointA.position;
             previousPosition = rigBody.position;
             currentTarget = pointB;
         }
 
-        private void Start()
-        {
-            if(FirstMove)
-                MoveLoop().Forget();
-        }
-        public override void Affect(AbstractSwitch switchObject)
-        {
-            MoveLoop().Forget();
-        }
-        public override void Reset()
-        {
-           
-        }
         private async UniTaskVoid MoveLoop()
         {
-            CancellationToken cancellationToken = this.GetCancellationTokenOnDestroy();
+            CancellationToken cancelOnDestroyToken = this.GetCancellationTokenOnDestroy();
+            CancellationTokenSource canceller = CancellationTokenSource.CreateLinkedTokenSource(cancelOnDestroyToken, cTokenSource.Token);
+            CancellationToken cancellationToken = canceller.Token;
 
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -157,6 +177,11 @@ namespace Module.Gimmick.DynamicScaffold
 
         private void OnCollisionEnter(Collision other)
         {
+            if (!isEnabled.Value)
+            {
+                return;
+            }
+
             contactCount++;
 
             //床に設置したプレイヤーを取得
@@ -168,6 +193,11 @@ namespace Module.Gimmick.DynamicScaffold
 
         private void OnCollisionExit(Collision other)
         {
+            if (!isEnabled.Value)
+            {
+                return;
+            }
+
             contactCount--;
 
             if (contactCount == 0 && other.gameObject.CompareTag(Tag.Player))

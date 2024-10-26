@@ -124,7 +124,7 @@ namespace Module.Character
             simpleInertia.AddInertia(inertia);
         }
 
-        public void Death()
+        public void Kill()
         {
             isDeath.Value = true;
             rigBody.velocity = Vector3.zero;

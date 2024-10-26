@@ -5,41 +5,20 @@ using UnityEngine.Events;
 
 namespace Module.Gimmick
 {
-    public class Switch : AbstractSwitch
+    public class Switch : GimmickObject
     {
         [SerializeField] private bool initializeIsOn = false;
-        [SerializeField] private List<AbstractGimmickAffected> gimmickAffecteds = new List<AbstractGimmickAffected>();
         [SerializeField, Tag] private List<string> targetTags;
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private MeshRenderer meshRenderer, RayMeshRenderer;
-        public override bool isOn { get => _isOn; protected set => _isOn = value; }
-        private bool _isOn;
 
-        void Start()
+        private int pushingCount = 0;
+
+        private void Start()
         {
-            isOn = initializeIsOn;
-        }
-
-        public override void OnSwitch(bool isOn)
-        {
-            this.isOn = isOn;
-
-            if (isOn)
+            if (initializeIsOn)
             {
-                audioSource.Play();
-            }
-            else
-            {
-                //offEvent.Invoke();
-            }
-
-
-            meshRenderer.material.SetFloat("_EmissionIntensity", isOn ? 1.0f : 0.0f);
-            RayMeshRenderer.material.SetInt("_PowerOn", isOn ? 0 : 1);
-
-            foreach (var gimmick in gimmickAffecteds)
-            {
-                gimmick.Affect(this);
+                Enable();
             }
         }
 
@@ -47,7 +26,8 @@ namespace Module.Gimmick
         {
             if (targetTags.Any(tag => collider.CompareTag(tag)))
             {
-                OnSwitch(!isOn);
+                pushingCount++;
+                Enable();
             }
         }
 
@@ -55,8 +35,35 @@ namespace Module.Gimmick
         {
             if (targetTags.Any(tag => collider.CompareTag(tag)))
             {
-                OnSwitch(!isOn);
+                pushingCount--;
+
+                if (pushingCount == 0)
+                {
+                    Disable();
+                }
             }
+        }
+
+        public override void Enable(bool doEffect = true)
+        {
+            audioSource.Play();
+            meshRenderer.material.SetFloat("_EmissionIntensity", 1.0f);
+            RayMeshRenderer.material.SetInt("_PowerOn", 0);
+            isEnabled.Value = true;
+        }
+
+        public override void Disable(bool doEffect = true)
+        {
+            //offEvent.Invoke();
+            meshRenderer.material.SetFloat("_EmissionIntensity", 0f);
+            RayMeshRenderer.material.SetInt("_PowerOn", 1);
+            isEnabled.Value = false;
+        }
+
+        public override void Reset()
+        {
+            pushingCount = 0;
+            Disable(false);
         }
     }
 }
