@@ -13,6 +13,7 @@ namespace Module.PlayTest
     {
         [SerializeField] private GameObject Player;
         [SerializeField] private GameObject[] MoveObject;
+        [SerializeField] private AbstractSwitch[] switchs;
         [NonSerialized] public Vector3 RetryPosition;
         private Vector3[] MoveObjectPosition;
         [NonSerialized] public Vector3 GravityScale;
@@ -68,6 +69,12 @@ namespace Module.PlayTest
             for (int i = 0; i < MoveObjectPosition.Length; i++)
             {
                 MoveObject[i].transform.position = MoveObjectPosition[i];
+            }
+
+            //追記:スイッチのリセット
+            for (int i = 0; i < switchs.Length; i++)
+            {
+                switchs[i].OnSwitch(false);
             }
         }
 
