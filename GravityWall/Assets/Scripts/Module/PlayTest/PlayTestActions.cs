@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 namespace Module.PlayTest
 {
     public class PlayTestActions : MonoBehaviour
@@ -16,8 +17,9 @@ namespace Module.PlayTest
 
         public void OnButton()
         {
-            note.SetActive(true);
-            this.gameObject.SetActive(false);
+            //note.SetActive(true);
+            // this.gameObject.SetActive(false);
+            SceneManager.LoadScene("Tutorial01");
         }
     }
 }

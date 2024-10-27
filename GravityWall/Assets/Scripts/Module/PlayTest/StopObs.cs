@@ -10,9 +10,9 @@ public class StopObs : MonoBehaviour
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-        if (obsManager == null)
-            return;
-        obsManager.StopOBS();
+       // if (obsManager == null)
+      //      return;
+      //  obsManager.StopOBS();
     }
 
     

@@ -92,7 +92,7 @@ namespace Module.PlayTest
 
         public void LoadStageSelectScene()
         {
-            SceneManager.LoadScene("StageSelect");
+            SceneManager.LoadScene("PlayTestTitle");
         }
         private void Update()
         {
