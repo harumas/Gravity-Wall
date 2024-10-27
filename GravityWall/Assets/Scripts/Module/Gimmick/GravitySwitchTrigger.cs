@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Constants;
 using Module.Character;
 using UnityEngine;
 
@@ -7,9 +8,17 @@ namespace Module.Gimmick
 {
     public class GravitySwitchTrigger : MonoBehaviour
     {
+        private bool isEnable = true;
+        public void SetEnable(bool isEnable)
+        {
+            this.isEnable = isEnable;
+        }
+
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.CompareTag("Player"))
+            if (!isEnable) return;
+
+            if (other.gameObject.CompareTag(Tag.Player))
             {
                 other.GetComponent<GravitySwitcher>().Disable();
             }
@@ -17,7 +26,9 @@ namespace Module.Gimmick
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.gameObject.CompareTag("Player"))
+            if (!isEnable) return;
+
+            if (other.gameObject.CompareTag(Tag.Player))
             {
                 other.GetComponent<GravitySwitcher>().Enable();
             }
