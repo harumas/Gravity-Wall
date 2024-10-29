@@ -5,6 +5,7 @@ using UnityEngine.Playables;
 using Module.Gravity;
 using DG.Tweening;
 using Constants;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 namespace Module.Gimmick
 {
@@ -13,8 +14,8 @@ namespace Module.Gimmick
         [SerializeField] private GameObject glass, breakedGlass;
         [SerializeField] private Collider collider;
         [SerializeField] private PlayableDirector director;
-        [SerializeField] private GameObject clearCanvas;
         [SerializeField] private AudioSource audioSource;
+        [SerializeField] private UnityEvent onClear;
         Vector3 scale;
 
         void Start()
@@ -34,7 +35,7 @@ namespace Module.Gimmick
                     Time.fixedDeltaTime = 0.001f;
                     collider.enabled = false;
 
-                    clearCanvas.SetActive(true);
+                    onClear.Invoke();
 
                     audioSource.Play();
 

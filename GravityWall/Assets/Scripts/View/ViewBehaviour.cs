@@ -5,9 +5,25 @@ namespace View
 {
     public abstract class ViewBehaviour : MonoBehaviour
     {
-        public abstract UniTask OnPreActive();
-        public abstract UniTask OnActive();
-        public abstract UniTask OnDeactive();
+        public abstract BehaviourType BehaviourType { get; }
+        
+        protected abstract UniTask OnPreActivate();
+        protected abstract void OnActivate();
+        protected abstract void OnDeactivate();
+        protected abstract UniTask OnPostDeactivate();
 
+        public async void Activate()
+        {
+            gameObject.SetActive(true);
+            await OnPreActivate();
+            OnActivate();
+        }
+
+        public async void Deactivate()
+        {
+            OnDeactivate();
+            await OnPostDeactivate();
+            gameObject.SetActive(false);
+        }
     }
 }

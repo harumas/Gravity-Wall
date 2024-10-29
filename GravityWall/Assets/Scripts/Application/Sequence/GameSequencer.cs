@@ -1,7 +1,6 @@
-﻿namespace Application.Sequence
+﻿using UnityEngine;
+
+namespace Application.Sequence
 {
-    public class GameSequencer
-    {
-        
-    }
+    public class GameSequencer : MonoBehaviour { }
 }

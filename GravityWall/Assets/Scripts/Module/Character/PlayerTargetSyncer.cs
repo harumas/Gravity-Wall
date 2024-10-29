@@ -51,5 +51,10 @@ namespace Module.Character
             //補完して回転
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, damping);
         }
+
+        public void Reset()
+        {
+            moveInput = Vector2.zero;
+        }
     }
 }

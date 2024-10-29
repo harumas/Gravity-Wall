@@ -128,6 +128,7 @@ namespace Module.Character
         {
             isDeath.Value = true;
             rigBody.velocity = Vector3.zero;
+            moveInput = Vector2.zero;
             enabled = false;
         }
 

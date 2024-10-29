@@ -11,6 +11,7 @@ using Presentation;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
+using View;
 using PlayerInput = Module.InputModule.PlayerInput;
 
 namespace Container
@@ -20,8 +21,8 @@ namespace Container
     /// </summary>
     public class InGameContainer : LifetimeScope
     {
-        [SerializeField] private UISequencer uiSequencer;
-        
+        [SerializeField] private ViewBehaviourNavigator behaviourNavigator;
+
         protected override void Configure(IContainerBuilder builder)
         {
             //ゲームが初期化されていなかったらコンテナを構築しない
@@ -39,25 +40,26 @@ namespace Container
             builder.RegisterEntryPoint<AudioConfigChangedListener>();
             builder.RegisterEntryPoint<PlayerInputPresenter>();
             builder.RegisterEntryPoint<LevelVolumeCameraPresenter>();
-            builder.RegisterEntryPoint<RespawnManager>();
+            builder.RegisterEntryPoint<SequenceViewPresenter>();
 
 #if UNITY_EDITOR
             builder.RegisterEntryPoint<ExternalAccessor>();
 #endif
 
+            builder.Register<RespawnManager>(Lifetime.Singleton);
             builder.Register<PlayerInput>(Lifetime.Singleton).As<IGameInput>();
-            RegisterInstanceWithNullCheck(builder, uiSequencer);
 
+            RegisterInstanceWithNullCheck(builder, behaviourNavigator);
             RegisterPlayerComponents(builder);
         }
-        
+
         private void RegisterInstanceWithNullCheck<T>(IContainerBuilder builder, T instance) where T : class
         {
             if (instance == null)
             {
                 throw new NullReferenceException($"{typeof(T).Name} がアタッチされていません");
             }
-            
+
             builder.RegisterInstance(instance);
         }
 
