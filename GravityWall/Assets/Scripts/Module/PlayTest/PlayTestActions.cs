@@ -12,7 +12,8 @@ namespace Module.PlayTest
         void Start()
         {
             EventSystem.current.firstSelectedGameObject = TestObj;
-
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         public void OnButton()
