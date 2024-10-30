@@ -1,9 +1,11 @@
+using System;
+using Application.Sequence;
 using Constants;
 using Module.Gravity;
 using R3;
 using UnityEngine;
 
-namespace Application.Respawn
+namespace Module.Gimmick
 {
     public readonly struct RespawnContext
     {
@@ -21,12 +23,14 @@ namespace Application.Respawn
         }
     }
 
+    /// <summary>
+    /// セーブポイントを設定するコンポーネント
+    /// </summary>
     public class SavePoint : MonoBehaviour
     {
         [SerializeField] private LevelResetter levelResetter;
 
-        private readonly Subject<RespawnContext> onEnterPoint = new Subject<RespawnContext>();
-        public Observable<RespawnContext> OnEnterPoint => onEnterPoint;
+        public event Action<RespawnContext> OnEnterPoint;
 
         private bool firstTouch = false;
 
@@ -38,7 +42,7 @@ namespace Application.Respawn
 
                 firstTouch = true;
                 var respawnContext = new RespawnContext(transform.position, transform.rotation, WorldGravity.Instance.Gravity, levelResetter);
-                onEnterPoint.OnNext(respawnContext);
+                OnEnterPoint?.Invoke(respawnContext);
             }
         }
     }

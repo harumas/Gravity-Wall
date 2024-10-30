@@ -18,6 +18,12 @@ namespace Module.Character
             this.moveInput = moveInput;
         }
 
+        public void SetRotation(Quaternion targetRotation)
+        {
+            Vector3 planedDirection = Vector3.ProjectOnPlane(targetRotation * Vector3.forward, axis.up);
+            transform.rotation = Quaternion.LookRotation(planedDirection, axis.up);
+        }
+
         public Vector3 GetTargetDirection()
         {
             Vector3 inputDirection = target.rotation * new Vector3(moveInput.x, 0f, moveInput.y);
@@ -45,9 +51,9 @@ namespace Module.Character
             {
                 return;
             }
-            
+
             Quaternion targetRotation = Quaternion.LookRotation(targetDirection, axis.up);
-            
+
             //補完して回転
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, damping);
         }

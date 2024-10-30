@@ -1,7 +1,8 @@
 ﻿using System;
-using Application.Respawn;
+using System.Data;
 using Cysharp.Threading.Tasks;
 using Module.Character;
+using Module.Gimmick;
 using Module.Gravity;
 using R3;
 using UnityEngine;
@@ -15,17 +16,23 @@ namespace Application.Sequence
         private readonly PlayerController playerController;
         private readonly CameraController cameraController;
         private readonly PlayerTargetSyncer playerTargetSyncer;
+        private readonly GravitySwitcher gravitySwitcher;
         private RespawnContext respawnData;
         private bool isRespawning;
 
+        /// <summary>
+        /// Viewのリスポーン演出を待機するイベント
+        /// </summary>
         public event Func<UniTask> RespawnViewSequence;
 
         [Inject]
-        public RespawnManager(PlayerController playerController,CameraController cameraController, PlayerTargetSyncer playerTargetSyncer)
+        public RespawnManager(PlayerController playerController, CameraController cameraController, PlayerTargetSyncer playerTargetSyncer,
+            GravitySwitcher gravitySwitcher)
         {
             this.playerController = playerController;
             this.cameraController = cameraController;
             this.playerTargetSyncer = playerTargetSyncer;
+            this.gravitySwitcher = gravitySwitcher;
             Initialize();
         }
 
@@ -34,11 +41,13 @@ namespace Application.Sequence
             var savePoints = Object.FindObjectsByType<SavePoint>(FindObjectsSortMode.None);
             var deathFloors = Object.FindObjectsByType<DeathFloor>(FindObjectsSortMode.None);
 
+            //セーブポイントのイベント登録
             foreach (SavePoint savePoint in savePoints)
             {
-                savePoint.OnEnterPoint.Subscribe(OnSave);
+                savePoint.OnEnterPoint += OnSave;
             }
 
+            //死亡床のイベント登録
             foreach (DeathFloor deathFloor in deathFloors)
             {
                 deathFloor.OnEnter += () =>
@@ -60,25 +69,48 @@ namespace Application.Sequence
 
         private async UniTaskVoid OnEnterDeathFloor()
         {
+            if (respawnData.LevelResetter == null)
+            {
+                throw new NoNullAllowedException("チェックポイントが設定されていません！");
+            }
+
             isRespawning = true;
 
-            playerController.Kill();
-            playerTargetSyncer.Reset();
+            //プレイヤーの無効化
+            DisablePlayer();
 
+            //リスポーン演出があれば実行
             if (RespawnViewSequence != null)
             {
                 await RespawnViewSequence();
             }
 
+            //重力の復元
             WorldGravity.Instance.SetValue(respawnData.Gravity);
 
+            //レベル上のオブジェクトの復元
             respawnData.LevelResetter.ResetLevel();
+            
+            //プレイヤーの有効化
+            EnablePlayer();
 
+            isRespawning = false;
+        }
+        
+        private void DisablePlayer()
+        {
+            playerController.Kill();
+            playerTargetSyncer.Reset();
+            gravitySwitcher.Disable();
+        }
+        
+        private void EnablePlayer()
+        {
             playerController.Respawn();
             playerController.transform.SetPositionAndRotation(respawnData.Position, respawnData.Rotation);
             cameraController.SetCameraRotation(respawnData.Rotation);
-
-            isRespawning = false;
+            playerTargetSyncer.SetRotation(respawnData.Rotation);
+            gravitySwitcher.Enable();
         }
     }
 }
