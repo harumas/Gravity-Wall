@@ -25,6 +25,7 @@ namespace Module.Gimmick
 
         public override void Enable(bool doEffect = true)
         {
+            isEnabled.Value = true;
             onEvent.Invoke();
 
             // Emissionの色を変更
@@ -33,6 +34,7 @@ namespace Module.Gimmick
 
         public override void Disable(bool doEffect = true)
         {
+            isEnabled.Value = false;
             meshRenderer.material.SetFloat("_PushRatio", 0f);
         }
 

@@ -29,7 +29,7 @@ namespace Module.Gimmick
 
             foreach (GimmickObject gimmick in observedSwitches)
             {
-                gimmick.IsEnabled.Subscribe(UpdateGateState).AddTo(this);
+                gimmick.IsEnabled.Skip(1).Subscribe(UpdateGateState).AddTo(this);
             }
         }
 
@@ -64,7 +64,7 @@ namespace Module.Gimmick
             }
 
             gateOpenEvent.Invoke();
-            gate.SetActive(true);
+            gate.SetActive(false);
             ChangeGateLight(true);
 
             isEnabled.Value = true;
@@ -84,7 +84,7 @@ namespace Module.Gimmick
             }
 
             gateCloseEvent.Invoke();
-            gate.SetActive(false);
+            gate.SetActive(true);
             ChangeGateLight(false);
 
             isEnabled.Value = false;
@@ -106,6 +106,7 @@ namespace Module.Gimmick
 
         void ChangeCounterLights(bool isOn)
         {
+            Debug.Log(isOn);
             if (isOn)
             {
                 lightMaterials[switchCount].SetFloat("_EmissionIntensity", 1.0f);
