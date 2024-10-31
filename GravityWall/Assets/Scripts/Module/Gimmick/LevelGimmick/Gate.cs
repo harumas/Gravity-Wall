@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using DG.Tweening;
+using R3;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Module.Gimmick
 {
-    public class Gate : AbstractGimmickAffected
+    public class Gate : GimmickObject
     {
         [SerializeField] private UnityEvent gateOpenEvent;
         [SerializeField] private UnityEvent gateCloseEvent;
@@ -16,48 +17,83 @@ namespace Module.Gimmick
         [SerializeField] private GameObject Counterlight;
         [SerializeField] private int switchMaxCount = 1;
         [SerializeField] private AudioSource audioSource;
+        [SerializeField] private GimmickObject[] observedSwitches;
+
         private int switchCount = 0;
         private List<Material> lightMaterials = new List<Material>();
-        public bool isOpen { get; private set; }
         private const float intensity = 8.0f;
 
         private void Start()
         {
             InstantiateCounterLights();
+
+            foreach (GimmickObject gimmick in observedSwitches)
+            {
+                gimmick.IsEnabled.Skip(1).Subscribe(UpdateGateState).AddTo(this);
+            }
         }
 
-        public override void Affect(AbstractSwitch switchObject)
+        private void UpdateGateState(bool switchEnabled)
         {
-            ChangeCounterLights(switchObject.isOn);
+            ChangeCounterLights(switchEnabled);
 
-            switchCount += switchObject.isOn ? 1 : -1;
+            switchCount += switchEnabled ? 1 : -1;
+            bool isOpen = switchCount >= switchMaxCount;
 
-            if (isOpen && switchCount < switchMaxCount)
+            if (isOpen)
             {
-                gateCloseEvent.Invoke();
+                Enable();
+            }
+            else
+            {
+                Disable();
+            }
+        }
+
+        public override void Enable(bool doEffect = true)
+        {
+            if (isEnabled.Value)
+            {
+                return;
+            }
+
+            if (doEffect)
+            {
+                audioSource.Play();
+                GateAnimation(true);
+            }
+
+            gateOpenEvent.Invoke();
+            gate.SetActive(false);
+            ChangeGateLight(true);
+
+            isEnabled.Value = true;
+        }
+
+        public override void Disable(bool doEffect = true)
+        {
+            if (!isEnabled.Value)
+            {
+                return;
+            }
+
+            if (doEffect)
+            {
                 audioSource.Play();
                 GateAnimation(false);
             }
 
-            isOpen = switchCount >= switchMaxCount;
-            gate.SetActive(!isOpen);
+            gateCloseEvent.Invoke();
+            gate.SetActive(true);
+            ChangeGateLight(false);
 
-            ChangeGateLight(isOpen);
-
-            if (isOpen)
-            {
-                Debug.Log("isOpenNow");
-                gateOpenEvent.Invoke();
-                audioSource.Play();
-                GateAnimation(true);
-            }
+            isEnabled.Value = false;
         }
 
         public override void Reset()
         {
             switchCount = 0;
-            isOpen = false;
-            gate.SetActive(!isOpen);
+            Disable(false);
         }
 
         void ChangeGateLight(bool isOpen)
@@ -70,6 +106,7 @@ namespace Module.Gimmick
 
         void ChangeCounterLights(bool isOn)
         {
+            Debug.Log(isOn);
             if (isOn)
             {
                 lightMaterials[switchCount].SetFloat("_EmissionIntensity", 1.0f);
@@ -106,7 +143,8 @@ namespace Module.Gimmick
             {
                 var light = Instantiate(Counterlight, transform);
 
-                light.transform.localPosition = new Vector3(startX + i * spacing, lightBasePosition.localPosition.y, lightBasePosition.localPosition.z);
+                light.transform.localPosition =
+                    new Vector3(startX + i * spacing, lightBasePosition.localPosition.y, lightBasePosition.localPosition.z);
                 light.transform.localRotation = lightBasePosition.localRotation;
 
                 lightMaterials.Add(light.GetComponent<MeshRenderer>().material);

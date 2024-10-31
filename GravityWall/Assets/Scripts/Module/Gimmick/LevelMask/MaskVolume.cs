@@ -18,7 +18,7 @@ namespace Module.Gimmick.LevelMask
 
         void Update()
         {
-            if (!Application.isPlaying)
+            if (!UnityEngine.Application.isPlaying)
             {
                 maskRenderer.enabled = false;
             }
@@ -26,7 +26,7 @@ namespace Module.Gimmick.LevelMask
 
         private void Awake()
         {
-            if (Application.isPlaying)
+            if (UnityEngine.Application.isPlaying)
             {
                 Disable();
                 isEnable.Value = false;

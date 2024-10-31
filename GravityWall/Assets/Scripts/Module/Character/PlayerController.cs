@@ -84,7 +84,7 @@ namespace Module.Character
             }
 
             // 速度調整
-            playerFunction.AdjustVelocity(isMoveInput);
+            playerFunction.AdjustVelocity(isMoveInput, isDeath.Value);
             onMove.Value = rigBody.velocity;
 
             // ジャンプ中の重力を調整
@@ -124,10 +124,13 @@ namespace Module.Character
             simpleInertia.AddInertia(inertia);
         }
 
-        public void Death()
+        public void Kill()
         {
             isDeath.Value = true;
+            isJumping.Value = false;
             rigBody.velocity = Vector3.zero;
+            moveInput = Vector2.zero;
+            onMove.Value = Vector3.zero;
             enabled = false;
         }
 

@@ -57,7 +57,7 @@ namespace Module.Character
             rigidbody.AddForce(moveForce, ForceMode.Acceleration);
         }
 
-        public void AdjustVelocity(bool isMoveInput)
+        public void AdjustVelocity(bool isMoveInput, bool freezeX)
         {
             Vector3 gravity = worldGravity.Gravity;
             Vector3 velocity = rigidbody.velocity;
@@ -67,15 +67,22 @@ namespace Module.Character
             Vector3 yVelocity = gravity * velocityAlongGravity;
             Vector3 xVelocity = velocity - gravity * velocityAlongGravity;
 
-            if (isMoveInput)
+            if (freezeX)
             {
-                //x軸の動きだけクランプ
-                xVelocity = Vector3.ClampMagnitude(xVelocity, parameter.MaxSpeed);
+                xVelocity = Vector3.zero;
             }
             else
             {
-                //入力がない時は減衰させる
-                xVelocity *= parameter.SpeedDamping;
+                if (isMoveInput)
+                {
+                    //x軸の動きだけクランプ
+                    xVelocity = Vector3.ClampMagnitude(xVelocity, parameter.MaxSpeed);
+                }
+                else
+                {
+                    //入力がない時は減衰させる
+                    xVelocity *= parameter.SpeedDamping;
+                }
             }
 
             //元の座標系に戻す
@@ -145,7 +152,7 @@ namespace Module.Character
             // Out-Sineで補間する
             float time = Time.time - lastRotateTime;
             float t = parameter.RotateStep * (Mathf.Sin(time / parameter.RotateTime * Mathf.PI * 0.5f) + 1.0f) + parameter.EasingOffset;
-            
+
             rigidbody.rotation = Quaternion.RotateTowards(currentRotation, targetRotation, t);
 
             // 回転がほぼ完了したら回転の目標に合わせる
