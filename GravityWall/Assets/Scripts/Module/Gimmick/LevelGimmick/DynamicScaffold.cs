@@ -14,7 +14,7 @@ namespace Module.Gimmick.DynamicScaffold
     {
         [SerializeField] private Transform pointA;
         [SerializeField] private Transform pointB;
-        [Header("移動速度")] [SerializeField] private float moveSpeed;
+        [Header("移動速度")][SerializeField] private float moveSpeed;
 
         [Header("目標地点で待機する時間")] [SerializeField] private float stopDuration;
 
@@ -34,10 +34,17 @@ namespace Module.Gimmick.DynamicScaffold
 
         private const float StopThreshold = 0.01f;
 
+        private CancellationTokenSource cancellationToken;
+
         private void Awake()
         {
             rigBody = GetComponent<Rigidbody>();
 
+            SetUpRigidbody();
+        }
+
+        private void SetUpRigidbody()
+        {
             //Rigidbodyのセットアップ
             rigBody.mass = Mathf.Infinity;
             rigBody.drag = Mathf.Infinity;
@@ -90,7 +97,6 @@ namespace Module.Gimmick.DynamicScaffold
             CancellationToken cancelOnDestroyToken = this.GetCancellationTokenOnDestroy();
             CancellationTokenSource canceller = CancellationTokenSource.CreateLinkedTokenSource(cancelOnDestroyToken, cTokenSource.Token);
             CancellationToken cancellationToken = canceller.Token;
-
             while (!cancellationToken.IsCancellationRequested)
             {
                 bool arrived = false;
@@ -206,6 +212,13 @@ namespace Module.Gimmick.DynamicScaffold
                 pushement.AddInertia(moveDelta);
                 pushement = null;
             }
+        }
+
+        void OnDestroy()
+        {
+            if (cancellationToken == null) return;
+            cancellationToken.Cancel();
+            cancellationToken.Dispose();
         }
     }
 }
