@@ -5,7 +5,6 @@ namespace Module.Character
 {
     public class PlayerRotateSEPlayer : MonoBehaviour
     {
-        [SerializeField] private float volume = 0.8f;
         [SerializeField] private float playInterval = 0.3f;
         [SerializeField] private AudioClip audioClip;
         [SerializeField] private AudioSource audioSource;
@@ -26,7 +25,6 @@ namespace Module.Character
                 
                 if (this.isRotating == false)
                 {
-                    audioSource.volume = volume;
                     audioSource.clip = audioClip;
                     audioSource.Play();
                     lastPlayTime = Time.time;
