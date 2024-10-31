@@ -4544,8 +4544,10 @@ MonoBehaviour:
   breakedGlass: {fileID: 1055619797}
   collider: {fileID: 147618432}
   director: {fileID: 75980560}
-  clearCanvas: {fileID: 1125822640}
   audioSource: {fileID: 147618433}
+  onClear:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!65 &147618432
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13322,7 +13324,7 @@ PrefabInstance:
         type: 3}
       propertyPath: gateOpenEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1242463335}
+      objectReference: {fileID: 0}
     - target: {fileID: 5260175374949259475, guid: 7e317563c594d4fe787b60604ecdfd7c,
         type: 3}
       propertyPath: gateOpenEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -34294,7 +34296,7 @@ PrefabInstance:
         type: 3}
       propertyPath: gateOpenEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1242463335}
+      objectReference: {fileID: 0}
     - target: {fileID: 5260175374949259475, guid: 7e317563c594d4fe787b60604ecdfd7c,
         type: 3}
       propertyPath: gateOpenEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -36919,28 +36921,6 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!1 &1242463331 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4761164583628210521, guid: d89f3a1474e2d435eb59724b0fdb6677,
-    type: 3}
-  m_PrefabInstance: {fileID: 1256158777}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1242463335
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1242463331}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12c1232065c6f4e4588c3888f01a6b45, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelObjects:
-  - {fileID: 1246668693}
-  gimmicks:
-  - {fileID: 783329824}
 --- !u!1 &1246668693 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4194902724994213223, guid: f6aca8f9c47972845a4ea3251c680a08,
@@ -37594,11 +37574,7 @@ PrefabInstance:
     - {fileID: 4699882028793911472, guid: d89f3a1474e2d435eb59724b0fdb6677, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4761164583628210521, guid: d89f3a1474e2d435eb59724b0fdb6677,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1242463335}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d89f3a1474e2d435eb59724b0fdb6677, type: 3}
 --- !u!43 &1276941268
 Mesh:
