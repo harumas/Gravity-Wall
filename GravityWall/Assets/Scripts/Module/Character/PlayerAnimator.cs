@@ -33,7 +33,7 @@ namespace Module.Character
         {
             float speed = Mathf.Lerp(prevSpeed, currentSpeed, damping * Time.deltaTime);
 
-            if (speed <= 0.01f)
+            if (playerController.IsJumping.CurrentValue || speed <= 0.01f)
             {
                 speed = 0f;
             }
