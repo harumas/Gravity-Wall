@@ -8,20 +8,22 @@ using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
 using ThreadPriority = UnityEngine.ThreadPriority;
 
-public class SceneLoader
+public class AdditiveSceneLoader
 {
-    public SceneLoader()
+    public async UniTask Load(string sceneName)
     {
         UnityEngine.Application.backgroundLoadingPriority = ThreadPriority.Low;
-    }
-
-    private async UniTask Load(string sceneName)
-    {
+        
 #if UNITY_EDITOR
         await LoadSceneWithMetrics(sceneName);
 #else
-        await SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        await SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive).ToUniTask();
 #endif
+    }
+
+    public async UniTask Unload(string sceneName)
+    {
+        await SceneManager.UnloadSceneAsync(sceneName);
     }
 
     private async UniTask LoadSceneWithMetrics(string sceneName)

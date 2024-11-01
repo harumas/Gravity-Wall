@@ -38,14 +38,12 @@ namespace Container
             builder.RegisterEntryPoint<InputConfigChangedListener>();
             builder.RegisterEntryPoint<AudioConfigChangedListener>();
             builder.RegisterEntryPoint<PlayerInputPresenter>();
-            builder.RegisterEntryPoint<LevelVolumeCameraPresenter>();
             builder.RegisterEntryPoint<SequenceViewPresenter>();
 
 #if UNITY_EDITOR
             builder.RegisterEntryPoint<ExternalAccessor>();
 #endif
 
-            builder.Register<RespawnManager>(Lifetime.Singleton);
             builder.Register<PlayerInput>(Lifetime.Singleton).As<IGameInput>();
 
             RegisterInstanceWithNullCheck(builder, behaviourNavigator);
