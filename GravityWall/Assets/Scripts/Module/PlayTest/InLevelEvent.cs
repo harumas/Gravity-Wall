@@ -15,7 +15,7 @@ namespace Module.PlayTest
 
         private void OnTriggerStay(Collider other)
         {
-            if (other.gameObject.CompareTag(Tag.Player) && !gate.isOpen && !inRoomPlayer)
+            if (other.gameObject.CompareTag(Tag.Player) && !gate.IsEnabled.CurrentValue && !inRoomPlayer)
             {
                 levelActiveChanger.SetActiveLevel(hallways);
                 inRoomPlayer = true;

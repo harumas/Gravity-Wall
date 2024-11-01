@@ -21,7 +21,7 @@ namespace Module.InputModule
             Observable.EveryUpdate(UnityFrameProvider.PostLateUpdate)
                 .Select(_ => lookEvent.ReadValue<Vector2>() * Time.deltaTime)
                 .Subscribe(value => lookDeltaProperty.Value = value);
-                
+
             //移動入力のイベントを登録
             InputEvent moveEvent = InputActionProvider.CreateEvent(ActionGuid.Player.Move);
             moveEvent.Started += OnMove;
@@ -31,15 +31,15 @@ namespace Module.InputModule
             //ジャンプ入力のイベントを登録
             InputEvent jumpEvent = InputActionProvider.CreateEvent(ActionGuid.Player.Jump);
             jumpEvent.Started += _ => jumpSubject.OnNext(Unit.Default);
-            
+
             //カメラ回転入力のイベントを登録
             InputEvent rotateCameraEvent = InputActionProvider.CreateEvent(ActionGuid.Player.CameraRotate);
             rotateCameraEvent.Started += _ =>
             {
-                float input = rotateCameraEvent.ReadValue<float>(); 
+                float input = rotateCameraEvent.ReadValue<float>();
                 int value = input == 0f ? 0 : Math.Sign(input);
-                
-                cameraRotateSubject.OnNext(value); 
+
+                cameraRotateSubject.OnNext(value);
             };
         }
 
