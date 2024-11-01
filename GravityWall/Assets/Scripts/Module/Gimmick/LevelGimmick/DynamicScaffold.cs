@@ -72,6 +72,7 @@ namespace Module.Gimmick.DynamicScaffold
 
             cTokenSource = new CancellationTokenSource();
             MoveLoop().Forget();
+            isEnabled.Value = true;
         }
 
         public override void Disable(bool doEffect = true)
@@ -82,6 +83,7 @@ namespace Module.Gimmick.DynamicScaffold
             }
 
             cTokenSource.Cancel();
+            isEnabled.Value = false;
         }
 
         public override void Reset()
