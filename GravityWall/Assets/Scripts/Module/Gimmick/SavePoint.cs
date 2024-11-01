@@ -34,6 +34,11 @@ namespace Module.Gimmick
 
         private bool firstTouch = false;
 
+        private void Start()
+        {
+            levelResetter.RegisterObjects();
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             if (!firstTouch && other.CompareTag(Tag.Player))

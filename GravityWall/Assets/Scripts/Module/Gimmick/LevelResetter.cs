@@ -18,7 +18,7 @@ namespace Application.Sequence
         private readonly List<(GimmickObject gimmick, bool isEnable)> gimmicks = new List<(GimmickObject gimmick, bool enabled)>();
         private readonly List<Vector3> levelObjectPositions = new List<Vector3>();
 
-        private void Start()
+        public void RegisterObjects()
         {
             //オブジェクトがギミックの場合は取得
             foreach (GameObject levelObject in levelObjects)
