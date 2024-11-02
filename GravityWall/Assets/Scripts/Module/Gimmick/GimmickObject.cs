@@ -7,7 +7,7 @@ namespace Module.Gimmick
     {
         [SerializeField] protected SerializableReactiveProperty<bool> isEnabled;
         public ReadOnlyReactiveProperty<bool> IsEnabled => isEnabled;
-        
+
         public abstract void Enable(bool doEffect = true);
         public abstract void Disable(bool doEffect = true);
         public abstract void Reset();
