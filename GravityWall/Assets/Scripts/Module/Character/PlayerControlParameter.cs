@@ -17,6 +17,7 @@ namespace Module.Character
         [Header("ジャンプ中移動係数"), SerializeField] private float airControl;
         [Header("連続ジャンプを許可する間隔"), SerializeField] private float allowJumpInterval;
         [Header("ジャンプを許可する地面との距離"), SerializeField] private float allowJumpDistance;
+        [Header("接地判定を許可する間隔"), SerializeField] private float allowLandingInteval;
 
         [Header("回転のイージング係数"), SerializeField] private float rotateStep;
         [Header("回転のイージング時間係数"), SerializeField] private float rotateTime;
@@ -33,6 +34,7 @@ namespace Module.Character
 
         public float AllowJumpInterval => allowJumpInterval;
         public float AllowJumpDistance => allowJumpDistance;
+        public float AllowLandingInterval => allowLandingInteval;
 
         public float RotateStep => rotateStep;
         public float RotateTime => rotateTime;

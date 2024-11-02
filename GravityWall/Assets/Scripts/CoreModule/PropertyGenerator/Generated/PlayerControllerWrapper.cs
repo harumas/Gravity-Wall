@@ -38,5 +38,11 @@ namespace PropertyGenerator.Generated
 			get => target.GetBool(569220492);
 			set => target.SetBool(569220492, value);
 		}
+		
+		public float LandingSpeed
+		{
+			get => target.GetFloat(408814760);
+			set => target.SetFloat(408814760, value);
+		}
 	}
 }

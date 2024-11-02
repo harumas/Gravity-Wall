@@ -1,12 +1,14 @@
 using UnityEngine;
 using R3;
+using UnityEngine.Serialization;
 
 namespace Module.Character
 {
-    public class PlayerRotateSEPlayer : MonoBehaviour
+    public class PlayerSoundPlayer : MonoBehaviour
     {
         [SerializeField] private float playInterval = 0.3f;
-        [SerializeField] private AudioClip audioClip;
+        [SerializeField] private AudioClip rotateClip;
+        [SerializeField] private AudioClip jumpClip;
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private PlayerController playerController;
         private bool isRotating = true;
@@ -25,12 +27,19 @@ namespace Module.Character
                 
                 if (this.isRotating == false)
                 {
-                    audioSource.clip = audioClip;
-                    audioSource.Play();
+                    audioSource.PlayOneShot(rotateClip);
                     lastPlayTime = Time.time;
                 }
 
                 this.isRotating = isRotating;
+            }).AddTo(this);
+            
+            playerController.IsJumping.Subscribe(isJumping =>
+            {
+                if (isJumping)
+                {
+                    audioSource.PlayOneShot(jumpClip);
+                }
             }).AddTo(this);
         }
     }
