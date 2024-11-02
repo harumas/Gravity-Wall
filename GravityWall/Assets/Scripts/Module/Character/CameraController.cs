@@ -1,4 +1,5 @@
 using CoreModule.Helper;
+using CoreModule.Input;
 using UnityEngine;
 
 namespace Module.Character
@@ -8,8 +9,7 @@ namespace Module.Character
     /// </summary>
     public class CameraController : MonoBehaviour
     {
-        [Header("ロールピッチの回転軸")]
-        [SerializeField] private Transform pivotHorizontal;
+        [Header("ロールピッチの回転軸")] [SerializeField] private Transform pivotHorizontal;
         [SerializeField] private MinMaxValue horizontalRange;
         [SerializeField] private MinMaxValue verticalRange;
         [SerializeField] private bool isFreeCamera = true;
@@ -19,15 +19,27 @@ namespace Module.Character
             //カーソルロック
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
+
+            InputEvent enterScreenEvent = InputActionProvider.CreateEvent(ActionGuid.Player.EnterScreen);
+            enterScreenEvent.Started += _ => { SetCursorLock(true); };
+            
+            InputEvent exitScreenEvent = InputActionProvider.CreateEvent(ActionGuid.Player.ExitScreen);
+            exitScreenEvent.Started += _ => { SetCursorLock(false); };
+        }
+
+        private void SetCursorLock(bool isLock)
+        {
+            Cursor.visible = !isLock;
+            Cursor.lockState = isLock ? CursorLockMode.Locked : CursorLockMode.None;
         }
 
         public void OnRotateCameraInput(Vector2 mouseDelta)
         {
-            if (!isFreeCamera)
+            if (!isFreeCamera || Cursor.lockState != CursorLockMode.Locked)
             {
                 return;
             }
-            
+
             float dx = mouseDelta.x;
             float dy = mouseDelta.y;
 
@@ -41,7 +53,7 @@ namespace Module.Character
 
             pivotHorizontal.localEulerAngles = new Vector3(eulerX, eulerY, 0f);
         }
-        
+
         public void SetCameraRotation(Quaternion rotation)
         {
             pivotHorizontal.rotation = rotation;

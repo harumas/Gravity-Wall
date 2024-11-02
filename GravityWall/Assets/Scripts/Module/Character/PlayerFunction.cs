@@ -17,6 +17,9 @@ namespace Module.Character
         private readonly Rigidbody rigidbody;
         private readonly LocalGravity localGravity;
         private readonly PlayerControlParameter parameter;
+        private readonly CapsuleCollider capsuleCollider;
+
+        private const int GroundLayerMask = Layer.Mask.Base | Layer.Mask.Gravity | Layer.Mask.IgnoreGravity;
 
         private float lastJumpTime;
         private float lastRotateTime;
@@ -35,6 +38,8 @@ namespace Module.Character
             this.rigidbody = rigidbody;
             this.localGravity = localGravity;
             this.parameter = parameter;
+
+            capsuleCollider = transform.GetComponent<CapsuleCollider>();
 
             worldGravity = WorldGravity.Instance;
         }
@@ -59,35 +64,42 @@ namespace Module.Character
 
         public void AdjustVelocity(bool isMoveInput, bool freezeX)
         {
-            Vector3 gravity = worldGravity.Gravity;
-            Vector3 velocity = rigidbody.velocity;
-
             //重力のベクトルに対してのローカル速度を取得
-            float velocityAlongGravity = Vector3.Dot(velocity, gravity);
-            Vector3 yVelocity = gravity * velocityAlongGravity;
-            Vector3 xVelocity = velocity - gravity * velocityAlongGravity;
+            (Vector3 xv, Vector3 yv) = GetSeperatedVelocity();
 
             if (freezeX)
             {
-                xVelocity = Vector3.zero;
+                xv = Vector3.zero;
             }
             else
             {
                 if (isMoveInput)
                 {
                     //x軸の動きだけクランプ
-                    xVelocity = Vector3.ClampMagnitude(xVelocity, parameter.MaxSpeed);
+                    xv = Vector3.ClampMagnitude(xv, parameter.MaxSpeed);
                 }
                 else
                 {
                     //入力がない時は減衰させる
-                    xVelocity *= parameter.SpeedDamping;
+                    xv *= parameter.SpeedDamping;
                 }
             }
 
             //元の座標系に戻す
-            Vector3 originalVelocity = xVelocity + yVelocity;
+            Vector3 originalVelocity = xv + yv;
             rigidbody.velocity = originalVelocity;
+        }
+
+        public (Vector3 xv, Vector3 yv) GetSeperatedVelocity()
+        {
+            Vector3 gravity = worldGravity.Gravity;
+            Vector3 velocity = rigidbody.velocity;
+
+            float velocityAlongGravity = Vector3.Dot(velocity, gravity);
+            Vector3 xv = velocity - gravity * velocityAlongGravity;
+            Vector3 yv = gravity * velocityAlongGravity;
+
+            return (xv, yv);
         }
 
         public bool CanJumpAgain()
@@ -99,11 +111,38 @@ namespace Module.Character
                 return false;
             }
 
-            int layerMask = Layer.Mask.Base | Layer.Mask.Gravity | Layer.Mask.IgnoreGravity;
             Vector3 rayDirection = worldGravity.Direction;
-            bool isHit = Physics.Raycast(transform.position, rayDirection, parameter.AllowJumpDistance, layerMask);
+            bool isHit = Physics.Raycast(transform.position, rayDirection, parameter.AllowJumpDistance, GroundLayerMask);
 
             // 地面に接触していたらジャンプ可能
+            return isHit;
+        }
+
+        public bool CanGroundingAgain(float landingTime)
+        {
+            // 前のジャンプから一定時間が経過していたらチェック開始
+            bool canGrounding = lastJumpTime + parameter.AllowLandingInterval <= Time.time;
+            if (!canGrounding)
+            {
+                return false;
+            }
+
+            Vector3 yv = GetSeperatedVelocity().yv;
+            bool isDown = Vector3.Dot(yv, worldGravity.Gravity) > 0f;
+            float yVelocity = isDown ? yv.magnitude : 0f;
+            float g = worldGravity.Gravity.magnitude;
+
+            Vector3 rayDirection = worldGravity.Direction;
+
+            //カプセルコライダーのオフセットを取得
+            float offset = capsuleCollider.center.y + capsuleCollider.height * 0.5f;
+
+            // 着地モーションが間に合う距離を算出
+            float detectDistance = yVelocity * landingTime + 0.5f * g * landingTime * landingTime;
+
+            // 着地モーションが間に合う距離に入ったら着地確定とする
+            bool isHit = Physics.Raycast(transform.position, rayDirection, detectDistance + offset, GroundLayerMask);
+
             return isHit;
         }
 
