@@ -38,7 +38,6 @@ namespace Container
             builder.RegisterEntryPoint<InputConfigChangedListener>();
             builder.RegisterEntryPoint<AudioConfigChangedListener>();
             builder.RegisterEntryPoint<PlayerInputPresenter>();
-            builder.RegisterEntryPoint<SequenceViewPresenter>();
 
 #if UNITY_EDITOR
             builder.RegisterEntryPoint<ExternalAccessor>();

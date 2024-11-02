@@ -10,6 +10,7 @@ namespace Container
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterEntryPoint<LevelVolumeCameraPresenter>();
+            builder.RegisterEntryPoint<SequenceViewPresenter>();
             
             builder.Register<RespawnManager>(Lifetime.Singleton);
         }
