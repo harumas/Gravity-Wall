@@ -22,15 +22,20 @@ namespace Module.Character
         public ReadOnlyReactiveProperty<bool> IsJumping => isJumping;
         [SerializeField] private SerializableReactiveProperty<bool> isJumping = new SerializableReactiveProperty<bool>();
 
+        public ReadOnlyReactiveProperty<bool> IsGrounding => isGrounding;
+        [SerializeField] private SerializableReactiveProperty<bool> isGrounding = new SerializableReactiveProperty<bool>();
+
         public ReadOnlyReactiveProperty<bool> IsRotating => isRotating;
         [SerializeField] private SerializableReactiveProperty<bool> isRotating = new SerializableReactiveProperty<bool>();
 
-        public ReadOnlyReactiveProperty<Vector3> OnMove => onMove;
-        [SerializeField] private SerializableReactiveProperty<Vector3> onMove = new SerializableReactiveProperty<Vector3>();
-
         public ReadOnlyReactiveProperty<bool> IsDeath => isDeath;
         [SerializeField] private SerializableReactiveProperty<bool> isDeath = new SerializableReactiveProperty<bool>();
+
+        public ReadOnlyReactiveProperty<(Vector3 xv, Vector3 yv)> OnMove => onMove;
+        private ReactiveProperty<(Vector3 xv, Vector3 yv)> onMove = new ReactiveProperty<(Vector3 xv, Vector3 yv)>();
+
         private Vector2 moveInput;
+        private float landingTime;
 
         private void Start()
         {
@@ -65,14 +70,29 @@ namespace Module.Character
 
             playerFunction.PerformJump();
             isJumping.Value = true;
+            isGrounding.Value = false;
+        }
+
+        public void SetLandingTime(float time)
+        {
+            landingTime = time;
         }
 
         private void FixedUpdate()
         {
-            // 再びジャンプ可能になったらフラグを解除
-            if (isJumping.Value && playerFunction.CanJumpAgain())
+            if (isJumping.Value)
             {
-                isJumping.Value = false;
+                // 再びジャンプ可能になったらフラグを解除
+                if (playerFunction.CanJumpAgain())
+                {
+                    isJumping.Value = false;
+                }
+
+                //接地判定
+                if (playerFunction.CanGroundingAgain(landingTime))
+                {
+                    isGrounding.Value = true;
+                }
             }
 
             bool isMoveInput = moveInput != Vector2.zero;
@@ -85,7 +105,7 @@ namespace Module.Character
 
             // 速度調整
             playerFunction.AdjustVelocity(isMoveInput, isDeath.Value);
-            onMove.Value = rigBody.velocity;
+            onMove.Value = isMoveInput ? playerFunction.GetSeperatedVelocity() : (Vector3.zero, Vector3.zero);
 
             // ジャンプ中の重力を調整
             if (isJumping.Value)
@@ -117,6 +137,8 @@ namespace Module.Character
         {
             playerFunction.AddForce(force, mode, forcedGravity);
             isJumping.Value = true;
+            isJumping.ForceNotify();
+            isGrounding.Value = false;
         }
 
         public void AddInertia(Vector3 inertia)
@@ -130,7 +152,7 @@ namespace Module.Character
             isJumping.Value = false;
             rigBody.velocity = Vector3.zero;
             moveInput = Vector2.zero;
-            onMove.Value = Vector3.zero;
+            onMove.Value = (Vector3.zero, Vector3.zero);
             enabled = false;
         }
 

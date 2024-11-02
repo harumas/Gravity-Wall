@@ -29,7 +29,7 @@ namespace Module.Character
         [SerializeField] private bool isGrounding;
 
         private Vector3 prevDir;
-        private Vector3 lastMovement;
+        private (Vector3 xv, Vector3 yv) lastMovement;
         private Vector3 nearestNormal;
         private ContactPoint nearestContact;
         private bool doSwitchGravity;
@@ -229,7 +229,7 @@ namespace Module.Character
         {
             float detectRange = 0.2f;
             float detectDistance = 0.55f;
-            Vector3 moveDirection = lastMovement.normalized;
+            Vector3 moveDirection = lastMovement.xv.normalized;
             Vector3 right = Vector3.Cross(transform.up, moveDirection);
             Vector3 origin = transform.position;
 

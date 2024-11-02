@@ -14,9 +14,8 @@ namespace Module.Character
         {
             if (anim.GetFloat("Speed") > 0.1f || anim.GetBool("IsJumping"))
             {
-                audioSource.clip = footClip;
                 audioSource.pitch = Random.Range(0.7f, 1.3f);
-                audioSource.Play();
+                audioSource.PlayOneShot(footClip);
             }
         }
     }
