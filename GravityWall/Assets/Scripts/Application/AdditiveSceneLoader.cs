@@ -4,21 +4,25 @@ using Cysharp.Threading.Tasks;
 using Module.Gimmick;
 using R3;
 using Unity.IO.LowLevel.Unsafe;
+using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
 using ThreadPriority = UnityEngine.ThreadPriority;
 
 public class AdditiveSceneLoader
 {
-    public async UniTask Load(string sceneName)
+    public async UniTask Load(AssetReference levelReference)
     {
         UnityEngine.Application.backgroundLoadingPriority = ThreadPriority.Low;
+
+        var opHandle = await Addressables.LoadSceneAsync(levelReference, LoadSceneMode.Additive, false);
+
+        await UniTask.Yield();
+
+        await opHandle.ActivateAsync();
         
-#if UNITY_EDITOR
-        await LoadSceneWithMetrics(sceneName);
-#else
-        await SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive).ToUniTask();
-#endif
+        var scene = opHandle.Scene;
+        SceneManager.SetActiveScene(scene);
     }
 
     public async UniTask Unload(string sceneName)

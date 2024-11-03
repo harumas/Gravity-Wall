@@ -1,23 +1,24 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace Application.Sequence
 {
     public class AdditiveLevelLoadTrigger : MonoBehaviour
     {
-        [SerializeField] private string levelName;
+        [SerializeField] private AssetReference levelReference;
 
-        public event Action<string> OnLoadRequested;
-        public event Action<string> OnUnloadRequested;
+        public event Action<AssetReference> OnLoadRequested;
+        public event Action<AssetReference> OnUnloadRequested;
         
         public void Load()
         {
-            OnLoadRequested?.Invoke(levelName);
+            OnLoadRequested?.Invoke(levelReference);
         }
         
         public void Unload()
         {
-            OnUnloadRequested?.Invoke(levelName);
+            OnUnloadRequested?.Invoke(levelReference);
         }
     }
 }

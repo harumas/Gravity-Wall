@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using VContainer;
 using VContainer.Unity;
 using Object = UnityEngine.Object;
@@ -17,7 +18,7 @@ namespace Application.Sequence
     public class InGameSequencer : IStartable
     {
         private readonly AdditiveSceneLoader additiveSceneLoader;
-        private string levelName;
+        private AssetReference levelReference;
         private GameState gameState;
 
         [Inject]
@@ -35,27 +36,29 @@ namespace Application.Sequence
                 trigger.OnLoadRequested += OnLoadRequested;
                 trigger.OnUnloadRequested += OnUnloadRequested;
             }
+
+            Sequence().Forget();
         }
 
-        private void OnLoadRequested(string sceneName)
+        private void OnLoadRequested(AssetReference levelReference)
         {
-            levelName = sceneName;
+            this.levelReference = levelReference;
             gameState = GameState.Playing;
         }
 
-        private void OnUnloadRequested(string sceneName)
+        private void OnUnloadRequested(AssetReference levelReference)
         {
-            levelName = sceneName;
+            this.levelReference = levelReference;
             gameState = GameState.StageSelect;
         }
 
-        public async UniTask Sequence()
+        public async UniTaskVoid Sequence()
         {
+            Debug.Log("Waiting");
             //ステージセレクト待機
             await UniTask.WaitUntil(IsGameState(GameState.Playing));
             
-            
-            await additiveSceneLoader.Load(levelName);
+            await additiveSceneLoader.Load(levelReference);
             
             //クリア待機
             await UniTask.WaitUntil(IsGameState(GameState.StageSelect));
