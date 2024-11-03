@@ -1,6 +1,8 @@
-﻿using Module.Character;
+﻿using System;
+using Module.Character;
 using Module.InputModule;
 using R3;
+using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
@@ -16,18 +18,61 @@ namespace Presentation
             IGameInput gameInput,
             PlayerController playerController,
             CameraController cameraController,
-            PlayerTargetSyncer playerTargetSyncer)
+            PlayerTargetSyncer playerTargetSyncer,
+            GravitySwitcher gravitySwitcher
+        )
         {
-            gameInput.Move.Subscribe(playerController.OnMoveInput).AddTo(playerController);
-            gameInput.Jump.Subscribe(_ => playerController.OnJumpInput()).AddTo(playerController);
+            gameInput.Move
+                .Subscribe(moveInput =>
+                {
+                    if (!playerController.IsDeath.CurrentValue)
+                    {
+                        playerController.OnMoveInput(moveInput);
+                    }
+                })
+                .AddTo(playerController);
 
-            gameInput.LookDelta.Subscribe(cameraController.OnRotateCameraInput).AddTo(cameraController);
+            gameInput.Jump
+                .Subscribe(_ =>
+                {
+                    if (!playerController.IsDeath.CurrentValue)
+                    {
+                        playerController.OnJumpInput();
+                    }
+                })
+                .AddTo(playerController);
 
-            gameInput.Move.Subscribe(playerTargetSyncer.OnMoveInput).AddTo(playerTargetSyncer);
+            gameInput.LookDelta
+                .Subscribe(lookInput =>
+                {
+                    if (!playerController.IsDeath.CurrentValue)
+                    {
+                        cameraController.OnRotateCameraInput(lookInput);
+                    }
+                })
+                .AddTo(cameraController);
+
+            gameInput.Move
+                .Subscribe(moveInput =>
+                {
+                    if (!playerController.IsDeath.CurrentValue)
+                    {
+                        playerTargetSyncer.OnMoveInput(moveInput);
+                    }
+                })
+                .AddTo(playerTargetSyncer);
+
+            gameInput.Move
+                .Subscribe(moveInput =>
+                {
+                    if (!playerController.IsDeath.CurrentValue)
+                    {
+                        gravitySwitcher.OnMoveInput(moveInput);
+                    }
+                })
+                .AddTo(playerTargetSyncer);
         }
 
-        public void Initialize()
-        {
-        }
+        public void Initialize() { }
     }
 }

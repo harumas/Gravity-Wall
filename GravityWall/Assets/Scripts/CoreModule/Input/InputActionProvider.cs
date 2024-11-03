@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace CoreModule.Input
 {
     /// <summary>
@@ -11,9 +15,9 @@ namespace CoreModule.Input
     public static class InputActionProvider
     {
         public static InputActionAsset ActionAsset => inputActionAsset;
-        
+
         private static InputActionAsset inputActionAsset;
-        private static readonly List<InputEvent> inputEvents = new();
+        private static List<InputEvent> inputEvents = new();
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Initialize()
@@ -25,13 +29,20 @@ namespace CoreModule.Input
                 Debug.LogError("InputActionAssetのロードに失敗しました。");
                 return;
             }
-            
+
             inputActionAsset.Enable();
+            inputEvents = new List<InputEvent>();
 
 #if UNITY_EDITOR
-            Application.quitting += OnDispose;
+            EditorApplication.playModeStateChanged += state =>
+            {
+                if (state == PlayModeStateChange.ExitingPlayMode)
+                {
+                    OnDispose();
+                }
+            };
 #else
-            EditorApplication.quitting += OnDispose;
+            Application.quitting += OnDispose;
 #endif
         }
 

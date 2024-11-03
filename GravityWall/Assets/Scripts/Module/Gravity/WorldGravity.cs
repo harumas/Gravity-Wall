@@ -15,11 +15,13 @@ namespace Module.Gravity
         public static WorldGravity Instance { get; private set; }
 
         public Vector3 Gravity { get; private set; }
+        public Vector3 Direction { get; private set; }
         private uint activeGravityMask;
         
         private WorldGravity()
         {
             Gravity = Vector3.down;
+            Direction = Vector3.down;
             activeGravityMask = uint.MaxValue;
         }
 
@@ -36,6 +38,7 @@ namespace Module.Gravity
         public void SetValue(Vector3 gravity)
         {
             Gravity = gravity;
+            Direction = gravity.normalized;
         }
 
         public void SetEnable(Type mask)

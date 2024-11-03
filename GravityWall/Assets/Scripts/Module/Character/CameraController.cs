@@ -1,4 +1,5 @@
 using CoreModule.Helper;
+using CoreModule.Input;
 using UnityEngine;
 
 namespace Module.Character
@@ -8,35 +9,59 @@ namespace Module.Character
     /// </summary>
     public class CameraController : MonoBehaviour
     {
-        [Header("ロールピッチの回転軸")]
-        [SerializeField]
-        private Transform pivotVertical;
-
-        [SerializeField] private Transform pivotHorizontal;
+        [Header("ロールピッチの回転軸")] [SerializeField] private Transform pivotHorizontal;
         [SerializeField] private MinMaxValue horizontalRange;
         [SerializeField] private MinMaxValue verticalRange;
+        [SerializeField] private bool isFreeCamera = true;
 
         private void Start()
         {
             //カーソルロック
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
+
+            InputEvent enterScreenEvent = InputActionProvider.CreateEvent(ActionGuid.Player.EnterScreen);
+            enterScreenEvent.Started += _ => { SetCursorLock(true); };
+            
+            InputEvent exitScreenEvent = InputActionProvider.CreateEvent(ActionGuid.Player.ExitScreen);
+            exitScreenEvent.Started += _ => { SetCursorLock(false); };
+        }
+
+        private void SetCursorLock(bool isLock)
+        {
+            Cursor.visible = !isLock;
+            Cursor.lockState = isLock ? CursorLockMode.Locked : CursorLockMode.None;
         }
 
         public void OnRotateCameraInput(Vector2 mouseDelta)
         {
+            if (!isFreeCamera || Cursor.lockState != CursorLockMode.Locked)
+            {
+                return;
+            }
+
             float dx = mouseDelta.x;
             float dy = mouseDelta.y;
 
-            float eulerX = pivotHorizontal.localEulerAngles.x;
-            float eulerY = pivotVertical.localEulerAngles.y;
+            Vector3 localEulerAngles = pivotHorizontal.localEulerAngles;
+            float eulerX = localEulerAngles.x;
+            float eulerY = localEulerAngles.y;
 
             //回転を制限
             eulerX = ClampAngle(eulerX - dy, horizontalRange.Min, horizontalRange.Max);
             eulerY = ClampAngle(eulerY + dx, verticalRange.Min, verticalRange.Max);
 
-            pivotVertical.localEulerAngles = new Vector3(0f, eulerY, 0f);
             pivotHorizontal.localEulerAngles = new Vector3(eulerX, eulerY, 0f);
+        }
+
+        public void SetCameraRotation(Quaternion rotation)
+        {
+            pivotHorizontal.rotation = rotation;
+        }
+
+        public void SetFreeCamera(bool isFreeCamera)
+        {
+            this.isFreeCamera = isFreeCamera;
         }
 
         private float ClampAngle(float angle, float from, float to)

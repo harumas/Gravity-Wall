@@ -1,4 +1,5 @@
 using Constants;
+using R3;
 using UnityEngine;
 
 namespace Module.Gimmick.LevelMask
@@ -11,10 +12,13 @@ namespace Module.Gimmick.LevelMask
     {
         [SerializeField] private Renderer maskRenderer;
         [SerializeField] private FilterVolume[] filterGroup;
+        
+        [SerializeField] private SerializableReactiveProperty<bool> isEnable;
+        public ReadOnlyReactiveProperty<bool> IsEnable => isEnable;
 
         void Update()
         {
-            if (!Application.isPlaying)
+            if (!UnityEngine.Application.isPlaying)
             {
                 maskRenderer.enabled = false;
             }
@@ -22,9 +26,10 @@ namespace Module.Gimmick.LevelMask
 
         private void Awake()
         {
-            if (Application.isPlaying)
+            if (UnityEngine.Application.isPlaying)
             {
                 Disable();
+                isEnable.Value = false;
             }
         }
 
@@ -33,6 +38,7 @@ namespace Module.Gimmick.LevelMask
             if (other.CompareTag(Tag.Player))
             {
                 Enable();
+                isEnable.Value = true;
             }
         }
 
@@ -41,6 +47,7 @@ namespace Module.Gimmick.LevelMask
             if (other.CompareTag(Tag.Player))
             {
                 Disable();
+                isEnable.Value = false;
             }
         }
 
