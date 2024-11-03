@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Buffers;
+using System.Collections.Generic;
 using Application;
 using Application.Sequence;
 using Constants;
@@ -8,6 +10,7 @@ using Module.Gravity;
 using Module.InputModule;
 using Presentation;
 using UnityEngine;
+using UnityEngine.Pool;
 using VContainer;
 using VContainer.Unity;
 using View;
@@ -35,9 +38,12 @@ namespace Container
 
             UnityEngine.Application.targetFrameRate = 120;
 
+
+            builder.RegisterEntryPoint<PlayerInputPresenter>();
+
+            //コンフィグ変更のリスナーを登録
             builder.RegisterEntryPoint<InputConfigChangedListener>();
             builder.RegisterEntryPoint<AudioConfigChangedListener>();
-            builder.RegisterEntryPoint<PlayerInputPresenter>();
 
 #if UNITY_EDITOR
             builder.RegisterEntryPoint<ExternalAccessor>();
@@ -47,6 +53,9 @@ namespace Container
 
             RegisterInstanceWithNullCheck(builder, behaviourNavigator);
             RegisterPlayerComponents(builder);
+
+
+            builder.RegisterInstance<List<SavePoint>>(new List<SavePoint>(20));
         }
 
         private void RegisterInstanceWithNullCheck<T>(IContainerBuilder builder, T instance) where T : class
