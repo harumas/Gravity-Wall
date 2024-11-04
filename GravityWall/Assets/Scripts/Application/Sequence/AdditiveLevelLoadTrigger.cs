@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -6,10 +7,10 @@ namespace Application.Sequence
 {
     public class AdditiveLevelLoadTrigger : MonoBehaviour
     {
-        [SerializeField] private AssetReference levelReference;
+        [SerializeField] private List<AssetReference>  levelReference;
 
-        public event Action<AssetReference> OnLoadRequested;
-        public event Action<AssetReference> OnUnloadRequested;
+        public event Action<List<AssetReference>> OnLoadRequested;
+        public event Action<List<AssetReference>> OnUnloadRequested;
         
         public void Load()
         {

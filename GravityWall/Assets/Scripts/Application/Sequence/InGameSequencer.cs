@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -15,11 +16,12 @@ namespace Application.Sequence
         Playing
     }
 
-    public class InGameSequencer : IStartable
+    public class InGameSequencer : IStartable, IDisposable
     {
         private readonly AdditiveSceneLoader additiveSceneLoader;
-        private AssetReference levelReference;
+        private List<AssetReference> levelReference;
         private GameState gameState;
+        private CancellationTokenSource cTokenSource;
 
         [Inject]
         public InGameSequencer()
@@ -40,13 +42,13 @@ namespace Application.Sequence
             Sequence().Forget();
         }
 
-        private void OnLoadRequested(AssetReference levelReference)
+        private void OnLoadRequested(List<AssetReference> levelReference)
         {
             this.levelReference = levelReference;
             gameState = GameState.Playing;
         }
 
-        private void OnUnloadRequested(AssetReference levelReference)
+        private void OnUnloadRequested(List<AssetReference> levelReference)
         {
             this.levelReference = levelReference;
             gameState = GameState.StageSelect;
@@ -57,16 +59,24 @@ namespace Application.Sequence
             Debug.Log("Waiting");
             //ステージセレクト待機
             await UniTask.WaitUntil(IsGameState(GameState.Playing));
-            
-            await additiveSceneLoader.Load(levelReference);
-            
+
+            cTokenSource = new CancellationTokenSource();
+            await additiveSceneLoader.Load(levelReference, cTokenSource.Token);
+
             //クリア待機
             await UniTask.WaitUntil(IsGameState(GameState.StageSelect));
+            await additiveSceneLoader.UnloadAdditiveScenes(cTokenSource.Token);
         }
 
         private Func<bool> IsGameState(GameState gameState)
         {
             return () => this.gameState == gameState;
+        }
+
+        public void Dispose()
+        {
+            cTokenSource?.Cancel();
+            cTokenSource?.Dispose();
         }
     }
 }

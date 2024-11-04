@@ -1,33 +1,67 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using Module.Gimmick;
 using R3;
 using Unity.IO.LowLevel.Unsafe;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
 using ThreadPriority = UnityEngine.ThreadPriority;
 
 public class AdditiveSceneLoader
 {
-    public async UniTask Load(AssetReference levelReference)
+    private List<SceneInstance> additiveScenes = new List<SceneInstance>(16);
+
+    public async UniTask Load(List<AssetReference> levelReference, CancellationToken cancellationToken)
     {
         UnityEngine.Application.backgroundLoadingPriority = ThreadPriority.Low;
 
-        var opHandle = await Addressables.LoadSceneAsync(levelReference, LoadSceneMode.Additive, false);
+        var loadStream = CreateLoadStream(levelReference);
 
-        await UniTask.Yield();
+        Scene lastScene = default;
 
-        await opHandle.ActivateAsync();
-        
-        var scene = opHandle.Scene;
-        SceneManager.SetActiveScene(scene);
+        await foreach (SceneInstance instance in loadStream.WithCancellation(cancellationToken))
+        {
+            await instance.ActivateAsync();
+            await UniTask.Yield();
+
+            additiveScenes.Add(instance);
+
+            lastScene = instance.Scene;
+        }
+
+        if (lastScene.IsValid())
+        {
+            SceneManager.SetActiveScene(lastScene);
+        }
     }
 
-    public async UniTask Unload(string sceneName)
+    private IUniTaskAsyncEnumerable<SceneInstance> CreateLoadStream(List<AssetReference> levelReference)
     {
-        await SceneManager.UnloadSceneAsync(sceneName);
+        return UniTaskAsyncEnumerable.Create<SceneInstance>(async (writer, token) =>
+        {
+            foreach (AssetReference reference in levelReference)
+            {
+                var handle = await Addressables.LoadSceneAsync(reference, LoadSceneMode.Additive, false).WithCancellation(token);
+                await writer.YieldAsync(handle);
+            }
+        });
+    }
+
+    public async UniTask UnloadAdditiveScenes(CancellationToken cancellationToken)
+    {
+        foreach (SceneInstance instance in additiveScenes)
+        {
+            await Addressables.UnloadSceneAsync(instance).WithCancellation(cancellationToken);
+            await UniTask.Yield();
+        }
+
+        additiveScenes.Clear();
     }
 
     private async UniTask LoadSceneWithMetrics(string sceneName)
