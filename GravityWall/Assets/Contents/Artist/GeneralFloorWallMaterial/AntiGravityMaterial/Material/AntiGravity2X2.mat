@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: AntiGravity2X2
-  m_Shader: {fileID: -6465566751694194690, guid: 74686ab863fe0dc4598560e65eb847eb,
+  m_Shader: {fileID: -6465566751694194690, guid: ae79a4dcde6a14a4ea1ec502a318565d,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -34,6 +34,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - Texture2D_E5864E9:
         m_Texture: {fileID: 2800000, guid: b9d2d2ca3f98e714990cdb31767cdd5a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _AntiWall_8dc8a3e709244ce48615ef1fd70c4968_EmissionRGBTexture_843300868_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 23222fdfd91f1e64cb4ddfa0fe17175e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
@@ -96,6 +100,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _RGBTexture:
+        m_Texture: {fileID: 2800000, guid: e49185438348e4d45bd4903242d2e69d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _ReflectiomProbeMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -126,10 +134,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - Vector1_6155CAB: 1
+    - Vector1_6155CAB: 0.8
     - Vector1_85F6688: 1
     - _AlphaClip: 0
     - _AlphaToMask: 0
+    - _AntiEmissionStrength: 0.814
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
@@ -146,6 +155,7 @@ Material:
     - _EnvironmentReflections: 1
     - _FresnelIntensity: 1.72
     - _FresnelPower: 1.93
+    - _FresnelPower_1: 5
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -180,9 +190,11 @@ Material:
     - Color_BE5A53D8: {r: 0.6289307, g: 0.6289307, b: 0.6289307, a: 0}
     - Vector2_2818E70A: {r: 0.5, g: 0.47, b: 0, a: 0}
     - Vector2_EF5B598A: {r: 0.1, g: 0.1, b: 0, a: 0}
+    - _AntiWallTiling: {r: 0.1, g: 0.1, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _FresnelColor: {r: 0.824664, g: 0.35958037, b: 3.6886053, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &4477317219292709818
