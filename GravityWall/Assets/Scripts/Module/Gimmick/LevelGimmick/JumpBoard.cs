@@ -33,7 +33,7 @@ namespace Module.Gimmick
                 meshRenderer.material.SetFloat("_JumpOn", jumpOn);
             }).OnComplete(() =>
             {
-                DOTween.To(() => jumpOn, (value) => jumpOn = value, -0.65f, 0.3f)
+                DOTween.To(() => jumpOn, (value) => jumpOn = value, -0.5f, 0.3f)
                 .SetEase(Ease.OutBounce)
                 .OnUpdate(() =>
                 {
