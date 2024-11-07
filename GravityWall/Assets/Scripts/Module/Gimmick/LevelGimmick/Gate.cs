@@ -23,6 +23,8 @@ namespace Module.Gimmick
         private int switchCount = 0;
         private List<Material> lightMaterials = new List<Material>();
         private static readonly int emissionIntensity = Shader.PropertyToID("_EmissionIntensity");
+        
+        public bool IsUsing { get; set; }
 
         private void Start()
         {
@@ -107,7 +109,6 @@ namespace Module.Gimmick
 
         void ChangeCounterLights(bool isOn)
         {
-            Debug.Log(isOn);
             if (isOn)
             {
                 lightMaterials[switchCount].SetFloat(emissionIntensity, 1.0f);

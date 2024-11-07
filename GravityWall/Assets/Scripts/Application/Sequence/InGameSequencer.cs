@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using CoreModule.Helper.Attribute;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -19,7 +20,7 @@ namespace Application.Sequence
     public class InGameSequencer : IStartable, IDisposable
     {
         private readonly AdditiveSceneLoader additiveSceneLoader;
-        private List<AssetReference> levelReference;
+        private (SceneField mainScene, List<SceneField> sceneFields) loadContext;
         private GameState gameState;
         private CancellationTokenSource cTokenSource;
 
@@ -42,26 +43,25 @@ namespace Application.Sequence
             Sequence().Forget();
         }
 
-        private void OnLoadRequested(List<AssetReference> levelReference)
+        private void OnLoadRequested(SceneField mainScene, List<SceneField> fields)
         {
-            this.levelReference = levelReference;
+            this.loadContext = (mainScene, fields);
             gameState = GameState.Playing;
         }
 
-        private void OnUnloadRequested(List<AssetReference> levelReference)
+        private void OnUnloadRequested(SceneField mainScene, List<SceneField> fields)
         {
-            this.levelReference = levelReference;
+            this.loadContext = (mainScene, fields);
             gameState = GameState.StageSelect;
         }
 
         public async UniTaskVoid Sequence()
         {
-            Debug.Log("Waiting");
             //ステージセレクト待機
             await UniTask.WaitUntil(IsGameState(GameState.Playing));
 
             cTokenSource = new CancellationTokenSource();
-            await additiveSceneLoader.Load(levelReference, cTokenSource.Token);
+            await additiveSceneLoader.Load(loadContext, cTokenSource.Token);
 
             //クリア待機
             await UniTask.WaitUntil(IsGameState(GameState.StageSelect));

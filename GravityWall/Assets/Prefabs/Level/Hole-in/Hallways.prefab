@@ -376,7 +376,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2793
+  m_VersionIndex: 2814
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -491,6 +491,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7189490013327621165}
   - component: {fileID: 7276738492549926907}
+  - component: {fileID: 508031013143930257}
   m_Layer: 0
   m_Name: Hallway2
   m_TagString: Untagged
@@ -527,8 +528,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hallwayBody: {fileID: 657487136226366360}
-  gimmickObjects: []
+  gimmickObjects:
+  - Level2/Gate1
+  - Level3/Gate0
   referencedGates: []
+--- !u!65 &508031013143930257
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3808620235262514029}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 12.297458, y: 3.5002618, z: 1.8944168}
+  m_Center: {x: 5.648729, y: 1.5118086, z: -18.262741}
 --- !u!1 &3928667295010473306
 GameObject:
   m_ObjectHideFlags: 0
@@ -543,7 +567,6 @@ GameObject:
   - component: {fileID: 7347185203671797024}
   - component: {fileID: 3051638550778895865}
   - component: {fileID: 3179672098402458180}
-  - component: {fileID: 3083254970420987637}
   m_Layer: 9
   m_Name: Body
   m_TagString: Wall
@@ -906,7 +929,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3798
+  m_VersionIndex: 3816
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1011,21 +1034,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
---- !u!114 &3083254970420987637
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3928667295010473306}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 988773b64da03d642ac01f06bc6c378f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hallwayBody: {fileID: 0}
-  gimmickObjects: []
-  referencedGates: []
 --- !u!1 &4160165785577863697
 GameObject:
   m_ObjectHideFlags: 0
@@ -1036,6 +1044,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4528659801745143057}
   - component: {fileID: 6955285125011240097}
+  - component: {fileID: 629806680960343338}
   m_Layer: 0
   m_Name: Hallway1
   m_TagString: Untagged
@@ -1072,8 +1081,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hallwayBody: {fileID: 3928667295010473306}
-  gimmickObjects: []
+  gimmickObjects:
+  - Level1/Gate0
+  - Level2/Gate0
   referencedGates: []
+--- !u!65 &629806680960343338
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4160165785577863697}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.6767607, y: 3.1643162, z: 12.515592}
+  m_Center: {x: -5.819134, y: 1.452071, z: -5.9136596}
 --- !u!1 &6723310604659405065
 GameObject:
   m_ObjectHideFlags: 0
@@ -1450,7 +1482,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2277
+  m_VersionIndex: 2301
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1565,6 +1597,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7466685469671406564}
   - component: {fileID: 7991728894147857364}
+  - component: {fileID: 1904822057727571940}
   m_Layer: 0
   m_Name: Hallway0
   m_TagString: Untagged
@@ -1605,6 +1638,27 @@ MonoBehaviour:
   - Level0/Gate0
   - Level1/Gate1
   referencedGates: []
+--- !u!65 &1904822057727571940
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7099704571139710363}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.103693, y: 3.1029022, z: 12.48027}
+  m_Center: {x: -6.111663, y: 1.4456171, z: 18.200523}
 --- !u!1 &7708388111334187813
 GameObject:
   m_ObjectHideFlags: 0
@@ -1615,6 +1669,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3218779239631022956}
   - component: {fileID: 398692091430745743}
+  - component: {fileID: 3252964905356997787}
   m_Layer: 0
   m_Name: Hallway3
   m_TagString: Untagged
@@ -1651,8 +1706,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hallwayBody: {fileID: 6723310604659405065}
-  gimmickObjects: []
+  gimmickObjects:
+  - Level3/Gate1
   referencedGates: []
+--- !u!65 &3252964905356997787
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7708388111334187813}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.2266617, y: 3.465403, z: 2.142645}
+  m_Center: {x: 23.861473, y: 1.232702, z: -17.19711}
 --- !u!1 &8518433429482882922
 GameObject:
   m_ObjectHideFlags: 0
@@ -2029,7 +2106,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3798
+  m_VersionIndex: 3825
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []

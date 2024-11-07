@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Constants;
@@ -13,33 +12,65 @@ namespace Module.PlayTest
     {
         [SerializeField] private bool startActive;
         [SerializeField] private GameObject roomObject;
-        [SerializeField] private List<GimmickObject> levelGates;
+        [SerializeField] private List<Gate> levelGates;
+        [SerializeField] private List<ObjectHider> objectHiders;
 
         private bool isPlayerEnter;
 
         private void Start()
         {
-            roomObject.SetActive(startActive);
-
-            foreach (GimmickObject gate in levelGates)
+            if (startActive)
             {
-                gate.IsEnabled.Subscribe(isEnabled =>
-                    {
-                        if (isEnabled)
-                        {
-                            roomObject.SetActive(true);
-                        }
-                        else
-                        {
-                            bool allDisabled = levelGates.All(g => !g.IsEnabled.CurrentValue);
+                foreach (Gate levelGate in levelGates)
+                {
+                    levelGate.IsUsing = true;
+                }
 
-                            if (allDisabled && !isPlayerEnter)
-                            {
-                                roomObject.SetActive(false);
-                            }
-                        }
-                    })
-                    .AddTo(destroyCancellationToken);
+                Activate();
+            }
+            else
+            {
+                Deactivate();
+            }
+
+            foreach (Gate gate in levelGates)
+            {
+                gate.IsEnabled.Skip(1).Subscribe(isEnabled =>
+                {
+                    if (isEnabled)
+                    {
+                        Activate();
+                    }
+                    else
+                    {
+                        Deactivate();
+                    }
+                }).AddTo(this);
+            }
+        }
+
+        public void Activate()
+        {
+            roomObject.SetActive(true);
+
+            foreach (Gate levelGate in levelGates)
+            {
+                levelGate.gameObject.SetActive(true);
+            }
+        }
+
+        public void Deactivate()
+        {
+            bool allDisabled = levelGates.All(g => !g.IsEnabled.CurrentValue);
+
+            if (allDisabled && !isPlayerEnter)
+            {
+                roomObject.SetActive(false);
+
+                foreach (Gate levelGate in levelGates)
+                {
+                    levelGate.gameObject.SetActive(false);
+                }
             }
         }
 
@@ -48,6 +79,16 @@ namespace Module.PlayTest
             if (other.CompareTag(Tag.Player))
             {
                 isPlayerEnter = true;
+
+                foreach (Gate levelGate in levelGates)
+                {
+                    levelGate.IsUsing = true;
+                }
+
+                foreach (ObjectHider hider in objectHiders)
+                {
+                    hider.Enable();
+                }
             }
         }
 
@@ -56,6 +97,11 @@ namespace Module.PlayTest
             if (other.CompareTag(Tag.Player))
             {
                 isPlayerEnter = false;
+
+                foreach (Gate gate in levelGates)
+                {
+                    gate.IsUsing = false;
+                }
             }
         }
     }

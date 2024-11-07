@@ -111,12 +111,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isEnabled:
     value: 0
+  gimmickPath: Gate
   gateOpenEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7607265530484897456}
+        m_TargetAssemblyTypeName: Module.Gimmick.ObjectHider, Module.Gimmick
+        m_MethodName: Disable
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   gateCloseEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7607265530484897456}
+        m_TargetAssemblyTypeName: Module.Gimmick.ObjectHider, Module.Gimmick
+        m_MethodName: Enable
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   gate: {fileID: 1706609514237489590}
   gateMeshRenderers:
   - {fileID: 1469237011632712047}
@@ -161,6 +186,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startActive: 1
+  roomObject: {fileID: 0}
+  levelGates: []
+  objectHiders: []
 --- !u!82 &3672596641055093830
 AudioSource:
   m_ObjectHideFlags: 0

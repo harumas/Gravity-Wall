@@ -4,6 +4,7 @@ using Application.Sequence;
 using Constants;
 using CoreModule.Helper;
 using Cysharp.Threading.Tasks;
+using Module.Gimmick;
 using Presentation;
 using UnityEngine;
 using VContainer;
@@ -28,6 +29,9 @@ namespace Container
             builder.RegisterEntryPoint<SequenceViewPresenter>();
 
             builder.Register<RespawnManager>(Lifetime.Singleton);
+
+            var gimmickReference = Parent.Container.Resolve<GimmickReference>();
+            gimmickReference.UpdateReference();
         }
 
         private void SetReusableComponents()

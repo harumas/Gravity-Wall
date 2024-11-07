@@ -17,35 +17,65 @@ namespace Module.Gimmick
         private bool isPlayerEnter;
         private Gate enteredGate;
 
-        private void Awake()
+        private void Start()
+        {
+            GimmickReference.OnGimmickReferenceUpdated += OnGimmickReferenceUpdated;
+        }
+
+        private void OnGimmickReferenceUpdated(GimmickReference reference)
         {
             foreach (string path in gimmickObjects)
             {
-                if (GimmickReference.TryGetGimmick(path, out Gate gate))
+                if (reference.TryGetGimmick(path, out Gate gate))
                 {
                     referencedGates.Add(gate);
-                    gate.IsEnabled.Subscribe(isEnabled => OnGateAction(gate, isEnabled)).AddTo(this);
+                }
+                else
+                {
+                    Debug.LogWarning("Gimmick not found: " + path);
+                }
+
+                foreach (Gate referencedGate in referencedGates)
+                {
+                    referencedGate.IsEnabled.Skip(1).Subscribe(isEnabled => OnGateAction(gate, isEnabled)).AddTo(this);
                 }
             }
+
+            Disable(null);
         }
 
         private void OnGateAction(Gate gate, bool isEnabled)
         {
             if (isEnabled)
             {
-                hallwayBody.SetActive(true);
-                enteredGate = gate;
+                Enable();
             }
             else if (!isPlayerEnter)
             {
-                hallwayBody.SetActive(false);
+                Disable(gate);
+            }
+        }
 
-                foreach (Gate otherGate in referencedGates)
+        private void Enable()
+        {
+            hallwayBody.SetActive(true);
+
+            foreach (Gate otherGate in referencedGates)
+            {
+                otherGate.gameObject.SetActive(true);
+            }
+        }
+
+        private void Disable(Gate gate)
+        {
+            hallwayBody.SetActive(false);
+
+            foreach (Gate otherGate in referencedGates)
+            {
+                if (!otherGate.IsUsing)
                 {
-                    if (gate != otherGate)
-                    {
-                        otherGate.gameObject.SetActive(false);
-                    }
+                    otherGate.Disable(false);
+                    otherGate.gameObject.SetActive(false);
                 }
             }
         }

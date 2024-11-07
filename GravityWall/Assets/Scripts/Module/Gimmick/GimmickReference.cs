@@ -1,11 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace Module.Gimmick
 {
     public class GimmickReference : MonoBehaviour
     {
-        private static readonly Dictionary<string, GimmickObject> gimmickObjects = new Dictionary<string, GimmickObject>();
+        private readonly Dictionary<string, GimmickObject> gimmickObjects = new Dictionary<string, GimmickObject>();
+        public static event Action<GimmickReference> OnGimmickReferenceUpdated;
+
+#if UNITY_EDITOR
+        [InitializeOnLoadMethod]
+#else
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+#endif
+        private static void Initialize()
+        {
+            OnGimmickReferenceUpdated = null;
+        }
+
+        private void Awake()
+        {
+            OnGimmickReferenceUpdated = null;
+        }
 
         public void UpdateReference()
         {
@@ -16,9 +34,11 @@ namespace Module.Gimmick
             {
                 gimmickObjects.Add(gimmick.Path, gimmick);
             }
+
+            OnGimmickReferenceUpdated?.Invoke(this);
         }
 
-        public static bool TryGetGimmick<T>(string gimmickPath, out T gimmick) where T : GimmickObject
+        public bool TryGetGimmick<T>(string gimmickPath, out T gimmick) where T : GimmickObject
         {
             if (gimmickObjects.TryGetValue(gimmickPath, out GimmickObject gimmickObject) &&
                 gimmickObject is T item)
@@ -30,6 +50,5 @@ namespace Module.Gimmick
             gimmick = null;
             return false;
         }
-        
     }
 }

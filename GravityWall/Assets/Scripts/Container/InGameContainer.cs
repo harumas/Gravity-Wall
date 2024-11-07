@@ -26,6 +26,7 @@ namespace Container
     public class InGameContainer : LifetimeScope
     {
         [SerializeField] private ViewBehaviourNavigator behaviourNavigator;
+        [SerializeField] private GimmickReference gimmickReference;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -61,6 +62,7 @@ namespace Container
             };
             
             builder.RegisterInstance(reusableComponents).As<IReadOnlyList<IReusableComponent>>();
+            builder.RegisterInstance(gimmickReference);
 
 #if UNITY_EDITOR
             builder.RegisterEntryPoint<ExternalAccessor>();

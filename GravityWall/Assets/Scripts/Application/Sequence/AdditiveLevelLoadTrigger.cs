@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CoreModule.Helper.Attribute;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -7,19 +8,20 @@ namespace Application.Sequence
 {
     public class AdditiveLevelLoadTrigger : MonoBehaviour
     {
-        [SerializeField] private List<AssetReference>  levelReference;
+        [SerializeField] private SceneField mainScene;
+        [SerializeField] private List<SceneField> levelReference;
 
-        public event Action<List<AssetReference>> OnLoadRequested;
-        public event Action<List<AssetReference>> OnUnloadRequested;
-        
+        public event Action<SceneField, List<SceneField>> OnLoadRequested;
+        public event Action<SceneField, List<SceneField>> OnUnloadRequested;
+
         public void Load()
         {
-            OnLoadRequested?.Invoke(levelReference);
+            OnLoadRequested?.Invoke(mainScene, levelReference);
         }
-        
+
         public void Unload()
         {
-            OnUnloadRequested?.Invoke(levelReference);
+            OnUnloadRequested?.Invoke(mainScene, levelReference);
         }
     }
 }

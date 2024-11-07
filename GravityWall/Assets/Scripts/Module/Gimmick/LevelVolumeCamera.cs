@@ -1,5 +1,6 @@
 using System;
 using Cinemachine;
+using Constants;
 using CoreModule.Helper;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -18,9 +19,7 @@ namespace Module.Gimmick
         [SerializeField] private Transform cameraPivot;
         [SerializeField] private Ease easeType;
 
-        [Header("回転のイージング係数")]
-        [SerializeField]
-        private float rotateStep;
+        [Header("回転のイージング係数")] [SerializeField] private float rotateStep;
 
         [SerializeField] private SerializableReactiveProperty<bool> isEnabled;
         [SerializeField] private SerializableReactiveProperty<bool> isPlayerRotating;
@@ -30,7 +29,6 @@ namespace Module.Gimmick
         public Observable<bool> IsRotating => Observable.Merge(isPlayerRotating, isInputRotating);
         public Observable<Quaternion> Rotation => Observable.EveryValueChanged(cameraPivot, target => target.rotation);
 
-        private MaskVolume maskVolume;
         private CinemachineBrain cameraBrain;
         private VerticalAdjuster verticalAdjuster;
         private Transform playerTransform;
@@ -41,19 +39,10 @@ namespace Module.Gimmick
             this.playerTransform = playerTransform;
         }
 
-        private void Awake()
+        private void Start()
         {
             verticalAdjuster = new VerticalAdjuster();
-            maskVolume = transform.parent.GetComponent<MaskVolume>();
             cameraBrain = Camera.main.GetComponent<CinemachineBrain>();
-
-            if (maskVolume == null)
-            {
-                Debug.LogError("MaskVolumeが見つかりませんでした");
-                return;
-            }
-
-            AssignVolumeEvent();
         }
 
         private void Update()
@@ -156,24 +145,31 @@ namespace Module.Gimmick
             return isLastRotation;
         }
 
-        private void AssignVolumeEvent()
+        private void OnTriggerEnter(Collider other)
         {
-            maskVolume.IsEnable.Subscribe(isEnable =>
-                {
-                    if (isEnable)
-                    {
-                        Enable();
-                    }
-                    else
-                    {
-                        Disable();
-                    }
-                })
-                .AddTo(this);
+            if (other.CompareTag(Tag.Player))
+            {
+                Enable().Forget();
+            }
         }
 
-        private void Enable()
+        private void OnTriggerExit(Collider other)
         {
+            if (playerTransform == null)
+            {
+                return;
+            }
+
+            if (other.CompareTag(Tag.Player))
+            {
+                Disable();
+            }
+        }
+
+        private async UniTaskVoid Enable()
+        {
+            await UniTask.WaitUntil(() => playerTransform != null);
+            
             InitializeDirection();
             virtualCamera.Priority = 11;
             isEnabled.Value = true;

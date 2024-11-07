@@ -378,7 +378,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2436
+  m_VersionIndex: 2454
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -533,7 +533,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentReference:
-    TypeName: 
+    TypeName: Container.InGameContainer
   autoRun: 0
   autoInjectGameObjects: []
 --- !u!114 &814332681701203701
@@ -552,6 +552,8 @@ MonoBehaviour:
   roomObject: {fileID: 4814497148214120345}
   levelGates:
   - {fileID: 3446620792711493366}
+  objectHiders:
+  - {fileID: 1060968566459766933}
 --- !u!65 &357797846987833628
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -27546,7 +27548,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2984
+  m_VersionIndex: 3002
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -28023,12 +28025,17 @@ PrefabInstance:
     - target: {fileID: 624629796947512473, guid: 0f395e5f4315144c2ae44e454977f80f,
         type: 3}
       propertyPath: m_Name
-      value: Switch
+      value: Switch0
       objectReference: {fileID: 0}
     - target: {fileID: 624629796947512473, guid: 0f395e5f4315144c2ae44e454977f80f,
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2097836411523704022, guid: 0f395e5f4315144c2ae44e454977f80f,
+        type: 3}
+      propertyPath: gimmickPath
+      value: Level0/Room/Switch0
       objectReference: {fileID: 0}
     - target: {fileID: 2097836411523704022, guid: 0f395e5f4315144c2ae44e454977f80f,
         type: 3}
@@ -28209,7 +28216,7 @@ PrefabInstance:
     - target: {fileID: 4897957424493195374, guid: 7e317563c594d4fe787b60604ecdfd7c,
         type: 3}
       propertyPath: m_Name
-      value: Gate
+      value: Gate0
       objectReference: {fileID: 0}
     - target: {fileID: 4897957424493195374, guid: 7e317563c594d4fe787b60604ecdfd7c,
         type: 3}
@@ -28233,6 +28240,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5260175374949259475, guid: 7e317563c594d4fe787b60604ecdfd7c,
         type: 3}
+      propertyPath: gimmickPath
+      value: Level0/Gate0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5260175374949259475, guid: 7e317563c594d4fe787b60604ecdfd7c,
+        type: 3}
       propertyPath: observedSwitches.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -28249,7 +28261,7 @@ PrefabInstance:
     - target: {fileID: 5260175374949259475, guid: 7e317563c594d4fe787b60604ecdfd7c,
         type: 3}
       propertyPath: gateOpenEvent.m_PersistentCalls.m_Calls.Array.size
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5260175374949259475, guid: 7e317563c594d4fe787b60604ecdfd7c,
         type: 3}
@@ -28416,11 +28428,24 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0.1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7471500961253179769, guid: 7e317563c594d4fe787b60604ecdfd7c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e317563c594d4fe787b60604ecdfd7c, type: 3}
+--- !u!114 &1060968566459766933 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7607265530484897456, guid: 7e317563c594d4fe787b60604ecdfd7c,
+    type: 3}
+  m_PrefabInstance: {fileID: 7434104861170380325}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee7754dc2b1c4e442af2d966e9cd8ac0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3446620792711493366 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5260175374949259475, guid: 7e317563c594d4fe787b60604ecdfd7c,
@@ -28608,7 +28633,7 @@ PrefabInstance:
     - target: {fileID: 4666205903397099147, guid: 5b5287a13ab2e004e8fad368189340bb,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 2998
+      value: 3016
       objectReference: {fileID: 0}
     - target: {fileID: 4716034564354573398, guid: 5b5287a13ab2e004e8fad368189340bb,
         type: 3}

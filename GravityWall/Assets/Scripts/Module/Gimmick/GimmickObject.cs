@@ -16,6 +16,20 @@ namespace Module.Gimmick
 
         private void OnValidate()
         {
+            gimmickPath = GetGimmickPath();
+        }
+
+        private void Awake()
+        {
+            gimmickPath = GetGimmickPath();
+        }
+
+        public abstract void Enable(bool doEffect = true);
+        public abstract void Disable(bool doEffect = true);
+        public abstract void Reset();
+
+        private string GetGimmickPath()
+        {
             StringBuilder builder = new StringBuilder();
             Transform current = transform;
             const char slash = '/';
@@ -29,11 +43,7 @@ namespace Module.Gimmick
 
             builder.Remove(builder.Length - 1, 1);
 
-            gimmickPath = builder.ToString();
+            return builder.ToString();
         }
-
-        public abstract void Enable(bool doEffect = true);
-        public abstract void Disable(bool doEffect = true);
-        public abstract void Reset();
     }
 }

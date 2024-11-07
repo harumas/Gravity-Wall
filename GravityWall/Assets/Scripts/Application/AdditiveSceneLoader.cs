@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using CoreModule.Helper.Attribute;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
 using Module.Gimmick;
 using R3;
 using Unity.IO.LowLevel.Unsafe;
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
@@ -15,52 +17,56 @@ using ThreadPriority = UnityEngine.ThreadPriority;
 
 public class AdditiveSceneLoader
 {
-    private List<SceneInstance> additiveScenes = new List<SceneInstance>(16);
+    private readonly List<string> additiveScenes = new List<string>(16);
+    private const int DelayFrameCount = 10;
 
-    public async UniTask Load(List<AssetReference> levelReference, CancellationToken cancellationToken)
+    public async UniTask Load((SceneField mainScene, List<SceneField> sceneFields) loadContext, CancellationToken cancellationToken)
     {
         UnityEngine.Application.backgroundLoadingPriority = ThreadPriority.Low;
 
-        var loadStream = CreateLoadStream(levelReference);
+        var loadStream = CreateLoadStream(loadContext.sceneFields);
 
-        Scene lastScene = default;
-
-        await foreach (SceneInstance instance in loadStream.WithCancellation(cancellationToken))
+        await foreach ((SceneField sceneField, AsyncOperation operation) context in loadStream.WithCancellation(cancellationToken))
         {
-            await instance.ActivateAsync();
-            await UniTask.Yield();
+            context.operation.allowSceneActivation = true;
+            await UniTask.DelayFrame(DelayFrameCount, cancellationToken: cancellationToken);
 
-            additiveScenes.Add(instance);
-
-            lastScene = instance.Scene;
+            additiveScenes.Add(context.sceneField.SceneName);
         }
 
+        Scene lastScene = SceneManager.GetSceneByName(loadContext.mainScene.SceneName);
         if (lastScene.IsValid())
         {
             SceneManager.SetActiveScene(lastScene);
         }
     }
 
-    private IUniTaskAsyncEnumerable<SceneInstance> CreateLoadStream(List<AssetReference> levelReference)
+    private IUniTaskAsyncEnumerable<(SceneField sceneField, AsyncOperation operation)> CreateLoadStream(List<SceneField> levelReference)
     {
-        return UniTaskAsyncEnumerable.Create<SceneInstance>(async (writer, token) =>
+        return UniTaskAsyncEnumerable.Create<(SceneField sceneField, AsyncOperation operation)>(async (writer, token) =>
         {
-            foreach (AssetReference reference in levelReference)
+            foreach (SceneField reference in levelReference)
             {
-                var handle = await Addressables.LoadSceneAsync(reference, LoadSceneMode.Additive, false).WithCancellation(token);
-                await writer.YieldAsync(handle);
+                var operation = SceneManager.LoadSceneAsync(reference.SceneName, LoadSceneMode.Additive);
+                operation.allowSceneActivation = false;
+
+                // 読み込みまで待機
+                await UniTask.WaitUntil(() => operation.progress >= 0.9f, cancellationToken: token);
+
+                await writer.YieldAsync((reference, operation));
             }
         });
     }
 
     public async UniTask UnloadAdditiveScenes(CancellationToken cancellationToken)
     {
-        foreach (SceneInstance instance in additiveScenes)
+        foreach (string sceneName in additiveScenes)
         {
-            await Addressables.UnloadSceneAsync(instance).WithCancellation(cancellationToken);
+            await SceneManager.UnloadSceneAsync(sceneName).WithCancellation(cancellationToken);
             await UniTask.Yield();
         }
 
+        await Resources.UnloadUnusedAssets();
         additiveScenes.Clear();
     }
 
