@@ -1,12 +1,16 @@
 ﻿using Cysharp.Threading.Tasks;
+using R3;
 using UnityEngine;
 
 namespace View
 {
     public abstract class ViewBehaviour : MonoBehaviour
     {
-        public abstract BehaviourType BehaviourType { get; }
-        
+        public abstract ViewBehaviourType ViewBehaviourType { get; }
+
+        [SerializeField] private SerializableReactiveProperty<bool> isActive = new SerializableReactiveProperty<bool>(false);
+        public ReadOnlyReactiveProperty<bool> IsActive => isActive;
+
         protected abstract UniTask OnPreActivate();
         protected abstract void OnActivate();
         protected abstract void OnDeactivate();
@@ -16,6 +20,7 @@ namespace View
         {
             gameObject.SetActive(true);
             await OnPreActivate();
+            isActive.Value = true;
             OnActivate();
         }
 
@@ -23,6 +28,7 @@ namespace View
         {
             OnDeactivate();
             await OnPostDeactivate();
+            isActive.Value = false;
             gameObject.SetActive(false);
         }
     }

@@ -48,10 +48,18 @@ namespace Container
             //コンフィグ変更のリスナーを登録
             builder.RegisterEntryPoint<InputConfigChangedListener>();
             builder.RegisterEntryPoint<AudioConfigChangedListener>();
+            builder.RegisterEntryPoint<OptionChangedPresenter>();
 
             builder.Register<PlayerInput>(Lifetime.Singleton).As<IGameInput>();
 
+            //ViewBehaviourの登録
+            behaviourNavigator.RegisterBehaviours();
+            builder.RegisterComponent(behaviourNavigator.GetBehaviour<OptionBehaviour>(ViewBehaviourType.Option));
+            builder.RegisterComponent(behaviourNavigator.GetBehaviour<LoadingBehaviour>(ViewBehaviourType.Loading));
+            builder.RegisterComponent(behaviourNavigator.GetBehaviour<ClearBehaviour>(ViewBehaviourType.Clear));
+            builder.RegisterComponent(behaviourNavigator.GetBehaviour<PauseBehaviour>(ViewBehaviourType.Pause));
             RegisterInstanceWithNullCheck(builder, behaviourNavigator);
+
             RegisterPlayerComponents(builder);
 
             var reusableComponents = new List<IReusableComponent>
@@ -60,9 +68,10 @@ namespace Container
                 RegisterReusableComponent<DeathFloor>(builder),
                 RegisterReusableComponent<LevelVolumeCamera>(builder)
             };
-            
+
             builder.RegisterInstance(reusableComponents).As<IReadOnlyList<IReusableComponent>>();
             builder.RegisterInstance(gimmickReference);
+
 
 #if UNITY_EDITOR
             builder.RegisterEntryPoint<ExternalAccessor>();

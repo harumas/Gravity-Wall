@@ -5,56 +5,100 @@ using UnityEngine;
 
 namespace View
 {
-    public enum BehaviourType
+    public enum ViewBehaviourType
     {
+        None,
         Loading,
         Option,
         Clear,
-        Pause
+        Pause,
+        License,
+        Title,
     }
 
     public class ViewBehaviourNavigator : MonoBehaviour
     {
-        private Dictionary<BehaviourType, ViewBehaviour> viewBehaviours;
+        private Dictionary<ViewBehaviourType, ViewBehaviour> viewBehaviours;
         private Stack<ViewBehaviour> activeBehaviours;
 
-        private void Awake()
+        public ViewBehaviourType CurrentBehaviourType
         {
-            viewBehaviours = new Dictionary<BehaviourType, ViewBehaviour>();
+            get
+            {
+                if (activeBehaviours.Count > 0)
+                {
+                    return activeBehaviours.Peek().ViewBehaviourType;
+                }
+
+                return ViewBehaviourType.None;
+            }
+        }
+
+        public void RegisterBehaviours()
+        {
+            viewBehaviours = new Dictionary<ViewBehaviourType, ViewBehaviour>();
             activeBehaviours = new Stack<ViewBehaviour>();
 
             var behaviours = transform.GetComponentsInChildren<ViewBehaviour>(true);
 
             foreach (ViewBehaviour behaviour in behaviours)
             {
-                viewBehaviours.Add(behaviour.BehaviourType, behaviour);
+                viewBehaviours.Add(behaviour.ViewBehaviourType, behaviour);
             }
         }
 
-
-        public T ActivateBehaviour<T>(BehaviourType type) where T : ViewBehaviour
+        public T GetBehaviour<T>(ViewBehaviourType type) where T : ViewBehaviour
         {
-            ActivateBehaviour(type);
-            return viewBehaviours[type] as T;
+            return GetBehaviour(type) as T;
         }
 
-        public void ActivateBehaviour(BehaviourType type)
+        public ViewBehaviour GetBehaviour(ViewBehaviourType type)
         {
-            ViewBehaviour behaviour = viewBehaviours[type];
+            if (viewBehaviours.TryGetValue(type, out ViewBehaviour behaviour))
+            {
+                return behaviour;
+            }
+
+            Debug.LogError("指定されたBehaviourが存在しません。");
+            return null;
+        }
+
+        public T ActivateBehaviour<T>(ViewBehaviourType type) where T : ViewBehaviour
+        {
+            ViewBehaviour behaviour = GetBehaviour(type);
+            if (behaviour == null)
+            {
+                return null;
+            }
+
+            behaviour.Activate();
+            activeBehaviours.Push(behaviour);
+
+            return behaviour as T;
+        }
+
+        public void ActivateBehaviour(ViewBehaviourType type)
+        {
+            ViewBehaviour behaviour = GetBehaviour(type);
+            if (behaviour == null)
+            {
+                return;
+            }
+
             behaviour.Activate();
             activeBehaviours.Push(behaviour);
         }
 
-        public void DeactivateBehaviour(BehaviourType type)
+        public void DeactivateBehaviour(ViewBehaviourType type)
         {
             ViewBehaviour behaviour = activeBehaviours.Peek();
 
-            if (type != behaviour.BehaviourType)
+            if (type != behaviour.ViewBehaviourType)
             {
                 Debug.Log("手前に表示されているViewを閉じてから実行してください。");
                 return;
             }
-            
+
             activeBehaviours.Pop();
             behaviour.Deactivate();
         }

@@ -6,7 +6,7 @@ namespace View
 {
     public class LoadingBehaviour : ViewBehaviour
     {
-        public override BehaviourType BehaviourType => BehaviourType.Loading;
+        public override ViewBehaviourType ViewBehaviourType => ViewBehaviourType.Loading;
 
         [SerializeField] private float loadingTime;
 

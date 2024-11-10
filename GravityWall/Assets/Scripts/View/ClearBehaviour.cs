@@ -6,7 +6,7 @@ namespace View
 {
     public class ClearBehaviour : ViewBehaviour
     {
-        public override BehaviourType BehaviourType => BehaviourType.Clear;
+        public override ViewBehaviourType ViewBehaviourType => ViewBehaviourType.Clear;
 
         [SerializeField] private float clearDelay;
 
