@@ -1,5 +1,4 @@
 ﻿using CoreModule.Input;
-using Cysharp.Threading.Tasks;
 using R3;
 using UnityEngine.InputSystem;
 using VContainer;
@@ -8,24 +7,24 @@ using View;
 
 namespace Presentation
 {
-    public class LicenseBehaviourPresenter : IStartable
+    public class CreditBehaviourPresenter : IStartable
     {
         private readonly ViewBehaviourNavigator navigator;
-        private readonly LicenseBehaviour licenseBehaviour;
+        private readonly CreditBehaviour creditBehaviour;
         private InputEvent backEvent;
 
         [Inject]
-        public LicenseBehaviourPresenter(ViewBehaviourNavigator navigator, LicenseBehaviour licenseBehaviour)
+        public CreditBehaviourPresenter(ViewBehaviourNavigator navigator, CreditBehaviour creditBehaviour)
         {
             this.navigator = navigator;
-            this.licenseBehaviour = licenseBehaviour;
+            this.creditBehaviour = creditBehaviour;
         }
 
         public void Start()
         {
             backEvent = InputActionProvider.CreateEvent(ActionGuid.UI.Cancel);
 
-            licenseBehaviour.OnActiveStateChanged.Subscribe(context =>
+            creditBehaviour.OnActiveStateChanged.Subscribe(context =>
                 {
                     if (context.isActive)
                     {
@@ -36,12 +35,12 @@ namespace Presentation
                         backEvent.Started -= OnBackButtonPressed;
                     }
                 })
-                .AddTo(licenseBehaviour);
+                .AddTo(creditBehaviour);
         }
 
         private void OnBackButtonPressed(InputAction.CallbackContext _)
         {
-            navigator.DeactivateBehaviour(ViewBehaviourState.License);
+            navigator.DeactivateBehaviour(ViewBehaviourState.Credit);
         }
     }
 }

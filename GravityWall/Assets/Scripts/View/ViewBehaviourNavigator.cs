@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using R3;
 using TriInspector;
 using UnityEngine;
 
 namespace View
 {
-    public enum ViewBehaviourType
+    public enum ViewBehaviourState
     {
         None,
         Loading,
@@ -14,54 +15,51 @@ namespace View
         Pause,
         License,
         Title,
+        Credit,
     }
 
     public class ViewBehaviourNavigator : MonoBehaviour
     {
-        [SerializeField] private ViewBehaviourType initialViewBehaviour;
-
-        private Dictionary<ViewBehaviourType, ViewBehaviour> viewBehaviours;
+        private Dictionary<ViewBehaviourState, ViewBehaviour> viewBehaviours;
         private Stack<ViewBehaviour> activeBehaviours;
 
-        public ViewBehaviourType CurrentBehaviourType
+        private readonly Subject<ViewBehaviourState> onStateChanged = new();
+        public Observable<ViewBehaviourState> OnStateChanged => onStateChanged;
+
+        public ViewBehaviourState CurrentBehaviourState
         {
             get
             {
                 if (activeBehaviours.Count > 0)
                 {
-                    return activeBehaviours.Peek().ViewBehaviourType;
+                    return activeBehaviours.Peek().ViewBehaviourState;
                 }
 
-                return ViewBehaviourType.None;
+                return ViewBehaviourState.None;
             }
         }
 
         public void RegisterBehaviours()
         {
-            viewBehaviours = new Dictionary<ViewBehaviourType, ViewBehaviour>();
+            viewBehaviours = new Dictionary<ViewBehaviourState, ViewBehaviour>();
             activeBehaviours = new Stack<ViewBehaviour>();
 
             var behaviours = transform.GetComponentsInChildren<ViewBehaviour>(true);
 
             foreach (ViewBehaviour behaviour in behaviours)
             {
-                viewBehaviours.Add(behaviour.ViewBehaviourType, behaviour);
-            }
-
-            if (initialViewBehaviour != ViewBehaviourType.None)
-            {
-                ActivateBehaviour(initialViewBehaviour);
+                viewBehaviours.Add(behaviour.ViewBehaviourState, behaviour);
             }
         }
 
-        public T GetBehaviour<T>(ViewBehaviourType type) where T : ViewBehaviour
+        public T GetBehaviour<T>(ViewBehaviourState state) where T : ViewBehaviour
         {
-            return GetBehaviour(type) as T;
+            return GetBehaviour(state) as T;
         }
 
-        public ViewBehaviour GetBehaviour(ViewBehaviourType type)
+        public ViewBehaviour GetBehaviour(ViewBehaviourState state)
         {
-            if (viewBehaviours.TryGetValue(type, out ViewBehaviour behaviour))
+            if (viewBehaviours.TryGetValue(state, out ViewBehaviour behaviour))
             {
                 return behaviour;
             }
@@ -70,56 +68,60 @@ namespace View
             return null;
         }
 
-        public T ActivateBehaviour<T>(ViewBehaviourType type) where T : ViewBehaviour
+        public T ActivateBehaviour<T>(ViewBehaviourState state) where T : ViewBehaviour
         {
-            ActivateBehaviour(type);
+            ActivateBehaviour(state);
             return activeBehaviours.Peek() as T;
         }
 
-        public void ActivateBehaviour(ViewBehaviourType type)
+        public void ActivateBehaviour(ViewBehaviourState state)
         {
-            ViewBehaviour behaviour = GetBehaviour(type);
+            ViewBehaviour behaviour = GetBehaviour(state);
+            
             if (behaviour == null)
             {
                 return;
             }
 
-            ViewBehaviourType beforeType = ViewBehaviourType.None;
+            ViewBehaviourState beforeState = ViewBehaviourState.None;
 
             if (activeBehaviours.TryPeek(out ViewBehaviour beforeBehaviour))
             {
-                beforeBehaviour.Deactivate(type);
-                beforeType = beforeBehaviour.ViewBehaviourType;
+                beforeBehaviour.Deactivate(state);
+                beforeState = beforeBehaviour.ViewBehaviourState;
             }
 
-            behaviour.Activate(beforeType);
+            behaviour.Activate(beforeState);
+            onStateChanged.OnNext(state);
             activeBehaviours.Push(behaviour);
         }
 
-        public void DeactivateBehaviour(ViewBehaviourType type)
+        public void DeactivateBehaviour(ViewBehaviourState state)
         {
             ViewBehaviour behaviour = activeBehaviours.Peek();
 
-            if (type != behaviour.ViewBehaviourType)
+            if (state != behaviour.ViewBehaviourState)
             {
                 Debug.Log("手前に表示されているViewを閉じてから実行してください。");
                 return;
             }
 
             activeBehaviours.Pop();
-            ViewBehaviourType nextType = ViewBehaviourType.None;
+            ViewBehaviourState nextState = ViewBehaviourState.None;
 
             if (activeBehaviours.TryPeek(out var beforeBehaviour))
             {
-                nextType = beforeBehaviour.ViewBehaviourType;
+                nextState = beforeBehaviour.ViewBehaviourState;
             }
 
-            behaviour.Deactivate(nextType);
+            behaviour.Deactivate(nextState);
 
-            if (nextType != ViewBehaviourType.None)
+            if (nextState != ViewBehaviourState.None)
             {
-                beforeBehaviour.Activate(type);
+                beforeBehaviour.Activate(state);
             }
+
+            onStateChanged.OnNext(nextState);
         }
     }
 }

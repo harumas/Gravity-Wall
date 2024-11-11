@@ -25,26 +25,23 @@ namespace Presentation
         {
             respawnManager.RespawnViewSequence += async () =>
             {
-                var behaviour = behaviourNavigator.ActivateBehaviour<LoadingBehaviour>(ViewBehaviourType.Loading);
+                var behaviour = behaviourNavigator.ActivateBehaviour<LoadingBehaviour>(ViewBehaviourState.Loading);
                 await behaviour.SequenceLoading();
-                behaviourNavigator.DeactivateBehaviour(ViewBehaviourType.Loading);
+                behaviourNavigator.DeactivateBehaviour(ViewBehaviourState.Loading);
             };
 
-            InputEvent exitScreenEvent = InputActionProvider.CreateEvent(ActionGuid.Player.ExitScreen);
+            InputEvent exitScreenEvent = InputActionProvider.CreateEvent(ActionGuid.UI.ExitScreen);
             exitScreenEvent.Started += _ =>
             {
-                if (behaviourNavigator.CurrentBehaviourType == ViewBehaviourType.None)
+                if (behaviourNavigator.CurrentBehaviourState == ViewBehaviourState.None)
                 {
-                    behaviourNavigator.ActivateBehaviour(ViewBehaviourType.Pause);
+                    behaviourNavigator.ActivateBehaviour(ViewBehaviourState.Pause);
                 }
-                else if (behaviourNavigator.CurrentBehaviourType == ViewBehaviourType.Option)
+                else if (behaviourNavigator.CurrentBehaviourState == ViewBehaviourState.Option)
                 {
-                    behaviourNavigator.DeactivateBehaviour(ViewBehaviourType.Pause);
+                    behaviourNavigator.DeactivateBehaviour(ViewBehaviourState.Pause);
                 }
             };
-
-            var optionView = behaviourNavigator.GetBehaviour<OptionBehaviour>(ViewBehaviourType.Option).OptionView;
-            optionView.OnBackButtonPressed.Subscribe(_ => behaviourNavigator.DeactivateBehaviour(ViewBehaviourType.Option)).AddTo(optionView);
         }
     }
 }

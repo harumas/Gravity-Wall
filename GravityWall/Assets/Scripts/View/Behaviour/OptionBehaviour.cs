@@ -1,31 +1,29 @@
-using System;
 using Cysharp.Threading.Tasks;
-using Module.InputModule;
-using R3;
 using UnityEngine;
-using UnityEngine.UI;
-using VContainer;
 
 namespace View
 {
     public class OptionBehaviour : ViewBehaviour
     {
-        public override ViewBehaviourType ViewBehaviourType => ViewBehaviourType.Option;
+        public override ViewBehaviourState ViewBehaviourState => ViewBehaviourState.Option;
 
         [SerializeField] private OptionView optionView;
 
         public OptionView OptionView => optionView;
 
-        protected override async UniTask OnPreActivate(ViewBehaviourType beforeType)
+        protected override async UniTask OnPreActivate(ViewBehaviourState beforeState)
         {
             await UniTask.CompletedTask;
         }
 
-        protected override void OnActivate() { }
+        protected override void OnActivate()
+        {
+            optionView.SelectFirst();
+        }
 
         protected override void OnDeactivate() { }
 
-        protected override async UniTask OnPostDeactivate(ViewBehaviourType nextType)
+        protected override async UniTask OnPostDeactivate(ViewBehaviourState nextState)
         {
             await UniTask.CompletedTask;
         }

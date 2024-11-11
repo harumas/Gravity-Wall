@@ -1,7 +1,9 @@
 ﻿using Application;
 using CoreModule.Input;
+using Module.Character;
 using Module.InputModule;
 using R3;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using VContainer;
 using VContainer.Unity;
@@ -15,6 +17,8 @@ namespace Presentation
         private readonly PauseBehaviour pauseBehaviour;
         private readonly CursorLocker cursorLocker;
         private readonly GameStopper gameStopper;
+        private readonly PlayerController playerController;
+        private readonly PlayerTargetSyncer playerTargetSyncer;
         private InputEvent exitEvent;
 
         [Inject]
@@ -22,45 +26,56 @@ namespace Presentation
             ViewBehaviourNavigator navigator,
             PauseBehaviour pauseBehaviour,
             CursorLocker cursorLocker,
-            GameStopper gameStopper
+            GameStopper gameStopper,
+            PlayerController playerController,
+            PlayerTargetSyncer playerTargetSyncer
         )
         {
             this.navigator = navigator;
             this.pauseBehaviour = pauseBehaviour;
             this.cursorLocker = cursorLocker;
             this.gameStopper = gameStopper;
+            this.playerController = playerController;
+            this.playerTargetSyncer = playerTargetSyncer;
         }
 
         public void Start()
         {
-            exitEvent = InputActionProvider.CreateEvent(ActionGuid.Player.ExitScreen);
-            exitEvent.Started += OnExitEvent;
+            exitEvent = InputActionProvider.CreateEvent(ActionGuid.UI.ExitScreen);
+
+            navigator.OnStateChanged.Subscribe(state =>
+            {
+                exitEvent.Started -= OnExitEvent;
+
+                if (state == ViewBehaviourState.Pause || state == ViewBehaviourState.None)
+                {
+                    exitEvent.Started += OnExitEvent;
+                }
+            }).AddTo(pauseBehaviour);
 
             pauseBehaviour.OnActiveStateChanged.Subscribe(context =>
                 {
-                    if (context.isActive && context.behaviourType == ViewBehaviourType.None)
+                    if (context.isActive && context.behaviourType == ViewBehaviourState.None)
                     {
                         cursorLocker.SetCursorLock(false);
+                        cursorLocker.IsCursorChangeBlock = true;
+                        playerTargetSyncer.Lock();
+                        playerController.Lock();
                     }
-                    else if (!context.isActive && context.behaviourType == ViewBehaviourType.None)
+                    else if (!context.isActive && context.behaviourType == ViewBehaviourState.None)
                     {
+                        cursorLocker.IsCursorChangeBlock = false;
                         cursorLocker.SetCursorLock(true);
-                    }
-                    else if (!context.isActive && context.behaviourType != ViewBehaviourType.None)
-                    {
-                        exitEvent.Started -= OnExitEvent;
-                    }
-                    else if (context.isActive && context.behaviourType != ViewBehaviourType.None)
-                    {
-                        exitEvent.Started += OnExitEvent;
+                        playerTargetSyncer.Unlock();
+                        playerController.Unlock();
                     }
                 })
                 .AddTo(pauseBehaviour);
 
             PauseView pauseView = pauseBehaviour.PauseView;
 
-            pauseView.OnContinueButtonPressed.Subscribe(_ => navigator.DeactivateBehaviour(ViewBehaviourType.Pause)).AddTo(pauseView);
-            pauseView.OnGoToSettingsButtonPressed.Subscribe(_ => navigator.ActivateBehaviour(ViewBehaviourType.Option)).AddTo(pauseView);
+            pauseView.OnContinueButtonPressed.Subscribe(_ => navigator.DeactivateBehaviour(ViewBehaviourState.Pause)).AddTo(pauseView);
+            pauseView.OnGoToSettingsButtonPressed.Subscribe(_ => navigator.ActivateBehaviour(ViewBehaviourState.Option)).AddTo(pauseView);
             pauseView.OnEndGameButtonPressed.Subscribe(_ => gameStopper.Quit());
         }
 
@@ -68,11 +83,11 @@ namespace Presentation
         {
             if (pauseBehaviour.IsActive.CurrentValue)
             {
-                navigator.DeactivateBehaviour(ViewBehaviourType.Pause);
+                navigator.DeactivateBehaviour(ViewBehaviourState.Pause);
             }
             else
             {
-                navigator.ActivateBehaviour(ViewBehaviourType.Pause);
+                navigator.ActivateBehaviour(ViewBehaviourState.Pause);
             }
         }
     }

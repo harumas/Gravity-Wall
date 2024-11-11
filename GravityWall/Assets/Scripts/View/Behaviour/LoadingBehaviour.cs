@@ -6,7 +6,7 @@ namespace View
 {
     public class LoadingBehaviour : ViewBehaviour
     {
-        public override ViewBehaviourType ViewBehaviourType => ViewBehaviourType.Loading;
+        public override ViewBehaviourState ViewBehaviourState => ViewBehaviourState.Loading;
 
         [SerializeField] private float loadingTime;
 
@@ -15,7 +15,7 @@ namespace View
             await UniTask.Delay(TimeSpan.FromSeconds(loadingTime));
         }
 
-        protected override async UniTask OnPreActivate(ViewBehaviourType beforeType)
+        protected override async UniTask OnPreActivate(ViewBehaviourState beforeState)
         {
             await UniTask.CompletedTask;
         }
@@ -24,7 +24,7 @@ namespace View
 
         protected override void OnDeactivate() { }
 
-        protected override async UniTask OnPostDeactivate(ViewBehaviourType nextType)
+        protected override async UniTask OnPostDeactivate(ViewBehaviourState nextState)
         {
             await UniTask.CompletedTask;
         }

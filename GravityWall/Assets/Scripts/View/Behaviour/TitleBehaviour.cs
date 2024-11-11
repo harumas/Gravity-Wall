@@ -8,7 +8,7 @@ namespace View
 {
     public class TitleBehaviour : ViewBehaviour
     {
-        public override ViewBehaviourType ViewBehaviourType => ViewBehaviourType.Title;
+        public override ViewBehaviourState ViewBehaviourState => ViewBehaviourState.Title;
 
         [SerializeField] private TitleView titleView;
         private readonly Subject<bool> onCursorLockChange = new Subject<bool>();
@@ -16,23 +16,29 @@ namespace View
         public TitleView TitleView => titleView;
         public Observable<bool> OnCursorLockChange => onCursorLockChange;
 
-        protected override async UniTask OnPreActivate(ViewBehaviourType beforeType)
+        protected override async UniTask OnPreActivate(ViewBehaviourState beforeState)
         {
-            if (beforeType == ViewBehaviourType.None)
+            // インゲームからタイトルに戻るときにカーソルをロック解除する
+            if (beforeState == ViewBehaviourState.None)
             {
                 onCursorLockChange.OnNext(false);
             }
+            
+            titleView.SelectFirst();
 
             await UniTask.CompletedTask;
         }
 
-        protected override void OnActivate() { }
+        protected override void OnActivate()
+        {
+        }
 
         protected override void OnDeactivate() { }
 
-        protected override async UniTask OnPostDeactivate(ViewBehaviourType nextType)
+        protected override async UniTask OnPostDeactivate(ViewBehaviourState nextState)
         {
-            if (nextType == ViewBehaviourType.None)
+            // タイトルからインゲームに遷移するときにカーソルをロックする
+            if (nextState == ViewBehaviourState.None)
             {
                 onCursorLockChange.OnNext(true);
             }

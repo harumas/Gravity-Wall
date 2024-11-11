@@ -17,18 +17,18 @@ namespace Presentation
         public OptionChangedPresenter(SaveManager<ConfigData> configManager, ViewBehaviourNavigator behaviourNavigator)
         {
             configData = configManager.Data;
-            optionBehaviour = behaviourNavigator.GetBehaviour<OptionBehaviour>(ViewBehaviourType.Option);
+            optionBehaviour = behaviourNavigator.GetBehaviour<OptionBehaviour>(ViewBehaviourState.Option);
         }
 
         public void Start()
         {
             OptionView optionView = optionBehaviour.OptionView;
-            
-            optionBehaviour.OnActiveStateChanged.Skip(1).Subscribe(context =>
+
+            optionBehaviour.OnActiveStateChanged.Subscribe(context =>
             {
                 if (context.isActive)
                 {
-                    optionView.SetBgmVolume(configData.BgmVolume.Value);        
+                    optionView.SetBgmVolume(configData.BgmVolume.Value);
                     optionView.SetSeVolume(configData.SeVolume.Value);
                     optionView.SetControllerSensibility(configData.PadSensibility.Value);
                     optionView.SetVibrationToggle(configData.Vibration.Value);
@@ -37,7 +37,7 @@ namespace Presentation
 
             optionView.OnBgmVolumeChanged.Skip(1).Subscribe(value => configData.BgmVolume.Value = value).AddTo(optionView);
             optionView.OnSeVolumeChanged.Skip(1).Subscribe(value => configData.SeVolume.Value = value).AddTo(optionView);
-            optionView.OnControllerSensibilityChanged.Skip(1).Subscribe(value => configData.PadSensibility.Value = value).AddTo(optionView);
+            optionView.OnControllerSensibilityChanged.Skip(2).Subscribe(value => { configData.PadSensibility.Value = value; }).AddTo(optionView);
             optionView.OnVibrationToggleChanged.Skip(1).Subscribe(value => configData.Vibration.Value = value).AddTo(optionView);
         }
     }
