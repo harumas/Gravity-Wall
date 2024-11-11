@@ -18,6 +18,8 @@ namespace View
 
     public class ViewBehaviourNavigator : MonoBehaviour
     {
+        [SerializeField] private ViewBehaviourType initialViewBehaviour;
+
         private Dictionary<ViewBehaviourType, ViewBehaviour> viewBehaviours;
         private Stack<ViewBehaviour> activeBehaviours;
 
@@ -45,6 +47,11 @@ namespace View
             {
                 viewBehaviours.Add(behaviour.ViewBehaviourType, behaviour);
             }
+
+            if (initialViewBehaviour != ViewBehaviourType.None)
+            {
+                ActivateBehaviour(initialViewBehaviour);
+            }
         }
 
         public T GetBehaviour<T>(ViewBehaviourType type) where T : ViewBehaviour
@@ -65,16 +72,8 @@ namespace View
 
         public T ActivateBehaviour<T>(ViewBehaviourType type) where T : ViewBehaviour
         {
-            ViewBehaviour behaviour = GetBehaviour(type);
-            if (behaviour == null)
-            {
-                return null;
-            }
-
-            behaviour.Activate();
-            activeBehaviours.Push(behaviour);
-
-            return behaviour as T;
+            ActivateBehaviour(type);
+            return activeBehaviours.Peek() as T;
         }
 
         public void ActivateBehaviour(ViewBehaviourType type)
@@ -85,7 +84,15 @@ namespace View
                 return;
             }
 
-            behaviour.Activate();
+            ViewBehaviourType beforeType = ViewBehaviourType.None;
+
+            if (activeBehaviours.TryPeek(out ViewBehaviour beforeBehaviour))
+            {
+                beforeBehaviour.Deactivate(type);
+                beforeType = beforeBehaviour.ViewBehaviourType;
+            }
+
+            behaviour.Activate(beforeType);
             activeBehaviours.Push(behaviour);
         }
 
@@ -100,7 +107,19 @@ namespace View
             }
 
             activeBehaviours.Pop();
-            behaviour.Deactivate();
+            ViewBehaviourType nextType = ViewBehaviourType.None;
+
+            if (activeBehaviours.TryPeek(out var beforeBehaviour))
+            {
+                nextType = beforeBehaviour.ViewBehaviourType;
+            }
+
+            behaviour.Deactivate(nextType);
+
+            if (nextType != ViewBehaviourType.None)
+            {
+                beforeBehaviour.Activate(type);
+            }
         }
     }
 }

@@ -15,18 +15,18 @@ namespace View
             await UniTask.Delay(TimeSpan.FromSeconds(loadingTime));
         }
 
-        protected override UniTask OnPreActivate()
+        protected override async UniTask OnPreActivate(ViewBehaviourType beforeType)
         {
-            return UniTask.CompletedTask;
+            await UniTask.CompletedTask;
         }
 
         protected override void OnActivate() { }
 
         protected override void OnDeactivate() { }
 
-        protected override UniTask OnPostDeactivate()
+        protected override async UniTask OnPostDeactivate(ViewBehaviourType nextType)
         {
-            return UniTask.CompletedTask;
+            await UniTask.CompletedTask;
         }
     }
 }

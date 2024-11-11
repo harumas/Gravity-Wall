@@ -1,29 +1,32 @@
 ﻿using CoreModule.Save;
 using Module.Config;
 using R3;
+using UnityEngine;
+using VContainer;
 using VContainer.Unity;
 using View;
 
 namespace Presentation
 {
-    public class OptionChangedPresenter : IInitializable
+    public class OptionChangedPresenter : IStartable
     {
         private readonly ConfigData configData;
         private readonly OptionBehaviour optionBehaviour;
 
+        [Inject]
         public OptionChangedPresenter(SaveManager<ConfigData> configManager, ViewBehaviourNavigator behaviourNavigator)
         {
             configData = configManager.Data;
             optionBehaviour = behaviourNavigator.GetBehaviour<OptionBehaviour>(ViewBehaviourType.Option);
         }
 
-        public void Initialize()
+        public void Start()
         {
             OptionView optionView = optionBehaviour.OptionView;
             
-            optionBehaviour.IsActive.Subscribe(isActive =>
+            optionBehaviour.OnActiveStateChanged.Skip(1).Subscribe(context =>
             {
-                if (isActive)
+                if (context.isActive)
                 {
                     optionView.SetBgmVolume(configData.BgmVolume.Value);        
                     optionView.SetSeVolume(configData.SeVolume.Value);
@@ -32,10 +35,10 @@ namespace Presentation
                 }
             }).AddTo(optionBehaviour);
 
-            optionView.OnBgmVolumeChanged.Subscribe(value => configData.BgmVolume.Value = value).AddTo(optionView);
-            optionView.OnSeVolumeChanged.Subscribe(value => configData.SeVolume.Value = value).AddTo(optionView);
-            optionView.OnControllerSensibilityChanged.Subscribe(value => configData.PadSensibility.Value = value).AddTo(optionView);
-            optionView.OnVibrationToggleChanged.Subscribe(value => configData.Vibration.Value = value).AddTo(optionView);
+            optionView.OnBgmVolumeChanged.Skip(1).Subscribe(value => configData.BgmVolume.Value = value).AddTo(optionView);
+            optionView.OnSeVolumeChanged.Skip(1).Subscribe(value => configData.SeVolume.Value = value).AddTo(optionView);
+            optionView.OnControllerSensibilityChanged.Skip(1).Subscribe(value => configData.PadSensibility.Value = value).AddTo(optionView);
+            optionView.OnVibrationToggleChanged.Skip(1).Subscribe(value => configData.Vibration.Value = value).AddTo(optionView);
         }
     }
 }

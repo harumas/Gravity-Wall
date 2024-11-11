@@ -23,6 +23,7 @@ namespace Container
             
             builder.Register<ConfigLoader>(Lifetime.Singleton);
             builder.Register<SaveManager<ConfigData>>(Lifetime.Singleton);
+            builder.Register<GameStopper>(Lifetime.Singleton);
             builder.RegisterInstance(InputActionProvider.ActionAsset);
             builder.RegisterInstance(audioMixer);
         }

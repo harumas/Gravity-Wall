@@ -49,14 +49,21 @@ namespace Container
             builder.RegisterEntryPoint<InputConfigChangedListener>();
             builder.RegisterEntryPoint<AudioConfigChangedListener>();
             builder.RegisterEntryPoint<OptionChangedPresenter>();
+            
+            builder.RegisterEntryPoint<TitleBehaviourPresenter>();
+            builder.RegisterEntryPoint<LicenseBehaviourPresenter>();
+            builder.RegisterEntryPoint<PauseBehaviourPresenter>();
 
             builder.Register<PlayerInput>(Lifetime.Singleton).As<IGameInput>();
+            builder.Register<CursorLocker>(Lifetime.Singleton);
 
             //ViewBehaviourの登録
             behaviourNavigator.RegisterBehaviours();
             builder.RegisterComponent(behaviourNavigator.GetBehaviour<OptionBehaviour>(ViewBehaviourType.Option));
             builder.RegisterComponent(behaviourNavigator.GetBehaviour<LoadingBehaviour>(ViewBehaviourType.Loading));
             builder.RegisterComponent(behaviourNavigator.GetBehaviour<ClearBehaviour>(ViewBehaviourType.Clear));
+            builder.RegisterComponent(behaviourNavigator.GetBehaviour<TitleBehaviour>(ViewBehaviourType.Title));
+            builder.RegisterComponent(behaviourNavigator.GetBehaviour<LicenseBehaviour>(ViewBehaviourType.License));
             builder.RegisterComponent(behaviourNavigator.GetBehaviour<PauseBehaviour>(ViewBehaviourType.Pause));
             RegisterInstanceWithNullCheck(builder, behaviourNavigator);
 
