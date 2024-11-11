@@ -12,14 +12,12 @@ namespace Presentation
     public class SequenceViewPresenter : IInitializable
     {
         private readonly RespawnManager respawnManager;
-        private readonly CursorLocker cursorLocker;
         private readonly ViewBehaviourNavigator behaviourNavigator;
 
         [Inject]
-        public SequenceViewPresenter(RespawnManager respawnManager, CursorLocker cursorLocker, ViewBehaviourNavigator behaviourNavigator)
+        public SequenceViewPresenter(RespawnManager respawnManager,  ViewBehaviourNavigator behaviourNavigator)
         {
             this.respawnManager = respawnManager;
-            this.cursorLocker = cursorLocker;
             this.behaviourNavigator = behaviourNavigator;
         }
 

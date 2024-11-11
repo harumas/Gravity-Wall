@@ -1,5 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using Module.InputModule;
+using UnityEngine;
 using VContainer;
 
 namespace View
@@ -9,6 +10,8 @@ namespace View
         public override ViewBehaviourType ViewBehaviourType => ViewBehaviourType.Pause;
 
         private CursorLocker cursorLocker;
+        [SerializeField] private PauseView pauseView;
+        public PauseView PauseView => pauseView;
 
         [Inject]
         private void Construct(CursorLocker cursorLocker)
@@ -16,7 +19,7 @@ namespace View
             this.cursorLocker = cursorLocker;
         }
 
-        protected override async UniTask OnPreActivate()
+        protected override async UniTask OnPreActivate(ViewBehaviourType beforeType)
         {
             await UniTask.CompletedTask;
         }
@@ -25,15 +28,19 @@ namespace View
         {
             cursorLocker.IsCursorChangeBlock = true;
             cursorLocker.SetCursorLock(true);
+
+            Time.timeScale = 0f;
         }
 
         protected override void OnDeactivate()
         {
             cursorLocker.IsCursorChangeBlock = false;
             cursorLocker.SetCursorLock(false);
+
+            Time.timeScale = 1f;
         }
 
-        protected override async UniTask OnPostDeactivate()
+        protected override async UniTask OnPostDeactivate(ViewBehaviourType nextType)
         {
             await UniTask.CompletedTask;
         }

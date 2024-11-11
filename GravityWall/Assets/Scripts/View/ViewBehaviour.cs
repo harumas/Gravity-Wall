@@ -8,26 +8,31 @@ namespace View
     {
         public abstract ViewBehaviourType ViewBehaviourType { get; }
 
-        [SerializeField] private SerializableReactiveProperty<bool> isActive = new SerializableReactiveProperty<bool>(false);
-        public ReadOnlyReactiveProperty<bool> IsActive => isActive;
+        [SerializeField] private SerializableReactiveProperty<bool> isActive = new();
+        private readonly Subject<(bool isActive, ViewBehaviourType behaviourType)> onActiveStateChanged = new();
 
-        protected abstract UniTask OnPreActivate();
+        public ReadOnlyReactiveProperty<bool> IsActive => isActive;
+        public Observable<(bool isActive, ViewBehaviourType behaviourType)> OnActiveStateChanged => onActiveStateChanged;
+
+        protected abstract UniTask OnPreActivate(ViewBehaviourType beforeType);
         protected abstract void OnActivate();
         protected abstract void OnDeactivate();
-        protected abstract UniTask OnPostDeactivate();
+        protected abstract UniTask OnPostDeactivate(ViewBehaviourType nextType);
 
-        public async void Activate()
+        public async void Activate(ViewBehaviourType beforeType)
         {
             gameObject.SetActive(true);
-            await OnPreActivate();
+            await OnPreActivate(beforeType);
+            onActiveStateChanged.OnNext((true, beforeType));
             isActive.Value = true;
             OnActivate();
         }
 
-        public async void Deactivate()
+        public async void Deactivate(ViewBehaviourType nextType)
         {
             OnDeactivate();
-            await OnPostDeactivate();
+            await OnPostDeactivate(nextType);
+            onActiveStateChanged.OnNext((false, nextType));
             isActive.Value = false;
             gameObject.SetActive(false);
         }

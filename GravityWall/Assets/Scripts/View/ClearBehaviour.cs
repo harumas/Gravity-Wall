@@ -13,10 +13,10 @@ namespace View
         public async UniTask SequenceClear()
         {
             await UniTask.Delay(TimeSpan.FromSeconds(clearDelay));
-            Deactivate();
+            Deactivate(ViewBehaviourType.None);
         }
 
-        protected override UniTask OnPreActivate()
+        protected override UniTask OnPreActivate(ViewBehaviourType type)
         {
             return UniTask.CompletedTask;
         }
@@ -25,7 +25,7 @@ namespace View
 
         protected override void OnDeactivate() { }
 
-        protected override UniTask OnPostDeactivate()
+        protected override UniTask OnPostDeactivate(ViewBehaviourType type)
         {
             return UniTask.CompletedTask;
         }
