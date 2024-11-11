@@ -50,21 +50,25 @@ namespace Container
             builder.RegisterEntryPoint<AudioConfigChangedListener>();
             builder.RegisterEntryPoint<OptionChangedPresenter>();
             
+            builder.RegisterEntryPoint<ViewBehaviourInitializer>();
             builder.RegisterEntryPoint<TitleBehaviourPresenter>();
             builder.RegisterEntryPoint<LicenseBehaviourPresenter>();
             builder.RegisterEntryPoint<PauseBehaviourPresenter>();
+            builder.RegisterEntryPoint<OptionBehaviourPresenter>();
+            builder.RegisterEntryPoint<CreditBehaviourPresenter>();
 
             builder.Register<PlayerInput>(Lifetime.Singleton).As<IGameInput>();
             builder.Register<CursorLocker>(Lifetime.Singleton);
 
             //ViewBehaviourの登録
             behaviourNavigator.RegisterBehaviours();
-            builder.RegisterComponent(behaviourNavigator.GetBehaviour<OptionBehaviour>(ViewBehaviourType.Option));
-            builder.RegisterComponent(behaviourNavigator.GetBehaviour<LoadingBehaviour>(ViewBehaviourType.Loading));
-            builder.RegisterComponent(behaviourNavigator.GetBehaviour<ClearBehaviour>(ViewBehaviourType.Clear));
-            builder.RegisterComponent(behaviourNavigator.GetBehaviour<TitleBehaviour>(ViewBehaviourType.Title));
-            builder.RegisterComponent(behaviourNavigator.GetBehaviour<LicenseBehaviour>(ViewBehaviourType.License));
-            builder.RegisterComponent(behaviourNavigator.GetBehaviour<PauseBehaviour>(ViewBehaviourType.Pause));
+            builder.RegisterComponent(behaviourNavigator.GetBehaviour<OptionBehaviour>(ViewBehaviourState.Option));
+            builder.RegisterComponent(behaviourNavigator.GetBehaviour<LoadingBehaviour>(ViewBehaviourState.Loading));
+            builder.RegisterComponent(behaviourNavigator.GetBehaviour<ClearBehaviour>(ViewBehaviourState.Clear));
+            builder.RegisterComponent(behaviourNavigator.GetBehaviour<TitleBehaviour>(ViewBehaviourState.Title));
+            builder.RegisterComponent(behaviourNavigator.GetBehaviour<LicenseBehaviour>(ViewBehaviourState.License));
+            builder.RegisterComponent(behaviourNavigator.GetBehaviour<PauseBehaviour>(ViewBehaviourState.Pause));
+            builder.RegisterComponent(behaviourNavigator.GetBehaviour<CreditBehaviour>(ViewBehaviourState.Credit));
             RegisterInstanceWithNullCheck(builder, behaviourNavigator);
 
             RegisterPlayerComponents(builder);

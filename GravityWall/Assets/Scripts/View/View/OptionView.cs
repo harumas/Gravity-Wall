@@ -1,5 +1,6 @@
 ﻿using R3;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace View
@@ -12,8 +13,10 @@ namespace View
         [SerializeField] private Slider sensibilityXSlider;
         [SerializeField] private Slider sensibilityYSlider;
         [SerializeField] private Toggle vibrationToggle;
+        [SerializeField] private Button licenseButton;
 
         public Observable<Unit> OnBackButtonPressed => backButton.OnClickAsObservable();
+        public Observable<Unit> OnLicenseButtonPressed => licenseButton.OnClickAsObservable();
 
         public Observable<float> OnBgmVolumeChanged => bgmVolumeSlider
             .OnValueChangedAsObservable()
@@ -25,9 +28,15 @@ namespace View
 
         public Observable<Vector2> OnControllerSensibilityChanged =>
             Observable.Merge(sensibilityXSlider.OnValueChangedAsObservable(), sensibilityYSlider.OnValueChangedAsObservable())
-                .Select(_ => new Vector2(sensibilityXSlider.value / sensibilityXSlider.maxValue, sensibilityYSlider.value / sensibilityYSlider.maxValue));
+                .Select(_ => new Vector2(sensibilityXSlider.value / sensibilityXSlider.maxValue,
+                    sensibilityYSlider.value / sensibilityYSlider.maxValue));
 
         public Observable<bool> OnVibrationToggleChanged => vibrationToggle.OnValueChangedAsObservable();
+
+        public void SelectFirst()
+        {
+            EventSystem.current.SetSelectedGameObject(sensibilityXSlider.gameObject);
+        }
 
         public void SetBgmVolume(float value)
         {

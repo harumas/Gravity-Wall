@@ -1,5 +1,6 @@
 ﻿using R3;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace View
@@ -17,5 +18,10 @@ namespace View
         public Observable<Unit> OnReturnToHubButton => returnToHubButton.OnClickAsObservable();
         public Observable<Unit> OnGoToSettingsButtonPressed => goToSettingsButton.OnClickAsObservable();
         public Observable<Unit> OnEndGameButtonPressed => endGameButton.OnClickAsObservable();
+
+        public void SelectFirst()
+        {
+            EventSystem.current.SetSelectedGameObject(continueButton.gameObject);
+        }
     }
 }
