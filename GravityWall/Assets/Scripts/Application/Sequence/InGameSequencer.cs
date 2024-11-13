@@ -11,12 +11,6 @@ using Object = UnityEngine.Object;
 
 namespace Application.Sequence
 {
-    public enum GameState
-    {
-        StageSelect,
-        Playing
-    }
-
     public class InGameSequencer : IStartable, IDisposable
     {
         private readonly AdditiveSceneLoader additiveSceneLoader;
@@ -25,8 +19,9 @@ namespace Application.Sequence
         private CancellationTokenSource cTokenSource;
 
         [Inject]
-        public InGameSequencer()
+        public InGameSequencer(GameState gameState)
         {
+            this.gameState = gameState;
             additiveSceneLoader = new AdditiveSceneLoader();
         }
 
@@ -37,7 +32,6 @@ namespace Application.Sequence
             foreach (AdditiveLevelLoadTrigger trigger in triggers)
             {
                 trigger.OnLoadRequested += OnLoadRequested;
-                trigger.OnUnloadRequested += OnUnloadRequested;
             }
 
             Sequence().Forget();
@@ -46,31 +40,25 @@ namespace Application.Sequence
         private void OnLoadRequested(SceneField mainScene, List<SceneField> fields)
         {
             this.loadContext = (mainScene, fields);
-            gameState = GameState.Playing;
-        }
-
-        private void OnUnloadRequested(SceneField mainScene, List<SceneField> fields)
-        {
-            this.loadContext = (mainScene, fields);
-            gameState = GameState.StageSelect;
+            gameState.SetState(GameState.State.Playing);
         }
 
         public async UniTaskVoid Sequence()
         {
             //ステージセレクト待機
-            await UniTask.WaitUntil(IsGameState(GameState.Playing));
+            await UniTask.WaitUntil(IsGameState(GameState.State.Playing));
 
             cTokenSource = new CancellationTokenSource();
             await additiveSceneLoader.Load(loadContext, cTokenSource.Token);
 
             //クリア待機
-            await UniTask.WaitUntil(IsGameState(GameState.StageSelect));
+            await UniTask.WaitUntil(IsGameState(GameState.State.StageSelect));
             await additiveSceneLoader.UnloadAdditiveScenes(cTokenSource.Token);
         }
 
-        private Func<bool> IsGameState(GameState gameState)
+        private Func<bool> IsGameState(GameState.State state)
         {
-            return () => this.gameState == gameState;
+            return () => gameState.Current.CurrentValue == state;
         }
 
         public void Dispose()

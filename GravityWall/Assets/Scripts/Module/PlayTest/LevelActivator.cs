@@ -35,23 +35,28 @@ namespace Module.PlayTest
 
             foreach (Gate gate in levelGates)
             {
-                gate.IsEnabled.Skip(1).Subscribe(isEnabled =>
-                {
-                    if (isEnabled)
+                gate.IsEnabled.Skip(1)
+                    .Subscribe(isEnabled =>
                     {
-                        Activate();
-                    }
-                    else
-                    {
-                        Deactivate();
-                    }
-                }).AddTo(this);
+                        if (isEnabled)
+                        {
+                            Activate();
+                        }
+                        else
+                        {
+                            Deactivate();
+                        }
+                    })
+                    .AddTo(this);
             }
         }
 
         public void Activate()
         {
-            roomObject.SetActive(true);
+            if (roomObject != null)
+            {
+                roomObject.SetActive(true);
+            }
 
             foreach (Gate levelGate in levelGates)
             {
@@ -65,7 +70,10 @@ namespace Module.PlayTest
 
             if (allDisabled && !isPlayerEnter)
             {
-                roomObject.SetActive(false);
+                if (roomObject != null)
+                {
+                    roomObject.SetActive(false);
+                }
 
                 foreach (Gate levelGate in levelGates)
                 {
