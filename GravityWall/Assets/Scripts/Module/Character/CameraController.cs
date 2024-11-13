@@ -14,25 +14,6 @@ namespace Module.Character
         [SerializeField] private MinMaxValue verticalRange;
         [SerializeField] private bool isFreeCamera = true;
 
-        private void Start()
-        {
-            //カーソルロック
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-
-            InputEvent enterScreenEvent = InputActionProvider.CreateEvent(ActionGuid.Player.EnterScreen);
-            enterScreenEvent.Started += _ => { SetCursorLock(true); };
-            
-            InputEvent exitScreenEvent = InputActionProvider.CreateEvent(ActionGuid.Player.ExitScreen);
-            exitScreenEvent.Started += _ => { SetCursorLock(false); };
-        }
-
-        private void SetCursorLock(bool isLock)
-        {
-            Cursor.visible = !isLock;
-            Cursor.lockState = isLock ? CursorLockMode.Locked : CursorLockMode.None;
-        }
-
         public void OnRotateCameraInput(Vector2 mouseDelta)
         {
             if (!isFreeCamera || Cursor.lockState != CursorLockMode.Locked)
