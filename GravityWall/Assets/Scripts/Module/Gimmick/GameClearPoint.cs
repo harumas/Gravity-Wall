@@ -8,7 +8,7 @@ namespace Application.Sequence
     public class GameClearPoint : MonoBehaviour
     {
         public event Action OnClear;
-        private bool firstTouch = true;
+        private bool firstTouch = false;
 
         private void OnTriggerEnter(Collider other)
         {
@@ -18,10 +18,9 @@ namespace Application.Sequence
             }
         }
 
-        public void Clear()
+        private void Clear()
         {
             OnClear?.Invoke();
-            firstTouch = false;
         }
     }
 }

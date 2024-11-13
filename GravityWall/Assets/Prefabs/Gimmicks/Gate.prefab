@@ -63,7 +63,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4304468164229452824}
   - component: {fileID: 5260175374949259475}
-  - component: {fileID: 7471500961253179769}
+  - component: {fileID: 7607265530484897456}
   - component: {fileID: 3672596641055093830}
   m_Layer: 9
   m_Name: Gate
@@ -82,7 +82,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 103.66, y: 1.77, z: 19.97}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.4832, y: 1.4832, z: 1.4832}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2128025230109674958}
@@ -113,10 +113,34 @@ MonoBehaviour:
   gimmickPath: Gate
   gateOpenEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7607265530484897456}
+        m_TargetAssemblyTypeName: Module.Gimmick.ObjectHider, Module.Gimmick
+        m_MethodName: Disable
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   gateCloseEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7607265530484897456}
+        m_TargetAssemblyTypeName: Module.Gimmick.ObjectHider, Module.Gimmick
+        m_MethodName: Enable
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   gate: {fileID: 1706609514237489590}
   gateMeshRenderers:
   - {fileID: 1469237011632712047}
@@ -133,9 +157,10 @@ MonoBehaviour:
   - {fileID: 6620361321699404605}
   switchMaxCount: 1
   audioSource: {fileID: 3672596641055093830}
-  observedSwitches: []
+  observedSwitches:
+  - {fileID: 0}
   setInterval: 0.5
---- !u!114 &7471500961253179769
+--- !u!114 &7607265530484897456
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,15 +169,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4897957424493195374}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ffdfed186bc7f401bb3fff98844ff62d, type: 3}
+  m_Script: {fileID: 11500000, guid: ee7754dc2b1c4e442af2d966e9cd8ac0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startActive: 1
-  activateOnOpen: 0
-  roomObject: {fileID: 0}
-  observeGate: 
-  levelGates: []
-  objectHiders: []
+  hideAngle: 80
 --- !u!82 &3672596641055093830
 AudioSource:
   m_ObjectHideFlags: 0

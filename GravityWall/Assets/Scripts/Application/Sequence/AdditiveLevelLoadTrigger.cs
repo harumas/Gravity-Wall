@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Constants;
 using CoreModule.Helper.Attribute;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -10,18 +11,29 @@ namespace Application.Sequence
     {
         [SerializeField] private SceneField mainScene;
         [SerializeField] private List<SceneField> levelReference;
+        [SerializeField] private bool triggerDetect;
+        [SerializeField] private bool isLoaded;
 
         public event Action<SceneField, List<SceneField>> OnLoadRequested;
-        public event Action<SceneField, List<SceneField>> OnUnloadRequested;
-
+        
         public void Load()
         {
             OnLoadRequested?.Invoke(mainScene, levelReference);
         }
 
-        public void Unload()
+        public void Reset()
         {
-            OnUnloadRequested?.Invoke(mainScene, levelReference);
+            isLoaded = false;
         }
+
+        public void OnTriggerEnter(Collider other)
+        {
+            if (triggerDetect && !isLoaded && other.CompareTag(Tag.Player))
+            {
+                Load();
+                isLoaded = true;
+            }
+        }
+        
     }
 }

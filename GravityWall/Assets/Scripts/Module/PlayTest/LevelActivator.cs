@@ -11,9 +11,7 @@ namespace Module.PlayTest
     public class LevelActivator : MonoBehaviour
     {
         [SerializeField] private bool startActive;
-        [SerializeField] private bool activateOnOpen;
         [SerializeField] private GameObject roomObject;
-        [SerializeField] private string observeGate;
         [SerializeField] private List<Gate> levelGates;
         [SerializeField] private List<ObjectHider> objectHiders;
 
@@ -21,11 +19,6 @@ namespace Module.PlayTest
 
         private void Start()
         {
-            if (activateOnOpen)
-            {
-                GimmickReference.OnGimmickReferenceUpdated += OnGimmickReferenceUpdated;
-            }
-
             if (startActive)
             {
                 foreach (Gate levelGate in levelGates)
@@ -58,28 +51,12 @@ namespace Module.PlayTest
             }
         }
 
-        private void OnGimmickReferenceUpdated(GimmickReference reference)
-        {
-            if (reference.TryGetGimmick(observeGate, out Gate gate))
-            {
-                gate.IsEnabled.Skip(1)
-                    .Subscribe(isEnabled =>
-                    {
-                        if (isEnabled)
-                        {
-                            Activate();
-                        }
-                        else
-                        {
-                            Deactivate();
-                        }
-                    });
-            }
-        }
-
         public void Activate()
         {
-            roomObject.SetActive(true);
+            if (roomObject != null)
+            {
+                roomObject.SetActive(true);
+            }
 
             foreach (Gate levelGate in levelGates)
             {
@@ -93,7 +70,10 @@ namespace Module.PlayTest
 
             if (allDisabled && !isPlayerEnter)
             {
-                roomObject.SetActive(false);
+                if (roomObject != null)
+                {
+                    roomObject.SetActive(false);
+                }
 
                 foreach (Gate levelGate in levelGates)
                 {
