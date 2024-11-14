@@ -6,17 +6,17 @@ namespace View
 {
     public class ClearBehaviour : ViewBehaviour
     {
-        public override BehaviourType BehaviourType => BehaviourType.Clear;
+        public override ViewBehaviourState ViewBehaviourState => ViewBehaviourState.Clear;
 
         [SerializeField] private float clearDelay;
 
         public async UniTask SequenceClear()
         {
             await UniTask.Delay(TimeSpan.FromSeconds(clearDelay));
-            Deactivate();
+            Deactivate(ViewBehaviourState.None);
         }
 
-        protected override UniTask OnPreActivate()
+        protected override UniTask OnPreActivate(ViewBehaviourState state)
         {
             return UniTask.CompletedTask;
         }
@@ -25,7 +25,7 @@ namespace View
 
         protected override void OnDeactivate() { }
 
-        protected override UniTask OnPostDeactivate()
+        protected override UniTask OnPostDeactivate(ViewBehaviourState state)
         {
             return UniTask.CompletedTask;
         }
