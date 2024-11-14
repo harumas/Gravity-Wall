@@ -40,11 +40,12 @@ namespace Module.Gimmick
                     audioSource.Play();
 
                     breakedGlass.transform.localScale = scale;
-                    breakedGlass.transform.DOScaleZ(0.7f, 3.0f).SetUpdate(true).OnComplete(() =>
+                    breakedGlass.transform.DOScaleZ(0.7f, 1.0f)
+                    .SetUpdate(true)
+                    .OnComplete(() =>
                     {
                         Time.timeScale = 1.0f;
                         Time.fixedDeltaTime = 0.01f;
-                        SceneManager.LoadScene("Test_stairs_01");
                     });
                 }
             }
