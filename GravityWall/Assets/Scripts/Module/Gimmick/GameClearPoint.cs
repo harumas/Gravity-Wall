@@ -1,5 +1,5 @@
+using System;
 using Constants;
-using Unity.Plastic.Newtonsoft.Json.Serialization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

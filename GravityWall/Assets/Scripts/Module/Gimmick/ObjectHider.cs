@@ -32,6 +32,8 @@ namespace Module.Gimmick
                     rend.enabled = !isHide;
                 }
             });
+            
+            Disable();
         }
 
         private void Update()
