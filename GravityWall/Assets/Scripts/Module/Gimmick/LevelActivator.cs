@@ -13,9 +13,11 @@ namespace Module.PlayTest
         [SerializeField] private bool startActive;
         [SerializeField] private GameObject roomObject;
         [SerializeField] private List<Gate> levelGates;
-        [SerializeField] private List<ObjectHider> objectHiders;
 
         private bool isPlayerEnter;
+
+        public bool IsPlayerEnter => isPlayerEnter;
+        public bool StartActive => startActive;
 
         private void Start()
         {
@@ -23,7 +25,7 @@ namespace Module.PlayTest
             {
                 foreach (Gate levelGate in levelGates)
                 {
-                    levelGate.IsUsing = true;
+                    levelGate.UsingCount++;
                 }
 
                 Activate();
@@ -77,7 +79,10 @@ namespace Module.PlayTest
 
                 foreach (Gate levelGate in levelGates)
                 {
-                    levelGate.gameObject.SetActive(false);
+                    if (!levelGate.IsUsing)
+                    {
+                        levelGate.gameObject.SetActive(false);
+                    }
                 }
             }
         }
@@ -88,15 +93,15 @@ namespace Module.PlayTest
             {
                 isPlayerEnter = true;
 
-                foreach (Gate levelGate in levelGates)
+                if (!startActive)
                 {
-                    levelGate.IsUsing = true;
+                    foreach (Gate levelGate in levelGates)
+                    {
+                        levelGate.UsingCount++;
+                    }
                 }
 
-                foreach (ObjectHider hider in objectHiders)
-                {
-                    hider.Enable();
-                }
+                startActive = false;
             }
         }
 
@@ -108,7 +113,7 @@ namespace Module.PlayTest
 
                 foreach (Gate gate in levelGates)
                 {
-                    gate.IsUsing = false;
+                    gate.UsingCount--;
                 }
             }
         }

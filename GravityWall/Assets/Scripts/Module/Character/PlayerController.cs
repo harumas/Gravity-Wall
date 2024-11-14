@@ -149,26 +149,23 @@ namespace Module.Character
         public void Kill()
         {
             isDeath.Value = true;
-            isJumping.Value = false;
-            isGrounding.Value = true;
-            rigBody.velocity = Vector3.zero;
-            Lock();
         }
 
-        public void Respawn()
+        public void Revival()
         {
             isDeath.Value = false;
-            enabled = true;
-            Unlock();
         }
 
         public void Lock()
         {
+            isJumping.Value = false;
+            isGrounding.Value = true;
+            rigBody.velocity = Vector3.zero;
             moveInput = Vector2.zero;
             onMove.Value = (Vector3.zero, Vector3.zero);
             enabled = false;
         }
-        
+
         public void Unlock()
         {
             enabled = true;
