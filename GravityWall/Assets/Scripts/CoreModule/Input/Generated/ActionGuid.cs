@@ -9,6 +9,7 @@ namespace CoreModule.Input
     public static class ActionGuid
     {
        public static readonly Player Player = new Player();
+       public static readonly UI UI = new UI();
     }
 
     public class Player
@@ -19,7 +20,13 @@ namespace CoreModule.Input
        public readonly Guid Look = new Guid("a12e4f6d-2482-46a4-af46-87f68f3332db");
        public readonly Guid Hold = new Guid("131b776c-a49a-4470-92b3-546b35725ce8");
        public readonly Guid CameraRotate = new Guid("14bcd41f-f822-4225-9f98-6afccf018761");
-       public readonly Guid EnterScreen = new Guid("82e970a8-bd5e-48ea-aba5-69209a53e79e");
-       public readonly Guid ExitScreen = new Guid("7f8323f2-33de-48b9-85f8-94d9c6dca90d");
+    }
+
+    public class UI
+    {
+       public readonly Guid MapId = new Guid("aa83a432-2201-4603-a424-63af335c5072");
+       public readonly Guid Select = new Guid("78316865-06a2-4214-a3d7-57e29f0751cd");
+       public readonly Guid Cancel = new Guid("a7bb4996-57b4-4805-a591-4d41efa0eef3");
+       public readonly Guid ExitScreen = new Guid("a8303f8f-2b97-4619-99a2-07552890732a");
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using CoreModule.Helper;
 using Cysharp.Threading.Tasks;
 using Module.Character;
 using Module.Gimmick;
@@ -26,20 +27,26 @@ namespace Application.Sequence
         public event Func<UniTask> RespawnViewSequence;
 
         [Inject]
-        public RespawnManager(PlayerController playerController, CameraController cameraController, PlayerTargetSyncer playerTargetSyncer,
+        public RespawnManager(
+            ReusableComponents<SavePoint> savePoints,
+            ReusableComponents<DeathFloor> deathFloors,
+            PlayerController playerController,
+            CameraController cameraController,
+            PlayerTargetSyncer playerTargetSyncer,
             GravitySwitcher gravitySwitcher)
         {
             this.playerController = playerController;
             this.cameraController = cameraController;
             this.playerTargetSyncer = playerTargetSyncer;
             this.gravitySwitcher = gravitySwitcher;
-            Initialize();
+
+            Initialize(savePoints, deathFloors);
         }
 
-        private void Initialize()
+        private void Initialize(ReusableComponents<SavePoint> savePointComponents, ReusableComponents<DeathFloor> deathFloorComponents)
         {
-            var savePoints = Object.FindObjectsByType<SavePoint>(FindObjectsSortMode.None);
-            var deathFloors = Object.FindObjectsByType<DeathFloor>(FindObjectsSortMode.None);
+            var savePoints = savePointComponents.GetComponents();
+            var deathFloors = deathFloorComponents.GetComponents();
 
             //セーブポイントのイベント登録
             foreach (SavePoint savePoint in savePoints)
@@ -90,20 +97,20 @@ namespace Application.Sequence
 
             //レベル上のオブジェクトの復元
             respawnData.LevelResetter.ResetLevel();
-            
+
             //プレイヤーの有効化
             EnablePlayer();
 
             isRespawning = false;
         }
-        
+
         private void DisablePlayer()
         {
             playerController.Kill();
             playerTargetSyncer.Reset();
             gravitySwitcher.Disable();
         }
-        
+
         private void EnablePlayer()
         {
             playerController.Respawn();
