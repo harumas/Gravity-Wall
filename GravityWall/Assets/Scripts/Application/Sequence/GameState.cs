@@ -1,4 +1,7 @@
-﻿using R3;
+﻿using System.Threading;
+using Cysharp.Threading.Tasks;
+using R3;
+using UnityEngine;
 
 namespace Application.Sequence
 {
@@ -16,6 +19,12 @@ namespace Application.Sequence
         public void SetState(State state)
         {
             current.Value = state;
+            Debug.Log($"GameState: {state}");
+        }
+
+        public UniTask WaitUntilState(State state, CancellationToken cancellationToken)
+        {
+            return UniTask.WaitUntil(() => current.Value == state, cancellationToken: cancellationToken);
         }
     }
 }

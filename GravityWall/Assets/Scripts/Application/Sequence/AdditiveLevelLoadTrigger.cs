@@ -4,6 +4,7 @@ using Constants;
 using CoreModule.Helper.Attribute;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Serialization;
 
 namespace Application.Sequence
 {
@@ -12,8 +13,9 @@ namespace Application.Sequence
         [SerializeField] private SceneField mainScene;
         [SerializeField] private List<SceneField> levelReference;
         [SerializeField] private bool triggerDetect;
-        [SerializeField] private bool isLoaded;
-
+        [SerializeField] private bool isTouched;
+        
+        public event Action OnSceneLoaded;
         public event Action<SceneField, List<SceneField>> OnLoadRequested;
         
         public void Load()
@@ -21,17 +23,22 @@ namespace Application.Sequence
             OnLoadRequested?.Invoke(mainScene, levelReference);
         }
 
+        public void CallLoaded()
+        {
+            OnSceneLoaded?.Invoke();
+        }
+
         public void Reset()
         {
-            isLoaded = false;
+            isTouched = false;
         }
 
         public void OnTriggerEnter(Collider other)
         {
-            if (triggerDetect && !isLoaded && other.CompareTag(Tag.Player))
+            if (triggerDetect && !isTouched && other.CompareTag(Tag.Player))
             {
                 Load();
-                isLoaded = true;
+                isTouched = true;
             }
         }
         

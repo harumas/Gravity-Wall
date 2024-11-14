@@ -8,11 +8,13 @@ using Constants;
 using CoreModule.Helper;
 using Module.Character;
 using Module.Gimmick;
+using Module.Gimmick.LevelGimmick;
 using Module.Gravity;
 using Module.InputModule;
 using Presentation;
 using UnityEngine;
 using UnityEngine.Pool;
+using UnityEngine.Serialization;
 using VContainer;
 using VContainer.Unity;
 using View;
@@ -27,6 +29,7 @@ namespace Container
     {
         [SerializeField] private ViewBehaviourNavigator behaviourNavigator;
         [SerializeField] private GimmickReference gimmickReference;
+        [SerializeField] private HubSpawnPoint hubSpawnPoint;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -41,7 +44,6 @@ namespace Container
 
             UnityEngine.Application.targetFrameRate = 120;
 
-
             builder.RegisterEntryPoint<InGameSequencer>();
             builder.RegisterEntryPoint<PlayerInputPresenter>();
 
@@ -49,7 +51,7 @@ namespace Container
             builder.RegisterEntryPoint<InputConfigChangedListener>();
             builder.RegisterEntryPoint<AudioConfigChangedListener>();
             builder.RegisterEntryPoint<OptionChangedPresenter>();
-            
+
             builder.RegisterEntryPoint<ViewBehaviourInitializer>();
             builder.RegisterEntryPoint<TitleBehaviourPresenter>();
             builder.RegisterEntryPoint<LicenseBehaviourPresenter>();
@@ -59,6 +61,7 @@ namespace Container
 
             builder.Register<PlayerInput>(Lifetime.Singleton).As<IGameInput>();
             builder.Register<CursorLocker>(Lifetime.Singleton);
+            builder.Register<RespawnManager>(Lifetime.Singleton);
 
             //ViewBehaviourの登録
             behaviourNavigator.RegisterBehaviours();
@@ -83,6 +86,8 @@ namespace Container
             builder.RegisterInstance(reusableComponents).As<IReadOnlyList<IReusableComponent>>();
             builder.RegisterInstance(gimmickReference);
 
+            builder.Register<HubSpawner>(Lifetime.Singleton);
+            builder.RegisterInstance(hubSpawnPoint);
 
 #if UNITY_EDITOR
             builder.RegisterEntryPoint<ExternalAccessor>();
