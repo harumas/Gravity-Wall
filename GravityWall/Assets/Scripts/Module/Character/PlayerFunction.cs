@@ -31,7 +31,8 @@ namespace Module.Character
             Transform cameraPivot,
             Rigidbody rigidbody,
             LocalGravity localGravity,
-            PlayerControlParameter parameter)
+            PlayerControlParameter parameter
+        )
         {
             this.transform = transform;
             this.cameraPivot = cameraPivot;
@@ -168,11 +169,22 @@ namespace Module.Character
         {
             Vector3 gravity = worldGravity.Gravity;
             Quaternion currentRotation = rigidbody.rotation;
-            Quaternion targetRotation = Quaternion.FromToRotation(transform.up, -gravity) * currentRotation;
 
             // 自分と重力の角度の差を求める
             float angle = Vector3.Angle(transform.up, -gravity);
             angle = Mathf.Max(angle, Mathf.Epsilon);
+
+            Quaternion targetRotation;
+
+            if (angle >= parameter.CameraAxisRotateAngle)
+            {
+                targetRotation = Quaternion.AngleAxis(angle, Camera.main.transform.forward) * currentRotation;
+            }
+            else
+            {
+                targetRotation = Quaternion.FromToRotation(transform.up, -gravity) * currentRotation;
+            }
+
 
             if (angle <= Mathf.Epsilon)
             {
