@@ -9,6 +9,7 @@ namespace Module.Gimmick
         [SerializeField, Tag] private string[] targetTags;
         [SerializeField] private MeshRenderer meshRenderer;
         [SerializeField] private UnityEvent onEvent;
+        private static readonly int pushRatio = Shader.PropertyToID("_PushRatio");
 
         private void Start()
         {
@@ -29,13 +30,13 @@ namespace Module.Gimmick
             onEvent.Invoke();
 
             // Emissionの色を変更
-            meshRenderer.material.SetFloat("_PushRatio", 1.0f);
+            meshRenderer.material.SetFloat(pushRatio, 1.0f);
         }
 
         public override void Disable(bool doEffect = true)
         {
             isEnabled.Value = false;
-            meshRenderer.material.SetFloat("_PushRatio", 0f);
+            meshRenderer.material.SetFloat(pushRatio, 0f);
         }
 
         public override void Reset()
