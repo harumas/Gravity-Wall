@@ -20,7 +20,10 @@ namespace Module.InputModule
 
             Observable.EveryUpdate(UnityFrameProvider.PostLateUpdate)
                 .Select(_ => lookEvent.ReadValue<Vector2>() * Time.deltaTime)
-                .Subscribe(value => lookDeltaProperty.Value = value);
+                .Subscribe(value =>
+                {
+                    lookDeltaProperty.Value = value;
+                });
 
             //移動入力のイベントを登録
             InputEvent moveEvent = InputActionProvider.CreateEvent(ActionGuid.Player.Move);

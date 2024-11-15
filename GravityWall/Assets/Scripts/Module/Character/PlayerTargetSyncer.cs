@@ -62,5 +62,16 @@ namespace Module.Character
         {
             moveInput = Vector2.zero;
         }
+
+        public void Lock()
+        {
+            Reset();
+            enabled = false;
+        }
+        
+        public void Unlock()
+        {
+            enabled = true;
+        }
     }
 }

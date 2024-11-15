@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using R3;
+using TriInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -19,12 +20,24 @@ namespace Module.Gimmick
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private GimmickObject[] observedSwitches;
         [SerializeField] private float setInterval = 1f;
+        [SerializeField,ReadOnly]  private int usingCount = 0;
 
         private int switchCount = 0;
         private List<Material> lightMaterials = new List<Material>();
         private static readonly int emissionIntensity = Shader.PropertyToID("_EmissionIntensity");
-        
-        public bool IsUsing { get; set; }
+
+        public bool IsUsing => UsingCount > 0;
+
+        public int UsingCount
+        {
+            get => usingCount;
+            set
+            {
+                usingCount = value;
+                usingCount = Mathf.Max(usingCount, 0);
+            }
+        }
+
 
         private void Start()
         {

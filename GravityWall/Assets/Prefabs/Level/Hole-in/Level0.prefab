@@ -378,7 +378,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2454
+  m_VersionIndex: 2463
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -495,6 +495,7 @@ GameObject:
   - component: {fileID: 7921651084196050931}
   - component: {fileID: 814332681701203701}
   - component: {fileID: 357797846987833628}
+  - component: {fileID: 5632069655863525359}
   m_Layer: 10
   m_Name: Level0
   m_TagString: LevelSegment
@@ -552,8 +553,6 @@ MonoBehaviour:
   roomObject: {fileID: 4814497148214120345}
   levelGates:
   - {fileID: 3446620792711493366}
-  objectHiders:
-  - {fileID: 1060968566459766933}
 --- !u!65 &357797846987833628
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -575,6 +574,23 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 13.636374, y: 13.050513, z: 12.935513}
   m_Center: {x: -6.318187, y: 6.0252566, z: 5.9677563}
+--- !u!114 &5632069655863525359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2912901925130086630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce661f9e4e5fb43439408cade5eb5379, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gates:
+  - {fileID: 3446620792711493366}
+  objectHiders:
+  - {fileID: 1060968566459766933}
+  levelActivator: {fileID: 814332681701203701}
 --- !u!1 &4237868672677330077
 GameObject:
   m_ObjectHideFlags: 0
@@ -27548,7 +27564,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3002
+  m_VersionIndex: 3011
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -28633,7 +28649,7 @@ PrefabInstance:
     - target: {fileID: 4666205903397099147, guid: 5b5287a13ab2e004e8fad368189340bb,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 3016
+      value: 3025
       objectReference: {fileID: 0}
     - target: {fileID: 4716034564354573398, guid: 5b5287a13ab2e004e8fad368189340bb,
         type: 3}

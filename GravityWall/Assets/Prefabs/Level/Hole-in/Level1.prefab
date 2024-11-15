@@ -440,7 +440,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2535
+  m_VersionIndex: 2547
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -596,6 +596,7 @@ GameObject:
   - component: {fileID: 2347102922434313356}
   - component: {fileID: 2587095486980384820}
   - component: {fileID: 7438460965281514864}
+  - component: {fileID: 5686236731293194042}
   m_Layer: 10
   m_Name: Level1
   m_TagString: LevelSegment
@@ -638,9 +639,6 @@ MonoBehaviour:
   levelGates:
   - {fileID: 205940591472968148}
   - {fileID: 8240350466346158261}
-  objectHiders:
-  - {fileID: 2573296961422569399}
-  - {fileID: 5995998665518491350}
 --- !u!65 &7438460965281514864
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -662,6 +660,25 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 12.416966, y: 12.8004, z: 13.169134}
   m_Center: {x: -5.951653, y: 5.9002, z: 6.084567}
+--- !u!114 &5686236731293194042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752660950830390256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce661f9e4e5fb43439408cade5eb5379, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gates:
+  - {fileID: 205940591472968148}
+  - {fileID: 8240350466346158261}
+  objectHiders:
+  - {fileID: 2573296961422569399}
+  - {fileID: 5995998665518491350}
+  levelActivator: {fileID: 2587095486980384820}
 --- !u!1 &5048202902324692253
 GameObject:
   m_ObjectHideFlags: 0
@@ -26369,7 +26386,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2531
+  m_VersionIndex: 2543
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -27209,7 +27226,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2448
+  m_VersionIndex: 2460
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -28040,7 +28057,7 @@ PrefabInstance:
     - target: {fileID: 4666205903397099147, guid: 5b5287a13ab2e004e8fad368189340bb,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 3010
+      value: 3022
       objectReference: {fileID: 0}
     - target: {fileID: 4716034564354573398, guid: 5b5287a13ab2e004e8fad368189340bb,
         type: 3}
@@ -28849,6 +28866,11 @@ PrefabInstance:
       propertyPath: gimmickAffecteds.Array.data[0]
       value: 
       objectReference: {fileID: 8240350466346158261}
+    - target: {fileID: 5058043401232741299, guid: 0f395e5f4315144c2ae44e454977f80f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7009071550399127301, guid: 0f395e5f4315144c2ae44e454977f80f,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -28872,7 +28894,7 @@ PrefabInstance:
     - target: {fileID: 7009071550399127301, guid: 0f395e5f4315144c2ae44e454977f80f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.0279999
+      value: -1.428
       objectReference: {fileID: 0}
     - target: {fileID: 7009071550399127301, guid: 0f395e5f4315144c2ae44e454977f80f,
         type: 3}
@@ -28964,7 +28986,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf56b750bd086aa4c8536fe4be10c34e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetGimmick: {fileID: 8240350466346158261}
+  targetGate: {fileID: 8240350466346158261}
+  levelActivator: {fileID: 2587095486980384820}
 --- !u!1001 &9067020088172767303
 PrefabInstance:
   m_ObjectHideFlags: 0
