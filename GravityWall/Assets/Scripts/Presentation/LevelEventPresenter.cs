@@ -5,6 +5,7 @@ using CoreModule.Helper;
 using Cysharp.Threading.Tasks;
 using Module.Character;
 using Module.Gimmick;
+using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using View;
@@ -19,11 +20,13 @@ namespace Presentation
         private RespawnContext respawnDataOnDeath;
 
         [Inject]
-        public LevelEventPresenter(RespawnManager respawnManager,
+        public LevelEventPresenter(
+            RespawnManager respawnManager,
             ViewBehaviourNavigator behaviourNavigator,
             PlayerController playerController,
             ReusableComponents<SavePoint> savePointComponents,
-            ReusableComponents<DeathFloor> deathFloorComponents)
+            ReusableComponents<DeathFloor> deathFloorComponents
+        )
         {
             this.respawnManager = respawnManager;
             this.behaviourNavigator = behaviourNavigator;
@@ -39,10 +42,14 @@ namespace Presentation
 
         private void SubscribeComponents(
             ReusableComponents<SavePoint> savePointComponents,
-            ReusableComponents<DeathFloor> deathFloorComponents)
+            ReusableComponents<DeathFloor> deathFloorComponents
+        )
         {
             var savePoints = savePointComponents.GetComponents();
             var deathFloors = deathFloorComponents.GetComponents();
+
+
+            Debug.Log("SubscribeComponents");
 
             //セーブポイントのイベント登録
             foreach (SavePoint savePoint in savePoints)

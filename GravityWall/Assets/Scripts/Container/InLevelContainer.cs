@@ -17,7 +17,7 @@ namespace Container
         private async void Start()
         {
             //シーン読み込みと被らないようにフレームをずらす
-            await UniTask.DelayFrame(5);
+            await UniTask.DelayFrame(20);
             Build();
         }
 
@@ -29,6 +29,7 @@ namespace Container
             builder.RegisterEntryPoint<LevelVolumeCameraPresenter>();
             builder.RegisterEntryPoint<SequenceViewPresenter>();
             builder.RegisterEntryPoint<GameClearPresenter>();
+            builder.RegisterEntryPoint<LevelEventPresenter>();
 
             var gimmickReference = Parent.Container.Resolve<GimmickReference>();
             gimmickReference.UpdateReference();
