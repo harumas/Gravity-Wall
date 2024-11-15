@@ -11,7 +11,7 @@ namespace Module.Gimmick
     {
         [SerializeField] private Animator animator;
         [SerializeField] private AudioSource audioSource;
-        [SerializeField] private Transform SwitchPos;
+        [SerializeField] private Transform switchPos;
         [SerializeField] private PowerPipe[] powerPipes;
         [SerializeField] private UnityEvent goalEvent;
 
@@ -39,7 +39,7 @@ namespace Module.Gimmick
             {
                 playerController = other.gameObject.GetComponent<PlayerController>();
                 playerController.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                playerController.transform.position = SwitchPos.position;
+                playerController.transform.position = switchPos.position;
                 playerController.Lock();
                 animator.SetTrigger("OnSwitch");
             }

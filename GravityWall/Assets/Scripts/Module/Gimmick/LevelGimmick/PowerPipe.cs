@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using UnityEditor;
 using UnityEngine;
 
 namespace Module.Gimmick
@@ -8,6 +9,8 @@ namespace Module.Gimmick
     public class PowerPipe : MonoBehaviour
     {
         private MeshRenderer[] meshRenderers;
+        protected MaterialProperty pipe;
+        private static readonly int emissionIntensity = Shader.PropertyToID("_EmissionIntensity");
         // Start is called before the first frame update
         void Start()
         {
@@ -23,7 +26,7 @@ namespace Module.Gimmick
                 DOTween.To(() => value, (v) => value = v, isOn ? 1.0f : 0.0f, 0.3f)
                 .OnUpdate(() =>
                 {
-                    mesh.material.SetFloat("_EmissionIntensity", value);
+                    mesh.material.SetFloat(emissionIntensity, value);
                 });
             }
         }
