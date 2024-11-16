@@ -170,12 +170,12 @@ namespace Module.Gimmick
         {
             await UniTask.WaitUntil(() => playerTransform != null);
             
-            InitializeDirection();
+            SyncDirection();
             virtualCamera.Priority = 11;
             isEnabled.Value = true;
         }
 
-        private void InitializeDirection()
+        public void SyncDirection()
         {
             //カメラに一番近い前方ベクトルを取得
             Vector3 forward = verticalAdjuster.GetNearestDirection(cameraBrain.transform.forward);
