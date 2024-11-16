@@ -1,4 +1,5 @@
 using System;
+using Module.PlayTest;
 using R3;
 using UnityEngine;
 
@@ -6,13 +7,14 @@ namespace Module.Gimmick
 {
     public class JustOnceGimmick : MonoBehaviour
     {
-        [SerializeField] private GimmickObject targetGimmick;
+        [SerializeField] private Gate targetGate;
+        [SerializeField] private LevelActivator levelActivator;
 
         private void Awake()
         {
-            targetGimmick.IsEnabled.Skip(1).Subscribe(isEnabled =>
+            targetGate.IsEnabled.Skip(1).Subscribe(isEnabled =>
             {
-                if (!isEnabled)
+                if (levelActivator.IsPlayerEnter && targetGate.UsingCount == 1 && !isEnabled)
                 {
                     gameObject.SetActive(false);
                 }

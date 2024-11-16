@@ -17,7 +17,7 @@ namespace Module.Gravity
         public Vector3 Gravity { get; private set; }
         public Vector3 Direction { get; private set; }
         private uint activeGravityMask;
-        
+
         private WorldGravity()
         {
             Gravity = Vector3.down;
@@ -29,7 +29,7 @@ namespace Module.Gravity
         {
             Instance = new WorldGravity();
         }
-        
+
         public static void Destroy()
         {
             Instance = null;

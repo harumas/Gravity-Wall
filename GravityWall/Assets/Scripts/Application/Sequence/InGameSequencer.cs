@@ -1,76 +1,51 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
-using CoreModule.Helper.Attribute;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
-using UnityEngine.AddressableAssets;
+using Module.Gimmick.LevelGimmick;
 using VContainer;
 using VContainer.Unity;
-using Object = UnityEngine.Object;
 
 namespace Application.Sequence
 {
-    public enum GameState
-    {
-        StageSelect,
-        Playing
-    }
-
     public class InGameSequencer : IStartable, IDisposable
     {
-        private readonly AdditiveSceneLoader additiveSceneLoader;
-        private (SceneField mainScene, List<SceneField> sceneFields) loadContext;
-        private GameState gameState;
+        private readonly GameState gameState;
+        private readonly HubSpawner hubSpawner;
+        private readonly RespawnManager respawnManager;
+        private readonly AdditiveSceneLoadExecutor loadExecutor;
         private CancellationTokenSource cTokenSource;
 
         [Inject]
-        public InGameSequencer()
+        public InGameSequencer(GameState gameState, HubSpawner hubSpawner, RespawnManager respawnManager)
         {
-            additiveSceneLoader = new AdditiveSceneLoader();
+            this.gameState = gameState;
+            this.hubSpawner = hubSpawner;
+            this.respawnManager = respawnManager;
+            loadExecutor = new AdditiveSceneLoadExecutor();
         }
 
         public void Start()
         {
-            var triggers = Object.FindObjectsByType<AdditiveLevelLoadTrigger>(FindObjectsSortMode.None);
-
-            foreach (AdditiveLevelLoadTrigger trigger in triggers)
-            {
-                trigger.OnLoadRequested += OnLoadRequested;
-                trigger.OnUnloadRequested += OnUnloadRequested;
-            }
+            cTokenSource = new CancellationTokenSource();
+            loadExecutor.SetCancellationToken(cTokenSource.Token);
 
             Sequence().Forget();
         }
 
-        private void OnLoadRequested(SceneField mainScene, List<SceneField> fields)
+        private async UniTaskVoid Sequence()
         {
-            this.loadContext = (mainScene, fields);
-            gameState = GameState.Playing;
-        }
+            // プレイ開始待機
+            await gameState.WaitUntilState(GameState.State.Playing, cTokenSource.Token);
 
-        private void OnUnloadRequested(SceneField mainScene, List<SceneField> fields)
-        {
-            this.loadContext = (mainScene, fields);
-            gameState = GameState.StageSelect;
-        }
+            // クリア待機
+            await gameState.WaitUntilState(GameState.State.StageSelect, cTokenSource.Token);
+            
+            respawnManager.LockPlayer();
 
-        public async UniTaskVoid Sequence()
-        {
-            //ステージセレクト待機
-            await UniTask.WaitUntil(IsGameState(GameState.Playing));
+            // シーンアンロード
+            await loadExecutor.UnloadAdditiveScenes();
 
-            cTokenSource = new CancellationTokenSource();
-            await additiveSceneLoader.Load(loadContext, cTokenSource.Token);
-
-            //クリア待機
-            await UniTask.WaitUntil(IsGameState(GameState.StageSelect));
-            await additiveSceneLoader.UnloadAdditiveScenes(cTokenSource.Token);
-        }
-
-        private Func<bool> IsGameState(GameState gameState)
-        {
-            return () => this.gameState == gameState;
+            await hubSpawner.Respawn();
         }
 
         public void Dispose()

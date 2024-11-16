@@ -85,6 +85,11 @@ namespace Module.Gimmick
             if (other.CompareTag(Tag.Player))
             {
                 isPlayerEnter = true;
+
+                foreach (Gate gate in referencedGates)
+                {
+                    gate.UsingCount++;
+                }
             }
         }
 
@@ -93,6 +98,11 @@ namespace Module.Gimmick
             if (other.CompareTag(Tag.Player))
             {
                 isPlayerEnter = false;
+
+                foreach (Gate gate in referencedGates)
+                {
+                    gate.UsingCount--;
+                }
             }
         }
     }

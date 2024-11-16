@@ -1,4 +1,5 @@
 ﻿using Application;
+using Application.Sequence;
 using CoreModule.Input;
 using CoreModule.Save;
 using Module.Config;
@@ -26,6 +27,7 @@ namespace Container
             builder.Register<ConfigLoader>(Lifetime.Singleton);
             builder.Register<SaveManager<ConfigData>>(Lifetime.Singleton);
             builder.Register<GameStopper>(Lifetime.Singleton);
+            builder.Register<GameState>(Lifetime.Singleton);
             builder.RegisterInstance(InputActionProvider.ActionAsset);
             builder.RegisterInstance(inputAdjustParameter);
             builder.RegisterInstance(audioMixer);

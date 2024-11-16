@@ -12,7 +12,7 @@ using VContainer.Unity;
 
 namespace Container
 {
-    public class LevelContainer : LifetimeScope
+    public class InLevelContainer : LifetimeScope
     {
         private async void Start()
         {
@@ -25,10 +25,10 @@ namespace Container
         {
             SetReusableComponents();
 
+            builder.RegisterEntryPoint<InLevelSequencer>();
             builder.RegisterEntryPoint<LevelVolumeCameraPresenter>();
             builder.RegisterEntryPoint<SequenceViewPresenter>();
-
-            builder.Register<RespawnManager>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<GameClearPresenter>();
 
             var gimmickReference = Parent.Container.Resolve<GimmickReference>();
             gimmickReference.UpdateReference();
