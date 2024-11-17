@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using R3;
+using TriInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,14 +15,29 @@ namespace Module.Gimmick
         [SerializeField] private MeshRenderer[] gateMeshRenderers;
         [SerializeField] private Transform lightBasePosition;
         [SerializeField] private Transform gateLeft, gateRight;
-        [SerializeField] private GameObject Counterlight;
+        [SerializeField] private GameObject[] pooledLights;
         [SerializeField] private int switchMaxCount = 1;
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private GimmickObject[] observedSwitches;
+        [SerializeField] private float setInterval = 1f;
+        [SerializeField, ReadOnly] private int usingCount = 0;
 
         private int switchCount = 0;
         private List<Material> lightMaterials = new List<Material>();
-        private const float intensity = 8.0f;
+        private static readonly int emissionIntensity = Shader.PropertyToID("_EmissionIntensity");
+
+        public bool IsUsing => UsingCount > 0;
+
+        public int UsingCount
+        {
+            get => usingCount;
+            set
+            {
+                usingCount = value;
+                usingCount = Mathf.Max(usingCount, 0);
+            }
+        }
+
 
         private void Start()
         {
@@ -100,20 +116,19 @@ namespace Module.Gimmick
         {
             for (int i = 0; i < gateMeshRenderers.Length; i++)
             {
-                gateMeshRenderers[i].material.SetFloat("_EmissionIntensity", isOpen ? 1.0f : 0.0f);
+                gateMeshRenderers[i].material.SetFloat(emissionIntensity, isOpen ? 1.0f : 0.0f);
             }
         }
 
         void ChangeCounterLights(bool isOn)
         {
-            Debug.Log(isOn);
             if (isOn)
             {
-                lightMaterials[switchCount].SetFloat("_EmissionIntensity", 1.0f);
+                lightMaterials[switchCount].SetFloat(emissionIntensity, 1.0f);
             }
             else
             {
-                lightMaterials[switchCount - 1].SetFloat("_EmissionIntensity", 0.0f);
+                lightMaterials[switchCount - 1].SetFloat(emissionIntensity, 0.0f);
             }
         }
 
@@ -125,29 +140,20 @@ namespace Module.Gimmick
 
         void InstantiateCounterLights()
         {
-            if (switchMaxCount <= 1)
+            if (switchMaxCount > pooledLights.Length)
             {
-                var light = Instantiate(Counterlight, transform);
-
-                light.transform.localPosition = lightBasePosition.localPosition;
-                light.transform.localRotation = lightBasePosition.localRotation;
-
-                lightMaterials.Add(light.GetComponent<MeshRenderer>().material);
+                Debug.LogError("SwitchMaxCount is larger than the number of pooled lights.");
                 return;
             }
 
-            float width = gate.transform.localScale.x * 0.7f;
-            float spacing = width / (switchMaxCount - 1);
-            float startX = lightBasePosition.localPosition.x - width / 2.0f;
+            float width = setInterval * (switchMaxCount - 1);
+
             for (int i = 0; i < switchMaxCount; i++)
             {
-                var light = Instantiate(Counterlight, transform);
-
-                light.transform.localPosition =
-                    new Vector3(startX + i * spacing, lightBasePosition.localPosition.y, lightBasePosition.localPosition.z);
-                light.transform.localRotation = lightBasePosition.localRotation;
-
-                lightMaterials.Add(light.GetComponent<MeshRenderer>().material);
+                var lightObj = pooledLights[i];
+                lightObj.SetActive(true);
+                lightObj.transform.localPosition = lightBasePosition.localPosition + Vector3.right * (setInterval * i - width / 2);
+                lightMaterials.Add(lightObj.GetComponent<Renderer>().material);
             }
         }
     }

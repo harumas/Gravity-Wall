@@ -19,7 +19,7 @@ namespace Module.Config
         [MenuItem("Tools/GameConfigWindow", false, -100)]
         private static void Init()
         {
-            if (!Application.isPlaying)
+            if (!UnityEngine.Application.isPlaying)
             {
                 Debug.LogError("再生中のみ表示できます。");
                 return;
@@ -51,7 +51,7 @@ namespace Module.Config
 
         private async void Save()
         {
-            if (!Application.isPlaying)
+            if (!UnityEngine.Application.isPlaying)
             {
                 Debug.LogError("再生中のみ変更できます");
                 return;
