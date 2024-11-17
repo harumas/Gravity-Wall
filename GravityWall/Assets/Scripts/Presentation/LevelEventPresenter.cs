@@ -66,8 +66,6 @@ namespace Presentation
             var deathFloors = deathFloorComponents.GetComponents();
 
 
-            Debug.Log("SubscribeComponents");
-
             //セーブポイントのイベント登録
             foreach (SavePoint savePoint in savePoints)
             {

@@ -40,6 +40,8 @@ namespace Module.Character
         private ThresholdChecker rotateAngleChecker;
         private DelayableProperty<bool> canRotateProperty = new();
 
+        public bool LockSwitch { get; set; }
+
         private void Awake()
         {
             rotateAngleChecker = new ThresholdChecker(constrainedAngleThreshold, angleChangeDuration);
@@ -123,11 +125,21 @@ namespace Module.Character
 
         public void Enable()
         {
+            if (LockSwitch)
+            {
+                return;
+            }
+
             isEnabled = true;
         }
 
         public void Disable()
         {
+            if (LockSwitch)
+            {
+                return;
+            }
+
             isEnabled = false;
         }
 

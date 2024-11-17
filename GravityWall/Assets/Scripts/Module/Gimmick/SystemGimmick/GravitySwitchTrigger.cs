@@ -8,7 +8,9 @@ namespace Module.Gimmick
 {
     public class GravitySwitchTrigger : MonoBehaviour
     {
+        [SerializeField] private bool throughLock;
         private bool isEnable = true;
+
         public void SetEnable(bool isEnable)
         {
             this.isEnable = isEnable;
@@ -18,9 +20,17 @@ namespace Module.Gimmick
         {
             if (!isEnable) return;
 
+
             if (other.gameObject.CompareTag(Tag.Player))
             {
-                other.GetComponent<GravitySwitcher>().Disable();
+                var gravitySwitcher = other.GetComponent<GravitySwitcher>();
+
+                if (throughLock)
+                {
+                    gravitySwitcher.LockSwitch = false;
+                }
+
+                gravitySwitcher.Disable();
             }
         }
 
@@ -30,7 +40,14 @@ namespace Module.Gimmick
 
             if (other.gameObject.CompareTag(Tag.Player))
             {
-                other.GetComponent<GravitySwitcher>().Enable();
+                var gravitySwitcher = other.GetComponent<GravitySwitcher>();
+
+                if (throughLock)
+                {
+                    gravitySwitcher.LockSwitch = false;
+                }
+
+                gravitySwitcher.GetComponent<GravitySwitcher>().Enable();
             }
         }
     }

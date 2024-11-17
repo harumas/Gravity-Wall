@@ -52,7 +52,7 @@ namespace Container
             builder.RegisterEntryPoint<AudioConfigChangedListener>();
             builder.RegisterEntryPoint<OptionChangedPresenter>();
 
-            builder.RegisterEntryPoint<ViewBehaviourInitializer>();
+            //builder.RegisterEntryPoint<ViewBehaviourInitializer>();
             builder.RegisterEntryPoint<TitleBehaviourPresenter>();
             builder.RegisterEntryPoint<LicenseBehaviourPresenter>();
             builder.RegisterEntryPoint<PauseBehaviourPresenter>();

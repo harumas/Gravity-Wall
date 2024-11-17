@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
-using UnityEditor;
 using UnityEngine;
 
 namespace Module.Gimmick
@@ -9,7 +8,6 @@ namespace Module.Gimmick
     public class PowerPipe : MonoBehaviour
     {
         private MeshRenderer[] meshRenderers;
-        protected MaterialProperty pipe;
         private static readonly int emissionIntensity = Shader.PropertyToID("_EmissionIntensity");
         // Start is called before the first frame update
         void Start()
