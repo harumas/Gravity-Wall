@@ -13,13 +13,13 @@ namespace Module.Character
         [SerializeField] private bool isEnabled = true;
         [SerializeField] private bool canSwitchGravity = true;
 
-        [Header("重力変化の制限がかかる角度")] [SerializeField] private float constrainedAngleThreshold;
+        [Header("重力変化の制限がかかる角度")][SerializeField] private float constrainedAngleThreshold;
 
         [Header("入力が開始されてから重力変更が可能になるまでの秒数")]
         [SerializeField]
         private float allowAngleChangeDuration;
 
-        [Header("重力変化までの秒数")] [SerializeField] private float angleChangeDuration;
+        [Header("重力変化までの秒数")][SerializeField] private float angleChangeDuration;
         [SerializeField] private float detectHoldAngle = 1f;
         [SerializeField] private float detectRayRadius = 0.6f;
         [SerializeField] private float detectRayRange = 0.6f;
