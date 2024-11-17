@@ -20,7 +20,7 @@ namespace Module.Gimmick
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private GimmickObject[] observedSwitches;
         [SerializeField] private float setInterval = 1f;
-        [SerializeField,ReadOnly]  private int usingCount = 0;
+        [SerializeField, ReadOnly] private int usingCount = 0;
 
         private int switchCount = 0;
         private List<Material> lightMaterials = new List<Material>();

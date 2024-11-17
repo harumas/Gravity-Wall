@@ -1,12 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using Module.Gravity;
 using DG.Tweening;
 using Constants;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
+using UnityEngine.Rendering;//Volumeを使うのに必要
+using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;//Bloomを使うのに必要
+
 namespace Module.Gimmick
 {
     public class BreakGlass : MonoBehaviour
@@ -16,6 +17,7 @@ namespace Module.Gimmick
         [SerializeField] private PlayableDirector director;
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private UnityEvent onClear;
+        [SerializeField] private Volume volume;
         Vector3 scale;
 
         void Start()
@@ -29,6 +31,12 @@ namespace Module.Gimmick
             {
                 if (WorldGravity.Instance.Gravity == Vector3.left)
                 {
+                    DepthOfField depth;
+                    if (volume.profile.TryGet<DepthOfField>(out depth))
+                    {
+                        depth.active = false;
+                    }
+
                     glass.SetActive(false);
                     breakedGlass.SetActive(true);
                     Time.timeScale = 0.05f;
@@ -40,7 +48,9 @@ namespace Module.Gimmick
                     audioSource.Play();
 
                     breakedGlass.transform.localScale = scale;
-                    breakedGlass.transform.DOScaleZ(0.7f, 3.0f).SetUpdate(true).OnComplete(() =>
+                    breakedGlass.transform.DOScaleZ(0.7f, 3.0f)
+                    .SetUpdate(true)
+                    .OnComplete(() =>
                     {
                         Time.timeScale = 1.0f;
                         Time.fixedDeltaTime = 0.01f;
