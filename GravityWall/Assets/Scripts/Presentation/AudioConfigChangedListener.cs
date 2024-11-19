@@ -1,4 +1,5 @@
 ﻿using CoreModule.Save;
+using Cysharp.Threading.Tasks;
 using Module.Config;
 using R3;
 using UnityEngine;
@@ -13,6 +14,7 @@ namespace Presentation
     /// </summary>
     public class AudioConfigChangedListener : IStartable
     {
+        private readonly SaveManager<ConfigData> saveManager;
         private readonly ConfigData configData;
         private readonly AudioMixer audioMixer;
 
@@ -20,6 +22,7 @@ namespace Presentation
         public AudioConfigChangedListener(SaveManager<ConfigData> saveManager, AudioMixer audioMixer)
         {
             configData = saveManager.Data;
+            this.saveManager = saveManager;
             this.audioMixer = audioMixer;
         }
 
@@ -31,6 +34,11 @@ namespace Presentation
             configData.BgmVolume.Subscribe(UpdateBgmVolume);
             configData.SeVolume.Subscribe(UpdateSeVolume);
             configData.AmbientVolume.Subscribe(UpdateAmbientVolume);
+
+            configData.MasterVolume.Subscribe(SaveConfig);
+            configData.BgmVolume.Subscribe(SaveConfig);
+            configData.SeVolume.Subscribe(SaveConfig);
+            configData.AmbientVolume.Subscribe(SaveConfig);
         }
 
         private void UpdateAllVolumes()
@@ -39,6 +47,11 @@ namespace Presentation
             UpdateBgmVolume(configData.BgmVolume.CurrentValue);
             UpdateSeVolume(configData.SeVolume.CurrentValue);
             UpdateAmbientVolume(configData.AmbientVolume.CurrentValue);
+        }
+
+        private void SaveConfig(float _)
+        {
+            saveManager.Save().Forget();
         }
 
         private void UpdateMasterVolume(float value)

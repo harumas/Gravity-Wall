@@ -1,5 +1,5 @@
 ﻿using Application.Sequence;
-using Cysharp.Threading.Tasks;
+using CoreModule.Input;
 using VContainer;
 using VContainer.Unity;
 using View;
@@ -8,23 +8,27 @@ namespace Presentation
 {
     public class SequenceViewPresenter : IInitializable
     {
-        private readonly RespawnManager respawnManager;
         private readonly ViewBehaviourNavigator behaviourNavigator;
 
         [Inject]
-        public SequenceViewPresenter(RespawnManager respawnManager, ViewBehaviourNavigator behaviourNavigator)
+        public SequenceViewPresenter(RespawnManager respawnManager,  ViewBehaviourNavigator behaviourNavigator)
         {
-            this.respawnManager = respawnManager;
             this.behaviourNavigator = behaviourNavigator;
         }
 
         public void Initialize()
         {
-            respawnManager.RespawnViewSequence += async () =>
+            InputEvent exitScreenEvent = InputActionProvider.CreateEvent(ActionGuid.UI.ExitScreen);
+            exitScreenEvent.Started += _ =>
             {
-                var behaviour = behaviourNavigator.ActivateBehaviour<LoadingBehaviour>(BehaviourType.Loading);
-                await behaviour.SequenceLoading();
-                behaviourNavigator.DeactivateBehaviour(BehaviourType.Loading);
+                if (behaviourNavigator.CurrentBehaviourState == ViewBehaviourState.None)
+                {
+                    behaviourNavigator.ActivateBehaviour(ViewBehaviourState.Pause);
+                }
+                else if (behaviourNavigator.CurrentBehaviourState == ViewBehaviourState.Option)
+                {
+                    behaviourNavigator.DeactivateBehaviour(ViewBehaviourState.Pause);
+                }
             };
         }
     }

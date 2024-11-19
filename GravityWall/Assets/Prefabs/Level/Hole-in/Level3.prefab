@@ -464,7 +464,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2887
+  m_VersionIndex: 2896
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -620,6 +620,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8679688200806464086}
   - component: {fileID: 6857024722987565828}
+  - component: {fileID: 2737276463784456159}
   - component: {fileID: 6439181438733719071}
   m_Layer: 10
   m_Name: Level3
@@ -664,9 +665,25 @@ MonoBehaviour:
   levelGates:
   - {fileID: 6258773503569397348}
   - {fileID: 5209426076978755778}
+--- !u!114 &2737276463784456159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7032241716190103168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce661f9e4e5fb43439408cade5eb5379, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gates:
+  - {fileID: 6258773503569397348}
+  - {fileID: 5209426076978755778}
   objectHiders:
   - {fileID: 8626129711381751815}
   - {fileID: 7576764834335823521}
+  levelActivator: {fileID: 6857024722987565828}
 --- !u!65 &6439181438733719071
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -33298,7 +33315,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2887
+  m_VersionIndex: 2896
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -33783,7 +33800,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2467
+  m_VersionIndex: 2476
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -34051,6 +34068,11 @@ PrefabInstance:
     - target: {fileID: 5260175374949259475, guid: 7e317563c594d4fe787b60604ecdfd7c,
         type: 3}
       propertyPath: gateOpenEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5260175374949259475, guid: 7e317563c594d4fe787b60604ecdfd7c,
+        type: 3}
+      propertyPath: gateCloseEvent.m_PersistentCalls.m_Calls.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5260175374949259475, guid: 7e317563c594d4fe787b60604ecdfd7c,
@@ -35090,7 +35112,7 @@ PrefabInstance:
     - target: {fileID: 4666205903397099147, guid: 5b5287a13ab2e004e8fad368189340bb,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 3010
+      value: 3019
       objectReference: {fileID: 0}
     - target: {fileID: 4716034564354573398, guid: 5b5287a13ab2e004e8fad368189340bb,
         type: 3}
@@ -35327,7 +35349,7 @@ PrefabInstance:
     - target: {fileID: 48829376772457929, guid: 6694fe9e4c5dce048844fbcdb0138b61,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 1943
+      value: 1952
       objectReference: {fileID: 0}
     - target: {fileID: 1303336164730361024, guid: 6694fe9e4c5dce048844fbcdb0138b61,
         type: 3}
@@ -35392,12 +35414,12 @@ PrefabInstance:
     - target: {fileID: 7914554867700065420, guid: 6694fe9e4c5dce048844fbcdb0138b61,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 3756
+      value: 3765
       objectReference: {fileID: 0}
     - target: {fileID: 9137400549077953992, guid: 6694fe9e4c5dce048844fbcdb0138b61,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 4883
+      value: 4892
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -35720,7 +35742,7 @@ PrefabInstance:
     - target: {fileID: 4666205903397099147, guid: 5b5287a13ab2e004e8fad368189340bb,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 3010
+      value: 3019
       objectReference: {fileID: 0}
     - target: {fileID: 4716034564354573398, guid: 5b5287a13ab2e004e8fad368189340bb,
         type: 3}
@@ -35826,6 +35848,11 @@ PrefabInstance:
       propertyPath: gimmickAffecteds.Array.data[1]
       value: 
       objectReference: {fileID: 6258773503569397348}
+    - target: {fileID: 5058043401232741299, guid: 0f395e5f4315144c2ae44e454977f80f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7009071550399127301, guid: 0f395e5f4315144c2ae44e454977f80f,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -35849,7 +35876,7 @@ PrefabInstance:
     - target: {fileID: 7009071550399127301, guid: 0f395e5f4315144c2ae44e454977f80f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.98
+      value: -1.36
       objectReference: {fileID: 0}
     - target: {fileID: 7009071550399127301, guid: 0f395e5f4315144c2ae44e454977f80f,
         type: 3}
@@ -35941,4 +35968,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf56b750bd086aa4c8536fe4be10c34e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetGimmick: {fileID: 6258773503569397348}
+  targetGate: {fileID: 6258773503569397348}
+  levelActivator: {fileID: 6857024722987565828}

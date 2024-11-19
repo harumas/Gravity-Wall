@@ -63,7 +63,7 @@ namespace Module.Character
 
         public void OnJumpInput()
         {
-            if (isJumping.Value)
+            if (!enabled || isJumping.Value)
             {
                 return;
             }
@@ -149,6 +149,15 @@ namespace Module.Character
         public void Kill()
         {
             isDeath.Value = true;
+        }
+
+        public void Revival()
+        {
+            isDeath.Value = false;
+        }
+
+        public void Lock()
+        {
             isJumping.Value = false;
             isGrounding.Value = true;
             rigBody.velocity = Vector3.zero;
@@ -157,9 +166,8 @@ namespace Module.Character
             enabled = false;
         }
 
-        public void Respawn()
+        public void Unlock()
         {
-            isDeath.Value = false;
             enabled = true;
         }
     }
