@@ -18,6 +18,8 @@ namespace Module.Character
         [Header("連続ジャンプを許可する間隔"), SerializeField] private float allowJumpInterval;
         [Header("ジャンプを許可する地面との距離"), SerializeField] private float allowJumpDistance;
         [Header("接地判定を許可する間隔"), SerializeField] private float allowLandingInteval;
+        [Header("追加ジャンプ量を加算していくカーブ"), SerializeField] private AnimationCurve additionalJumpCurve;
+        [Header("追加ジャンプ量の係数"), SerializeField] private float additionalJumpMultiplier;
 
         [Header("回転のイージング係数"), SerializeField] private float rotateStep;
         [Header("回転のイージング時間係数"), SerializeField] private float rotateTime;
@@ -40,5 +42,10 @@ namespace Module.Character
         public float RotateTime => rotateTime;
         public float EasingOffset => easingOffset;
         public float RotatingAngle => rotatingAngle;
+
+        public float GetAdditionalJumpPower(float time)
+        {
+            return additionalJumpCurve.Evaluate(time) * additionalJumpMultiplier;
+        }
     }
 }

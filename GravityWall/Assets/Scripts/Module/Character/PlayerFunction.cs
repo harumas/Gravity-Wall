@@ -146,6 +146,15 @@ namespace Module.Character
             return isHit;
         }
 
+        public void PerformAdditionalJump()
+        {
+            float time = Time.time - lastJumpTime;
+            float jumpPower = parameter.GetAdditionalJumpPower(time);
+            Vector3 force = -worldGravity.Direction * jumpPower;
+
+            rigidbody.AddForce(force, ForceMode.Acceleration);
+        }
+
         public void PerformJump()
         {
             Vector3 jumpForce = -worldGravity.Gravity * parameter.JumpPower;

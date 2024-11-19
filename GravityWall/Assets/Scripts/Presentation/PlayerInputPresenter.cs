@@ -33,11 +33,18 @@ namespace Presentation
                 .AddTo(playerController);
 
             gameInput.Jump
-                .Subscribe(_ =>
+                .Subscribe(isStarted =>
                 {
                     if (!playerController.IsDeath.CurrentValue)
                     {
-                        playerController.OnJumpInput();
+                        if (isStarted)
+                        {
+                            playerController.OnJumpStart();
+                        }
+                        else
+                        {
+                            playerController.OnJumpEnd();
+                        }
                     }
                 })
                 .AddTo(playerController);
