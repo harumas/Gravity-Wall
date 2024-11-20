@@ -98,6 +98,11 @@ namespace View
 
         public void DeactivateBehaviour(ViewBehaviourState state)
         {
+            if (activeBehaviours.Count == 0)
+            {
+                return;
+            }
+            
             ViewBehaviour behaviour = activeBehaviours.Peek();
 
             if (state != behaviour.ViewBehaviourState)

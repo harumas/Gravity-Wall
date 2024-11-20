@@ -125,7 +125,7 @@ namespace Module.Character
 
         private void OnCollisionEnter(Collision _)
         {
-            simpleInertia.OnCollisionEnter();
+            simpleInertia?.OnCollisionEnter();
         }
 
         public void AddExternalPosition(Vector3 delta)
@@ -143,7 +143,7 @@ namespace Module.Character
 
         public void AddInertia(Vector3 inertia)
         {
-            simpleInertia.AddInertia(inertia);
+            simpleInertia?.AddInertia(inertia);
         }
 
         public void Kill()
