@@ -21,6 +21,16 @@ namespace CoreModule.Helper
             return Random.Range(min, max);
         }
 
+        public float Remap01(float value)
+        {
+            return Mathf.InverseLerp(min, max, value);
+        }
+
+        public float Remap01Squared(float value)
+        {
+            return Mathf.InverseLerp(min * min, max * max, value);
+        }
+
         public float Clamp(float value)
         {
             return Mathf.Clamp(value, min, max);
