@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using CoreModule.Helper;
 using UnityEngine;
 
 
@@ -9,13 +10,11 @@ namespace Gimmick.LevelGimmick
     public class EmissionByDistance : MonoBehaviour
     {
         [SerializeField] private Renderer targetRenderer;
-        [SerializeField] private AnimationCurve intensityCurve;
-        [SerializeField] private float multiplier;
+        [SerializeField] private MinMaxValue distanceRange;
         [SerializeField] private float minEmission;
 
         private Camera mainCamera;
         private static readonly int emissionIntensityProperty = Shader.PropertyToID("_EmissionIntensity");
-        
 
         private void Start()
         {
@@ -26,8 +25,9 @@ namespace Gimmick.LevelGimmick
         {
             Vector3 p = transform.position - mainCamera.transform.position;
 
-            // 二乗則で強さを設定
-            float intensity = Mathf.Max(minEmission, intensityCurve.Evaluate(p.x * p.x + p.y * p.y) * multiplier);
+            Debug.Log(distanceRange.Remap01Squared(p.x * p.x + p.y * p.y + p.z * p.z));
+
+            float intensity = Mathf.Max(minEmission, distanceRange.Remap01Squared(p.x * p.x + p.y * p.y + p.z * p.z));
 
             targetRenderer.material.SetFloat(emissionIntensityProperty, intensity);
         }
