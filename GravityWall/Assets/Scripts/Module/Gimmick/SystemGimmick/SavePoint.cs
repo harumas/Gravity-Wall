@@ -48,6 +48,8 @@ namespace Module.Gimmick
                 firstTouch = true;
                 var respawnContext = new RespawnContext(transform.position, transform.rotation, WorldGravity.Instance.Gravity, levelResetter);
                 OnEnterPoint?.Invoke(respawnContext);
+
+                levelResetter.ResetLevel();
             }
         }
     }

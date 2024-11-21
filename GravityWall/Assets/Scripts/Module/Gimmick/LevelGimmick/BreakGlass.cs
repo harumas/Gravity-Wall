@@ -47,7 +47,7 @@ namespace Module.Gimmick
                     audioSource.Play();
 
                     breakedGlass.transform.localScale = scale;
-                    breakedGlass.transform.DOScaleZ(0.7f, 3.0f)
+                    breakedGlass.transform.DOScaleZ(0.7f, 1.0f)
                     .SetUpdate(true)
                     .OnComplete(() =>
                     {

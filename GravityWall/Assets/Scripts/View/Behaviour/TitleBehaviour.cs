@@ -23,7 +23,7 @@ namespace View
             {
                 onCursorLockChange.OnNext(false);
             }
-            
+
             titleView.SelectFirst();
 
             await UniTask.CompletedTask;
@@ -41,6 +41,7 @@ namespace View
             if (nextState == ViewBehaviourState.None)
             {
                 onCursorLockChange.OnNext(true);
+                // titleView.TitleVirtualCamera.Priority = 0;
             }
 
             await UniTask.CompletedTask;

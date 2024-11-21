@@ -42,7 +42,7 @@ namespace Module.Gimmick
         private void Start()
         {
             InstantiateCounterLights();
-
+            ChangeGateLight(false);
             foreach (GimmickObject gimmick in observedSwitches)
             {
                 gimmick.IsEnabled.Skip(1).Subscribe(UpdateGateState).AddTo(this);

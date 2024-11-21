@@ -12,9 +12,9 @@ namespace Module.Character
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private PlayerController playerController;
         private bool isRotating = true;
-        
+
         private float lastPlayTime;
-        
+
         void Start()
         {
             // 回転のイベント登録
@@ -24,20 +24,22 @@ namespace Module.Character
                 {
                     return;
                 }
-                
+
                 if (this.isRotating == false)
                 {
+                    audioSource.volume = 0.8f;
                     audioSource.PlayOneShot(rotateClip);
                     lastPlayTime = Time.time;
                 }
 
                 this.isRotating = isRotating;
             }).AddTo(this);
-            
+
             playerController.IsJumping.Subscribe(isJumping =>
             {
                 if (isJumping)
                 {
+                    audioSource.volume = 0.5f;
                     audioSource.PlayOneShot(jumpClip);
                 }
             }).AddTo(this);
