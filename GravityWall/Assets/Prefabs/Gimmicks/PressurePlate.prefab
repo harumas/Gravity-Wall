@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 3740166718094443097}
   - component: {fileID: 5535128053442594208}
   - component: {fileID: 7906629046998526494}
-  - component: {fileID: 7815243682783889747}
   - component: {fileID: 6988918092831114249}
   m_Layer: 9
   m_Name: Collider
@@ -37,7 +36,8 @@ Transform:
   m_LocalPosition: {x: -0.062349126, y: -0.06399965, z: -0.0361522}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 3373465083510416499}
   m_Father: {fileID: 7098946537602985938}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3859339382809240858
@@ -537,18 +537,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   temporaryGravityMultiplier: 0.07
---- !u!114 &7815243682783889747
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5146523200442523819}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 066b842494aa546419c78d5ccada3267, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &6988918092831114249
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1189,7 +1177,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5277613775346696198}
   m_Enabled: 0
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -1249,7 +1237,7 @@ MonoBehaviour:
   targetTags:
   - Player
   meshRenderer: {fileID: 967837767122650440}
-  collisionEventBridge: {fileID: 7815243682783889747}
+  triggerEventBridge: {fileID: 1403652908010866293}
   onEvent:
     m_PersistentCalls:
       m_Calls:
@@ -1267,8 +1255,8 @@ MonoBehaviour:
         m_CallState: 2
   pushDuration: 0.2
   buttonCollision: {fileID: 6988918092831114249}
-  collisionMoveOffset: -0.5
-  pushDelay: 0.4
+  collisionMoveOffset: -0.31
+  pushDelay: 0.1
 --- !u!82 &1649160304965933493
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1365,6 +1353,72 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &8523025103733324374
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3373465083510416499}
+  - component: {fileID: 8371201576205565922}
+  - component: {fileID: 1403652908010866293}
+  m_Layer: 10
+  m_Name: Trigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3373465083510416499
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8523025103733324374}
+  serializedVersion: 2
+  m_LocalRotation: {x: -8.881785e-16, y: 0.25881913, z: 4.4408926e-16, w: 0.9659258}
+  m_LocalPosition: {x: 0.05821897, y: 0.0000000013731418, z: -0.006940916}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2942626787956884941}
+  m_LocalEulerAnglesHint: {x: 0, y: 30, z: 0}
+--- !u!65 &8371201576205565922
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8523025103733324374}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.4077538, y: 0.5950191, z: 1.238475}
+  m_Center: {x: 0.0161575, y: 0.29922068, z: -0.11923676}
+--- !u!114 &1403652908010866293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8523025103733324374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 587faf791a4910843b17d5bdb4059da4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &768396432458629406
 PrefabInstance:
   m_ObjectHideFlags: 0
