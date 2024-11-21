@@ -12,7 +12,6 @@ namespace Gimmick.LevelGimmick
         [SerializeField] private AnimationCurve intensityCurve;
         [SerializeField] private float multiplier;
         [SerializeField] private float minEmission;
-        [SerializeField] private float 
 
         private Camera mainCamera;
         private static readonly int emissionIntensityProperty = Shader.PropertyToID("_EmissionIntensity");
