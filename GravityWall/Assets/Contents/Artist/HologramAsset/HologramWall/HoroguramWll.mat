@@ -7,26 +7,27 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BatteryStand 1
-  m_Shader: {fileID: -6465566751694194690, guid: ac516f1c6b6f06047877e303abfafe57,
+  m_Name: HoroguramWll
+  m_Shader: {fileID: -6465566751694194690, guid: cf474b3293443f248b95d8dc0676aee8,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _ALPHATEST_ON
+  - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2450
+  m_CustomRenderQueue: 3000
   stringTagMap:
-    RenderType: TransparentCutout
-  disabledShaderPasses: []
+    RenderType: Transparent
+  disabledShaderPasses:
+  - SHADOWCASTER
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _AOTexture:
+    - _AlphaMaskTexture:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -54,28 +55,16 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _EmissionTexture:
-        m_Texture: {fileID: 2800000, guid: e6511fe0fc08b1d4e8137eff7f8e6e86, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainColorTexture:
-        m_Texture: {fileID: 2800000, guid: a7ca396b569c7f8469293075766a7b9f, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTexture:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MetallicTexture:
-        m_Texture: {fileID: 2800000, guid: 6811abf6678e1dc48ac2c1a2ae3baccc, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _NormalMapTexture:
-        m_Texture: {fileID: 2800000, guid: 2595a902882ea9042a972f9934ecdd86, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -86,23 +75,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_894db321c00342f4b2733fc1191c03f7_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: db91dc2f3d3f2a442aaf0f9aed94bd33, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SmoothnessTexture:
-        m_Texture: {fileID: 2800000, guid: 15c57e0995dbd564eabf17d0183da553, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Texture2D:
-        m_Texture: {fileID: 2800000, guid: ed4caee7b16db2848b4517aa7103955c, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Texture2DAsset_78577f479f0b4722b7649b5e4e31ccce_Out_0_Texture2D:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -120,63 +93,56 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AO: 1
-    - _AOTextureUse: 0
-    - _AlphaClip: 1
-    - _AlphaToMask: 1
+    - _Alpha: 0.021
+    - _AlphaClip: 0.212
+    - _AlphaToMask: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
-    - _CastShadows: 1
+    - _CastShadows: 0
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _DstBlend: 0
+    - _DstBlend: 10
     - _DstBlendAlpha: 0
-    - _EmissionIntensity: 0.188
     - _EnvironmentReflections: 1
-    - _GlossMapScale: 1
+    - _FresnelStrength: 4.07
+    - _GlossMapScale: 0
     - _Glossiness: 0
-    - _GlossyReflections: 1
-    - _MaxDistance: 3.5
+    - _GlossyReflections: 0
+    - _LineFrequency: 83.55
+    - _LineRotation: 0
+    - _LineStrength: 0.78
+    - _LineThickness: 0.19
     - _Metallic: 0
-    - _MetallicIntensity: 0.43
-    - _MinDistance: 0.2
-    - _Mode: 0
-    - _NormalStrength: 0.802
     - _OcclusionStrength: 1
-    - _Parallax: 0.02
-    - _PowerOn: 1
+    - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Roughness: 1
-    - _ScrollDotNum: 3
-    - _ScrollSpeed: 0.52
-    - _Smoothness: 0
-    - _SmoothnessIntensity: 0.84
+    - _ScrollSpeed: 4.86
+    - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _SrcBlend: 1
+    - _SrcBlend: 5
     - _SrcBlendAlpha: 1
-    - _Surface: 0
-    - _UVSec: 0
+    - _Surface: 1
     - _WorkflowMode: 1
     - _ZTest: 4
     - _ZWrite: 1
-    - _ZWriteControl: 0
+    - _ZWriteControl: 1
     m_Colors:
-    - _BaseColor: {r: 0.7353569, g: 0.7353569, b: 0.7353569, a: 1}
-    - _Color: {r: 0.7353569, g: 0.7353569, b: 0.7353569, a: 1}
-    - _EmissionColor: {r: 5.4776244, g: 68.30919, b: 29.673632, a: 1}
-    - _Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _FresnelColor: {r: 0, g: 68.5935, b: 22.396395, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _Tiling: {r: 1, g: 1, b: 0, a: 0}
+    - _Tint: {r: 1.2630079, g: 5.656854, b: 5.247085, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &4655676927507756773
+--- !u!114 &7039367604914412810
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

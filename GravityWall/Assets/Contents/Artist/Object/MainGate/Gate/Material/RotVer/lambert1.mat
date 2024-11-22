@@ -7,31 +7,30 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BatteryStand 1
-  m_Shader: {fileID: -6465566751694194690, guid: ac516f1c6b6f06047877e303abfafe57,
+  m_Name: lambert1
+  m_Shader: {fileID: -6465566751694194690, guid: 0612ae20f249e4244b0af4e5da71a1f2,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _ALPHATEST_ON
+  m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2450
+  m_CustomRenderQueue: -1
   stringTagMap:
-    RenderType: TransparentCutout
+    RenderType: Opaque
   disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _AOTexture:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: dab47c829e5d51741a2e40241248fc27, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 3b0a741e6a9df524f8cdf6e1ab12a32e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -55,15 +54,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionTexture:
-        m_Texture: {fileID: 2800000, guid: e6511fe0fc08b1d4e8137eff7f8e6e86, type: 3}
+        m_Texture: {fileID: 2800000, guid: febfb86a9ba411c41a7c397a03b64913, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainColorTexture:
-        m_Texture: {fileID: 2800000, guid: a7ca396b569c7f8469293075766a7b9f, type: 3}
+        m_Texture: {fileID: 2800000, guid: 08e0f459d27c9a346b49a2007a2ff48d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 3b0a741e6a9df524f8cdf6e1ab12a32e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -71,11 +70,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicTexture:
-        m_Texture: {fileID: 2800000, guid: 6811abf6678e1dc48ac2c1a2ae3baccc, type: 3}
+        m_Texture: {fileID: 2800000, guid: 4c8c1a9307e19aa4c9a43ecc4fdc2f09, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMapTexture:
-        m_Texture: {fileID: 2800000, guid: 2595a902882ea9042a972f9934ecdd86, type: 3}
+        m_Texture: {fileID: 2800000, guid: 7ae28d0b16a0a7b4487bf6783d8f9c5e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -86,23 +85,11 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_894db321c00342f4b2733fc1191c03f7_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: db91dc2f3d3f2a442aaf0f9aed94bd33, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _SmoothnessTexture:
-        m_Texture: {fileID: 2800000, guid: 15c57e0995dbd564eabf17d0183da553, type: 3}
+        m_Texture: {fileID: 2800000, guid: 7856f73f8de6b834aba8410289b3de39, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Texture2D:
-        m_Texture: {fileID: 2800000, guid: ed4caee7b16db2848b4517aa7103955c, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Texture2DAsset_78577f479f0b4722b7649b5e4e31ccce_Out_0_Texture2D:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -121,9 +108,9 @@ Material:
     m_Ints: []
     m_Floats:
     - _AO: 1
-    - _AOTextureUse: 0
-    - _AlphaClip: 1
-    - _AlphaToMask: 1
+    - _AOTextureUse: 1
+    - _AlphaClip: 0
+    - _AlphaToMask: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
@@ -136,28 +123,26 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 0
-    - _EmissionIntensity: 0.188
+    - _EmissionIntensity: 1
+    - _EmissionOpen: 0
     - _EnvironmentReflections: 1
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
-    - _MaxDistance: 3.5
+    - _MaxDistance: 0
     - _Metallic: 0
-    - _MetallicIntensity: 0.43
-    - _MinDistance: 0.2
+    - _MetallicIntensity: 1
+    - _MinDistance: 0
     - _Mode: 0
-    - _NormalStrength: 0.802
+    - _NormalStrength: 1
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _PowerOn: 1
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Roughness: 1
-    - _ScrollDotNum: 3
-    - _ScrollSpeed: 0.52
     - _Smoothness: 0
-    - _SmoothnessIntensity: 0.84
+    - _SmoothnessIntensity: 0.63
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -169,14 +154,19 @@ Material:
     - _ZWrite: 1
     - _ZWriteControl: 0
     m_Colors:
-    - _BaseColor: {r: 0.7353569, g: 0.7353569, b: 0.7353569, a: 1}
-    - _Color: {r: 0.7353569, g: 0.7353569, b: 0.7353569, a: 1}
-    - _EmissionColor: {r: 5.4776244, g: 68.30919, b: 29.673632, a: 1}
+    - _BaseColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+    - _Color: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+    - _DoorColor: {r: 3.2210934, g: 12.8806925, b: 78.79325, a: 0}
+    - _EmissionColor: {r: 1.1159213, g: 11.447212, b: 2.7927277, a: 1}
+    - _EmissionColor2: {r: 1.1486983, g: 0.08308186, b: 0.17820245, a: 0}
+    - _MainEmissionColor: {r: 0.7735849, g: 0, b: 0, a: 0}
+    - _MainEmissionColor2: {r: 1.6899402, g: 5.656854, b: 3.4478273, a: 0}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _SubEmissionColor: {r: 0, g: 0.6403336, b: 0.985529, a: 0}
     - _Tiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &4655676927507756773
+--- !u!114 &1068436368438562081
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
