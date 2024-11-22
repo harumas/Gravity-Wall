@@ -20,7 +20,7 @@ namespace Module.Gimmick
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private GimmickObject[] observedSwitches;
         [SerializeField] private float setInterval = 1f;
-        [SerializeField,ReadOnly]  private int usingCount = 0;
+        [SerializeField, ReadOnly] private int usingCount = 0;
 
         private int switchCount = 0;
         private List<Material> lightMaterials = new List<Material>();
@@ -116,7 +116,18 @@ namespace Module.Gimmick
         {
             for (int i = 0; i < gateMeshRenderers.Length; i++)
             {
-                gateMeshRenderers[i].material.SetFloat(emissionIntensity, isOpen ? 1.0f : 0.0f);
+                //gateMeshRenderers[i].material.color = isOpen ? Color.green : Color.red;
+                if (isOpen)
+                {
+                    // lightMaterials[switchCount].SetFloat(emissionIntensity, 1.0f);
+                    gateMeshRenderers[i].material.SetColor("_EmmisionColor", Color.red * 5.0f);
+                }
+                else
+                {
+                    // lightMaterials[switchCount - 1].SetFloat(emissionIntensity, 0.0f);
+                    gateMeshRenderers[i].material.SetColor("_EmmisionColor", Color.green * 5.0f);
+                }
+                // gateMeshRenderers[i].material.SetFloat(emissionIntensity, isOpen ? 1.0f : 0.0f);
             }
         }
 
@@ -124,11 +135,13 @@ namespace Module.Gimmick
         {
             if (isOn)
             {
-                lightMaterials[switchCount].SetFloat(emissionIntensity, 1.0f);
+                // lightMaterials[switchCount].SetFloat(emissionIntensity, 1.0f);
+                lightMaterials[switchCount].SetColor("_EmmisionColor", Color.red * 8.0f);
             }
             else
             {
-                lightMaterials[switchCount - 1].SetFloat(emissionIntensity, 0.0f);
+                // lightMaterials[switchCount - 1].SetFloat(emissionIntensity, 0.0f);
+                lightMaterials[switchCount].SetColor("_EmmisionColor", Color.green * 8.0f);
             }
         }
 
