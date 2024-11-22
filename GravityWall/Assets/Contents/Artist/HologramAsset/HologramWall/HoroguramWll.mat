@@ -7,20 +7,20 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Danger_Holo
-  m_Shader: {fileID: -6465566751694194690, guid: 8f3c305c641c0e84192d6b3273e61c4c,
+  m_Name: HoroguramWll
+  m_Shader: {fileID: -6465566751694194690, guid: cf474b3293443f248b95d8dc0676aee8,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _ALPHATEST_ON
+  - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2450
+  m_CustomRenderQueue: 3000
   stringTagMap:
-    RenderType: TransparentCutout
+    RenderType: Transparent
   disabledShaderPasses:
   - SHADOWCASTER
   m_LockedProperties: 
@@ -28,7 +28,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _AlphaMaskTexture:
-        m_Texture: {fileID: 2800000, guid: f34aa16ac87d5f04a90b8103d01dc9c6, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
@@ -60,7 +60,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTexture:
-        m_Texture: {fileID: 2800000, guid: 561b6f2ed1abf2f4498da096761de9d3, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -93,45 +93,43 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 0.12
-    - _AlphaClip: 0.549
-    - _AlphaToMask: 1
+    - _Alpha: 0.021
+    - _AlphaClip: 0.212
+    - _AlphaToMask: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
     - _CastShadows: 0
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
-    - _Cull: 0
+    - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _DstBlend: 0
+    - _DstBlend: 10
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
-    - _FresnelStrength: 4.62
+    - _FresnelStrength: 4.07
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _LineFrequency: 100
-    - _LineRotation: 90
-    - _LineStrength: 0.7
-    - _LineThickness: 0.2
+    - _LineFrequency: 83.55
+    - _LineRotation: 0
+    - _LineStrength: 0.78
+    - _LineThickness: 0.19
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _ScrollSpeed: 2
+    - _ScrollSpeed: 4.86
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _SrcBlend: 1
+    - _SrcBlend: 5
     - _SrcBlendAlpha: 1
-    - _Surface: 0
-    - _UpperIntensity: 1
-    - _UpperTime: 3
+    - _Surface: 1
     - _WorkflowMode: 1
     - _ZTest: 4
     - _ZWrite: 1
@@ -140,12 +138,11 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FresnelColor: {r: 74.38422, g: 4.36965, b: 0, a: 0}
+    - _FresnelColor: {r: 0, g: 68.5935, b: 22.396395, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _Tint: {r: 3.0120487, g: 0.05063898, b: 0, a: 0}
-    - _UpVector: {r: 0, g: 0, b: 1, a: 0}
+    - _Tint: {r: 1.2630079, g: 5.656854, b: 5.247085, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &766217913144047635
+--- !u!114 &7039367604914412810
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
