@@ -46,7 +46,7 @@ namespace Module.Gimmick
                 Debug.Log("セーブしました");
 
                 firstTouch = true;
-                var respawnContext = new RespawnContext(transform.position, transform.rotation, WorldGravity.Instance.Gravity, levelResetter);
+                var respawnContext = new RespawnContext(transform.position, transform.rotation, -transform.up, levelResetter);
                 OnEnterPoint?.Invoke(respawnContext);
             }
         }
