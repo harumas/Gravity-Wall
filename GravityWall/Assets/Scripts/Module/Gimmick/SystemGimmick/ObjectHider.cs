@@ -14,6 +14,8 @@ namespace Module.Gimmick
         [SerializeField]
         private float hideAngle = 80f;
 
+        [SerializeField] private bool activeOnStart;
+
         private Camera mainCamera;
         private List<Renderer> renderers = new List<Renderer>();
         private ReactiveProperty<bool> isHide = new ReactiveProperty<bool>();
@@ -32,8 +34,11 @@ namespace Module.Gimmick
                     rend.enabled = !isHide;
                 }
             });
-            
-            Disable();
+
+            if (!activeOnStart)
+            {
+                Disable();
+            }
         }
 
         private void Update()
