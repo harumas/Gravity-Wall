@@ -11,7 +11,9 @@ namespace Module.PlayTest
     public class LevelActivator : MonoBehaviour
     {
         [SerializeField] private bool startActive;
+        [SerializeField] private bool activateOnOpen;
         [SerializeField] private GameObject roomObject;
+        [SerializeField] private string observeGate;
         [SerializeField] private List<Gate> levelGates;
         [SerializeField] private List<ObjectHider> objectHiders;
 
@@ -19,6 +21,11 @@ namespace Module.PlayTest
 
         private void Start()
         {
+            if (activateOnOpen)
+            {
+                GimmickReference.OnGimmickReferenceUpdated += OnGimmickReferenceUpdated;
+            }
+
             if (startActive)
             {
                 foreach (Gate levelGate in levelGates)
@@ -35,17 +42,38 @@ namespace Module.PlayTest
 
             foreach (Gate gate in levelGates)
             {
-                gate.IsEnabled.Skip(1).Subscribe(isEnabled =>
-                {
-                    if (isEnabled)
+                gate.IsEnabled.Skip(1)
+                    .Subscribe(isEnabled =>
                     {
-                        Activate();
-                    }
-                    else
+                        if (isEnabled)
+                        {
+                            Activate();
+                        }
+                        else
+                        {
+                            Deactivate();
+                        }
+                    })
+                    .AddTo(this);
+            }
+        }
+
+        private void OnGimmickReferenceUpdated(GimmickReference reference)
+        {
+            if (reference.TryGetGimmick(observeGate, out Gate gate))
+            {
+                gate.IsEnabled.Skip(1)
+                    .Subscribe(isEnabled =>
                     {
-                        Deactivate();
-                    }
-                }).AddTo(this);
+                        if (isEnabled)
+                        {
+                            Activate();
+                        }
+                        else
+                        {
+                            Deactivate();
+                        }
+                    });
             }
         }
 

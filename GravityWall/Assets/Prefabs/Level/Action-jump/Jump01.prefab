@@ -252,7 +252,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 8351
+  m_VersionIndex: 8363
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -457,7 +457,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 10245
+  m_VersionIndex: 10257
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -611,7 +611,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8775030496799790838}
-  m_Layer: 0
+  - component: {fileID: 8018068230099058516}
+  - component: {fileID: 1555555423520649695}
+  - component: {fileID: 925641613234347374}
+  m_Layer: 10
   m_Name: Jump01
   m_TagString: LevelSegment
   m_Icon: {fileID: 0}
@@ -635,6 +638,62 @@ Transform:
   - {fileID: 5886083408545209017}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8018068230099058516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2487258226139616037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5eb5dd2b88404853b567ea2d3a46d25d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentReference:
+    TypeName: Container.InGameContainer
+  autoRun: 0
+  autoInjectGameObjects: []
+--- !u!114 &1555555423520649695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2487258226139616037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffdfed186bc7f401bb3fff98844ff62d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startActive: 1
+  activateOnOpen: 0
+  roomObject: {fileID: 2331681433061524925}
+  observeGate: 
+  levelGates:
+  - {fileID: 2516666613964215922}
+  objectHiders: []
+--- !u!65 &925641613234347374
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2487258226139616037}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 10.95665, y: 9.831863, z: 32.840622}
+  m_Center: {x: 0.52499866, y: 2.0624485, z: 4.609886}
 --- !u!1 &2844964454728473970
 GameObject:
   m_ObjectHideFlags: 0
@@ -1652,7 +1711,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3705
+  m_VersionIndex: 3717
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1888,7 +1947,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 10155
+  m_VersionIndex: 10167
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -2961,7 +3020,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3705
+  m_VersionIndex: 3717
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -3371,7 +3430,7 @@ PrefabInstance:
     - target: {fileID: 4180666763782012595, guid: ee25c7e485a84475d8b764ba91817c5e,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 1397
+      value: 1409
       objectReference: {fileID: 0}
     - target: {fileID: 4180666763782012595, guid: ee25c7e485a84475d8b764ba91817c5e,
         type: 3}
@@ -3624,12 +3683,23 @@ PrefabInstance:
       propertyPath: observedSwitches.Array.data[0]
       value: 
       objectReference: {fileID: 7403489078754196243}
+    - target: {fileID: 5260175374949259475, guid: 7e317563c594d4fe787b60604ecdfd7c,
+        type: 3}
+      propertyPath: gateOpenEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5260175374949259475, guid: 7e317563c594d4fe787b60604ecdfd7c,
+        type: 3}
+      propertyPath: gateCloseEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7607265530484897456, guid: 7e317563c594d4fe787b60604ecdfd7c,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7471500961253179769, guid: 7e317563c594d4fe787b60604ecdfd7c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
