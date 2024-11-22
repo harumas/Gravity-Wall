@@ -208,6 +208,7 @@ namespace Module.Gimmick.DynamicScaffold
 
         private void OnCollisionEnter(Collision other)
         {
+            Debug.Log("OnCollisionEnter");
             if (!isEnabled.Value)
             {
                 return;
@@ -224,6 +225,7 @@ namespace Module.Gimmick.DynamicScaffold
 
         private void OnCollisionExit(Collision other)
         {
+            Debug.Log("OnCollisionExit");
             if (!isEnabled.Value)
             {
                 return;
