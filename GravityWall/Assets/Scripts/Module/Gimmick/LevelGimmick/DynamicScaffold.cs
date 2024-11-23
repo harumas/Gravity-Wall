@@ -34,7 +34,7 @@ namespace Module.Gimmick.DynamicScaffold
         private Transform currentTarget;
         private IPushable pushement;
         private float trappedTimer;
-        private int contactCount;
+      [SerializeField]  private int contactCount;
 
         private const float StopThreshold = 0.01f;
 
@@ -65,6 +65,7 @@ namespace Module.Gimmick.DynamicScaffold
             {
                 gimmick.IsEnabled.Skip(1).Subscribe(UpdateMoveState).AddTo(this);
             }
+            
             if (enableOnAwake)
             {
                 Enable();
@@ -208,12 +209,6 @@ namespace Module.Gimmick.DynamicScaffold
 
         private void OnCollisionEnter(Collision other)
         {
-            Debug.Log("OnCollisionEnter");
-            if (!isEnabled.Value)
-            {
-                return;
-            }
-
             contactCount++;
 
             //床に設置したプレイヤーを取得
@@ -225,12 +220,6 @@ namespace Module.Gimmick.DynamicScaffold
 
         private void OnCollisionExit(Collision other)
         {
-            Debug.Log("OnCollisionExit");
-            if (!isEnabled.Value)
-            {
-                return;
-            }
-
             contactCount--;
 
             if (contactCount == 0 && other.gameObject.CompareTag(Tag.Player))
