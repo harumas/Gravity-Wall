@@ -41,7 +41,7 @@ namespace View
             if (nextState == ViewBehaviourState.None)
             {
                 onCursorLockChange.OnNext(true);
-                // titleView.TitleVirtualCamera.Priority = 0;
+                titleView.StartSequencer.StartSequence();
             }
 
             await UniTask.CompletedTask;

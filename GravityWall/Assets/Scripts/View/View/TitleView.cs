@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Cinemachine;
+using Module.PlayTest;
 namespace View
 {
     public class TitleView : MonoBehaviour
@@ -11,9 +12,9 @@ namespace View
         [SerializeField] private Button continueGameButton;
         [SerializeField] private Button creditButton;
         [SerializeField] private Button endGameButton;
-        // [SerializeField] private CinemachineVirtualCamera titleVirtualCamera;
+        [SerializeField] private StartSequencer startSequencer;
 
-        // public CinemachineVirtualCamera TitleVirtualCamera => titleVirtualCamera;
+        public StartSequencer StartSequencer => startSequencer;
 
         public Observable<Unit> OnNewGameButtonPressed => newGameButton.OnClickAsObservable();
         public Observable<Unit> OnContinueGameButtonPressed => continueGameButton.OnClickAsObservable();
