@@ -13,8 +13,11 @@ namespace View
         [SerializeField] private Button creditButton;
         [SerializeField] private Button endGameButton;
         [SerializeField] private StartSequencer startSequencer;
+        [SerializeField] private CanvasGroup canvasGroup, fadeCanvasGroup;
 
         public StartSequencer StartSequencer => startSequencer;
+        public CanvasGroup CanvasGroup => canvasGroup;
+        public CanvasGroup FadeCanvasGroup => fadeCanvasGroup;
 
         public Observable<Unit> OnNewGameButtonPressed => newGameButton.OnClickAsObservable();
         public Observable<Unit> OnContinueGameButtonPressed => continueGameButton.OnClickAsObservable();
