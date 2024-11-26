@@ -118,6 +118,14 @@ namespace Module.Character
             return isHit;
         }
 
+        public bool IsJumpable()
+        {
+            Vector3 rayDirection = worldGravity.Direction;
+            bool isHit = Physics.Raycast(transform.position, rayDirection,out RaycastHit hitInfo, parameter.AllowJumpDistance, GroundLayerMask);
+
+            return isHit && !hitInfo.transform.CompareTag(Tag.UnJumpable);
+        }
+
         public bool CanGroundingAgain(float landingTime)
         {
             // 前のジャンプから一定時間が経過していたらチェック開始
