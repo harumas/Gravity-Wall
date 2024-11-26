@@ -26,6 +26,9 @@ namespace Module.Gimmick
         private List<Material> lightMaterials = new List<Material>();
         private static readonly int emissionIntensity = Shader.PropertyToID("_EmissionIntensity");
 
+        private Color green = new Color(1.2f, 12f, 7);
+        private Color red = new Color(12f, 1.1f, 2);
+
         public bool IsUsing => UsingCount > 0;
 
         public int UsingCount
@@ -116,7 +119,14 @@ namespace Module.Gimmick
         {
             for (int i = 0; i < gateMeshRenderers.Length; i++)
             {
-                gateMeshRenderers[i].material.SetFloat(emissionIntensity, isOpen ? 1.0f : 0.0f);
+                if (isOpen)
+                {
+                    gateMeshRenderers[i].material.SetColor("_EmissionColor", green * 5.0f);
+                }
+                else
+                {
+                    gateMeshRenderers[i].material.SetColor("_EmissionColor", red * 5.0f);
+                }
             }
         }
 
@@ -124,11 +134,11 @@ namespace Module.Gimmick
         {
             if (isOn)
             {
-                lightMaterials[switchCount].SetFloat(emissionIntensity, 1.0f);
+                lightMaterials[switchCount].SetColor("_EmissionColor", green * 5.0f);
             }
             else
             {
-                lightMaterials[switchCount - 1].SetFloat(emissionIntensity, 0.0f);
+                lightMaterials[switchCount].SetColor("_EmissionColor", red * 5.0f);
             }
         }
 

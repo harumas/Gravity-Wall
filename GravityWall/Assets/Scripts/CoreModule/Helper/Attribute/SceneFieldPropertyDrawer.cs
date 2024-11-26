@@ -53,5 +53,5 @@ namespace CoreModule.Helper.Attribute
             return sceneList.ToArray();
         }
     }
-#endif
 }
+#endif
