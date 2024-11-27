@@ -36,6 +36,7 @@ namespace Module.Character
 
         private Vector2 moveInput;
         private float landingTime;
+        private bool isJumpingInput;
 
         private void Start()
         {
@@ -61,9 +62,9 @@ namespace Module.Character
             this.moveInput = moveInput;
         }
 
-        public void OnJumpInput()
+        public void OnJumpStart()
         {
-            if (!enabled || isJumping.Value)
+            if (!enabled || isJumping.Value || !playerFunction.IsJumpable())
             {
                 return;
             }
@@ -71,6 +72,17 @@ namespace Module.Character
             playerFunction.PerformJump();
             isJumping.Value = true;
             isGrounding.Value = false;
+            isJumpingInput = true;
+        }
+
+        public void OnJumpEnd()
+        {
+            if (!enabled || !isJumping.Value)
+            {
+                return;
+            }
+
+            isJumpingInput = false;
         }
 
         public void SetLandingTime(float time)
@@ -92,6 +104,11 @@ namespace Module.Character
                 if (playerFunction.CanGroundingAgain(landingTime))
                 {
                     isGrounding.Value = true;
+                }
+
+                if (isJumpingInput)
+                {
+                    playerFunction.PerformAdditionalJump();
                 }
             }
 
@@ -133,12 +150,13 @@ namespace Module.Character
             rigBody.MovePosition(rigBody.position + delta);
         }
 
-        public void AddForce(Vector3 force, ForceMode mode, float forcedGravity)
+        public void AddForce(Vector3 force, ForceMode mode, float forcedGravity, bool allowAdditionalPower)
         {
             playerFunction.AddForce(force, mode, forcedGravity);
             isJumping.Value = true;
             isJumping.ForceNotify();
             isGrounding.Value = false;
+            isJumpingInput = allowAdditionalPower;
         }
 
         public void AddInertia(Vector3 inertia)
