@@ -10,9 +10,7 @@ namespace Module.Gimmick
     [DefaultExecutionOrder(10)]
     public class ObjectHider : MonoBehaviour
     {
-        [Header("オブジェクトを隠す角度")]
-        [SerializeField]
-        private float hideAngle = 80f;
+        [Header("オブジェクトを隠す角度")] [SerializeField] private float hideAngle = 80f;
 
         [SerializeField] private bool activeOnStart;
 
@@ -20,14 +18,16 @@ namespace Module.Gimmick
         private List<Renderer> renderers = new List<Renderer>();
         private ReactiveProperty<bool> isHide = new ReactiveProperty<bool>();
 
-        private void Start()
+        private void Awake()
         {
+            isHide.Value = enabled;
+
             mainCamera = Camera.main;
 
             renderers.AddRange(gameObject.GetComponentsInChildren<Renderer>(true));
 
             //隠すイベントを登録
-            isHide.Skip(1).Subscribe(isHide =>
+            isHide.Subscribe(isHide =>
             {
                 foreach (Renderer rend in renderers)
                 {
