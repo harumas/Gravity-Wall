@@ -27,13 +27,13 @@ namespace Module.Gimmick
             renderers.AddRange(gameObject.GetComponentsInChildren<Renderer>(true));
 
             //隠すイベントを登録
-            isHide.Subscribe(isHide =>
+            isHide.Skip(1).Subscribe(isHide =>
             {
                 foreach (Renderer rend in renderers)
                 {
                     rend.enabled = !isHide;
                 }
-            });
+            }).AddTo(this);
 
             if (!activeOnStart)
             {
