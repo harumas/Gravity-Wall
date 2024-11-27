@@ -21,10 +21,13 @@ namespace Module.Gimmick
         [SerializeField] private GimmickObject[] observedSwitches;
         [SerializeField] private float setWidth = 2.7f;
         [SerializeField, ReadOnly] private int usingCount = 0;
+        [SerializeField] private Material lockHoloMaterial, openHoloMaterial;
+        [SerializeField] private MeshRenderer hologramMeshRenderer;
 
         private int switchCount = 0;
         private List<Material> lightMaterials = new List<Material>();
         private static readonly int emissionColor = Shader.PropertyToID("_EmissionColor");
+        private static readonly int alphaProperty = Shader.PropertyToID("_Alpha");
 
         private Color green = new Color(1.2f, 12f, 7);
         private Color red = new Color(12f, 1.1f, 2);
@@ -86,6 +89,16 @@ namespace Module.Gimmick
             gate.SetActive(false);
             ChangeGateLight(true);
 
+            hologramMeshRenderer.material = openHoloMaterial;
+            float alpha = 0.2f;
+            hologramMeshRenderer.transform.DOShakeScale(0.3f);
+            DOTween.To(() => alpha, (a) => alpha = a, 0, 1.0f)
+            .SetDelay(0.3f)
+            .OnUpdate(() =>
+            {
+                hologramMeshRenderer.material.SetFloat(alphaProperty, alpha);
+            });
+
             isEnabled.Value = true;
         }
 
@@ -105,6 +118,8 @@ namespace Module.Gimmick
             gateCloseEvent.Invoke();
             gate.SetActive(true);
             ChangeGateLight(false);
+            hologramMeshRenderer.material = lockHoloMaterial;
+            hologramMeshRenderer.material.SetFloat(alphaProperty, 0.2f);
 
             isEnabled.Value = false;
         }
