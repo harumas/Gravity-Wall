@@ -19,12 +19,12 @@ namespace Module.Gimmick
         [SerializeField] private int switchMaxCount = 1;
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private GimmickObject[] observedSwitches;
-        [SerializeField] private float setInterval = 1f;
+        [SerializeField] private float setWidth = 2.7f;
         [SerializeField, ReadOnly] private int usingCount = 0;
 
         private int switchCount = 0;
         private List<Material> lightMaterials = new List<Material>();
-        private static readonly int emissionIntensity = Shader.PropertyToID("_EmissionIntensity");
+        private static readonly int emissionColor = Shader.PropertyToID("_EmissionColor");
 
         private Color green = new Color(1.2f, 12f, 7);
         private Color red = new Color(12f, 1.1f, 2);
@@ -121,11 +121,11 @@ namespace Module.Gimmick
             {
                 if (isOpen)
                 {
-                    gateMeshRenderers[i].material.SetColor("_EmissionColor", green * 5.0f);
+                    gateMeshRenderers[i].material.SetColor(emissionColor, green * 5.0f);
                 }
                 else
                 {
-                    gateMeshRenderers[i].material.SetColor("_EmissionColor", red * 5.0f);
+                    gateMeshRenderers[i].material.SetColor(emissionColor, red * 5.0f);
                 }
             }
         }
@@ -134,11 +134,11 @@ namespace Module.Gimmick
         {
             if (isOn)
             {
-                lightMaterials[switchCount].SetColor("_EmissionColor", green * 5.0f);
+                lightMaterials[switchCount].SetColor(emissionColor, green * 5.0f);
             }
             else
             {
-                lightMaterials[switchCount].SetColor("_EmissionColor", red * 5.0f);
+                lightMaterials[switchCount].SetColor(emissionColor, red * 5.0f);
             }
         }
 
@@ -156,13 +156,15 @@ namespace Module.Gimmick
                 return;
             }
 
-            float width = setInterval * (switchMaxCount - 1);
+            int numberOfGaps = switchMaxCount + 1;
+            float spacing = setWidth / numberOfGaps;
 
             for (int i = 0; i < switchMaxCount; i++)
             {
                 var lightObj = pooledLights[i];
                 lightObj.SetActive(true);
-                lightObj.transform.localPosition = lightBasePosition.localPosition + Vector3.right * (setInterval * i - width / 2);
+                float xPosition = -setWidth / 2 + spacing * (i + 1);
+                lightObj.transform.localPosition = new Vector3(xPosition, lightObj.transform.localPosition.y, lightObj.transform.localPosition.z);
                 lightMaterials.Add(lightObj.GetComponent<Renderer>().material);
             }
         }
