@@ -50,7 +50,7 @@ namespace Module.Gimmick
         {
             if (isPlayerEnter)
             {
-                targetGravity.SetMultiplierAtFrame(30);
+                targetGravity.SetMultiplierAtFrame(20);
             }
         }
 
