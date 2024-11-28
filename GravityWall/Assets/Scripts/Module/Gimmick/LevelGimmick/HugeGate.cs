@@ -7,30 +7,24 @@ using UnityEngine.Events;
 
 namespace Module.Gimmick
 {
-    public class Gate : GimmickObject
+    public class HugeGate : GimmickObject
     {
         [SerializeField] private UnityEvent gateOpenEvent;
         [SerializeField] private UnityEvent gateCloseEvent;
-        [SerializeField] private GameObject gate;
-        [SerializeField] private MeshRenderer[] gateMeshRenderers;
         [SerializeField] private Transform lightBasePosition;
-        [SerializeField] private Transform gateLeft, gateRight;
         [SerializeField] private GameObject[] pooledLights;
         [SerializeField] private int switchMaxCount = 1;
-        [SerializeField] private AudioSource audioSource;
         [SerializeField] private GimmickObject[] observedSwitches;
         [SerializeField] private float setWidth = 2.7f;
         [SerializeField, ReadOnly] private int usingCount = 0;
-        [SerializeField] private Material lockHoloMaterial, openHoloMaterial;
-        [SerializeField] private MeshRenderer hologramMeshRenderer;
+        [SerializeField] private Animator anim;
 
         private int switchCount = 0;
         private List<Material> lightMaterials = new List<Material>();
-        private static readonly int emissionColor = Shader.PropertyToID("_EmissionColor");
-        private static readonly int alphaProperty = Shader.PropertyToID("_Alpha");
 
         private Color green = new Color(1.2f, 12f, 7);
         private Color red = new Color(12f, 1.1f, 2);
+        private static readonly int emissionColor = Shader.PropertyToID("_EmissionColor");
 
         public bool IsUsing => UsingCount > 0;
 
@@ -79,15 +73,9 @@ namespace Module.Gimmick
                 return;
             }
 
-            if (doEffect)
-            {
-                audioSource.Play();
-                GateAnimation(true);
-            }
-
             gateOpenEvent.Invoke();
-            gate.SetActive(false);
-            ChangeGateLight(true);
+
+            anim.SetBool("IsOpen",true);
 
             isEnabled.Value = true;
         }
@@ -99,15 +87,9 @@ namespace Module.Gimmick
                 return;
             }
 
-            if (doEffect)
-            {
-                audioSource.Play();
-                GateAnimation(false);
-            }
-
             gateCloseEvent.Invoke();
-            gate.SetActive(true);
-            ChangeGateLight(false);
+
+            anim.SetBool("IsOpen", false);
 
             isEnabled.Value = false;
         }
@@ -116,21 +98,6 @@ namespace Module.Gimmick
         {
             switchCount = 0;
             Disable(false);
-        }
-
-        void ChangeGateLight(bool isOpen)
-        {
-            for (int i = 0; i < gateMeshRenderers.Length; i++)
-            {
-                if (isOpen)
-                {
-                    gateMeshRenderers[i].material.SetColor(emissionColor, green * 5.0f);
-                }
-                else
-                {
-                    gateMeshRenderers[i].material.SetColor(emissionColor, red * 5.0f);
-                }
-            }
         }
 
         void ChangeCounterLights(bool isOn)
@@ -142,29 +109,6 @@ namespace Module.Gimmick
             else
             {
                 lightMaterials[switchCount].SetColor(emissionColor, red * 5.0f);
-            }
-        }
-
-        void GateAnimation(bool isOpen)
-        {
-            gateLeft.DOLocalMoveX(isOpen ? 0.9f : 0, 0.3f);
-            gateRight.DOLocalMoveX(isOpen ? -0.9f : 0, 0.3f);
-
-            hologramMeshRenderer.material = isOpen ? openHoloMaterial : lockHoloMaterial;
-
-            if (isOpen) {
-                float alpha = 0.2f;
-                hologramMeshRenderer.transform.DOShakeScale(0.3f);
-                DOTween.To(() => alpha, (a) => alpha = a, 0, 1.0f)
-                .SetDelay(0.3f)
-                .OnUpdate(() =>
-                {
-                    hologramMeshRenderer.material.SetFloat(alphaProperty, alpha);
-                });
-            }
-            else
-            {
-                hologramMeshRenderer.material.SetFloat(alphaProperty, 0.2f);
             }
         }
 

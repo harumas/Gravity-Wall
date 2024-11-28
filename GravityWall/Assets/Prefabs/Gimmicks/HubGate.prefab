@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3331168984465285801}
   - component: {fileID: 5017013306869036396}
   - component: {fileID: 3749641346002965749}
+  - component: {fileID: 1609147059547102007}
   m_Layer: 7
   m_Name: HubGate
   m_TagString: Wall
@@ -29,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 180}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.1013153, y: 1.1762902, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1611536353691401611}
@@ -100,7 +101,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 2
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
@@ -136,7 +137,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -176,6 +177,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1609147059547102007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2031984079132183784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec7df06addd2d6d47a900dd2fd1a6397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 3749641346002965749}
+  open: {fileID: 8300000, guid: d88d91b3ba2c6448a87e6a718c2c9bd4, type: 3}
+  unlock: {fileID: 8300000, guid: 71254cea231988e4884869957e42ca9a, type: 3}
+  steam: {fileID: 8300000, guid: 7724981ca820dcb489c4d7537a11db11, type: 3}
 --- !u!1 &2752280946327368278
 GameObject:
   m_ObjectHideFlags: 0
