@@ -1,12 +1,11 @@
-﻿using System;
-using Constants;
+﻿using Constants;
 using CoreModule.Helper;
 using Module.Gravity;
 using R3;
 using UGizmo;
 using UnityEngine;
 
-namespace Module.Character
+namespace Module.Player
 {
     public class GravitySwitcher : MonoBehaviour
     {

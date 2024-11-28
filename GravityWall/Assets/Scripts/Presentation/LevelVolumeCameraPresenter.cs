@@ -1,8 +1,8 @@
 ﻿using System;
 using CoreModule.Helper;
-using Module.Character;
 using Module.Gimmick;
 using Module.InputModule;
+using Module.Player;
 using R3;
 using UnityEngine;
 using VContainer;

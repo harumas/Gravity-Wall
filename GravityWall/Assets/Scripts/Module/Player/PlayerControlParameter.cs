@@ -1,9 +1,7 @@
 ﻿using System;
-using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Module.Character
+namespace Module.Player
 {
     [Serializable]
     public class PlayerControlParameter

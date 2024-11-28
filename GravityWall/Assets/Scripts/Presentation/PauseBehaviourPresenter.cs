@@ -2,8 +2,8 @@
 using Application.Sequence;
 using CoreModule.Input;
 using Cysharp.Threading.Tasks;
-using Module.Character;
 using Module.InputModule;
+using Module.Player;
 using R3;
 using UnityEngine;
 using UnityEngine.InputSystem;

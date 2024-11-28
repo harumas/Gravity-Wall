@@ -1,7 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Module.Character
+namespace Module.Player
 {
     /// <summary>
     /// 簡易的な慣性を表すクラス

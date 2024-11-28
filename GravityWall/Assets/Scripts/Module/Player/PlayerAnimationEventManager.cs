@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Module.Character
+namespace Module.Player
 {
     public class PlayerAnimationEventManager : MonoBehaviour
     {

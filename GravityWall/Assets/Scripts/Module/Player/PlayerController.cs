@@ -1,9 +1,8 @@
-using Domain;
 using Module.Gravity;
 using R3;
 using UnityEngine;
 
-namespace Module.Character
+namespace Module.Player
 {
     /// <summary>
     /// プレイヤーの移動と回転を制御するクラス

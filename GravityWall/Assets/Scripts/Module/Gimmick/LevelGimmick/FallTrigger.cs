@@ -1,5 +1,5 @@
-using Module.Character;
 using Module.Gravity;
+using Module.Player;
 using UnityEngine;
 
 namespace Module.Gimmick

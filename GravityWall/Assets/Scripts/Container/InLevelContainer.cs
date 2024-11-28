@@ -29,6 +29,7 @@ namespace Container
             builder.RegisterEntryPoint<LevelVolumeCameraPresenter>();
             builder.RegisterEntryPoint<SequenceViewPresenter>();
             builder.RegisterEntryPoint<GameClearPresenter>();
+            builder.RegisterEntryPoint<LevelEventPresenter>();
 
             var gimmickReference = Parent.Container.Resolve<GimmickReference>();
             gimmickReference.UpdateReference();

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Domain
+namespace Module.Player
 {
     public interface IPushable
     {

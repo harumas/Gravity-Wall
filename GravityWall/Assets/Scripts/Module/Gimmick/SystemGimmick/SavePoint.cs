@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace Module.Gimmick
 {
+    /// <summary>
+    /// リスポーン情報を格納する構造体
+    /// </summary>
     public readonly struct RespawnContext
     {
         public readonly Vector3 Position;

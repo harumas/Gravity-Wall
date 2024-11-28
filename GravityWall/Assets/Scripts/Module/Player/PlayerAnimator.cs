@@ -1,9 +1,8 @@
-﻿using CoreModule.Helper;
-using PropertyGenerator.Generated;
+﻿using PropertyGenerator.Generated;
 using R3;
 using UnityEngine;
 
-namespace Module.Character
+namespace Module.Player
 {
     public class PlayerAnimator : MonoBehaviour
     {

@@ -1,8 +1,7 @@
 using CoreModule.Helper;
-using CoreModule.Input;
 using UnityEngine;
 
-namespace Module.Character
+namespace Module.Player
 {
     /// <summary>
     /// カメラの回転を制御するクラス

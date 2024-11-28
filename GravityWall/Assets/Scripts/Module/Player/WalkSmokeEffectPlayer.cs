@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.VFX;
 
-namespace Module.Character
+namespace Module.Player
 {
     public class WalkSmokeEffectPlayer : MonoBehaviour
     {

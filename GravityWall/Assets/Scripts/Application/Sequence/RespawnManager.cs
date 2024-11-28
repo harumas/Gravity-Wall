@@ -1,12 +1,15 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
-using Module.Character;
 using Module.Gimmick;
 using Module.Gravity;
+using Module.Player;
 using VContainer;
 
 namespace Application.Sequence
 {
+    /// <summary>
+    /// リスポーン機能を提供するクラス
+    /// </summary>
     public class RespawnManager
     {
         private readonly PlayerController playerController;
@@ -30,6 +33,7 @@ namespace Application.Sequence
             this.gravitySwitcher = gravitySwitcher;
         }
 
+        
         public async UniTask RespawnPlayer(RespawnContext respawnContext, Func<UniTask> respawningTask)
         {
             isRespawning = true;

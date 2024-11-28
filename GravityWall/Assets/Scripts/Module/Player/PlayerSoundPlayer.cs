@@ -1,8 +1,7 @@
-using UnityEngine;
 using R3;
-using UnityEngine.Serialization;
+using UnityEngine;
 
-namespace Module.Character
+namespace Module.Player
 {
     public class PlayerSoundPlayer : MonoBehaviour
     {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Module.Character
+namespace Module.Player
 {
     /// <summary>
     /// 移動方向にプレイヤーの体を回転させるクラス
