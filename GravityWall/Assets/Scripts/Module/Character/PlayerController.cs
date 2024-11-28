@@ -22,9 +22,6 @@ namespace Module.Character
         public ReadOnlyReactiveProperty<bool> IsJumping => isJumping;
         [SerializeField] private SerializableReactiveProperty<bool> isJumping = new SerializableReactiveProperty<bool>();
 
-        public ReadOnlyReactiveProperty<bool> IsFalling => isFalling;
-        [SerializeField] private SerializableReactiveProperty<bool> isFalling = new SerializableReactiveProperty<bool>();
-
         public ReadOnlyReactiveProperty<bool> IsGrounding => isGrounding;
         [SerializeField] private SerializableReactiveProperty<bool> isGrounding = new SerializableReactiveProperty<bool>();
 
