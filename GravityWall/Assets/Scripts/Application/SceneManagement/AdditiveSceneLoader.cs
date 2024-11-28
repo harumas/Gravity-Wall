@@ -3,14 +3,11 @@ using System.Threading;
 using CoreModule.Helper.Attribute;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using R3;
-using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Debug = UnityEngine.Debug;
 using ThreadPriority = UnityEngine.ThreadPriority;
 
-namespace Application
+namespace Application.SceneManagement
 {
     /// <summary>
     /// 追加シーン読み込みを行うクラス

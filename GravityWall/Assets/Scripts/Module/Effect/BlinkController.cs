@@ -7,17 +7,17 @@ namespace Module.Player
     {
         [SerializeField] private SkinnedMeshRenderer faceMeshRenderer;
         [SerializeField] private float blinkTime = 1.0f;
+        
         private float blinkTimer = 0;
         private static readonly int rEyeBlunk = Shader.PropertyToID("_REyeBlink");
         private static readonly int lEyeBlunk = Shader.PropertyToID("_LEyeBlink");
-        // Start is called before the first frame update
-        void Start()
+
+        private void Start()
         {
             blinkTimer = blinkTime;
         }
 
-        // Update is called once per frame
-        void Update()
+        private void Update()
         {
             blinkTimer -= Time.deltaTime;
 

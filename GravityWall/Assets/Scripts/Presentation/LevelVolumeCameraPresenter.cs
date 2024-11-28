@@ -1,5 +1,4 @@
-﻿using System;
-using CoreModule.Helper;
+﻿using CoreModule.Helper;
 using Module.Gimmick;
 using Module.InputModule;
 using Module.Player;

@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using DG.Tweening;
 using R3;
 using TriInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Module.Gimmick
+namespace Module.Gimmick.LevelGimmick
 {
     public class HugeGate : GimmickObject
     {

@@ -4,7 +4,7 @@ using DG.Tweening;
 using Module.Player;
 using UnityEngine;
 
-namespace Module.Gimmick
+namespace Module.Gimmick.LevelGimmick
 {
     public class JumpBoard : MonoBehaviour
     {

@@ -7,14 +7,14 @@ using VContainer.Unity;
 namespace Application
 {
     /// <summary>
-    /// ゲームのロードクラス
+    /// アプリケーションの開始クラス
     /// </summary>
-    public class GameStarter : IAsyncStartable
+    public class ApplicationStarter : IAsyncStartable
     {
         private readonly ConfigLoader configLoader;
         
         [Inject]
-        public GameStarter(ConfigLoader configLoader)
+        public ApplicationStarter(ConfigLoader configLoader)
         {
             this.configLoader = configLoader;
         }
@@ -28,7 +28,10 @@ namespace Application
                 return;
             }
             
-            //タイトルシーンのロード
+            // FPSの上限は120
+            UnityEngine.Application.targetFrameRate = 120;
+            
+            // タイトルシーンのロード
             await GameBoot.LoadMainSceneAsync(cancellation);
         }
     }

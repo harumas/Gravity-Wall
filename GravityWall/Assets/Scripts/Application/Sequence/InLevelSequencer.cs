@@ -1,12 +1,9 @@
 ﻿using System.Threading;
-using Application.Sequence;
+using Application.Spawn;
 using Cysharp.Threading.Tasks;
-using Module.Gimmick;
-using Module.Gimmick.LevelGimmick;
-using UnityEngine;
 using VContainer.Unity;
 
-namespace Presentation
+namespace Application.Sequence
 {
     public class InLevelSequencer : IAsyncStartable
     {

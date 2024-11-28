@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Module.Gimmick
+namespace CoreModule.Helper
 {
     public class OnCollisionEventBridge : MonoBehaviour
     {

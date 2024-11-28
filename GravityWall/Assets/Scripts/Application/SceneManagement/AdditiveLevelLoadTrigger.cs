@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using Constants;
 using CoreModule.Helper.Attribute;
-using ThirdParty.Json.LitJson;
 using UnityEngine;
 
-namespace Application.Sequence
+namespace Application.SceneManagement
 {
     /// <summary>
     /// 追加シーン読み込みを行うための判定トリガー

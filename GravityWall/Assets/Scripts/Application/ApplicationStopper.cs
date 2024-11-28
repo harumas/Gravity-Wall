@@ -1,6 +1,9 @@
 ﻿namespace Application
 {
-    public class GameStopper
+    /// <summary>
+    /// アプリケーションの停止を行うクラス
+    /// </summary>
+    public class ApplicationStopper
     {
         public void Quit()
         {

@@ -1,4 +1,5 @@
-﻿using VContainer;
+﻿#if UNITY_EDITOR
+using VContainer;
 using VContainer.Unity;
 
 namespace Container
@@ -22,3 +23,4 @@ namespace Container
         }
     }
 }
+#endif

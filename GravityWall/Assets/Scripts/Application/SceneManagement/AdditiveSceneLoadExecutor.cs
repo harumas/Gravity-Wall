@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Application.Sequence
+namespace Application.SceneManagement
 {
     /// <summary>
     /// 追加シーン読み込みを実行するクラス

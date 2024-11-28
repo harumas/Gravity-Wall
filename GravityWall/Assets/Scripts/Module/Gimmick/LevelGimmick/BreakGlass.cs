@@ -1,13 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Playables;
-using Module.Gravity;
-using DG.Tweening;
 using Constants;
+using DG.Tweening;
+using Module.Gravity;
+using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
-namespace Module.Gimmick
+
+namespace Module.Gimmick.LevelGimmick
 {
     public class BreakGlass : MonoBehaviour
     {

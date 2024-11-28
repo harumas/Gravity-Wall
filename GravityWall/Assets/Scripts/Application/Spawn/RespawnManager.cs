@@ -5,7 +5,7 @@ using Module.Gravity;
 using Module.Player;
 using VContainer;
 
-namespace Application.Sequence
+namespace Application.Spawn
 {
     /// <summary>
     /// リスポーン機能を提供するクラス

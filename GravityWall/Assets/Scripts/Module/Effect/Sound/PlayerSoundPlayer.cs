@@ -1,7 +1,8 @@
+using Module.Player;
 using R3;
 using UnityEngine;
 
-namespace Module.Player
+namespace Module.Effect.Sound
 {
     public class PlayerSoundPlayer : MonoBehaviour
     {

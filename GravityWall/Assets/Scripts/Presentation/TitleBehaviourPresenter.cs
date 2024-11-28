@@ -2,7 +2,6 @@
 using Module.InputModule;
 using Module.Player;
 using R3;
-using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using View;
@@ -13,7 +12,7 @@ namespace Presentation
     {
         private readonly ViewBehaviourNavigator navigator;
         private readonly TitleBehaviour titleBehaviour;
-        private readonly GameStopper gameStopper;
+        private readonly ApplicationStopper applicationStopper;
         private readonly CursorLocker cursorLocker;
         private readonly PlayerController playerController;
         private readonly PlayerTargetSyncer playerTargetSyncer;
@@ -22,14 +21,14 @@ namespace Presentation
         public TitleBehaviourPresenter(
             ViewBehaviourNavigator navigator,
             TitleBehaviour titleBehaviour,
-            GameStopper gameStopper,
+            ApplicationStopper applicationStopper,
             CursorLocker cursorLocker,
             PlayerController playerController,
             PlayerTargetSyncer playerTargetSyncer)
         {
             this.navigator = navigator;
             this.titleBehaviour = titleBehaviour;
-            this.gameStopper = gameStopper;
+            this.applicationStopper = applicationStopper;
             this.cursorLocker = cursorLocker;
             this.playerController = playerController;
             this.playerTargetSyncer = playerTargetSyncer;
@@ -40,7 +39,7 @@ namespace Presentation
             TitleView titleView = titleBehaviour.TitleView;
 
             //ゲーム終了は一度だけ入力を受け取る
-            titleView.OnEndGameButtonPressed.Take(1).Subscribe(_ => gameStopper.Quit());
+            titleView.OnEndGameButtonPressed.Take(1).Subscribe(_ => applicationStopper.Quit());
             titleView.OnCreditButtonPressed.Subscribe(_ => navigator.ActivateBehaviour(ViewBehaviourState.Credit));
             titleView.OnNewGameButtonPressed.Subscribe(_ => navigator.DeactivateBehaviour(ViewBehaviourState.Title));
             titleView.OnContinueGameButtonPressed.Subscribe(_ => navigator.DeactivateBehaviour(ViewBehaviourState.Title));

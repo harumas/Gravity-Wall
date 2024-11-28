@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Threading;
+using Application.SceneManagement;
+using Application.Spawn;
 using Cysharp.Threading.Tasks;
 using Module.Gimmick.LevelGimmick;
+using Module.Gravity;
 using VContainer;
 using VContainer.Unity;
 
@@ -34,6 +37,8 @@ namespace Application.Sequence
 
         private async UniTaskVoid Sequence()
         {
+            WorldGravity.Create();
+            
             // プレイ開始待機
             await gameState.WaitUntilState(GameState.State.Playing, cTokenSource.Token);
 

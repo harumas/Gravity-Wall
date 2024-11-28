@@ -2,7 +2,7 @@
 using VContainer.Unity;
 using View;
 
-namespace Presentation
+namespace Application
 {
     /// <summary>
     /// ViewBehaviourNavigatorを初期状態に遷移するクラス

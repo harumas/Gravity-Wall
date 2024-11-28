@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using Module.Gimmick;
 using Module.Gimmick.LevelGimmick;
 
-namespace Application.Sequence
+namespace Application.Spawn
 {
     public class HubSpawner
     {

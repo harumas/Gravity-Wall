@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Module.Gimmick
+namespace Module.Gimmick.LevelGimmick
 {
     public class HugeGateSEPlayer : MonoBehaviour
     {

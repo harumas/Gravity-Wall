@@ -1,12 +1,12 @@
-using System;
-using System.Collections.Generic;
-using Baracuda.Monitoring;
 using UnityEngine;
 
-namespace Module.Gimmick.Sound
+namespace Module.Effect.Sound
 {
+    /// <summary>
+    /// 衝突音を鳴らすクラス
+    /// </summary>
     [RequireComponent(typeof(AudioSource))]
-    public class PhysicsSoundEffector : MonitoredBehaviour
+    public class ConflictSoundEffector : MonoBehaviour
     {
         [Header("速度変化によって音を鳴らす閾値")]
         [SerializeField] private float powerThreshold;

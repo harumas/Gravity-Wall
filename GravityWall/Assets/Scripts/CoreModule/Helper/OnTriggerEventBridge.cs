@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Module.Gimmick
+namespace CoreModule.Helper
 {
     public class OnTriggerEventBridge : MonoBehaviour
     {
