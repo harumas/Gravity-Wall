@@ -31,8 +31,10 @@ namespace Module.Gimmick
         [SerializeField] private LevelResetter levelResetter;
 
         public event Action<RespawnContext> OnEnterPoint;
+        public RespawnContext LatestContext { get; private set; }
 
-        private bool firstTouch = false;
+        public bool IsSaved => isSaved;
+        private bool isSaved = false;
 
         private void Start()
         {
@@ -41,13 +43,13 @@ namespace Module.Gimmick
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!firstTouch && other.CompareTag(Tag.Player))
+            if (!isSaved && other.CompareTag(Tag.Player))
             {
                 Debug.Log("セーブしました");
 
-                firstTouch = true;
-                var respawnContext = new RespawnContext(transform.position, transform.rotation, -transform.up, levelResetter);
-                OnEnterPoint?.Invoke(respawnContext);
+                isSaved = true;
+                LatestContext = new RespawnContext(transform.position, transform.rotation, -transform.up, levelResetter);
+                OnEnterPoint?.Invoke(LatestContext);
             }
         }
     }
