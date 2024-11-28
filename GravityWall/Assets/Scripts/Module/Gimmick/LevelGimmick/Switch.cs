@@ -22,6 +22,10 @@ namespace Module.Gimmick
             {
                 Enable();
             }
+            else
+            {
+                Disable();
+            }
         }
 
         private void OnTriggerEnter(Collider collider)
