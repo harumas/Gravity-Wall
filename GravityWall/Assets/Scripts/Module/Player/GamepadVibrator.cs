@@ -58,7 +58,7 @@ namespace Module.Player
         {
             cts = new CancellationTokenSource();
             InputSystem.ResetHaptics();
-            Gamepad.current.SetMotorSpeeds(scaleLeft, scaleRight);
+            Gamepad.current?.SetMotorSpeeds(scaleLeft, scaleRight);
             await UniTask.DelayFrame(frame);
             InputSystem.ResetHaptics();
             cts.Cancel();
