@@ -1,14 +1,12 @@
-using System;
 using System.Threading;
 using Constants;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using Domain;
+using Module.Player;
 using R3;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Module.Gimmick.DynamicScaffold
+namespace Module.Gimmick.LevelGimmick
 {
     [RequireComponent(typeof(Rigidbody))]
     public class DynamicScaffold : GimmickObject

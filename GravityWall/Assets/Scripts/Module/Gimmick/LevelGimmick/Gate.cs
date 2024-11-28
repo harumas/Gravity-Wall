@@ -5,7 +5,7 @@ using TriInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Module.Gimmick
+namespace Module.Gimmick.LevelGimmick
 {
     public class Gate : GimmickObject
     {

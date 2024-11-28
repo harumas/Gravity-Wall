@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using Constants;
-using Module.Character;
+using Module.Player;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Module.Gimmick
+namespace Module.Gimmick.LevelGimmick
 {
     public class GoalSwitch : GimmickObject
     {

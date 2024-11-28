@@ -4,7 +4,7 @@ using System.Threading;
 using Amazon.Rekognition;
 using CoreModule.Save;
 using Cysharp.Threading.Tasks;
-using Module.Character;
+using Module.Player;
 using Module.PlayTest.EmotionAnalyze;
 using R3;
 using UnityEngine;

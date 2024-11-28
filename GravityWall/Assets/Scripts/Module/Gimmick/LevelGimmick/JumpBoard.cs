@@ -1,10 +1,10 @@
 using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using Domain;
+using Module.Player;
 using UnityEngine;
 
-namespace Module.Gimmick
+namespace Module.Gimmick.LevelGimmick
 {
     public class JumpBoard : MonoBehaviour
     {
