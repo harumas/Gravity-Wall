@@ -4,6 +4,7 @@ using Constants;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
 using Domain;
+using R3;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -22,6 +23,9 @@ namespace Module.Gimmick.DynamicScaffold
 
         [Header("最初から動かすか")] [SerializeField] private bool enableOnAwake = true;
 
+        [SerializeField] private GimmickObject[] observedSwitches;
+        [SerializeField] private int switchMaxCount = 1;
+        private int switchCount = 0;
         private CancellationTokenSource cTokenSource;
         private Rigidbody rigBody;
         private Vector3 previousTargetPosition;
@@ -30,7 +34,7 @@ namespace Module.Gimmick.DynamicScaffold
         private Transform currentTarget;
         private IPushable pushement;
         private float trappedTimer;
-        private int contactCount;
+      [SerializeField]  private int contactCount;
 
         private const float StopThreshold = 0.01f;
 
@@ -57,11 +61,31 @@ namespace Module.Gimmick.DynamicScaffold
 
         private void Start()
         {
+            foreach (GimmickObject gimmick in observedSwitches)
+            {
+                gimmick.IsEnabled.Skip(1).Subscribe(UpdateMoveState).AddTo(this);
+            }
+            
             if (enableOnAwake)
             {
                 Enable();
             }
         }
+        private void UpdateMoveState(bool switchEnabled)
+        {
+            switchCount += switchEnabled ? 1 : -1;
+            bool isMove = switchCount >= switchMaxCount;
+
+            if (isMove)
+            {
+                Enable();
+            }
+            else
+            {
+                Disable();
+            }
+        }
+
 
         public override void Enable(bool doEffect = true)
         {
@@ -185,11 +209,6 @@ namespace Module.Gimmick.DynamicScaffold
 
         private void OnCollisionEnter(Collision other)
         {
-            if (!isEnabled.Value)
-            {
-                return;
-            }
-
             contactCount++;
 
             //床に設置したプレイヤーを取得
@@ -201,11 +220,6 @@ namespace Module.Gimmick.DynamicScaffold
 
         private void OnCollisionExit(Collision other)
         {
-            if (!isEnabled.Value)
-            {
-                return;
-            }
-
             contactCount--;
 
             if (contactCount == 0 && other.gameObject.CompareTag(Tag.Player))
