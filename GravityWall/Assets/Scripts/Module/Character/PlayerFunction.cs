@@ -122,9 +122,17 @@ namespace Module.Character
         public bool IsJumpable()
         {
             Vector3 rayDirection = worldGravity.Direction;
-            bool isHit = Physics.Raycast(transform.position, rayDirection,out RaycastHit hitInfo, parameter.AllowJumpDistance, GroundLayerMask);
+            bool isHit = Physics.Raycast(transform.position, rayDirection, out RaycastHit hitInfo, parameter.AllowJumpDistance, GroundLayerMask);
 
             return isHit && !hitInfo.transform.CompareTag(Tag.UnJumpable);
+        }
+
+        public bool IsGrounding()
+        {
+            Vector3 rayDirection = worldGravity.Direction;
+            bool isHit = Physics.Raycast(transform.position, rayDirection, out RaycastHit hitInfo, parameter.AllowJumpDistance, GroundLayerMask);
+
+            return isHit;
         }
 
         public bool CanGroundingAgain(float landingTime)
