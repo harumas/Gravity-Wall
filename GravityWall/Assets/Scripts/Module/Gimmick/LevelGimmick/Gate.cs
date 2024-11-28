@@ -89,13 +89,6 @@ namespace Module.Gimmick
             gate.SetActive(false);
             ChangeGateLight(true);
 
-            hologramMeshRenderer.material = openHoloMaterial;
-            float alpha = 0.2f;
-            hologramMeshRenderer.transform.DOShakeScale(0.3f);
-            DOTween.To(() => alpha, (a) => alpha = a, 0, 1.0f)
-                .SetDelay(0.3f)
-                .OnUpdate(() => { hologramMeshRenderer.material.SetFloat(alphaProperty, alpha); });
-
             isEnabled.Value = true;
         }
 
@@ -115,8 +108,6 @@ namespace Module.Gimmick
             gateCloseEvent.Invoke();
             gate.SetActive(true);
             ChangeGateLight(false);
-            hologramMeshRenderer.material = lockHoloMaterial;
-            hologramMeshRenderer.material.SetFloat(alphaProperty, 0.2f);
 
             isEnabled.Value = false;
         }
@@ -150,7 +141,7 @@ namespace Module.Gimmick
             }
             else
             {
-                lightMaterials[switchCount - 1].SetColor(emissionColor, red * 5.0f);
+                lightMaterials[switchCount].SetColor(emissionColor, red * 5.0f);
             }
         }
 
@@ -158,6 +149,23 @@ namespace Module.Gimmick
         {
             gateLeft.DOLocalMoveX(isOpen ? 0.9f : 0, 0.3f);
             gateRight.DOLocalMoveX(isOpen ? -0.9f : 0, 0.3f);
+
+            hologramMeshRenderer.material = isOpen ? openHoloMaterial : lockHoloMaterial;
+
+            if (isOpen) {
+                float alpha = 0.2f;
+                hologramMeshRenderer.transform.DOShakeScale(0.3f);
+                DOTween.To(() => alpha, (a) => alpha = a, 0, 1.0f)
+                .SetDelay(0.3f)
+                .OnUpdate(() =>
+                {
+                    hologramMeshRenderer.material.SetFloat(alphaProperty, alpha);
+                });
+            }
+            else
+            {
+                hologramMeshRenderer.material.SetFloat(alphaProperty, 0.2f);
+            }
         }
 
         void InstantiateCounterLights()

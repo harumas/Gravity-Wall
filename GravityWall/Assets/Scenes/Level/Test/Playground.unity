@@ -97,7 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 065befe4dda52ab438d02c76cf89dcae,
+    type: 2}
   m_LightingSettings: {fileID: 92652202}
 --- !u!196 &4
 NavMeshSettings:
@@ -1328,7 +1329,7 @@ LightingSettings:
   m_AlbedoBoost: 1
   m_IndirectOutputScale: 1
   m_UsingShadowmask: 1
-  m_BakeBackend: 1
+  m_BakeBackend: 2
   m_LightmapMaxSize: 1024
   m_BakeResolution: 40
   m_Padding: 2
@@ -1352,9 +1353,9 @@ LightingSettings:
   m_FinalGatherFiltering: 1
   m_PVRCulling: 1
   m_PVRSampling: 1
-  m_PVRDirectSampleCount: 32
-  m_PVRSampleCount: 512
-  m_PVREnvironmentSampleCount: 256
+  m_PVRDirectSampleCount: 16
+  m_PVRSampleCount: 128
+  m_PVREnvironmentSampleCount: 128
   m_PVREnvironmentReferencePointCount: 2048
   m_LightProbeSampleCountMultiplier: 4
   m_PVRBounces: 2
@@ -3036,6 +3037,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3863569561677538650, guid: 66e11150f66154c4ebbd9178fedceadf,
         type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3863569561677538650, guid: 66e11150f66154c4ebbd9178fedceadf,
+        type: 3}
       propertyPath: m_LocalPosition.y
       value: 1.704292
       objectReference: {fileID: 0}
@@ -3052,17 +3058,22 @@ PrefabInstance:
     - target: {fileID: 3863569561677538650, guid: 66e11150f66154c4ebbd9178fedceadf,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.023444638
+      value: 0.023444615
       objectReference: {fileID: 0}
     - target: {fileID: 3863569561677538650, guid: 66e11150f66154c4ebbd9178fedceadf,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000017331352
+      value: -0.000000017149299
       objectReference: {fileID: 0}
     - target: {fileID: 3863569561677538650, guid: 66e11150f66154c4ebbd9178fedceadf,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000015588788
+      value: 0.0000000015425035
+      objectReference: {fileID: 0}
+    - target: {fileID: 5979203719876794136, guid: 66e11150f66154c4ebbd9178fedceadf,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5979203719876794136, guid: 66e11150f66154c4ebbd9178fedceadf,
         type: 3}
@@ -3082,17 +3093,17 @@ PrefabInstance:
     - target: {fileID: 5979203719876794136, guid: 66e11150f66154c4ebbd9178fedceadf,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.023444638
+      value: 0.023444615
       objectReference: {fileID: 0}
     - target: {fileID: 5979203719876794136, guid: 66e11150f66154c4ebbd9178fedceadf,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000017331352
+      value: -0.000000017149299
       objectReference: {fileID: 0}
     - target: {fileID: 5979203719876794136, guid: 66e11150f66154c4ebbd9178fedceadf,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000015588788
+      value: 0.0000000015425035
       objectReference: {fileID: 0}
     - target: {fileID: 6224190170551648035, guid: 66e11150f66154c4ebbd9178fedceadf,
         type: 3}
@@ -3201,7 +3212,7 @@ Light:
     m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 1
+    m_Strength: 0.81
     m_Bias: 0.05
     m_NormalBias: 0.4
     m_NearPlane: 0.2
@@ -3231,7 +3242,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 1
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -3250,13 +3261,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 410087039}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.4152444, y: -0.29926798, z: 0.078601874, w: 0.8554721}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 49.245, y: -43.183, z: -10.062}
 --- !u!114 &410087042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6468,11 +6479,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Gate
-      objectReference: {fileID: 0}
-    - target: {fileID: 5260175374949259475, guid: 7e317563c594d4fe787b60604ecdfd7c,
-        type: 3}
-      propertyPath: gimmickPath
-      value: Level/Gate
       objectReference: {fileID: 0}
     - target: {fileID: 5260175374949259475, guid: 7e317563c594d4fe787b60604ecdfd7c,
         type: 3}
