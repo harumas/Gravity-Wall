@@ -31,7 +31,8 @@ namespace Module.Character
             Transform cameraPivot,
             Rigidbody rigidbody,
             LocalGravity localGravity,
-            PlayerControlParameter parameter)
+            PlayerControlParameter parameter
+        )
         {
             this.transform = transform;
             this.cameraPivot = cameraPivot;
@@ -118,6 +119,22 @@ namespace Module.Character
             return isHit;
         }
 
+        public bool IsJumpable()
+        {
+            Vector3 rayDirection = worldGravity.Direction;
+            bool isHit = Physics.Raycast(transform.position, rayDirection, out RaycastHit hitInfo, parameter.AllowJumpDistance, GroundLayerMask);
+
+            return isHit && !hitInfo.transform.CompareTag(Tag.UnJumpable);
+        }
+
+        public bool IsGrounding()
+        {
+            Vector3 rayDirection = worldGravity.Direction;
+            bool isHit = Physics.Raycast(transform.position, rayDirection, out RaycastHit hitInfo, parameter.AllowJumpDistance, GroundLayerMask);
+
+            return isHit;
+        }
+
         public bool CanGroundingAgain(float landingTime)
         {
             // 前のジャンプから一定時間が経過していたらチェック開始
@@ -146,6 +163,15 @@ namespace Module.Character
             return isHit;
         }
 
+        public void PerformAdditionalJump()
+        {
+            float time = Time.time - lastJumpTime;
+            float jumpPower = parameter.GetAdditionalJumpPower(time);
+            Vector3 force = -worldGravity.Direction * jumpPower;
+
+            rigidbody.AddForce(force, ForceMode.Acceleration);
+        }
+
         public void PerformJump()
         {
             Vector3 jumpForce = -worldGravity.Gravity * parameter.JumpPower;
@@ -168,11 +194,22 @@ namespace Module.Character
         {
             Vector3 gravity = worldGravity.Gravity;
             Quaternion currentRotation = rigidbody.rotation;
-            Quaternion targetRotation = Quaternion.FromToRotation(transform.up, -gravity) * currentRotation;
 
             // 自分と重力の角度の差を求める
             float angle = Vector3.Angle(transform.up, -gravity);
             angle = Mathf.Max(angle, Mathf.Epsilon);
+
+            Quaternion targetRotation;
+
+            if (angle >= parameter.CameraAxisRotateAngle)
+            {
+                targetRotation = Quaternion.AngleAxis(angle, Camera.main.transform.forward) * currentRotation;
+            }
+            else
+            {
+                targetRotation = Quaternion.FromToRotation(transform.up, -gravity) * currentRotation;
+            }
+
 
             if (angle <= Mathf.Epsilon)
             {
