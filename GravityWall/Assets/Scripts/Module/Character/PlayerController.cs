@@ -22,6 +22,9 @@ namespace Module.Character
         public ReadOnlyReactiveProperty<bool> IsJumping => isJumping;
         [SerializeField] private SerializableReactiveProperty<bool> isJumping = new SerializableReactiveProperty<bool>();
 
+        public ReadOnlyReactiveProperty<bool> IsFalling => isFalling;
+        [SerializeField] private SerializableReactiveProperty<bool> isFalling = new SerializableReactiveProperty<bool>();
+
         public ReadOnlyReactiveProperty<bool> IsGrounding => isGrounding;
         [SerializeField] private SerializableReactiveProperty<bool> isGrounding = new SerializableReactiveProperty<bool>();
 
@@ -92,6 +95,8 @@ namespace Module.Character
 
         private void FixedUpdate()
         {
+            //接地判定
+
             if (isJumping.Value)
             {
                 // 再びジャンプ可能になったらフラグを解除
@@ -100,17 +105,13 @@ namespace Module.Character
                     isJumping.Value = false;
                 }
 
-                //接地判定
-                if (playerFunction.CanGroundingAgain(landingTime))
-                {
-                    isGrounding.Value = true;
-                }
-
                 if (isJumpingInput)
                 {
                     playerFunction.PerformAdditionalJump();
                 }
             }
+
+            isGrounding.Value = playerFunction.CanGroundingAgain(landingTime);
 
             bool isMoveInput = moveInput != Vector2.zero;
 
@@ -167,6 +168,11 @@ namespace Module.Character
         public void Kill()
         {
             isDeath.Value = true;
+            isJumping.Value = false;
+            isGrounding.Value = true;
+            rigBody.velocity = Vector3.zero;
+            moveInput = Vector2.zero;
+            onMove.Value = (Vector3.zero, Vector3.zero);
         }
 
         public void Revival()
@@ -176,11 +182,6 @@ namespace Module.Character
 
         public void Lock()
         {
-            isJumping.Value = false;
-            isGrounding.Value = true;
-            rigBody.velocity = Vector3.zero;
-            moveInput = Vector2.zero;
-            onMove.Value = (Vector3.zero, Vector3.zero);
             enabled = false;
         }
 
