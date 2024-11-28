@@ -19,12 +19,18 @@ namespace Module.Gimmick
         [SerializeField] private int switchMaxCount = 1;
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private GimmickObject[] observedSwitches;
-        [SerializeField] private float setInterval = 1f;
-        [SerializeField,ReadOnly]  private int usingCount = 0;
+        [SerializeField] private float setWidth = 2.7f;
+        [SerializeField, ReadOnly] private int usingCount = 0;
+        [SerializeField] private Material lockHoloMaterial, openHoloMaterial;
+        [SerializeField] private MeshRenderer hologramMeshRenderer;
 
         private int switchCount = 0;
         private List<Material> lightMaterials = new List<Material>();
-        private static readonly int emissionIntensity = Shader.PropertyToID("_EmissionIntensity");
+        private static readonly int emissionColor = Shader.PropertyToID("_EmissionColor");
+        private static readonly int alphaProperty = Shader.PropertyToID("_Alpha");
+
+        private Color green = new Color(1.2f, 12f, 7);
+        private Color red = new Color(12f, 1.1f, 2);
 
         public bool IsUsing => UsingCount > 0;
 
@@ -116,7 +122,14 @@ namespace Module.Gimmick
         {
             for (int i = 0; i < gateMeshRenderers.Length; i++)
             {
-                gateMeshRenderers[i].material.SetFloat(emissionIntensity, isOpen ? 1.0f : 0.0f);
+                if (isOpen)
+                {
+                    gateMeshRenderers[i].material.SetColor(emissionColor, green * 5.0f);
+                }
+                else
+                {
+                    gateMeshRenderers[i].material.SetColor(emissionColor, red * 5.0f);
+                }
             }
         }
 
@@ -124,11 +137,11 @@ namespace Module.Gimmick
         {
             if (isOn)
             {
-                lightMaterials[switchCount].SetFloat(emissionIntensity, 1.0f);
+                lightMaterials[switchCount].SetColor(emissionColor, green * 5.0f);
             }
             else
             {
-                lightMaterials[switchCount - 1].SetFloat(emissionIntensity, 0.0f);
+                lightMaterials[switchCount].SetColor(emissionColor, red * 5.0f);
             }
         }
 
@@ -136,6 +149,23 @@ namespace Module.Gimmick
         {
             gateLeft.DOLocalMoveX(isOpen ? 0.9f : 0, 0.3f);
             gateRight.DOLocalMoveX(isOpen ? -0.9f : 0, 0.3f);
+
+            hologramMeshRenderer.material = isOpen ? openHoloMaterial : lockHoloMaterial;
+
+            if (isOpen) {
+                float alpha = 0.2f;
+                hologramMeshRenderer.transform.DOShakeScale(0.3f);
+                DOTween.To(() => alpha, (a) => alpha = a, 0, 1.0f)
+                .SetDelay(0.3f)
+                .OnUpdate(() =>
+                {
+                    hologramMeshRenderer.material.SetFloat(alphaProperty, alpha);
+                });
+            }
+            else
+            {
+                hologramMeshRenderer.material.SetFloat(alphaProperty, 0.2f);
+            }
         }
 
         void InstantiateCounterLights()
@@ -146,13 +176,15 @@ namespace Module.Gimmick
                 return;
             }
 
-            float width = setInterval * (switchMaxCount - 1);
+            int numberOfGaps = switchMaxCount + 1;
+            float spacing = setWidth / numberOfGaps;
 
             for (int i = 0; i < switchMaxCount; i++)
             {
                 var lightObj = pooledLights[i];
                 lightObj.SetActive(true);
-                lightObj.transform.localPosition = lightBasePosition.localPosition + Vector3.right * (setInterval * i - width / 2);
+                float xPosition = -setWidth / 2 + spacing * (i + 1);
+                lightObj.transform.localPosition = new Vector3(xPosition, lightObj.transform.localPosition.y, lightObj.transform.localPosition.z);
                 lightMaterials.Add(lightObj.GetComponent<Renderer>().material);
             }
         }
