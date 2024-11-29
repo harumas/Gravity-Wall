@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using Constants;
+using Module.Gimmick.SystemGimmick;
 using UnityEngine;
 
-namespace Module.Gimmick
+namespace Module.Gimmick.LevelGimmick
 {
     public class BreakFloor : MonoBehaviour
     {
