@@ -636,6 +636,7 @@ Transform:
   m_Children:
   - {fileID: 1971415245309523203}
   - {fileID: 5886083408545209017}
+  - {fileID: 9140065427616276557}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8018068230099058516
@@ -667,12 +668,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startActive: 1
-  activateOnOpen: 0
   roomObject: {fileID: 2331681433061524925}
-  observeGate: 
   levelGates:
   - {fileID: 2516666613964215922}
-  objectHiders: []
 --- !u!65 &925641613234347374
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -743,6 +741,37 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: b61a5433eb55ec843adac4d111dcc698, type: 2}
+--- !u!1 &4596725444066782149
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9140065427616276557}
+  m_Layer: 0
+  m_Name: lighting
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9140065427616276557
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4596725444066782149}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.3, y: 3.44, z: 2.39}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8775030496799790838}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5491204281732675027
 GameObject:
   m_ObjectHideFlags: 0
