@@ -1,10 +1,10 @@
-﻿using System;
-using System.Data;
-using Application.Sequence;
+﻿using System.Data;
+using Application.Spawn;
 using CoreModule.Helper;
 using Cysharp.Threading.Tasks;
-using Module.Character;
 using Module.Gimmick;
+using Module.Gimmick.LevelGimmick;
+using Module.Player;
 using VContainer;
 using VContainer.Unity;
 using View;
@@ -48,6 +48,12 @@ namespace Presentation
             foreach (SavePoint savePoint in savePoints)
             {
                 savePoint.OnEnterPoint += OnSave;
+
+                // 既にセーブ処理が実行されていたら、そのセーブ情報でセーブを行う
+                if (savePoint.IsSaved)
+                {
+                    OnSave(savePoint.LatestContext);    
+                }
             }
 
             //死亡床のイベント登録

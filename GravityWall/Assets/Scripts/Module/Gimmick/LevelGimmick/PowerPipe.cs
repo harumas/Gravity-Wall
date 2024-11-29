@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace Module.Gimmick
+namespace Module.Gimmick.LevelGimmick
 {
     public class PowerPipe : MonoBehaviour
     {

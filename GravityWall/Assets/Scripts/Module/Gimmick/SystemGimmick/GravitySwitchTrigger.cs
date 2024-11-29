@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using Constants;
-using Module.Character;
+using Module.Player;
 using UnityEngine;
 
-namespace Module.Gimmick
+namespace Module.Gimmick.SystemGimmick
 {
     public class GravitySwitchTrigger : MonoBehaviour
     {

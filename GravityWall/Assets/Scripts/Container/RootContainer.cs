@@ -22,11 +22,11 @@ namespace Container
         
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.RegisterEntryPoint<GameStarter>();
+            builder.RegisterEntryPoint<ApplicationStarter>();
             
             builder.Register<ConfigLoader>(Lifetime.Singleton);
             builder.Register<SaveManager<ConfigData>>(Lifetime.Singleton);
-            builder.Register<GameStopper>(Lifetime.Singleton);
+            builder.Register<ApplicationStopper>(Lifetime.Singleton);
             builder.Register<GameState>(Lifetime.Singleton);
             builder.RegisterInstance(InputActionProvider.ActionAsset);
             builder.RegisterInstance(inputAdjustParameter);

@@ -8,7 +8,6 @@ using Amazon.Rekognition;
 using Amazon.Rekognition.Model;
 using Amazon.Runtime;
 using Cysharp.Threading.Tasks;
-using Module.Character;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
