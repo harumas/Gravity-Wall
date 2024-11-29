@@ -1,5 +1,6 @@
 ﻿using R3;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Module.InputModule
 {
@@ -8,6 +9,6 @@ namespace Module.InputModule
         ReadOnlyReactiveProperty<Vector2> LookDelta { get; }
         ReadOnlyReactiveProperty<Vector2> Move { get; }
         Observable<int> CameraRotate { get; }
-        Observable<Unit> Jump { get; }
+        Observable<bool> Jump { get; }
     }
 }

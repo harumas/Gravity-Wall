@@ -31,6 +31,14 @@ namespace Module.Character
                     playerWrapper.IsJumping = true;
                 }
             }).AddTo(this);
+            
+            playerController.IsGrounding.Subscribe(isGrounding =>
+            {
+                if (!isGrounding)
+                {
+                    playerWrapper.IsJumping = true;
+                }
+            }).AddTo(this);
 
             // 回転のイベント登録
             playerController.IsRotating.Subscribe(isRotating => { playerWrapper.IsRotating = isRotating; }).AddTo(this);

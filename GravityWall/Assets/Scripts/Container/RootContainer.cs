@@ -3,6 +3,7 @@ using Application.Sequence;
 using CoreModule.Input;
 using CoreModule.Save;
 using Module.Config;
+using Module.InputModule;
 using Presentation;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -17,6 +18,7 @@ namespace Container
     public class RootContainer : LifetimeScope
     {
         [SerializeField] private AudioMixer audioMixer;
+        [SerializeField] private InputValueAdjustParameter inputAdjustParameter;
         
         protected override void Configure(IContainerBuilder builder)
         {
@@ -24,8 +26,10 @@ namespace Container
             
             builder.Register<ConfigLoader>(Lifetime.Singleton);
             builder.Register<SaveManager<ConfigData>>(Lifetime.Singleton);
+            builder.Register<GameStopper>(Lifetime.Singleton);
             builder.Register<GameState>(Lifetime.Singleton);
             builder.RegisterInstance(InputActionProvider.ActionAsset);
+            builder.RegisterInstance(inputAdjustParameter);
             builder.RegisterInstance(audioMixer);
         }
     }
