@@ -2142,7 +2142,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 3454808088591148170}
   footClip: {fileID: 8300000, guid: 0f813d56665494ef9931920a75c62d8a, type: 3}
-  anim: {fileID: 5226755687968112126}
+  speedThreshold: 0.1
+  anim:
+    target: {fileID: 5226755687968112126}
 --- !u!114 &2602912157784934177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2203,7 +2205,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31f72b914f894fc9bce7382b869d31c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 5226755687968112126}
+  animator:
+    target: {fileID: 5226755687968112126}
   landingClip: {fileID: 8698526773485126825, guid: 1ba71a4e99b617c45a9dcee081511dd0,
     type: 3}
   playerController: {fileID: 4984162288576153998}

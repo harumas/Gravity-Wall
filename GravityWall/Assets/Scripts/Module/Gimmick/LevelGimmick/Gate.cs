@@ -152,15 +152,16 @@ namespace Module.Gimmick.LevelGimmick
 
             hologramMeshRenderer.material = isOpen ? openHoloMaterial : lockHoloMaterial;
 
-            if (isOpen) {
+            if (isOpen)
+            {
                 float alpha = 0.2f;
                 hologramMeshRenderer.transform.DOShakeScale(0.3f);
                 DOTween.To(() => alpha, (a) => alpha = a, 0, 1.0f)
-                .SetDelay(0.3f)
-                .OnUpdate(() =>
-                {
-                    hologramMeshRenderer.material.SetFloat(alphaProperty, alpha);
-                });
+                    .SetDelay(0.3f)
+                    .OnUpdate(() =>
+                    {
+                        hologramMeshRenderer.material.SetFloat(alphaProperty, alpha);
+                    });
             }
             else
             {

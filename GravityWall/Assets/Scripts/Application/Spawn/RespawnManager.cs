@@ -18,6 +18,9 @@ namespace Application.Spawn
         private readonly GravitySwitcher gravitySwitcher;
         private bool isRespawning;
 
+        /// <summary>
+        /// リスポーン中かどうか
+        /// </summary>
         public bool IsRespawning => isRespawning;
 
         [Inject]
@@ -32,7 +35,6 @@ namespace Application.Spawn
             this.playerTargetSyncer = playerTargetSyncer;
             this.gravitySwitcher = gravitySwitcher;
         }
-
         
         public async UniTask RespawnPlayer(RespawnContext respawnContext, Func<UniTask> respawningTask)
         {
