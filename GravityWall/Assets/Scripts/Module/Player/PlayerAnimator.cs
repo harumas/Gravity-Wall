@@ -6,47 +6,59 @@ namespace Module.Player
 {
     public class PlayerAnimator : MonoBehaviour
     {
-        [SerializeField] private Animator animator;
+        [SerializeField] private PlayerControllerWrapper animator;
         [SerializeField] private AnimationClip landingClip;
         [SerializeField] private PlayerController playerController;
         [SerializeField] private float damping;
         [SerializeField] private float landingSpeed;
         [SerializeField] private float landingTimeOffset;
 
-        private PlayerControllerWrapper playerWrapper;
         private float currentSpeed;
         private float prevSpeed;
 
         private void Start()
         {
-            playerWrapper = new PlayerControllerWrapper(animator);
             playerController.SetLandingTime(GetLandingTime());
 
             // ジャンプのイベント登録
             playerController.IsJumping.Subscribe(isJumping =>
-            {
-                if (isJumping)
                 {
-                    playerWrapper.IsJumping = true;
-                }
-            }).AddTo(this);
-            
+                    if (isJumping)
+                    {
+                        animator.IsJumping = true;
+                    }
+                })
+                .AddTo(this);
+
             playerController.IsGrounding.Subscribe(isGrounding =>
-            {
-                if (!isGrounding)
                 {
-                    playerWrapper.IsJumping = true;
-                }
-            }).AddTo(this);
+                    if (!isGrounding)
+                    {
+                        animator.IsJumping = true;
+                    }
+                })
+                .AddTo(this);
 
             // 回転のイベント登録
-            playerController.IsRotating.Subscribe(isRotating => { playerWrapper.IsRotating = isRotating; }).AddTo(this);
+            playerController.IsRotating.Subscribe(isRotating =>
+                {
+                    animator.IsRotating = isRotating;
+                })
+                .AddTo(this);
 
-            playerController.OnMove.Subscribe(velocity => { currentSpeed = velocity.xv.magnitude; }).AddTo(this);
+            playerController.OnMove.Subscribe(velocity =>
+                {
+                    currentSpeed = velocity.xv.magnitude;
+                })
+                .AddTo(this);
 
-            playerController.IsDeath.Subscribe(isDeath => { playerWrapper.IsDeath = isDeath; }).AddTo(this);
+            playerController.IsDeath.Subscribe(isDeath =>
+                {
+                    animator.IsDeath = isDeath;
+                })
+                .AddTo(this);
 
-            playerWrapper.LandingSpeed = landingSpeed;
+            animator.LandingSpeed = landingSpeed;
         }
 
         /// <summary>
@@ -67,9 +79,9 @@ namespace Module.Player
         private void UpdateGrounding()
         {
             // 地面についたら着地モーションの再生
-            if (playerController.IsGrounding.CurrentValue && playerWrapper.IsJumping)
+            if (playerController.IsGrounding.CurrentValue && animator.IsJumping)
             {
-                playerWrapper.IsJumping = false;
+                animator.IsJumping = false;
             }
         }
 
@@ -83,7 +95,7 @@ namespace Module.Player
                 speed = 0f;
             }
 
-            playerWrapper.Speed = speed;
+            animator.Speed = speed;
             prevSpeed = speed;
         }
     }
