@@ -1,7 +1,9 @@
 using R3;
 using UnityEngine;
-
-namespace Module.Player
+using Module.Player;
+using DG.Tweening;
+using Cysharp.Threading.Tasks;
+namespace Module.Effect
 {
     public class DeathEffect : MonoBehaviour
     {
@@ -9,7 +11,9 @@ namespace Module.Player
         [SerializeField] private AudioClip deathEffect;
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private PlayerController playerController;
-    
+        [SerializeField] private Transform cameraPivot;
+        [SerializeField] private Animator anim;
+
         void Start()
         {
             playerController.IsDeath.Subscribe(isDeath =>
@@ -17,8 +21,19 @@ namespace Module.Player
                 if (isDeath)
                 {
                     OnDeathEffect();
+                    OnAttackHit().Forget();
                 }
+
             }).AddTo(this);
+        }
+
+        async UniTaskVoid OnAttackHit()
+        {
+            cameraPivot.DOShakePosition(0.7f, 1.5f, 20);
+            await UniTask.Delay(200);
+            anim.speed = 0f;
+            await UniTask.Delay(500);
+            anim.speed = 1f;
         }
 
         public void OnDeathEffect()

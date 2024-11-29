@@ -14,7 +14,7 @@ namespace Module.Player
         private readonly PlayerControlParameter parameter;
         private readonly CapsuleCollider capsuleCollider;
 
-        private const int GroundLayerMask = Layer.Mask.Base | Layer.Mask.Gravity | Layer.Mask.IgnoreGravity;
+        private const int GroundLayerMask = Layer.Mask.Base | Layer.Mask.Gravity | Layer.Mask.IgnoreGravity | Layer.Mask.IgnoreGimmick;
 
         private float lastJumpTime;
         private float lastRotateTime;

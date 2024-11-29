@@ -141,7 +141,7 @@ namespace Module.Gimmick.LevelGimmick
             }
             else
             {
-                lightMaterials[switchCount].SetColor(emissionColor, red * 5.0f);
+                lightMaterials[switchCount -1].SetColor(emissionColor, red * 5.0f);
             }
         }
 
