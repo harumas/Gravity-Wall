@@ -3,13 +3,15 @@ using System.Threading;
 using Application.SceneManagement;
 using Application.Spawn;
 using Cysharp.Threading.Tasks;
-using Module.Gimmick.LevelGimmick;
 using Module.Gravity;
 using VContainer;
 using VContainer.Unity;
 
 namespace Application.Sequence
 {
+    /// <summary>
+    /// ゲーム中の進行を行うクラス
+    /// </summary>
     public class InGameSequencer : IStartable, IDisposable
     {
         private readonly GameState gameState;
@@ -37,6 +39,7 @@ namespace Application.Sequence
 
         private async UniTaskVoid Sequence()
         {
+            // 重力クラスの作成
             WorldGravity.Create();
             
             // プレイ開始待機
@@ -47,7 +50,6 @@ namespace Application.Sequence
             
             respawnManager.LockPlayer();
 
-            // シーンアンロード
             await loadExecutor.UnloadAdditiveScenes();
 
             await hubSpawner.Respawn();

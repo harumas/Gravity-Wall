@@ -7,6 +7,9 @@ using View;
 
 namespace Presentation
 {
+    /// <summary>
+    /// クレジット画面のイベントを接続するクラス
+    /// </summary>
     public class CreditBehaviourPresenter : IStartable
     {
         private readonly ViewBehaviourNavigator navigator;

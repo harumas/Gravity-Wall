@@ -4,7 +4,7 @@ using Constants;
 using CoreModule.Helper.Attribute;
 using UnityEngine;
 
-namespace Application.SceneManagement
+namespace Module.Gimmick.SystemGimmick
 {
     /// <summary>
     /// 追加シーン読み込みを行うための判定トリガー
