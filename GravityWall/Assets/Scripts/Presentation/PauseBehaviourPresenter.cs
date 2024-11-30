@@ -18,6 +18,7 @@ namespace Presentation
         private readonly ViewBehaviourNavigator navigator;
         private readonly PauseBehaviour pauseBehaviour;
         private readonly CursorLocker cursorLocker;
+        private readonly GamepadVibrator gamepadVibrator;
         private readonly ApplicationStopper applicationStopper;
         private readonly PlayerController playerController;
         private readonly PlayerTargetSyncer playerTargetSyncer;
@@ -30,6 +31,7 @@ namespace Presentation
             ViewBehaviourNavigator navigator,
             PauseBehaviour pauseBehaviour,
             CursorLocker cursorLocker,
+            GamepadVibrator gamepadVibrator,
             ApplicationStopper applicationStopper,
             PlayerController playerController,
             PlayerTargetSyncer playerTargetSyncer,
@@ -40,6 +42,7 @@ namespace Presentation
             this.navigator = navigator;
             this.pauseBehaviour = pauseBehaviour;
             this.cursorLocker = cursorLocker;
+            this.gamepadVibrator = gamepadVibrator;
             this.applicationStopper = applicationStopper;
             this.playerController = playerController;
             this.playerTargetSyncer = playerTargetSyncer;
@@ -69,6 +72,7 @@ namespace Presentation
                         cursorLocker.IsCursorChangeBlock = true;
                         playerTargetSyncer.Lock();
                         playerController.Lock();
+                        gamepadVibrator.Pause();
                     }
                     else if (!context.isActive && context.behaviourType == ViewBehaviourState.None)
                     {
@@ -76,6 +80,7 @@ namespace Presentation
                         cursorLocker.SetCursorLock(true);
                         playerTargetSyncer.Unlock();
                         playerController.Unlock();
+                        gamepadVibrator.Resume();
                     }
                 })
                 .AddTo(pauseBehaviour);

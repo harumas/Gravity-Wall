@@ -12,15 +12,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4137c1fc6b441468ca95fc6b3c795f5, type: 3}
   m_Name: VibrationParameter
   m_EditorClassIdentifier: 
-  jump:
-    duration: 0
-    rightSpeed: 0
-    leftSpeed: 0
-  death:
-    duration: 0
-    rightSpeed: 0
-    leftSpeed: 0
-  rotate:
-    duration: 0.5
-    rightSpeed: 0.1
-    leftSpeed: 0.1
+  deathDuration: 1
+  deathSpeed: 0.4
+  rotateDuration: 0.5
+  rotateVibrationInterval: 0.1
+  angleVibrationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.22
+      inSlope: 0.034472875
+      outSlope: 0.034472875
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.115275316
+    - serializedVersion: 3
+      time: 1
+      value: 0.5
+      inSlope: 0.60504055
+      outSlope: 0.60504055
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.05317235
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

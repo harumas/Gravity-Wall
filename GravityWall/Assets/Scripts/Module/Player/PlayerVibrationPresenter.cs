@@ -15,39 +15,34 @@ namespace Module.Player
     public class PlayerVibrationPresenter : IInitializable
     {
         private float lastVibrationTime;
+        private float lastRotationAngle;
 
         [Inject]
         public PlayerVibrationPresenter(PlayerController playerController, VibrationParameter parameter, GamepadVibrator gamepadVibrator)
         {
-            playerController.IsJumping
+            playerController.IsDeath
                 .Subscribe(value =>
                 {
-                    if (!value && Time.time - lastVibrationTime > parameter.VibrationInterval)
+                    if (value)
                     {
                         lastVibrationTime = Time.time;
-                        gamepadVibrator.Vibrate(parameter.Jump.Duration, parameter.Jump.RightSpeed, parameter.Jump.LeftSpeed);
+                        gamepadVibrator.Vibrate(parameter.DeathDuration, parameter.DeathSpeed, parameter.DeathSpeed);
                     }
                 })
                 .AddTo(playerController);
 
-            playerController.IsDeath
-                .Subscribe(value =>
-                {
-                    if (value && Time.time - lastVibrationTime > parameter.VibrationInterval)
-                    {
-                        lastVibrationTime = Time.time;
-                        gamepadVibrator.Vibrate(parameter.Death.Duration, parameter.Death.RightSpeed, parameter.Death.LeftSpeed);
-                    }
-                })
+            playerController.RotationAngle
+                .Subscribe(value => { lastRotationAngle = value; })
                 .AddTo(playerController);
 
             playerController.IsRotating
                 .Subscribe(value =>
                 {
-                    if (value && Time.time - lastVibrationTime > parameter.VibrationInterval)
+                    if (value && Time.time - lastVibrationTime > parameter.RotateVibrationInterval)
                     {
                         lastVibrationTime = Time.time;
-                        gamepadVibrator.Vibrate(parameter.Rotate.Duration, parameter.Rotate.RightSpeed, parameter.Rotate.LeftSpeed);
+                        float speed = parameter.EvaluateAngleVibration(Mathf.Abs(lastRotationAngle) / 180f);
+                        gamepadVibrator.Vibrate(parameter.RotateDuration, speed, speed);
                     }
                 })
                 .AddTo(playerController);
