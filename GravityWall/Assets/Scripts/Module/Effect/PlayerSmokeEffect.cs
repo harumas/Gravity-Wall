@@ -63,7 +63,7 @@ namespace Module.Player
                 walkEffect.SpawnRate = spawnRateCurve.Evaluate(time);
                 walkEffect.SmokeSize = spawnSizeCurve.Evaluate(time);
                 walkEffect.SmokeVelocity = new Vector3(0f, 0f, velocityCurve.Evaluate(time));
-
+                
                 walkEffect.Effect.Play();
 
                 await UniTask.Delay(TimeSpan.FromSeconds(playInterval), cancellationToken: cancellationToken);

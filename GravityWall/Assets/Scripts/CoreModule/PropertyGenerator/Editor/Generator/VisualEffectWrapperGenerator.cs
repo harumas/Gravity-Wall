@@ -61,12 +61,15 @@ namespace PropertyGenerator
                     var exposedProperties = new List<VFXExposedProperty>();
                     vfxAsset.GetExposedProperties(exposedProperties);
 
+                    codeBuilder.NewLine();
                     foreach (VFXExposedProperty property in exposedProperties)
                     {
-                        string propertyName = property.name;
-                        int propertyId = Shader.PropertyToID(propertyName);
-                        Type type = property.type;
-                        AddParameter(propertyName, propertyId, type, codeBuilder);
+                        AddProperty(property.name, codeBuilder);
+                    }
+
+                    foreach (VFXExposedProperty property in exposedProperties)
+                    {
+                        AddParameter(property.name, property.type, codeBuilder);
                     }
                 }
             }
@@ -75,15 +78,20 @@ namespace PropertyGenerator
             SourceCreator.CreateFile(className, codeBuilder);
         }
 
-        private static void AddParameter(string name, int id, Type type, CodeBuilder builder)
+        private static void AddProperty(string name, CodeBuilder builder)
+        {
+            builder.NewLine($"private static readonly int {name}Property = Shader.PropertyToID(\"{name}\");");
+        }
+
+        private static void AddParameter(string name, Type type, CodeBuilder builder)
         {
             string suffix = propertyTypeMap[type];
 
             builder.NewLine();
             using (builder.CreateBlockScope($"public {type} {name}"))
             {
-                builder.NewLine($"get => target.Get{suffix}({id});");
-                builder.NewLine($"set => target.Set{suffix}({id}, value);");
+                builder.NewLine($"get => target.Get{suffix}({name}Property);");
+                builder.NewLine($"set => target.Set{suffix}({name}Property, value);");
             }
         }
     }
