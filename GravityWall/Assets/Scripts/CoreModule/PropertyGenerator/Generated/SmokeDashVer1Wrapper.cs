@@ -14,70 +14,82 @@ namespace PropertyGenerator.Generated
 		[SerializeField] private VisualEffect target;
 		public VisualEffect Effect => target;
 		
+		private static readonly int FresnelPowerProperty = Shader.PropertyToID("FresnelPower");
+		private static readonly int InSmokeGradientProperty = Shader.PropertyToID("InSmokeGradient");
+		private static readonly int IsLoopOnProperty = Shader.PropertyToID("IsLoopOn");
+		private static readonly int LifeTimeProperty = Shader.PropertyToID("LifeTime");
+		private static readonly int MainSmokeGradientProperty = Shader.PropertyToID("MainSmokeGradient");
+		private static readonly int SmokeSizeProperty = Shader.PropertyToID("SmokeSize");
+		private static readonly int SmokeSIzeAnimationCurveProperty = Shader.PropertyToID("SmokeSIzeAnimationCurve");
+		private static readonly int SmokeVelocityProperty = Shader.PropertyToID("SmokeVelocity");
+		private static readonly int SpawnRateProperty = Shader.PropertyToID("SpawnRate");
+		private static readonly int VoronoiScaleProperty = Shader.PropertyToID("VoronoiScale");
+		private static readonly int VoronoiSpeedProperty = Shader.PropertyToID("VoronoiSpeed");
+		
 		public System.Single FresnelPower
 		{
-			get => target.GetFloat(1028);
-			set => target.SetFloat(1028, value);
+			get => target.GetFloat(FresnelPowerProperty);
+			set => target.SetFloat(FresnelPowerProperty, value);
 		}
 		
 		public UnityEngine.Gradient InSmokeGradient
 		{
-			get => target.GetGradient(1037);
-			set => target.SetGradient(1037, value);
+			get => target.GetGradient(InSmokeGradientProperty);
+			set => target.SetGradient(InSmokeGradientProperty, value);
 		}
 		
 		public System.Boolean IsLoopOn
 		{
-			get => target.GetBool(1039);
-			set => target.SetBool(1039, value);
+			get => target.GetBool(IsLoopOnProperty);
+			set => target.SetBool(IsLoopOnProperty, value);
 		}
 		
 		public System.Single LifeTime
 		{
-			get => target.GetFloat(1027);
-			set => target.SetFloat(1027, value);
+			get => target.GetFloat(LifeTimeProperty);
+			set => target.SetFloat(LifeTimeProperty, value);
 		}
 		
 		public UnityEngine.Gradient MainSmokeGradient
 		{
-			get => target.GetGradient(1036);
-			set => target.SetGradient(1036, value);
+			get => target.GetGradient(MainSmokeGradientProperty);
+			set => target.SetGradient(MainSmokeGradientProperty, value);
 		}
 		
 		public System.Single SmokeSize
 		{
-			get => target.GetFloat(1024);
-			set => target.SetFloat(1024, value);
+			get => target.GetFloat(SmokeSizeProperty);
+			set => target.SetFloat(SmokeSizeProperty, value);
 		}
 		
 		public UnityEngine.AnimationCurve SmokeSIzeAnimationCurve
 		{
-			get => target.GetAnimationCurve(1033);
-			set => target.SetAnimationCurve(1033, value);
+			get => target.GetAnimationCurve(SmokeSIzeAnimationCurveProperty);
+			set => target.SetAnimationCurve(SmokeSIzeAnimationCurveProperty, value);
 		}
 		
 		public UnityEngine.Vector3 SmokeVelocity
 		{
-			get => target.GetVector3(1031);
-			set => target.SetVector3(1031, value);
+			get => target.GetVector3(SmokeVelocityProperty);
+			set => target.SetVector3(SmokeVelocityProperty, value);
 		}
 		
 		public System.Single SpawnRate
 		{
-			get => target.GetFloat(1026);
-			set => target.SetFloat(1026, value);
+			get => target.GetFloat(SpawnRateProperty);
+			set => target.SetFloat(SpawnRateProperty, value);
 		}
 		
 		public System.Single VoronoiScale
 		{
-			get => target.GetFloat(1030);
-			set => target.SetFloat(1030, value);
+			get => target.GetFloat(VoronoiScaleProperty);
+			set => target.SetFloat(VoronoiScaleProperty, value);
 		}
 		
 		public System.Single VoronoiSpeed
 		{
-			get => target.GetFloat(1029);
-			set => target.SetFloat(1029, value);
+			get => target.GetFloat(VoronoiSpeedProperty);
+			set => target.SetFloat(VoronoiSpeedProperty, value);
 		}
 	}
 }
