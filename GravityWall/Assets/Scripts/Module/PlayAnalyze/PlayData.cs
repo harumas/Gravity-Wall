@@ -1,9 +1,11 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Module.PlayTest.EmotionAnalyze
+namespace Module.PlayAnalyze
 {
+    /// <summary>
+    /// 1ステージあたりのプレイデータ
+    /// </summary>
     [Serializable]
     public class PlayData
     {

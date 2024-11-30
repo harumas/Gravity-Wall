@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
-using UnityEditor;
 using UnityEngine;
 
-namespace Module.PlayTest.EmotionAnalyze
+namespace Module.PlayAnalyze.EmotionAnalyzer
 {
+    /// <summary>
+    /// 感情分析結果を集計するクラス
+    /// </summary>
     public class EmotionAnalyzer : MonoBehaviour
     {
         [SerializeField] private string folderName;
@@ -31,36 +32,49 @@ namespace Module.PlayTest.EmotionAnalyze
         public async void Analyze()
         {
             Debug.Log("Loading emotions...");
+
+            // ステージ毎のプレイデータを取得する
             List<PlayData> emotions = await LoadAllEmotionData(Path.Combine("Assets", folderName));
             Dictionary<string, List<PlayData>> groupedEmotions = GroupByStage(emotions);
 
+            // ステージ毎に感情分析結果のパネルを作成
             foreach ((string stageName, List<PlayData> emotionList) in groupedEmotions)
             {
-                var stageEmotionView = Instantiate(stageEmotionPrefab, stageEmotionParent).GetComponent<StageEmotionView>();
-                stageEmotionView.SetStageName(stageName);
-                
-                long averageTicks = (long)Math.Round(emotionList.Select(emotion => emotion.PlayTime).Average());
-                stageEmotionView.SetPlayTime(TimeSpan.FromTicks(averageTicks).ToString("mm\\:ss"));
-
-                int rotateCount = (int)Math.Round(emotionList.Select(emotion => emotion.RotateCount).Average());
-                stageEmotionView.SetRotateCount(rotateCount);
-
-                int[] totalEmotions = new int[emotionTypes.Length];
-                int totalEmotionCount = 0;
-
-                foreach (int emotion in emotionList.SelectMany(data => data.Emotions))
-                {
-                    totalEmotions[emotion]++;
-                    totalEmotionCount += emotionList.Count;
-                }
-
-                for (var i = 0; i < totalEmotions.Length; i++)
-                {
-                    stageEmotionView.SetEmotionRate(emotionTypes[i], totalEmotions[i] / (float)totalEmotionCount * 100f);
-                }
+                CreateStageEmotionView(stageName, emotionList);
             }
 
             Debug.Log("Completed!");
+        }
+
+        private void CreateStageEmotionView(string stageName, List<PlayData> emotionList)
+        {
+            // ステージ名
+            var stageEmotionView = Instantiate(stageEmotionPrefab, stageEmotionParent).GetComponent<StageEmotionView>();
+            stageEmotionView.SetStageName(stageName);
+
+            // プレイ時間の平均
+            long averageTicks = (long)Math.Round(emotionList.Select(emotion => emotion.PlayTime).Average());
+            stageEmotionView.SetPlayTime(TimeSpan.FromTicks(averageTicks).ToString("mm\\:ss"));
+
+            // 回転数の平均
+            int rotateCount = (int)Math.Round(emotionList.Select(emotion => emotion.RotateCount).Average());
+            stageEmotionView.SetRotateCount(rotateCount);
+
+            // 感情の集計
+            int[] totalEmotions = new int[emotionTypes.Length];
+            int totalEmotionCount = 0;
+
+            foreach (int emotion in emotionList.SelectMany(data => data.Emotions))
+            {
+                totalEmotions[emotion]++;
+                totalEmotionCount += emotionList.Count;
+            }
+
+            // 感情の割合を表示
+            for (var i = 0; i < totalEmotions.Length; i++)
+            {
+                stageEmotionView.SetEmotionRate(emotionTypes[i], totalEmotions[i] / (float)totalEmotionCount * 100f);
+            }
         }
 
         private Dictionary<string, List<PlayData>> GroupByStage(List<PlayData> emotions)

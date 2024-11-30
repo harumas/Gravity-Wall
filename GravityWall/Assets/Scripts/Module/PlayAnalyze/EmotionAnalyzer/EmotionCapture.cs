@@ -9,10 +9,12 @@ using Amazon.Rekognition.Model;
 using Amazon.Runtime;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
-namespace Module.PlayTest.EmotionAnalyze
+namespace Module.PlayAnalyze.EmotionAnalyzer
 {
+    /// <summary>
+    /// 表情を撮影して、感情を収集するクラス
+    /// </summary>
     public class EmotionCapture
     {
         private readonly WebCamTexture webCamTexture;
@@ -26,22 +28,32 @@ namespace Module.PlayTest.EmotionAnalyze
             rekognitionClient = new AmazonRekognitionClient(credentials, RegionEndpoint.USEast1);
 
             // Webカメラのデバイスを取得
-            WebCamDevice[] devices = WebCamTexture.devices;
-            if (devices.Length > 0)
-            {
-                webCamTexture = new WebCamTexture(devices[0].name);
-                webCamTexture.Play();
-            }
-            else
-            {
-                Debug.LogError("Webカメラが見つかりません。");
-            }
+            webCamTexture = CreateWebCamTexture();
 
-
+            if (webCamTexture == null)
+            {
+                return;
+            }
+            
+            webCamTexture.Play();
             snapshot = new Texture2D(webCamTexture.width, webCamTexture.height);
         }
 
-        // ボタンなどで呼び出して現在のフレームをキャプチャし、Amazon Rekognitionで解析
+        private WebCamTexture CreateWebCamTexture()
+        {
+            WebCamDevice[] devices = WebCamTexture.devices;
+            if (devices.Length > 0)
+            {
+                return new WebCamTexture(devices[0].name);
+            }
+
+            Debug.LogError("Webカメラが見つかりません。");
+            return null;
+        }
+
+        /// <summary>
+        /// 表情の撮影を非同期で行います
+        /// </summary>
         public async UniTaskVoid CaptureAsync(CancellationToken cancellationToken, Action<EmotionName> action)
         {
             // 現在のWebCamTextureのフレームを取得
@@ -68,6 +80,8 @@ namespace Module.PlayTest.EmotionAnalyze
             try
             {
                 var response = await rekognitionClient.DetectFacesAsync(request, cancellationToken);
+                
+                // リクエストが成功したらコールバックを返す
                 if (response.HttpStatusCode == HttpStatusCode.OK)
                 {
                     EmotionName emotionName = response.FaceDetails.Count > 0 ? response.FaceDetails[0].Emotions[0].Type : EmotionName.UNKNOWN;

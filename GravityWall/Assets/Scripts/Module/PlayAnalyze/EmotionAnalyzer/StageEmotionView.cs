@@ -1,8 +1,7 @@
-using System;
 using TMPro;
 using UnityEngine;
 
-namespace Module.PlayTest.EmotionAnalyze
+namespace Module.PlayAnalyze.EmotionAnalyzer
 {
     public enum Emotion
     {
@@ -17,6 +16,9 @@ namespace Module.PlayTest.EmotionAnalyze
         Unknown
     }
 
+    /// <summary>
+    /// ステージの感情分析結果のパネルを表示するクラス
+    /// </summary>
     public class StageEmotionView : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI stageNameText;
