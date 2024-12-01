@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.Media;
+using Core.Sound;
+using CoreModule.Sound;
 using DG.Tweening;
 using R3;
 using TriInspector;
@@ -17,7 +20,6 @@ namespace Module.Gimmick.LevelGimmick
         [SerializeField] private Transform gateLeft, gateRight;
         [SerializeField] private GameObject[] pooledLights;
         [SerializeField] private int switchMaxCount = 1;
-        [SerializeField] private AudioSource audioSource;
         [SerializeField] private GimmickObject[] observedSwitches;
         [SerializeField] private float setWidth = 2.7f;
         [SerializeField, ReadOnly] private int usingCount = 0;
@@ -81,7 +83,7 @@ namespace Module.Gimmick.LevelGimmick
 
             if (doEffect)
             {
-                audioSource.Play();
+                SoundManager.Instance.Play(SoundKey.GateOpen, MixerType.SE);
                 GateAnimation(true);
             }
 
@@ -101,7 +103,7 @@ namespace Module.Gimmick.LevelGimmick
 
             if (doEffect)
             {
-                audioSource.Play();
+                SoundManager.Instance.Play(SoundKey.GateOpen, MixerType.SE);
                 GateAnimation(false);
             }
 
