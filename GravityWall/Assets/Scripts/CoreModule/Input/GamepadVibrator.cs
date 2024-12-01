@@ -31,6 +31,7 @@ namespace CoreModule.Input
                     {
                         motorRumble = dualMotorRumble;
                         enabled = true;
+                        Debug.Log("enable");
                     }
                     // GamePadが外された場合、他に接続されているGamePadを使用する
                     else if (change == InputDeviceChange.Removed || change == InputDeviceChange.Disconnected || change == InputDeviceChange.Disabled)
@@ -50,13 +51,14 @@ namespace CoreModule.Input
         /// </summary>
         public void Enable()
         {
-            if (enabled && Gamepad.current == null)
+            if (enabled || Gamepad.current == null)
             {
                 return;
             }
 
             motorRumble = Gamepad.current;
             enabled = true;
+            Debug.Log("enable");
         }
 
         /// <summary>
