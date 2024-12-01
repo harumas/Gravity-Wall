@@ -46,7 +46,7 @@ namespace CoreModule.Sound
             return audioMixerGroups;
         }
 
-        [Button("SoundKeyを生成する")]
+        [Button("SoundKeyとMixerTypeを生成")]
         private void Generate()
         {
             SoundKeyGenerator.Generate(audioClips, audioMixerGroups, exportPath);
