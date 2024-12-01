@@ -1,8 +1,6 @@
-﻿using System;
-using Module.Character;
-using Module.InputModule;
+﻿using Module.InputModule;
+using Module.Player;
 using R3;
-using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
@@ -33,11 +31,18 @@ namespace Presentation
                 .AddTo(playerController);
 
             gameInput.Jump
-                .Subscribe(_ =>
+                .Subscribe(isStarted =>
                 {
                     if (!playerController.IsDeath.CurrentValue)
                     {
-                        playerController.OnJumpInput();
+                        if (isStarted)
+                        {
+                            playerController.OnJumpStart();
+                        }
+                        else
+                        {
+                            playerController.OnJumpEnd();
+                        }
                     }
                 })
                 .AddTo(playerController);
