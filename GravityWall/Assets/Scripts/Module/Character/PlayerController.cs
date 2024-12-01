@@ -1,7 +1,6 @@
-using DG.Tweening;
-using DG.Tweening.Core.Easing;
 using Domain;
 using Module.Gravity;
+using R3;
 using UnityEngine;
 
 namespace Module.Character
@@ -9,36 +8,53 @@ namespace Module.Character
     /// <summary>
     /// プレイヤーの移動と回転を制御するクラス
     /// </summary>
-    public class PlayerController : MonoBehaviour, ICharacter
+    public class PlayerController : MonoBehaviour, IPushable
     {
-        [Header("移動速度")][SerializeField] private float controlSpeed;
-        [Header("速度減衰")][SerializeField] private float speedDamping;
-        [Header("ジャンプ中移動係数")][SerializeField] private float airControl;
-        [Header("回転のイージング")][SerializeField] private Ease easeType;
-
-        [Header("回転のイージング係数")]
-        [SerializeField]
-        private float rotateStep;
-
-        [Header("最大速度")][SerializeField] private float maxSpeed;
-        [Header("ジャンプ力")][SerializeField] private float jumpPower;
-        [Header("ジャンプ中の重力")][SerializeField] private float jumpingGravity;
-
-        [Header("連続ジャンプを許可する間隔")]
-        [SerializeField]
-        private float allowJumpInterval;
-
-        [Header("回転中とみなす角度")][SerializeField] private float rotatingAngle;
-
+        [SerializeField] private PlayerControlParameter parameter;
         [SerializeField] private Rigidbody rigBody;
-        [SerializeField] private Transform target;
+        [SerializeField] private Transform cameraPivot;
         [SerializeField] private LocalGravity localGravity;
 
-        private bool isJumping;
+        public bool IsRotationLocked { get; set; }
+        private SimpleInertia simpleInertia;
+        private PlayerFunction playerFunction;
+
+        public ReadOnlyReactiveProperty<bool> IsJumping => isJumping;
+        [SerializeField] private SerializableReactiveProperty<bool> isJumping = new SerializableReactiveProperty<bool>();
+
+        public ReadOnlyReactiveProperty<bool> IsGrounding => isGrounding;
+        [SerializeField] private SerializableReactiveProperty<bool> isGrounding = new SerializableReactiveProperty<bool>();
+
+        public ReadOnlyReactiveProperty<bool> IsRotating => isRotating;
+        [SerializeField] private SerializableReactiveProperty<bool> isRotating = new SerializableReactiveProperty<bool>();
+
+        public ReadOnlyReactiveProperty<bool> IsDeath => isDeath;
+        [SerializeField] private SerializableReactiveProperty<bool> isDeath = new SerializableReactiveProperty<bool>();
+
+        public ReadOnlyReactiveProperty<(Vector3 xv, Vector3 yv)> OnMove => onMove;
+        private ReactiveProperty<(Vector3 xv, Vector3 yv)> onMove = new ReactiveProperty<(Vector3 xv, Vector3 yv)>();
+
         private Vector2 moveInput;
-        private Vector3 inertia;
-        private float lastJumpTime;
-        private float variableJumpingGravity;
+        private float landingTime;
+
+        private void Start()
+        {
+            simpleInertia = new SimpleInertia(rigBody);
+            playerFunction = new PlayerFunction(transform, cameraPivot, rigBody, localGravity, parameter);
+
+            isRotating.Subscribe(isRotating =>
+            {
+                if (isRotating)
+                {
+                    //回転中はオブジェクトが落下しないようにする
+                    WorldGravity.Instance.SetDisable(WorldGravity.Type.Object);
+                }
+                else
+                {
+                    WorldGravity.Instance.SetEnable(WorldGravity.Type.Object);
+                }
+            });
+        }
 
         public void OnMoveInput(Vector2 moveInput)
         {
@@ -47,145 +63,69 @@ namespace Module.Character
 
         public void OnJumpInput()
         {
-            DoJump(-WorldGravity.Instance.Gravity * jumpPower, jumpingGravity);
+            if (isJumping.Value)
+            {
+                return;
+            }
+
+            playerFunction.PerformJump();
+            isJumping.Value = true;
+            isGrounding.Value = false;
+        }
+
+        public void SetLandingTime(float time)
+        {
+            landingTime = time;
         }
 
         private void FixedUpdate()
         {
-            PerformMove();
-            AdjustVelocity();
-            AdjustGravity();
-            PerformGravityRotate();
-            PerformInertia();
-        }
-
-        private void AdjustVelocity()
-        {
-            Vector3 gravity = WorldGravity.Instance.Gravity;
-            Vector3 velocity = rigBody.velocity;
-
-            float velocityAlongGravity = Vector3.Dot(velocity, gravity);
-
-            //重力のベクトルに対してのローカル速度を取得
-            Vector3 yVelocity = gravity * velocityAlongGravity;
-            Vector3 xVelocity = velocity - gravity * velocityAlongGravity;
-
-            if (moveInput == Vector2.zero)
+            if (isJumping.Value)
             {
-                //入力がない時は減衰させる
-                xVelocity *= speedDamping;
-            }
-            else
-            {
-                //x軸の動きだけクランプ
-                xVelocity = Vector3.ClampMagnitude(xVelocity, maxSpeed);
+                // 再びジャンプ可能になったらフラグを解除
+                if (playerFunction.CanJumpAgain())
+                {
+                    isJumping.Value = false;
+                }
+
+                //接地判定
+                if (playerFunction.CanGroundingAgain(landingTime))
+                {
+                    isGrounding.Value = true;
+                }
             }
 
-            //元の座標系に戻す
-            Vector3 originalVelocity = xVelocity + yVelocity;
+            bool isMoveInput = moveInput != Vector2.zero;
 
-            rigBody.velocity = originalVelocity;
-        }
-
-        private void PerformMove()
-        {
-            //移動方向の算出
-            Vector3 forward = target.forward * moveInput.y;
-            Vector3 right = target.right * moveInput.x;
-            Vector3 moveDirection = Vector3.ClampMagnitude(forward + right, 1f);
-
-            //重力と垂直な速度ベクトルに変換
-            Quaternion targetRotation = Quaternion.FromToRotation(target.up, -WorldGravity.Instance.Gravity);
-            Vector3 moveVelocity = targetRotation * moveDirection * controlSpeed;
-
-            float airMultiplier = isJumping ? airControl : 1f;
-
-            rigBody.AddForce(moveVelocity * airMultiplier, ForceMode.Acceleration);
-        }
-
-        private void PerformGravityRotate()
-        {
-            Quaternion targetRotation = Quaternion.FromToRotation(transform.up, -WorldGravity.Instance.Gravity) * rigBody.rotation;
-
-            //角度の差を求める
-            float angle = Vector3.Angle(transform.up, -WorldGravity.Instance.Gravity);
-            angle = Mathf.Max(angle, Mathf.Epsilon);
-
-            //イージング関数を噛ませる
-            float t = Evaluate(easeType, angle, rotateStep);
-            rigBody.rotation = Quaternion.Slerp(rigBody.rotation, targetRotation, t);
-
-            if (angle - rotateStep >= rotatingAngle)
+            // 移動処理
+            if (isMoveInput)
             {
-                //回転中はオブジェクトが落下しないようにする
-                WorldGravity.Instance.SetDisable(WorldGravity.Type.Object);
-            }
-            else
-            {
-                rigBody.rotation = targetRotation;
-                WorldGravity.Instance.SetEnable(WorldGravity.Type.Object);
-            }
-        }
-
-        private float Evaluate(Ease easeType, float angle, float step)
-        {
-            if (easeType == Ease.Unset)
-            {
-                return step;
+                playerFunction.PerformMove(moveInput, isJumping.Value);
             }
 
-            return EaseManager.Evaluate(easeType, null, step, angle, 1f, 1f);
-        }
+            // 速度調整
+            playerFunction.AdjustVelocity(isMoveInput, isDeath.Value);
+            onMove.Value = isMoveInput ? playerFunction.GetSeperatedVelocity() : (Vector3.zero, Vector3.zero);
 
-        private void PerformInertia()
-        {
-            if (moveInput == Vector2.zero)
+            // ジャンプ中の重力を調整
+            if (isJumping.Value)
             {
-                rigBody.MovePosition(rigBody.position + inertia);
-            }
-        }
-
-        private void AdjustGravity()
-        {
-            if (!isJumping)
-            {
-                return;
+                playerFunction.AdjustGravity();
             }
 
-            localGravity.SetMultiplierAtFrame(variableJumpingGravity);
+            // 慣性の適用
+            simpleInertia.PerformInertia();
+
+            // 重力に応じた回転
+            if (!IsRotationLocked)
+            {
+                isRotating.Value = playerFunction.PerformGravityRotate();
+            }
         }
 
         private void OnCollisionEnter(Collision _)
         {
-            isJumping = false;
-            inertia = Vector3.zero;
-        }
-
-        private void OnCollisionStay(Collision _)
-        {
-            if (!isJumping)
-            {
-                return;
-            }
-
-            bool canJump = lastJumpTime + allowJumpInterval <= Time.time;
-            if (canJump)
-            {
-                isJumping = false;
-            }
-        }
-
-        public void DoJump(Vector3 jumpForce, float jumpingGravity)
-        {
-            if (isJumping)
-            {
-                return;
-            }
-
-            variableJumpingGravity = jumpingGravity;
-            rigBody.AddForce(jumpForce, ForceMode.VelocityChange);
-            isJumping = true;
-            lastJumpTime = Time.time;
+            simpleInertia.OnCollisionEnter();
         }
 
         public void AddExternalPosition(Vector3 delta)
@@ -193,9 +133,34 @@ namespace Module.Character
             rigBody.MovePosition(rigBody.position + delta);
         }
 
+        public void AddForce(Vector3 force, ForceMode mode, float forcedGravity)
+        {
+            playerFunction.AddForce(force, mode, forcedGravity);
+            isJumping.Value = true;
+            isJumping.ForceNotify();
+            isGrounding.Value = false;
+        }
+
         public void AddInertia(Vector3 inertia)
         {
-            this.inertia += inertia;
+            simpleInertia.AddInertia(inertia);
+        }
+
+        public void Kill()
+        {
+            isDeath.Value = true;
+            isJumping.Value = false;
+            isGrounding.Value = true;
+            rigBody.velocity = Vector3.zero;
+            moveInput = Vector2.zero;
+            onMove.Value = (Vector3.zero, Vector3.zero);
+            enabled = false;
+        }
+
+        public void Respawn()
+        {
+            isDeath.Value = false;
+            enabled = true;
         }
     }
 }

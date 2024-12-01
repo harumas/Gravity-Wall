@@ -1,5 +1,5 @@
-﻿using Core.Input;
-using CoreModule.Save;
+﻿using CoreModule.Save;
+using CoreModule.Input;
 using Module.Config;
 using R3;
 using UnityEngine;
