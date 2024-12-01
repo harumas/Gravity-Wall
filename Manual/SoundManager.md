@@ -13,6 +13,8 @@ SoundManagerを使用するには`SoundKey`と`MixerType`を指定する必要�
 `Key`の部分にサウンドキーの名前、`Value`の部分にはAudioClipを設定して、`SoundKeyとMixerTypeの生成`ボタンをクリックします。  
 そうすると、設定内容を元にSoundKeyが生成されます。  
 
+![SoundSetting.png](Images/SoundSetting.png)
+
 ### MixerTypeについて
 MixerTypeは今のところ`BGM`, `SE`の二種類です。  
 AudioMixerをSoundSettingsに設定することで、MixerTypeもコード生成されます。
