@@ -35,23 +35,10 @@ namespace Module.Character
             pivotHorizontal.localEulerAngles = new Vector3(eulerX, eulerY, 0f);
         }
 
-        void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.LeftArrow) && !isRotating)
-            {
-                StartCoroutine(RotateCamera(Vector3.up, 90));
-            }
-
-            if (Input.GetKeyDown(KeyCode.RightArrow) && !isRotating)
-            {
-                StartCoroutine(RotateCamera(Vector3.up, -90));
-            }
-        }
-
         private float rotationDuration = 0.2f; // アニメーションの持続時間（秒）
         private bool isRotating = false; // 現在回転中かどうかを判定
 
-        private System.Collections.IEnumerator RotateCamera(Vector3 axis, float angle)
+        public System.Collections.IEnumerator RotateCamera(Vector3 axis, float angle)
         {
             isRotating = true;
 

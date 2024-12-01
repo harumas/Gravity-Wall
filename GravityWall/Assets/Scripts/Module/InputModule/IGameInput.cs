@@ -10,5 +10,7 @@ namespace Module.InputModule
         ReadOnlyReactiveProperty<Vector2> Move { get; }
         Observable<int> CameraRotate { get; }
         Observable<bool> Jump { get; }
+        Observable<bool> LookLeftSubject { get; }
+        Observable<bool> LookRightSubject { get; }
     }
 }
