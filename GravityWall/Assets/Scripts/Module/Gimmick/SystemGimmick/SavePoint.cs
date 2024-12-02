@@ -1,8 +1,6 @@
 using System;
 using Application.Sequence;
 using Constants;
-using Module.Gravity;
-using R3;
 using UnityEngine;
 
 namespace Module.Gimmick
@@ -49,7 +47,6 @@ namespace Module.Gimmick
             if (!isSaved && other.CompareTag(Tag.Player))
             {
                 Debug.Log("セーブしました");
-
                 isSaved = true;
                 LatestContext = new RespawnContext(transform.position, transform.rotation, -transform.up, levelResetter);
                 OnEnterPoint?.Invoke(LatestContext);

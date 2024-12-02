@@ -15,6 +15,7 @@ namespace Module.Player
         {
             if (anim.Speed > speedThreshold || anim.IsJumping)
             {
+                audioSource.volume = 0.3f;
                 audioSource.pitch = Random.Range(0.7f, 1.3f);
                 audioSource.PlayOneShot(footClip);
             }
