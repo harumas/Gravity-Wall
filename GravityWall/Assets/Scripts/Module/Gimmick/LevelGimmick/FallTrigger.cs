@@ -1,11 +1,13 @@
-using Constants;
-using Module.Character;
 using Module.Gravity;
+using Module.Player;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using Cinemachine;
-namespace Module.Gimmick
+using Module.Gimmick.SystemGimmick;
+using Constants;
+
+namespace Module.Gimmick.LevelGimmick
 {
     public class FallTrigger : MonoBehaviour
     {

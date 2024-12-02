@@ -3,11 +3,11 @@ using UnityEngine.Playables;
 using Module.Gravity;
 using DG.Tweening;
 using Constants;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.Events;
-using UnityEngine.Rendering;//Volumeを使うのに必要
-using UnityEngine.Rendering.Universal;//Bloomを使うのに必要
 
-namespace Module.Gimmick
+namespace Module.Gimmick.LevelGimmick
 {
     public class BreakGlass : MonoBehaviour
     {

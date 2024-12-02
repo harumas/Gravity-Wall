@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Constants;
 using Module.Gimmick;
+using Module.Gimmick.LevelGimmick;
 using UnityEngine;
 
 namespace Module.PlayTest

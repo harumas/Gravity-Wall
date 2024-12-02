@@ -3,6 +3,7 @@ using System.Linq;
 using Constants;
 using Cysharp.Threading.Tasks;
 using Module.Gimmick;
+using Module.Gimmick.LevelGimmick;
 using R3;
 using UnityEngine;
 
@@ -11,7 +12,9 @@ namespace Module.PlayTest
     public class LevelActivator : MonoBehaviour
     {
         [SerializeField] private bool startActive;
+        [SerializeField] private bool activateOnOpen;
         [SerializeField] private GameObject roomObject;
+        [SerializeField] private string observeGate;
         [SerializeField] private List<Gate> levelGates;
 
         private bool isPlayerEnter;
@@ -21,6 +24,11 @@ namespace Module.PlayTest
 
         private void Start()
         {
+            if (activateOnOpen)
+            {
+                GimmickReference.OnGimmickReferenceUpdated += OnGimmickReferenceUpdated;
+            }
+
             if (startActive)
             {
                 foreach (Gate levelGate in levelGates)
@@ -50,6 +58,25 @@ namespace Module.PlayTest
                         }
                     })
                     .AddTo(this);
+            }
+        }
+
+        private void OnGimmickReferenceUpdated(GimmickReference reference)
+        {
+            if (reference.TryGetGimmick(observeGate, out Gate gate))
+            {
+                gate.IsEnabled.Skip(1)
+                    .Subscribe(isEnabled =>
+                    {
+                        if (isEnabled)
+                        {
+                            Activate();
+                        }
+                        else
+                        {
+                            Deactivate();
+                        }
+                    });
             }
         }
 

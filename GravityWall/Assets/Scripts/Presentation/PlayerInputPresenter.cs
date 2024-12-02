@@ -1,6 +1,5 @@
-﻿using System;
-using Module.Character;
-using Module.InputModule;
+﻿using Module.InputModule;
+using Module.Player;
 using R3;
 using UnityEngine;
 using VContainer;

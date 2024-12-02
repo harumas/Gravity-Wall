@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using Constants;
-using Module.Character;
+using Module.Player;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;

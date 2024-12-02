@@ -2,10 +2,12 @@
 using CoreModule.Save;
 using R3;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Module.Config
 {
+    /// <summary>
+    /// ゲームの設定情報を保持するクラス
+    /// </summary>
     [Serializable]
     public class ConfigData : ICloneable<ConfigData>
     {
@@ -17,6 +19,9 @@ namespace Module.Config
         public SerializableReactiveProperty<float> AmbientVolume;
         public SerializableReactiveProperty<bool> Vibration;
 
+        /// <summary>
+        /// 設定情報をディープコピーします
+        /// </summary>
         public ConfigData Clone()
         {
             ConfigData configData = new ConfigData

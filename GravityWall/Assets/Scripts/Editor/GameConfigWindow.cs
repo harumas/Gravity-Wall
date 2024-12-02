@@ -1,11 +1,12 @@
 ﻿using Container;
 using CoreModule.Save;
+using Module.Config;
 using TriInspector;
 using UnityEditor;
 using UnityEngine;
 using VContainer;
 
-namespace Module.Config
+namespace Editor
 {
     /// <summary>
     /// ゲーム設定をエディタ上で行うクラス

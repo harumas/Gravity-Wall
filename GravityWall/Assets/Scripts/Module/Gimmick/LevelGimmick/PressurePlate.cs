@@ -7,7 +7,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Module.Gimmick
+namespace Module.Gimmick.LevelGimmick
 {
     public class PressurePlate : GimmickObject
     {
