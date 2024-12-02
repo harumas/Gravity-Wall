@@ -28,13 +28,16 @@ namespace Presentation
 
         public void Start()
         {
+            // 音量の初期値を設定する
             UpdateAllVolumes();
 
+            // 音量の変更を監視する
             configData.MasterVolume.Subscribe(UpdateMasterVolume);
             configData.BgmVolume.Subscribe(UpdateBgmVolume);
             configData.SeVolume.Subscribe(UpdateSeVolume);
             configData.AmbientVolume.Subscribe(UpdateAmbientVolume);
 
+            // 音量が変更されたら保存する
             configData.MasterVolume.Subscribe(SaveConfig);
             configData.BgmVolume.Subscribe(SaveConfig);
             configData.SeVolume.Subscribe(SaveConfig);

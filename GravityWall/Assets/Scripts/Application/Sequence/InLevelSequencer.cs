@@ -5,6 +5,9 @@ using VContainer.Unity;
 
 namespace Application.Sequence
 {
+    /// <summary>
+    /// レベル内のゲーム進行を行うクラス
+    /// </summary>
     public class InLevelSequencer : IAsyncStartable
     {
         private readonly RespawnManager respawnManager;

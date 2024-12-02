@@ -5,6 +5,9 @@ using Module.Gimmick.LevelGimmick;
 
 namespace Application.Spawn
 {
+    /// <summary>
+    /// ハブ内のリスポーンを行うクラス
+    /// </summary>
     public class HubSpawner
     {
         private readonly RespawnManager respawnManager;
@@ -16,6 +19,9 @@ namespace Application.Spawn
             respawnContext = spawnPoint.GetContext();
         }
 
+        /// <summary>
+        /// プレイヤーをハブにリスポーンします
+        /// </summary>
         public UniTask Respawn(Func<UniTask> respawningTask = null)
         {
             return respawnManager.RespawnPlayer(respawnContext, respawningTask);
