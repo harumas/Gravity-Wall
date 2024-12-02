@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
 using Module.Player;
 using R3;
+using TriInspector;
 using UnityEngine;
 
 namespace Module.Gimmick.LevelGimmick
@@ -13,16 +14,15 @@ namespace Module.Gimmick.LevelGimmick
     {
         [SerializeField] private Transform pointA;
         [SerializeField] private Transform pointB;
-        [Header("移動速度")][SerializeField] private float moveSpeed;
 
-        [Header("目標地点で待機する時間")] [SerializeField] private float stopDuration;
-
-        [Header("引っかかりを待つ時間")] [SerializeField] private float reverseDuration;
-
-        [Header("最初から動かすか")] [SerializeField] private bool enableOnAwake = true;
-
-        [SerializeField] private GimmickObject[] observedSwitches;
-        [SerializeField] private int switchMaxCount = 1;
+        [SerializeField, Header("移動速度")] private float moveSpeed;
+        [SerializeField, Header("目標地点で待機する時間")] private float stopDuration;
+        [SerializeField, Header("引っかかりを待つ時間")] private float reverseDuration;
+        [SerializeField, Header("最初から動かすか")] private bool enableOnAwake = true;
+        [SerializeField, Header("動力を検知するするスイッチ")] private GimmickObject[] observedSwitches;
+        [SerializeField, Header("最低いくつの動力が入ったら作動するか")] private int switchMaxCount = 1;
+        [SerializeField, ReadOnly, Header("触れているコライダーの数")] private int contactCount;
+        
         private int switchCount = 0;
         private CancellationTokenSource cTokenSource;
         private Rigidbody rigBody;
@@ -32,9 +32,6 @@ namespace Module.Gimmick.LevelGimmick
         private Transform currentTarget;
         private IPushable pushement;
         private float trappedTimer;
-      [SerializeField]  private int contactCount;
-
-        private const float StopThreshold = 0.01f;
 
         private CancellationTokenSource cancellationToken;
 
@@ -63,12 +60,13 @@ namespace Module.Gimmick.LevelGimmick
             {
                 gimmick.IsEnabled.Skip(1).Subscribe(UpdateMoveState).AddTo(this);
             }
-            
+
             if (enableOnAwake)
             {
                 Enable();
             }
         }
+
         private void UpdateMoveState(bool switchEnabled)
         {
             switchCount += switchEnabled ? 1 : -1;
@@ -120,12 +118,13 @@ namespace Module.Gimmick.LevelGimmick
         {
             CancellationToken cancelOnDestroyToken = this.GetCancellationTokenOnDestroy();
             CancellationTokenSource canceller = CancellationTokenSource.CreateLinkedTokenSource(cancelOnDestroyToken, cTokenSource.Token);
-            CancellationToken cancellationToken = canceller.Token;
-            while (!cancellationToken.IsCancellationRequested)
+            CancellationToken token = canceller.Token;
+
+            while (!token.IsCancellationRequested)
             {
                 bool arrived = false;
 
-                await foreach (var _ in UniTaskAsyncEnumerable.EveryUpdate(PlayerLoopTiming.FixedUpdate).WithCancellation(cancellationToken))
+                await foreach (var _ in UniTaskAsyncEnumerable.EveryUpdate(PlayerLoopTiming.FixedUpdate).WithCancellation(token))
                 {
                     Vector3 position = GetMoveTarget();
                     arrived = position == currentTarget.position;
@@ -145,7 +144,7 @@ namespace Module.Gimmick.LevelGimmick
                 //目標地点に到達できたら指定時間待機
                 if (arrived)
                 {
-                    await UniTask.WaitForSeconds(stopDuration, delayTiming: PlayerLoopTiming.FixedUpdate, cancellationToken: cancellationToken);
+                    await UniTask.WaitForSeconds(stopDuration, delayTiming: PlayerLoopTiming.FixedUpdate, cancellationToken: token);
                 }
             }
         }
@@ -156,7 +155,7 @@ namespace Module.Gimmick.LevelGimmick
             Vector3 position = Vector3.Lerp(transform.position, currentTarget.position, moveSpeed / distance);
 
             //ターゲットに十分近い場合はターゲット座標までの差分を移動量とする
-            if (distance < StopThreshold)
+            if (distance < 0.01f)
             {
                 position = currentTarget.position;
             }
@@ -228,11 +227,10 @@ namespace Module.Gimmick.LevelGimmick
             }
         }
 
-        void OnDestroy()
+        private void OnDestroy()
         {
-            if (cancellationToken == null) return;
-            cancellationToken.Cancel();
-            cancellationToken.Dispose();
+            cancellationToken?.Cancel();
+            cancellationToken?.Dispose();
         }
     }
 }
