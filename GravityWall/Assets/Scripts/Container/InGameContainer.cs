@@ -40,6 +40,7 @@ namespace Container
 
             // プレイヤーの入力を受け取るプレゼンターを登録
             builder.RegisterEntryPoint<PlayerInputPresenter>();
+            builder.RegisterEntryPoint<PlayerVibrationPresenter>();
 
             // コンフィグ変更のリスナーを登録
             builder.RegisterEntryPoint<InputConfigChangedListener>();

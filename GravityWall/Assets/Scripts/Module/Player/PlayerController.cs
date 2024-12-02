@@ -27,6 +27,9 @@ namespace Module.Player
         public ReadOnlyReactiveProperty<bool> IsRotating => isRotating;
         [SerializeField] private SerializableReactiveProperty<bool> isRotating = new SerializableReactiveProperty<bool>();
 
+        public ReadOnlyReactiveProperty<float> RotationAngle => rotationAngle;
+        [SerializeField] private SerializableReactiveProperty<float> rotationAngle = new SerializableReactiveProperty<float>();
+
         public ReadOnlyReactiveProperty<bool> IsDeath => isDeath;
         [SerializeField] private SerializableReactiveProperty<bool> isDeath = new SerializableReactiveProperty<bool>();
 
@@ -133,7 +136,9 @@ namespace Module.Player
             // 重力に応じた回転
             if (!IsRotationLocked)
             {
-                isRotating.Value = playerFunction.PerformGravityRotate();
+                (bool rotating, float angle) = playerFunction.PerformGravityRotate();
+                rotationAngle.Value = angle;
+                isRotating.Value = rotating;
             }
         }
 
