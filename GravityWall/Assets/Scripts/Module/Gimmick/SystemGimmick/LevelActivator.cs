@@ -12,6 +12,8 @@ namespace Module.PlayTest
     public class LevelActivator : MonoBehaviour
     {
         [SerializeField] private bool startActive;
+        [SerializeField] private bool activateOnOpen;
+        [SerializeField] private string observeGate;
         [SerializeField] private GameObject roomObject;
         [SerializeField] private List<Gate> levelGates;
 
@@ -22,6 +24,11 @@ namespace Module.PlayTest
 
         private void Start()
         {
+            if (activateOnOpen)
+            {
+                GimmickReference.OnGimmickReferenceUpdated += OnGimmickReferenceUpdated;
+            }
+
             if (startActive)
             {
                 foreach (Gate levelGate in levelGates)
@@ -51,6 +58,25 @@ namespace Module.PlayTest
                         }
                     })
                     .AddTo(this);
+            }
+        }
+
+        private void OnGimmickReferenceUpdated(GimmickReference reference)
+        {
+            if (reference.TryGetGimmick(observeGate, out Gate gate))
+            {
+                gate.IsEnabled.Skip(1)
+                    .Subscribe(isEnabled =>
+                    {
+                        if (isEnabled)
+                        {
+                            Activate();
+                        }
+                        else
+                        {
+                            Deactivate();
+                        }
+                    });
             }
         }
 
