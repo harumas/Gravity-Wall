@@ -49,6 +49,27 @@ namespace Presentation
                 })
                 .AddTo(playerController);
 
+
+            gameInput.LookLeftSubject
+                .Subscribe(isStarted =>
+                {
+                    if (!playerController.IsDeath.CurrentValue)
+                    {
+                        cameraController.StartCoroutine(cameraController.RotateCamera(Vector3.up, 90));
+                    }
+                })
+                .AddTo(playerController);
+            gameInput.LookRightSubject
+                .Subscribe(isStarted =>
+                {
+                    if (!playerController.IsDeath.CurrentValue)
+                    {
+                        cameraController.StartCoroutine(cameraController.RotateCamera(Vector3.up, -90));
+                    }
+                })
+                .AddTo(playerController);
+
+
             gameInput.LookDelta
                 .Subscribe(lookInput =>
                 {

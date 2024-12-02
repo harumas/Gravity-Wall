@@ -21,7 +21,7 @@ namespace Module.PlayTest
             titleVirtualCamera.Priority = 0;
             if (volume.profile.TryGet<DepthOfField>(out depth))
             {
-                depth.focusDistance.value = 300;
+                depth.focusDistance.value = 200;
                 depth.focalLength.value = 200;
             }
 
