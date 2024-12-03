@@ -1,3 +1,6 @@
+using System.Media;
+using Core.Sound;
+using CoreModule.Sound;
 using Module.Player;
 using R3;
 using UnityEngine;
@@ -7,9 +10,6 @@ namespace Module.Effect.Sound
     public class PlayerSoundPlayer : MonoBehaviour
     {
         [SerializeField] private float playInterval = 0.3f;
-        [SerializeField] private AudioClip rotateClip;
-        [SerializeField] private AudioClip jumpClip;
-        [SerializeField] private AudioSource audioSource;
         [SerializeField] private PlayerController playerController;
 
         private float lastPlayTime;
@@ -26,7 +26,7 @@ namespace Module.Effect.Sound
 
                     if (isRotating)
                     {
-                        audioSource.PlayOneShot(rotateClip);
+                        SoundManager.Instance.Play(SoundKey.WallRotate, MixerType.SE);
                         lastPlayTime = Time.time;
                     }
                 })
@@ -36,7 +36,7 @@ namespace Module.Effect.Sound
                 {
                     if (isJumping)
                     {
-                        audioSource.PlayOneShot(jumpClip);
+                        SoundManager.Instance.Play(SoundKey.Jump, MixerType.SE);
                     }
                 })
                 .AddTo(this);
