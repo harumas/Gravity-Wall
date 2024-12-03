@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace Module.Gimmick
+namespace Module.Gimmick.SystemGimmick
 {
     public class GimmickReference : MonoBehaviour
     {

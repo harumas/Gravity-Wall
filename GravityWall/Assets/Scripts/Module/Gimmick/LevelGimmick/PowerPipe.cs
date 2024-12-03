@@ -27,12 +27,13 @@ namespace Module.Gimmick.LevelGimmick
             foreach (var shaderWrapper in pipeRenderers)
             {
                 float value = isOn ? 0.0f : 1.0f;
-                DOTween.To(() => value, v => value = v, value, fadeDuration)
-                    .OnUpdate(() =>
-                    {
-                        shaderWrapper.EmissionIntensity = value;
-                    });
+                DoEmission(value).OnUpdate(() => shaderWrapper.EmissionIntensity = value);
             }
+        }
+
+        private Tween DoEmission(float value)
+        {
+            return DOTween.To(() => value, v => value = v, value, fadeDuration);
         }
     }
 }

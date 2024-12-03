@@ -12,6 +12,39 @@ namespace PropertyGenerator.Generated
 	{
 		[SerializeField] private Renderer renderer;
 		private Material target;
+		private static readonly int PushRatioProperty = Shader.PropertyToID("_PushRatio");
+		private static readonly int PushTextureProperty = Shader.PropertyToID("_PushTexture");
+		private static readonly int MainColorTextureProperty = Shader.PropertyToID("_MainColorTexture");
+		private static readonly int MetallicTextureProperty = Shader.PropertyToID("_MetallicTexture");
+		private static readonly int MetallicIntensityProperty = Shader.PropertyToID("_MetallicIntensity");
+		private static readonly int SmoothnessTextureProperty = Shader.PropertyToID("_SmoothnessTexture");
+		private static readonly int SmoothnessIntensityProperty = Shader.PropertyToID("_SmoothnessIntensity");
+		private static readonly int NormalMapTextureProperty = Shader.PropertyToID("_NormalMapTexture");
+		private static readonly int NormalStrengthProperty = Shader.PropertyToID("_NormalStrength");
+		private static readonly int EmissionTextureProperty = Shader.PropertyToID("_EmissionTexture");
+		private static readonly int EmissionIntensityProperty = Shader.PropertyToID("_EmissionIntensity");
+		private static readonly int DefaultEmissionColorProperty = Shader.PropertyToID("_DefaultEmissionColor");
+		private static readonly int PushedEmissionColorProperty = Shader.PropertyToID("_PushedEmissionColor");
+		private static readonly int AOTextureProperty = Shader.PropertyToID("_AOTexture");
+		private static readonly int WorkflowModeProperty = Shader.PropertyToID("_WorkflowMode");
+		private static readonly int CastShadowsProperty = Shader.PropertyToID("_CastShadows");
+		private static readonly int ReceiveShadowsProperty = Shader.PropertyToID("_ReceiveShadows");
+		private static readonly int SurfaceProperty = Shader.PropertyToID("_Surface");
+		private static readonly int BlendProperty = Shader.PropertyToID("_Blend");
+		private static readonly int AlphaClipProperty = Shader.PropertyToID("_AlphaClip");
+		private static readonly int BlendModePreserveSpecularProperty = Shader.PropertyToID("_BlendModePreserveSpecular");
+		private static readonly int SrcBlendProperty = Shader.PropertyToID("_SrcBlend");
+		private static readonly int DstBlendProperty = Shader.PropertyToID("_DstBlend");
+		private static readonly int ZWriteProperty = Shader.PropertyToID("_ZWrite");
+		private static readonly int ZWriteControlProperty = Shader.PropertyToID("_ZWriteControl");
+		private static readonly int ZTestProperty = Shader.PropertyToID("_ZTest");
+		private static readonly int CullProperty = Shader.PropertyToID("_Cull");
+		private static readonly int AlphaToMaskProperty = Shader.PropertyToID("_AlphaToMask");
+		private static readonly int QueueOffsetProperty = Shader.PropertyToID("_QueueOffset");
+		private static readonly int QueueControlProperty = Shader.PropertyToID("_QueueControl");
+		private static readonly int unityLightmapsProperty = Shader.PropertyToID("_unityLightmaps");
+		private static readonly int unityLightmapsIndProperty = Shader.PropertyToID("_unityLightmapsInd");
+		private static readonly int unityShadowMasksProperty = Shader.PropertyToID("_unityShadowMasks");
 		
 		public PressSwitchWrapper() { }
 		
@@ -35,12 +68,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetFloat(857);
+			  return target.GetFloat(PushRatioProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetFloat(857, value);
+			  target.SetFloat(PushRatioProperty, value);
 			}
 		}
 		
@@ -49,12 +82,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetTexture(858);
+			  return target.GetTexture(PushTextureProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetTexture(858, value);
+			  target.SetTexture(PushTextureProperty, value);
 			}
 		}
 		
@@ -63,12 +96,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetTexture(796);
+			  return target.GetTexture(MainColorTextureProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetTexture(796, value);
+			  target.SetTexture(MainColorTextureProperty, value);
 			}
 		}
 		
@@ -77,12 +110,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetTexture(800);
+			  return target.GetTexture(MetallicTextureProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetTexture(800, value);
+			  target.SetTexture(MetallicTextureProperty, value);
 			}
 		}
 		
@@ -91,12 +124,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetFloat(804);
+			  return target.GetFloat(MetallicIntensityProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetFloat(804, value);
+			  target.SetFloat(MetallicIntensityProperty, value);
 			}
 		}
 		
@@ -105,12 +138,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetTexture(805);
+			  return target.GetTexture(SmoothnessTextureProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetTexture(805, value);
+			  target.SetTexture(SmoothnessTextureProperty, value);
 			}
 		}
 		
@@ -119,12 +152,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetFloat(809);
+			  return target.GetFloat(SmoothnessIntensityProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetFloat(809, value);
+			  target.SetFloat(SmoothnessIntensityProperty, value);
 			}
 		}
 		
@@ -133,12 +166,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetTexture(810);
+			  return target.GetTexture(NormalMapTextureProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetTexture(810, value);
+			  target.SetTexture(NormalMapTextureProperty, value);
 			}
 		}
 		
@@ -147,12 +180,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetFloat(449);
+			  return target.GetFloat(NormalStrengthProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetFloat(449, value);
+			  target.SetFloat(NormalStrengthProperty, value);
 			}
 		}
 		
@@ -161,12 +194,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetTexture(817);
+			  return target.GetTexture(EmissionTextureProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetTexture(817, value);
+			  target.SetTexture(EmissionTextureProperty, value);
 			}
 		}
 		
@@ -175,12 +208,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetFloat(821);
+			  return target.GetFloat(EmissionIntensityProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetFloat(821, value);
+			  target.SetFloat(EmissionIntensityProperty, value);
 			}
 		}
 		
@@ -189,12 +222,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetColor(862);
+			  return target.GetColor(DefaultEmissionColorProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetColor(862, value);
+			  target.SetColor(DefaultEmissionColorProperty, value);
 			}
 		}
 		
@@ -203,12 +236,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetColor(863);
+			  return target.GetColor(PushedEmissionColorProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetColor(863, value);
+			  target.SetColor(PushedEmissionColorProperty, value);
 			}
 		}
 		
@@ -217,12 +250,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetTexture(464);
+			  return target.GetTexture(AOTextureProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetTexture(464, value);
+			  target.SetTexture(AOTextureProperty, value);
 			}
 		}
 		
@@ -231,12 +264,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetFloat(387);
+			  return target.GetFloat(WorkflowModeProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetFloat(387, value);
+			  target.SetFloat(WorkflowModeProperty, value);
 			}
 		}
 		
@@ -245,12 +278,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetFloat(826);
+			  return target.GetFloat(CastShadowsProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetFloat(826, value);
+			  target.SetFloat(CastShadowsProperty, value);
 			}
 		}
 		
@@ -259,12 +292,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetFloat(401);
+			  return target.GetFloat(ReceiveShadowsProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetFloat(401, value);
+			  target.SetFloat(ReceiveShadowsProperty, value);
 			}
 		}
 		
@@ -273,12 +306,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetFloat(397);
+			  return target.GetFloat(SurfaceProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetFloat(397, value);
+			  target.SetFloat(SurfaceProperty, value);
 			}
 		}
 		
@@ -287,12 +320,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetFloat(398);
+			  return target.GetFloat(BlendProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetFloat(398, value);
+			  target.SetFloat(BlendProperty, value);
 			}
 		}
 		
@@ -301,12 +334,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetFloat(399);
+			  return target.GetFloat(AlphaClipProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetFloat(399, value);
+			  target.SetFloat(AlphaClipProperty, value);
 			}
 		}
 		
@@ -315,12 +348,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetFloat(400);
+			  return target.GetFloat(BlendModePreserveSpecularProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetFloat(400, value);
+			  target.SetFloat(BlendModePreserveSpecularProperty, value);
 			}
 		}
 		
@@ -329,12 +362,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetFloat(56);
+			  return target.GetFloat(SrcBlendProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetFloat(56, value);
+			  target.SetFloat(SrcBlendProperty, value);
 			}
 		}
 		
@@ -343,12 +376,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetFloat(57);
+			  return target.GetFloat(DstBlendProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetFloat(57, value);
+			  target.SetFloat(DstBlendProperty, value);
 			}
 		}
 		
@@ -357,12 +390,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetFloat(263);
+			  return target.GetFloat(ZWriteProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetFloat(263, value);
+			  target.SetFloat(ZWriteProperty, value);
 			}
 		}
 		
@@ -371,12 +404,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetFloat(827);
+			  return target.GetFloat(ZWriteControlProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetFloat(827, value);
+			  target.SetFloat(ZWriteControlProperty, value);
 			}
 		}
 		
@@ -385,12 +418,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetFloat(795);
+			  return target.GetFloat(ZTestProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetFloat(795, value);
+			  target.SetFloat(ZTestProperty, value);
 			}
 		}
 		
@@ -399,12 +432,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetFloat(378);
+			  return target.GetFloat(CullProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetFloat(378, value);
+			  target.SetFloat(CullProperty, value);
 			}
 		}
 		
@@ -413,12 +446,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetFloat(386);
+			  return target.GetFloat(AlphaToMaskProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetFloat(386, value);
+			  target.SetFloat(AlphaToMaskProperty, value);
 			}
 		}
 		
@@ -427,12 +460,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetFloat(402);
+			  return target.GetFloat(QueueOffsetProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetFloat(402, value);
+			  target.SetFloat(QueueOffsetProperty, value);
 			}
 		}
 		
@@ -441,12 +474,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetFloat(479);
+			  return target.GetFloat(QueueControlProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetFloat(479, value);
+			  target.SetFloat(QueueControlProperty, value);
 			}
 		}
 		
@@ -455,12 +488,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetTexture(403);
+			  return target.GetTexture(unityLightmapsProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetTexture(403, value);
+			  target.SetTexture(unityLightmapsProperty, value);
 			}
 		}
 		
@@ -469,12 +502,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetTexture(407);
+			  return target.GetTexture(unityLightmapsIndProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetTexture(407, value);
+			  target.SetTexture(unityLightmapsIndProperty, value);
 			}
 		}
 		
@@ -483,12 +516,12 @@ namespace PropertyGenerator.Generated
 			get
 			{
 			  CheckPersistentMaterial();
-			  return target.GetTexture(411);
+			  return target.GetTexture(unityShadowMasksProperty);
 			}
 			set
 			{
 			  CheckPersistentMaterial();
-			  target.SetTexture(411, value);
+			  target.SetTexture(unityShadowMasksProperty, value);
 			}
 		}
 	}

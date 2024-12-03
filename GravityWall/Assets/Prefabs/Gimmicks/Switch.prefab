@@ -74,8 +74,10 @@ MonoBehaviour:
   initializeIsOn: 0
   targetTags:
   - BatteryBox
-  meshRenderer: {fileID: 813680178788835825}
-  RayMeshRenderer: {fileID: 6715214337785713254}
+  batteryStandShaderWrapper:
+    renderer: {fileID: 813680178788835825}
+  rayShaderWrapper:
+    renderer: {fileID: 6715214337785713254}
 --- !u!1001 &1049098172857762728
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -34,25 +34,26 @@ namespace Module.Gimmick.LevelGimmick
             // プレイヤーの上方向にジャンプ力を与える
             pushable.AddForce(transform.up * jumpPower, ForceMode.VelocityChange, jumpingGravity, false);
 
-            float jumpOn = -1;
+            // ジャンプボードを膨らませる → 元に戻す
+            DoBounce().OnComplete(DoReverse);
+        }
 
-            // 膨らませる
-            DOTween.To(() => jumpOn, (value) => jumpOn = value, bounceHeight, bounceDuration)
+        private Tween DoBounce()
+        {
+            float height = boardShaderWrapper.JumpOn;
+            
+            return DOTween.To(() => height, value => height = value, bounceHeight, bounceDuration)
                 .SetEase(Ease.OutBounce)
-                .OnUpdate(() =>
-                {
-                    boardShaderWrapper.JumpOn = jumpOn;
-                })
-                // 膨らみきったらもとに戻る
-                .OnComplete(() =>
-                {
-                    DOTween.To(() => jumpOn, (value) => jumpOn = value, reverseHeight, reverseDuration)
-                        .SetEase(Ease.OutBounce)
-                        .OnUpdate(() =>
-                        {
-                            boardShaderWrapper.JumpOn = jumpOn;
-                        });
-                });
+                .OnUpdate(() => { boardShaderWrapper.JumpOn = height; });
+        }
+
+        private void DoReverse()
+        {
+            float height = boardShaderWrapper.JumpOn;
+            
+            DOTween.To(() => height, value => height = value, reverseHeight, reverseDuration)
+                .SetEase(Ease.OutBounce)
+                .OnUpdate(() => { boardShaderWrapper.JumpOn = height; });
         }
     }
 }

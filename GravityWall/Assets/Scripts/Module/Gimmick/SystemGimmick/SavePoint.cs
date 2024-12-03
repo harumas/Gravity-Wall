@@ -1,11 +1,8 @@
 using System;
-using Application.Sequence;
 using Constants;
-using Module.Gravity;
-using R3;
 using UnityEngine;
 
-namespace Module.Gimmick
+namespace Module.Gimmick.SystemGimmick
 {
     /// <summary>
     /// リスポーン情報を格納する構造体

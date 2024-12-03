@@ -1,20 +1,20 @@
 using System;
 using Constants;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-namespace Application.Sequence
+namespace Module.Gimmick.SystemGimmick
 {
     public class GameClearPoint : MonoBehaviour
     {
         public event Action OnClear;
-        private bool firstTouch = false;
+        private bool isFirstTouch = true;
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!firstTouch && other.CompareTag(Tag.Player))
+            if (isFirstTouch && other.CompareTag(Tag.Player))
             {
                 Clear();
+                isFirstTouch = false;
             }
         }
 

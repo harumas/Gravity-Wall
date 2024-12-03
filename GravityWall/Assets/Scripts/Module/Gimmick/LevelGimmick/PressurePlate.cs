@@ -1,12 +1,13 @@
 using System;
 using System.Linq;
 using System.Threading;
+using Core.Sound;
 using CoreModule.Helper;
+using CoreModule.Sound;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using PropertyGenerator.Generated;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Module.Gimmick.LevelGimmick
 {
@@ -23,8 +24,6 @@ namespace Module.Gimmick.LevelGimmick
         [SerializeField, Tag] private string[] targetTags;
         [SerializeField] private PressSwitchWrapper shaderWrapper;
         [SerializeField] private OnTriggerEventBridge triggerEventBridge;
-        [SerializeField] private UnityEvent onPressed;
-
         [SerializeField, Header("当たり判定のRigidBody")] private Rigidbody buttonRig;
         [SerializeField, Header("押されたときに当たり判定を動かすオフセット")] private float collisionMoveOffset;
         [SerializeField, Header("押す時間")] private float pushDuration;
@@ -82,12 +81,12 @@ namespace Module.Gimmick.LevelGimmick
             if (doEffect)
             {
                 await PushButtonEffect();
+                SoundManager.Instance.Play(SoundKey.Switch, MixerType.SE);
             }
 
             state = State.Pushed;
 
             isEnabled.Value = true;
-            onPressed.Invoke();
         }
 
         public override void Disable(bool doEffect = true)
@@ -104,15 +103,16 @@ namespace Module.Gimmick.LevelGimmick
 
         private async UniTask PushButtonEffect()
         {
-            // 押し始めは少し遅延する
+            // 押し始めは遅延する
             await UniTask.Delay(TimeSpan.FromSeconds(pushDelay), cancellationToken: pushCanceller.Token);
 
             state = State.Changing;
 
-            Vector3 position = buttonRig.position + transform.up * collisionMoveOffset;
-
-            // 演出の遷移
+            // 見た目の状態の遷移
             DOTween.To(() => shaderWrapper.PushRatio, v => shaderWrapper.PushRatio = v, 1.0f, pushDuration);
+            
+            // ボタンの当たり判定を下げる
+            Vector3 position = buttonRig.position + transform.up * collisionMoveOffset;
             buttonRig.DoMove(position, pushDuration);
 
             await UniTask.Delay(TimeSpan.FromSeconds(pushDuration));

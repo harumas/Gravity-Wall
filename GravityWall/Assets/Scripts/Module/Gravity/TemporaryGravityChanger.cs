@@ -1,13 +1,14 @@
-﻿using System;
-using Constants;
-using Module.Gravity;
+﻿using Constants;
 using UnityEngine;
 
-namespace Module.Gimmick.LevelGimmick
+namespace Module.Gravity
 {
+    /// <summary>
+    /// 触れたプレイヤーの重力を一時的に変更するクラス
+    /// </summary>
     public class TemporaryGravityChanger : MonoBehaviour
     {
-        [SerializeField] private float temporaryGravityMultiplier;
+        [SerializeField,Header("重力の変更倍率")] private float temporaryGravityMultiplier;
 
         private bool isPlayerEnter;
         private LocalGravity targetGravity;
@@ -31,6 +32,7 @@ namespace Module.Gimmick.LevelGimmick
 
         private void FixedUpdate()
         {
+            // プレイヤーが触れていたら重力を変更
             if (isPlayerEnter)
             {
                 targetGravity.SetMultiplierAtFrame(temporaryGravityMultiplier);

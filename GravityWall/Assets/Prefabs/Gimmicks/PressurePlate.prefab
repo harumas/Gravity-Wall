@@ -150,23 +150,12 @@ MonoBehaviour:
   gimmickPath: PressurePlate
   targetTags:
   - Player
-  meshRenderer: {fileID: 967837767122650440}
+  shaderWrapper:
+    renderer: {fileID: 967837767122650440}
   triggerEventBridge: {fileID: 1403652908010866293}
-  onEvent:
+  onPressed:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8780117713062738434}
-        m_TargetAssemblyTypeName: Module.Effect.Sound.PressurePlateSoundPlayer, Module.Effect
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   buttonRig: {fileID: 6988918092831114249}
   collisionMoveOffset: -0.4
   pushDuration: 0.1

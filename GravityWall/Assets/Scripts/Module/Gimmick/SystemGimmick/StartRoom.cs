@@ -1,75 +1,72 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using Constants;
-using Module.Gimmick;
 using Module.Gimmick.LevelGimmick;
-using Module.Gimmick.SystemGimmick;
-using Module.PlayTest;
 using R3;
 using UnityEngine;
 
-public class StartRoom : MonoBehaviour
+namespace Module.Gimmick.SystemGimmick
 {
-    [SerializeField] private AdditiveLevelLoadTrigger loadTrigger;
-    [SerializeField] private string observeLevelName;
-    [SerializeField] private Gate roomGate;
-    [SerializeField] private ObjectHider objectHider;
-    [SerializeField] private GameObject roomObject;
-
-    public bool IsPlayerEnter => isPlayerEnter;
-    private bool isPlayerEnter;
-
-    private void Start()
+    public class StartRoom : MonoBehaviour
     {
-        loadTrigger.OnSceneLoaded += OnSceneLoaded;
+        [SerializeField] private AdditiveLevelLoadTrigger loadTrigger;
+        [SerializeField] private string observeLevelName;
+        [SerializeField] private Gate roomGate;
+        [SerializeField] private ObjectHider objectHider;
+        [SerializeField] private GameObject roomObject;
 
-        roomGate.IsEnabled.Skip(1).Subscribe(isEnable =>
+        public bool IsPlayerEnter => isPlayerEnter;
+        private bool isPlayerEnter;
+
+        private void Start()
         {
-            if (!isEnable && !isPlayerEnter)
+            loadTrigger.OnSceneLoaded += OnSceneLoaded;
+
+            roomGate.IsEnabled.Skip(1).Subscribe(isEnable =>
             {
-                roomObject.SetActive(false);
-                objectHider.Enable();
-            }
-        });
-    }
-
-    private void OnSceneLoaded()
-    {
-        var observeLevel = GameObject.FindGameObjectsWithTag(Tag.LevelSegment)
-            .FirstOrDefault(obj => obj.name == observeLevelName);
-
-        if (observeLevel == null)
-        {
-            Debug.LogError($"{nameof(observeLevelName)}: {observeLevelName}が存在しません");
-            return;
+                if (!isEnable && !isPlayerEnter)
+                {
+                    roomObject.SetActive(false);
+                    objectHider.Enable();
+                }
+            });
         }
 
-        var levelActivator = observeLevel.GetComponent<LevelActivator>();
-        levelActivator.OnActivateChanged += isActive =>
+        private void OnSceneLoaded()
         {
-            if (!isActive && !isPlayerEnter)
+            var observeLevel = GameObject.FindGameObjectsWithTag(Tag.LevelSegment)
+                .FirstOrDefault(obj => obj.name == observeLevelName);
+
+            if (observeLevel == null)
             {
-                objectHider.Disable();
-                roomGate.gameObject.SetActive(false);
+                Debug.LogError($"{nameof(observeLevelName)}: {observeLevelName}が存在しません");
+                return;
             }
-        };
-    }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag(Tag.Player))
-        {
-            isPlayerEnter = true;
+            var levelActivator = observeLevel.GetComponent<LevelActivator>();
+            levelActivator.OnActivateChanged += isActive =>
+            {
+                if (!isActive && !isPlayerEnter)
+                {
+                    objectHider.Disable();
+                    roomGate.gameObject.SetActive(false);
+                }
+            };
         }
-    }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag(Tag.Player))
+        private void OnTriggerEnter(Collider other)
         {
-            isPlayerEnter = false;
+            if (other.CompareTag(Tag.Player))
+            {
+                isPlayerEnter = true;
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag(Tag.Player))
+            {
+                isPlayerEnter = false;
+            }
         }
     }
 }

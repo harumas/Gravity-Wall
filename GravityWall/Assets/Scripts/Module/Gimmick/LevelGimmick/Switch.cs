@@ -9,11 +9,12 @@ namespace Module.Gimmick.LevelGimmick
 {
     public class Switch : GimmickObject
     {
-        [SerializeField] private bool initializeIsOn = false;
-        [SerializeField, Tag] private List<string> targetTags;
+        [SerializeField, Header("最初に有効化するか")] private bool initializeIsOn = false;
+        [SerializeField, Tag, Header("接地を検出する対象のタグ")] private List<string> targetTags;
         [SerializeField] private EmissionObjectWrapper batteryStandShaderWrapper;
         [SerializeField] private PowerCubeLightShaderWrapper rayShaderWrapper;
 
+        // 押しているオブジェクトの数
         private int pushingCount = 0;
 
         private void Start()
@@ -30,6 +31,7 @@ namespace Module.Gimmick.LevelGimmick
 
         private void OnTriggerEnter(Collider collider)
         {
+            // 対象のタグが触れたらカウントする
             if (targetTags.Any(tag => collider.CompareTag(tag)))
             {
                 pushingCount++;
@@ -39,10 +41,12 @@ namespace Module.Gimmick.LevelGimmick
 
         private void OnTriggerExit(Collider collider)
         {
+            // 対象のタグが触れたらカウントする
             if (targetTags.Any(tag => collider.CompareTag(tag)))
             {
                 pushingCount--;
 
+                // 何も触れてなかったら無効化
                 if (pushingCount == 0)
                 {
                     Disable();
@@ -52,7 +56,11 @@ namespace Module.Gimmick.LevelGimmick
 
         public override void Enable(bool doEffect = true)
         {
-            SoundManager.Instance.Play(SoundKey.Switch, MixerType.SE);
+            if (doEffect)
+            {
+                SoundManager.Instance.Play(SoundKey.Switch, MixerType.SE);
+            }
+
             batteryStandShaderWrapper.EmissionIntensity = 1.0f;
             rayShaderWrapper.PowerOn = 0f;
             isEnabled.Value = true;

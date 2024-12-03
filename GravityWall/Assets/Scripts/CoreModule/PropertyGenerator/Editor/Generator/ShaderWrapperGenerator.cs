@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -38,20 +39,28 @@ namespace PropertyGenerator
                     codeBuilder.NewLine($"[SerializeField] private {nameof(Renderer)} renderer;");
                     codeBuilder.NewLine($"private {nameof(Material)} target;");
 
-                    //Materialのインスタンスを登録するコンストラクタを生成する
-                    AddConstructor(className, codeBuilder);
-
-                    AddMaterialCreateMethod(codeBuilder);
-
-                    //Shaderのプロパティを生成する
+                    var properties = new List<(string name, ShaderPropertyType type)>();
                     for (int i = 0; i < shader.GetPropertyCount(); i++)
                     {
-                        //アンダーバーがついてたら省く
-                        string name = shader.GetPropertyName(i).Replace("_", String.Empty);
-                        int id = shader.GetPropertyNameId(i);
-                        ShaderPropertyType type = shader.GetPropertyType(i);
+                        properties.Add((shader.GetPropertyName(i).Replace("_", String.Empty), shader.GetPropertyType(i)));
+                    }
+                    
+                    codeBuilder.NewLine();
 
-                        AddParameter(name, id, type, codeBuilder);
+                    // Shaderのプロパティを生成する
+                    foreach ((string name, ShaderPropertyType type) in properties)
+                    {
+                        AddProperty(name, codeBuilder);
+                    }
+
+                    // Materialのインスタンスを登録するコンストラクタを生成する
+                    AddConstructor(className, codeBuilder);
+                    AddMaterialCreateMethod(codeBuilder);
+
+                    // クラスのプロパティを作成
+                    foreach ((string name, ShaderPropertyType type) in properties)
+                    {
+                        AddParameter(name, type, codeBuilder);
                     }
                 }
             }
@@ -85,7 +94,13 @@ namespace PropertyGenerator
             builder.NewLine("}");
         }
 
-        private static void AddParameter(string name, int id, ShaderPropertyType type, CodeBuilder builder)
+
+        private static void AddProperty(string name, CodeBuilder builder)
+        {
+            builder.NewLine($"private static readonly int {name}Property = Shader.PropertyToID(\"_{name}\");");
+        }
+
+        private static void AddParameter(string name, ShaderPropertyType type, CodeBuilder builder)
         {
             string methodSuffix = GetMethodSuffix(type);
             string propertyType = GetPropertyType(type);
@@ -97,13 +112,13 @@ namespace PropertyGenerator
                 builder.NewLine("get");
                 builder.NewLine("{");
                 builder.NewLine("  CheckPersistentMaterial();");
-                builder.NewLine($"  return target.Get{methodSuffix}({id});");
+                builder.NewLine($"  return target.Get{methodSuffix}({name}Property);");
                 builder.NewLine("}");
 
                 builder.NewLine("set");
                 builder.NewLine("{");
                 builder.NewLine("  CheckPersistentMaterial();");
-                builder.NewLine($"  target.Set{methodSuffix}({id}, value);");
+                builder.NewLine($"  target.Set{methodSuffix}({name}Property, value);");
                 builder.NewLine("}");
             }
         }
