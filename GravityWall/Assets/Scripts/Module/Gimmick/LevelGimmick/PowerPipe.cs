@@ -1,29 +1,37 @@
+using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
+using PropertyGenerator.Generated;
 using UnityEngine;
 
 namespace Module.Gimmick.LevelGimmick
 {
     public class PowerPipe : MonoBehaviour
     {
-        private MeshRenderer[] meshRenderers;
-        private static readonly int emissionIntensity = Shader.PropertyToID("_EmissionIntensity");
-        
+        [SerializeField, Header("動力演出の変化時間")] private float fadeDuration;
+        private PowerPipeShaderWrapper[] pipeRenderers;
+
         void Start()
         {
-            meshRenderers = GetComponentsInChildren<MeshRenderer>();
-            OnPowerPipe(false);
+            // MeshRendererからシェーダーへの操作ラッパーを取得する
+            pipeRenderers = GetComponentsInChildren<MeshRenderer>()
+                .Select(renderer => new PowerPipeShaderWrapper(renderer.material))
+                .ToArray();
+
+            DoPowerEffect(false);
         }
 
-        public void OnPowerPipe(bool isOn)
+        public void DoPowerEffect(bool isOn)
         {
-            foreach (var mesh in meshRenderers)
+            // 動力の変更演出
+            foreach (var shaderWrapper in pipeRenderers)
             {
                 float value = isOn ? 0.0f : 1.0f;
-                DOTween.To(() => value, (v) => value = v, isOn ? 1.0f : 0.0f, 0.3f)
-                .OnUpdate(() =>
-                {
-                    mesh.material.SetFloat(emissionIntensity, value);
-                });
+                DOTween.To(() => value, v => value = v, value, fadeDuration)
+                    .OnUpdate(() =>
+                    {
+                        shaderWrapper.EmissionIntensity = value;
+                    });
             }
         }
     }

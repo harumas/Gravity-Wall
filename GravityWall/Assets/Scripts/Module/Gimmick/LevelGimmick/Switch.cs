@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.Sound;
 using CoreModule.Sound;
+using PropertyGenerator.Generated;
 using UnityEngine;
 
 namespace Module.Gimmick.LevelGimmick
@@ -10,9 +11,8 @@ namespace Module.Gimmick.LevelGimmick
     {
         [SerializeField] private bool initializeIsOn = false;
         [SerializeField, Tag] private List<string> targetTags;
-        [SerializeField] private MeshRenderer meshRenderer, RayMeshRenderer;
-        private static readonly int emissionIntensity = Shader.PropertyToID("_EmissionIntensity");
-        private static readonly int powerOn = Shader.PropertyToID("_PowerOn");
+        [SerializeField] private EmissionObjectWrapper batteryStandShaderWrapper;
+        [SerializeField] private PowerCubeLightShaderWrapper rayShaderWrapper;
 
         private int pushingCount = 0;
 
@@ -53,16 +53,15 @@ namespace Module.Gimmick.LevelGimmick
         public override void Enable(bool doEffect = true)
         {
             SoundManager.Instance.Play(SoundKey.Switch, MixerType.SE);
-            meshRenderer.material.SetFloat(emissionIntensity, 1.0f);
-            RayMeshRenderer.material.SetInt(powerOn, 0);
+            batteryStandShaderWrapper.EmissionIntensity = 1.0f;
+            rayShaderWrapper.PowerOn = 0f;
             isEnabled.Value = true;
         }
 
         public override void Disable(bool doEffect = true)
         {
-            //offEvent.Invoke();
-            meshRenderer.material.SetFloat(emissionIntensity, 0f);
-            RayMeshRenderer.material.SetInt(powerOn, 1);
+            batteryStandShaderWrapper.EmissionIntensity = 0f;
+            rayShaderWrapper.PowerOn = 1f;
             isEnabled.Value = false;
         }
 

@@ -18,14 +18,12 @@ namespace Module.Gimmick.LevelGimmick
         [SerializeField, Header("移動速度")] private float moveSpeed;
         [SerializeField, Header("目標地点で待機する時間")] private float stopDuration;
         [SerializeField, Header("引っかかりを待つ時間")] private float reverseDuration;
-        [SerializeField, Header("最初から動かすか")] private bool enableOnAwake = true;
-        [SerializeField, Header("動力を検知するするスイッチ")] private GimmickObject[] observedSwitches;
-        [SerializeField, Header("最低いくつの動力が入ったら作動するか")] private int switchMaxCount = 1;
+        [SerializeField, Header("動力管理")] private PowerObserver powerObserver;
         [SerializeField, ReadOnly, Header("触れているコライダーの数")] private int contactCount;
         
-        private int switchCount = 0;
-        private CancellationTokenSource cTokenSource;
         private Rigidbody rigBody;
+        
+        private CancellationTokenSource cTokenSource;
         private Vector3 previousTargetPosition;
         private Vector3 previousPosition;
         private Vector3 moveDelta;
@@ -56,32 +54,8 @@ namespace Module.Gimmick.LevelGimmick
 
         private void Start()
         {
-            foreach (GimmickObject gimmick in observedSwitches)
-            {
-                gimmick.IsEnabled.Skip(1).Subscribe(UpdateMoveState).AddTo(this);
-            }
-
-            if (enableOnAwake)
-            {
-                Enable();
-            }
+            powerObserver.StartObserve(this);
         }
-
-        private void UpdateMoveState(bool switchEnabled)
-        {
-            switchCount += switchEnabled ? 1 : -1;
-            bool isMove = switchCount >= switchMaxCount;
-
-            if (isMove)
-            {
-                Enable();
-            }
-            else
-            {
-                Disable();
-            }
-        }
-
 
         public override void Enable(bool doEffect = true)
         {

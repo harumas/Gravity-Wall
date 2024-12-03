@@ -57,7 +57,7 @@ namespace Module.Gimmick.LevelGimmick
 
             foreach (var pipe in powerPipes)
             {
-                pipe.OnPowerPipe(true);
+                pipe.DoPowerEffect(true);
             }
 
             isEnabled.Value = true;
