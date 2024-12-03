@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Module.Gimmick
 {
-    public class JustOnceGimmick : MonoBehaviour
+    public class JustOnceGate : MonoBehaviour
     {
         [SerializeField] private Gate targetGate;
         [SerializeField] private LevelActivator levelActivator;
