@@ -13,8 +13,8 @@ namespace Module.PlayTest
     {
         [SerializeField] private bool startActive;
         [SerializeField] private bool activateOnOpen;
-        [SerializeField] private GameObject roomObject;
         [SerializeField] private string observeGate;
+        [SerializeField] private GameObject roomObject;
         [SerializeField] private List<Gate> levelGates;
 
         private bool isPlayerEnter;
