@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Constants;
@@ -21,6 +22,7 @@ namespace Module.PlayTest
 
         public bool IsPlayerEnter => isPlayerEnter;
         public bool StartActive => startActive;
+        public event Action<bool> OnActivateChanged;
 
         private void Start()
         {
@@ -91,27 +93,33 @@ namespace Module.PlayTest
             {
                 levelGate.gameObject.SetActive(true);
             }
+
+            OnActivateChanged?.Invoke(true);
         }
 
         public void Deactivate()
         {
             bool allDisabled = levelGates.All(g => !g.IsEnabled.CurrentValue);
 
-            if (allDisabled && !isPlayerEnter)
+            if (!allDisabled || isPlayerEnter)
             {
-                if (roomObject != null)
-                {
-                    roomObject.SetActive(false);
-                }
+                return;
+            }
 
-                foreach (Gate levelGate in levelGates)
+            if (roomObject != null)
+            {
+                roomObject.SetActive(false);
+            }
+
+            foreach (Gate levelGate in levelGates)
+            {
+                if (!levelGate.IsUsing)
                 {
-                    if (!levelGate.IsUsing)
-                    {
-                        levelGate.gameObject.SetActive(false);
-                    }
+                    levelGate.gameObject.SetActive(false);
                 }
             }
+
+            OnActivateChanged?.Invoke(false);
         }
 
         private void OnTriggerEnter(Collider other)

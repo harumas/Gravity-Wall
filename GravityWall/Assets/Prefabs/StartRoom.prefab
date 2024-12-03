@@ -10305,7 +10305,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 6232
+  m_VersionIndex: 6235
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -10777,7 +10777,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 5195
+  m_VersionIndex: 5198
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -10891,8 +10891,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4006960892183065113}
-  - component: {fileID: 7399867143423531959}
   - component: {fileID: 1344291759879921824}
+  - component: {fileID: 7221102126815033446}
   m_Layer: 10
   m_Name: StartRoom
   m_TagString: LevelSegment
@@ -10917,24 +10917,6 @@ Transform:
   - {fileID: 1076210293209386422}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7399867143423531959
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3804030273450179625}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ffdfed186bc7f401bb3fff98844ff62d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startActive: 1
-  activateOnOpen: 0
-  observeGate: 
-  roomObject: {fileID: 1101404861598768641}
-  levelGates:
-  - {fileID: 9055640233669362045}
 --- !u!65 &1344291759879921824
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10956,6 +10938,23 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 24.741148, y: 17.166027, z: 24.475082}
   m_Center: {x: -0.8368864, y: -5.04994, z: 0.62177277}
+--- !u!114 &7221102126815033446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3804030273450179625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1695a0725fcea604e8c3984986dad813, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loadTrigger: {fileID: 8674282475239134927}
+  observeLevelName: LevelBreak
+  roomGate: {fileID: 9055640233669362045}
+  objectHider: {fileID: 6683784692189277982}
+  roomObject: {fileID: 1101404861598768641}
 --- !u!1 &3956793685298772821
 GameObject:
   m_ObjectHideFlags: 0
@@ -10968,7 +10967,7 @@ GameObject:
   - component: {fileID: 6099581072862031417}
   - component: {fileID: 8674282475239134927}
   m_Layer: 10
-  m_Name: Cube
+  m_Name: AdditiveLevelLoader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11490,6 +11489,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3842693573237709230}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6683784692189277982 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7607265530484897456, guid: 7e317563c594d4fe787b60604ecdfd7c,
+    type: 3}
+  m_PrefabInstance: {fileID: 3842693573237709230}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee7754dc2b1c4e442af2d966e9cd8ac0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &9055640233669362045 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5260175374949259475, guid: 7e317563c594d4fe787b60604ecdfd7c,
@@ -11514,6 +11525,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Switch
+      objectReference: {fileID: 0}
+    - target: {fileID: 1173814149542805540, guid: 0f395e5f4315144c2ae44e454977f80f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 1299225949561006302, guid: 0f395e5f4315144c2ae44e454977f80f,
         type: 3}
@@ -11551,6 +11567,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8240350466346158261, guid: bdfc19d17a5524a4da4fdaefbd7fa71b,
         type: 3}
+    - target: {fileID: 5058043401232741299, guid: 0f395e5f4315144c2ae44e454977f80f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 5058043401232741299, guid: 0f395e5f4315144c2ae44e454977f80f,
         type: 3}
       propertyPath: m_IsActive
@@ -11653,7 +11674,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 624629796947512473, guid: 0f395e5f4315144c2ae44e454977f80f,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1117436804568218792}
+      addedObject: {fileID: 8988657281272356126}
   m_SourcePrefab: {fileID: 100100000, guid: 0f395e5f4315144c2ae44e454977f80f, type: 3}
 --- !u!4 &4270485703384841654 stripped
 Transform:
@@ -11679,7 +11700,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 6487128978211807923}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1117436804568218792
+--- !u!114 &8988657281272356126
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -11688,8 +11709,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 5957637865429757482}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf56b750bd086aa4c8536fe4be10c34e, type: 3}
+  m_Script: {fileID: 11500000, guid: 9159d332981a4569bd35b4ff12534350, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   targetGate: {fileID: 9055640233669362045}
-  levelActivator: {fileID: 7399867143423531959}
+  startRoom: {fileID: 7221102126815033446}
