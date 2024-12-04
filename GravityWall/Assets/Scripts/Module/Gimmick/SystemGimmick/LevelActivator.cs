@@ -8,18 +8,30 @@ using UnityEngine;
 
 namespace Module.Gimmick.SystemGimmick
 {
+    /// <summary>
+    /// 部屋の表示を管理するクラス
+    /// </summary>
     public class LevelActivator : MonoBehaviour
     {
-        [SerializeField] private bool startActive;
-        [SerializeField] private bool activateOnOpen;
-        [SerializeField] private string observeGate;
-        [SerializeField] private GameObject roomObject;
-        [SerializeField] private List<Gate> levelGates;
+        [SerializeField, Header("部屋の本体オブジェクト")] private GameObject roomObject;
+        [SerializeField, Header("部屋に所属するゲート")] private List<Gate> levelGates;
+        [SerializeField, Header("開始時に部屋を有効化するか")] private bool startActive;
+        [SerializeField, Header("入室ゲートの参照")] private string observeGate;
+        [SerializeField, Header("入室ゲートを元に有効化するか")] private bool activateOnOpen;
 
-        private bool isPlayerEnter;
+        /// <summary>
+        /// プレイヤーが入室しているか
+        /// </summary>
+        public bool IsPlayerEnter { get; private set; }
 
-        public bool IsPlayerEnter => isPlayerEnter;
+        /// <summary>
+        /// 開始時に部屋を有効化するか
+        /// </summary>
         public bool StartActive => startActive;
+
+        /// <summary>
+        /// 有効状態が変化した際に呼ばれるイベント
+        /// </summary>
         public event Action<bool> OnActivateChanged;
 
         private void Start()
@@ -31,33 +43,14 @@ namespace Module.Gimmick.SystemGimmick
 
             if (startActive)
             {
-                foreach (Gate levelGate in levelGates)
-                {
-                    levelGate.UsingCount++;
-                }
+                IncrementGateUsingCount();
+            }
 
-                Activate();
-            }
-            else
-            {
-                Deactivate();
-            }
+            SetActivate(startActive);
 
             foreach (Gate gate in levelGates)
             {
-                gate.IsEnabled.Skip(1)
-                    .Subscribe(isEnabled =>
-                    {
-                        if (isEnabled)
-                        {
-                            Activate();
-                        }
-                        else
-                        {
-                            Deactivate();
-                        }
-                    })
-                    .AddTo(this);
+                gate.IsEnabled.Skip(1).Subscribe(SetActivate).AddTo(gate);
             }
         }
 
@@ -65,18 +58,19 @@ namespace Module.Gimmick.SystemGimmick
         {
             if (reference.TryGetGimmick(observeGate, out Gate gate))
             {
-                gate.IsEnabled.Skip(1)
-                    .Subscribe(isEnabled =>
-                    {
-                        if (isEnabled)
-                        {
-                            Activate();
-                        }
-                        else
-                        {
-                            Deactivate();
-                        }
-                    });
+                gate.IsEnabled.Skip(1).Subscribe(SetActivate).AddTo(gate);
+            }
+        }
+
+        public void SetActivate(bool isActivate)
+        {
+            if (isActivate)
+            {
+                Activate();
+            }
+            else
+            {
+                Deactivate();
             }
         }
 
@@ -99,7 +93,7 @@ namespace Module.Gimmick.SystemGimmick
         {
             bool allDisabled = levelGates.All(g => !g.IsEnabled.CurrentValue);
 
-            if (!allDisabled || isPlayerEnter)
+            if (!allDisabled || IsPlayerEnter)
             {
                 return;
             }
@@ -124,14 +118,11 @@ namespace Module.Gimmick.SystemGimmick
         {
             if (other.CompareTag(Tag.Player))
             {
-                isPlayerEnter = true;
+                IsPlayerEnter = true;
 
                 if (!startActive)
                 {
-                    foreach (Gate levelGate in levelGates)
-                    {
-                        levelGate.UsingCount++;
-                    }
+                    IncrementGateUsingCount();
                 }
 
                 startActive = false;
@@ -142,12 +133,24 @@ namespace Module.Gimmick.SystemGimmick
         {
             if (other.CompareTag(Tag.Player))
             {
-                isPlayerEnter = false;
+                IsPlayerEnter = false;
+                DecrementGateUsingCount();
+            }
+        }
 
-                foreach (Gate gate in levelGates)
-                {
-                    gate.UsingCount--;
-                }
+        private void IncrementGateUsingCount()
+        {
+            foreach (Gate gate in levelGates)
+            {
+                gate.UsingCount++;
+            }
+        }
+
+        private void DecrementGateUsingCount()
+        {
+            foreach (Gate gate in levelGates)
+            {
+                gate.UsingCount--;
             }
         }
     }
