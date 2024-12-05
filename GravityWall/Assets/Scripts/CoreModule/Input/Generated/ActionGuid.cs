@@ -20,8 +20,6 @@ namespace CoreModule.Input
        public readonly Guid Look = new Guid("a12e4f6d-2482-46a4-af46-87f68f3332db");
        public readonly Guid Hold = new Guid("131b776c-a49a-4470-92b3-546b35725ce8");
        public readonly Guid CameraRotate = new Guid("14bcd41f-f822-4225-9f98-6afccf018761");
-       public readonly Guid LookRight = new Guid("0c40ac36-0ad6-400a-bfb4-7bf19c9af2d7");
-       public readonly Guid LookLeft = new Guid("765d7c1e-5847-4210-9555-89454f830244");
     }
 
     public class UI

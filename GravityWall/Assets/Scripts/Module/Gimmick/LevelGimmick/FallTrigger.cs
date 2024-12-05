@@ -16,10 +16,24 @@ namespace Module.Gimmick.LevelGimmick
 
         [SerializeField] private Volume volume;
         [SerializeField] private CinemachineVirtualCamera cinemachine;
+        [SerializeField] private UniversalRendererData rendererData;
 
         bool isPlayerEnter;
         private LocalGravity targetGravity;
-        private MotionBlur blur;
+        private ScriptableRendererFeature feature;
+
+        private readonly string radialBlurFeatureName = "RadialBlurFeature";
+
+        private void Awake()
+        {
+            feature = rendererData.rendererFeatures.Find(f => f.name == radialBlurFeatureName);
+            if (feature != null)
+            {
+                feature.SetActive(false);
+            }
+        }
+
+        private int cameraHighPriority = 20;
         private void OnTriggerExit(Collider other)
         {
             if (other.gameObject.CompareTag(Tag.Player))
@@ -36,23 +50,24 @@ namespace Module.Gimmick.LevelGimmick
                     other.GetComponentInChildren<Animator>().SetInteger("FallIndex", 1);
                     other.GetComponent<PlayerController>().Lock();
 
-                    if (volume.profile.TryGet<MotionBlur>(out blur))
+                    if (feature != null)
                     {
-                        blur.active = true;
+                        feature.SetActive(true);
                     }
 
-                    cinemachine.Priority = 20;
+                    cinemachine.Priority = cameraHighPriority;
 
                     isPlayerEnter = true;
                 }
             }
         }
 
+        private readonly float GravityScale = 20;
         private void FixedUpdate()
         {
             if (isPlayerEnter)
             {
-                targetGravity.SetMultiplierAtFrame(20);
+                targetGravity.SetMultiplierAtFrame(GravityScale);
             }
         }
 

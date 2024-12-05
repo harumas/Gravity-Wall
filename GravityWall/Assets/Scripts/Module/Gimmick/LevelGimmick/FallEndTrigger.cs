@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
 using Constants;
 using Module.Player;
@@ -14,25 +12,41 @@ namespace Module.Gimmick
         [SerializeField] private CinemachineVirtualCamera cinemachine;
         [SerializeField] private Volume volume;
         [SerializeField] private GameObject fallTrigger;
+        [SerializeField] private UniversalRendererData rendererData;
+        private ScriptableRendererFeature feature;
+        private readonly string blurFeatureName = "RadialBlurFeature";
 
-        private MotionBlur blur;
+        private void Start()
+        {
+            feature = rendererData.rendererFeatures.Find(f => f.name == blurFeatureName);
+            if (feature != null)
+            {
+                feature.SetActive(false);
+            }
+        }
+
+        private int minCameraPriority = 0;
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag(Tag.Player))
             {
-                cinemachine.Priority = 0;
+                cinemachine.Priority = minCameraPriority;
 
-                if (volume.profile.TryGet<MotionBlur>(out blur))
+                if (feature != null)
                 {
-                    blur.active = false;
+                    feature.SetActive(false);
                 }
 
                 other.GetComponent<GravitySwitcher>().Enable();
                 other.GetComponentInChildren<Animator>().SetInteger("FallIndex", 2);
-                other.GetComponent<PlayerController>().Unlock();
-
+                UnlockPlayerMove(other.GetComponent<PlayerController>());
                 fallTrigger.SetActive(false);
             }
+        }
+
+        void UnlockPlayerMove(PlayerController player)
+        {
+            player.Unlock();
         }
     }
 }

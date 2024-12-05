@@ -30,32 +30,35 @@ namespace Module.Gimmick.LevelGimmick
             {
                 if (WorldGravity.Instance.Gravity == Vector3.left)
                 {
-                    DepthOfField depth;
-                    if (volume.profile.TryGet<DepthOfField>(out depth))
-                    {
-                        depth.active = false;
-                    }
-
-                    glass.SetActive(false);
-                    breakedGlass.SetActive(true);
-                    Time.timeScale = 0.05f;
-                    Time.fixedDeltaTime = 0.001f;
-                    collider.enabled = false;
-
-                    onClear.Invoke();
-
-                    audioSource.Play();
-
-                    breakedGlass.transform.localScale = scale;
-                    breakedGlass.transform.DOScaleZ(0.7f, 1.0f)
-                    .SetUpdate(true)
-                    .OnComplete(() =>
-                    {
-                        Time.timeScale = 1.0f;
-                        Time.fixedDeltaTime = 0.01f;
-                    });
+                    BreakGlassEffect();
                 }
             }
+        }
+
+
+        private readonly float timeScale = 0.05f;
+        private readonly float fixedDeltaTime = 0.001f;
+        private readonly float defaultFixedDeltaTime = 0.01f;
+        void BreakGlassEffect()
+        {
+            glass.SetActive(false);
+            breakedGlass.SetActive(true);
+            Time.timeScale = timeScale;
+            Time.fixedDeltaTime = fixedDeltaTime;
+            collider.enabled = false;
+
+            onClear.Invoke();
+
+            audioSource.Play();
+
+            breakedGlass.transform.localScale = scale;
+            breakedGlass.transform.DOScaleZ(0.7f, 1.0f)
+            .SetUpdate(true)
+            .OnComplete(() =>
+            {
+                Time.timeScale = 1.0f;
+                Time.fixedDeltaTime = defaultFixedDeltaTime;
+            });
         }
     }
 }

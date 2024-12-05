@@ -1,5 +1,6 @@
 using CoreModule.Helper;
 using UnityEngine;
+using System.Collections;
 
 namespace Module.Player
 {
@@ -34,13 +35,12 @@ namespace Module.Player
             pivotHorizontal.localEulerAngles = new Vector3(eulerX, eulerY, 0f);
         }
 
-        private float rotationDuration = 0.2f; // アニメーションの持続時間（秒）
-        private bool isRotating = false; // 現在回転中かどうかを判定
-
-        public System.Collections.IEnumerator RotateCamera(Vector3 axis, float angle)
+        /// <summary>
+        /// 90度回転　実装見送り
+        /// </summary>
+        private float rotationDuration = 0.2f;
+        public IEnumerator Rotate90Camera(Vector3 axis, float angle)
         {
-            isRotating = true;
-
             Quaternion startRotation = pivotHorizontal.rotation;
             Quaternion endRotation = startRotation * Quaternion.AngleAxis(angle, axis);
 
@@ -50,17 +50,17 @@ namespace Module.Player
             {
                 pivotHorizontal.rotation = Quaternion.Slerp(startRotation, endRotation, elapsedTime / rotationDuration);
                 elapsedTime += Time.deltaTime;
-                yield return null; // 次のフレームまで待機
+                yield return null;
             }
 
-            // 回転終了後に90度単位で丸める
-            Vector3 finalEulerAngles = pivotHorizontal.rotation.eulerAngles;
-            finalEulerAngles.y = Mathf.Round(finalEulerAngles.y / 90) * 90; // Y軸を90度単位で丸める
-            finalEulerAngles.x = Mathf.Round(finalEulerAngles.x / 90) * 90; // 必要に応じてX軸も丸める
-            finalEulerAngles.z = Mathf.Round(finalEulerAngles.z / 90) * 90; // 必要に応じてZ軸も丸める
+            float rorateValue = 90;
 
-            pivotHorizontal.rotation = Quaternion.Euler(finalEulerAngles); // 丸めた角度で再設定
-            isRotating = false;
+            Vector3 finalEulerAngles = pivotHorizontal.rotation.eulerAngles;
+            finalEulerAngles.y = Mathf.Round(finalEulerAngles.y / rorateValue) * rorateValue;
+            finalEulerAngles.x = Mathf.Round(finalEulerAngles.x / rorateValue) * rorateValue;
+            finalEulerAngles.z = Mathf.Round(finalEulerAngles.z / rorateValue) * rorateValue;
+
+            pivotHorizontal.rotation = Quaternion.Euler(finalEulerAngles);
         }
 
 

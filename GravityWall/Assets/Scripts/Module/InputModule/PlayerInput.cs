@@ -12,8 +12,6 @@ namespace Module.InputModule
         private readonly ReactiveProperty<Vector2> moveProperty = new ReactiveProperty<Vector2>();
         private readonly Subject<int> cameraRotateSubject = new Subject<int>();
         private readonly Subject<bool> jumpSubject = new Subject<bool>();
-        private readonly Subject<bool> lookLeftSubject = new Subject<bool>();
-        private readonly Subject<bool> lookRightSubject = new Subject<bool>();
 
         public PlayerInput()
         {
@@ -32,12 +30,6 @@ namespace Module.InputModule
             moveEvent.Started += OnMove;
             moveEvent.Performed += OnMove;
             moveEvent.Canceled += OnMove;
-
-            //90度回転のイベントを登録
-            InputEvent lookLeft = InputActionProvider.CreateEvent(ActionGuid.Player.LookLeft);
-            lookLeft.Performed += ctx => lookLeftSubject.OnNext(ctx.performed);
-            InputEvent lookRight = InputActionProvider.CreateEvent(ActionGuid.Player.LookRight);
-            lookRight.Performed += ctx => lookRightSubject.OnNext(ctx.performed);
 
             //ジャンプ入力のイベントを登録
             InputEvent jumpEvent = InputActionProvider.CreateEvent(ActionGuid.Player.Jump);
@@ -59,9 +51,6 @@ namespace Module.InputModule
         public ReadOnlyReactiveProperty<Vector2> Move => moveProperty;
         public Observable<int> CameraRotate => cameraRotateSubject;
         public Observable<bool> Jump => jumpSubject;
-        public Observable<bool> LookLeftSubject => lookLeftSubject;
-        public Observable<bool> LookRightSubject => lookRightSubject;
-
 
         private void OnMove(InputAction.CallbackContext ctx)
         {
