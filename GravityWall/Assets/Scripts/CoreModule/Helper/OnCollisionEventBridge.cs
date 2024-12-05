@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace CoreModule.Helper
 {
+    /// <summary>
+    /// コリジョンイベントを仲介するクラス
+    /// </summary>
     public class OnCollisionEventBridge : MonoBehaviour
     {
         public event Action<Collision> Enter;

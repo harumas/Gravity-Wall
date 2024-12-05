@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Module.Player
 {
+    /// <summary>
+    /// プレイヤーの操作ロジックを集約したクラス
+    /// </summary>
     public class PlayerFunction
     {
         private readonly WorldGravity worldGravity;
@@ -47,7 +50,7 @@ namespace Module.Player
             Vector3 right = cameraPivot.right * moveInput.x;
             Vector3 moveDirection = Vector3.ClampMagnitude(forward + right, 1f);
 
-            // 重力と垂直な速度ベクトルに変換
+            // 重力変更先と平行な速度ベクトルに変換
             moveDirection = Quaternion.FromToRotation(cameraPivot.up, -worldGravity.Gravity) * moveDirection;
 
             // 空中の制御率を適用

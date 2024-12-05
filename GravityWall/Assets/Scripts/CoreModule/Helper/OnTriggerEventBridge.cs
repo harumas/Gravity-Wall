@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace CoreModule.Helper
 {
+    /// <summary>
+    /// トリガーイベントを仲介するクラス
+    /// </summary>
     public class OnTriggerEventBridge : MonoBehaviour
     {
         public event Action<Collider> Enter;
