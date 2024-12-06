@@ -88,6 +88,7 @@ namespace Module.Player
         {
             if (isEnabled)
             {
+                Debug.Log("SwitchGravity");
                 SwitchGravity();
             }
         }
