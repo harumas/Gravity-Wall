@@ -66,10 +66,43 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: e82376fa823acd74187f4fbdd763a60f,
         type: 3}
       propertyPath: m_Name
-      value: PressureSwitchBefore (1)
+      value: PressureSwitch
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e82376fa823acd74187f4fbdd763a60f,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6394628715869052842}
   m_SourcePrefab: {fileID: 100100000, guid: e82376fa823acd74187f4fbdd763a60f, type: 3}
+--- !u!23 &560582884047602774 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: e82376fa823acd74187f4fbdd763a60f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1154613139291035858}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2073744185579398531 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e82376fa823acd74187f4fbdd763a60f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1154613139291035858}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6394628715869052842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073744185579398531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52399578948d83d40b45fd11be88453c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 560582884047602774}
+  distanceRange:
+    min: 3
+    max: 15
+  minEmission: 0.4

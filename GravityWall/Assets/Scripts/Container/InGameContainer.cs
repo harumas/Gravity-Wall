@@ -1,20 +1,16 @@
 ﻿using System;
-using System.Buffers;
 using System.Collections.Generic;
-using System.Reflection;
 using Application;
 using Application.Sequence;
-using Constants;
+using Application.Spawn;
 using CoreModule.Helper;
-using Module.Character;
 using Module.Gimmick;
 using Module.Gimmick.LevelGimmick;
 using Module.Gravity;
 using Module.InputModule;
+using Module.Player;
 using Presentation;
 using UnityEngine;
-using UnityEngine.Pool;
-using UnityEngine.Serialization;
 using VContainer;
 using VContainer.Unity;
 using View;
@@ -39,19 +35,19 @@ namespace Container
                 return;
             }
 
-            //重力の生成 (後で消す)
-            WorldGravity.Create();
-
-            UnityEngine.Application.targetFrameRate = 120;
-
+            // ゲームの進行を管理するクラスの登録
             builder.RegisterEntryPoint<InGameSequencer>();
-            builder.RegisterEntryPoint<PlayerInputPresenter>();
 
-            //コンフィグ変更のリスナーを登録
+            // プレイヤーの入力を受け取るプレゼンターを登録
+            builder.RegisterEntryPoint<PlayerInputPresenter>();
+            builder.RegisterEntryPoint<PlayerVibrationPresenter>();
+
+            // コンフィグ変更のリスナーを登録
             builder.RegisterEntryPoint<InputConfigChangedListener>();
             builder.RegisterEntryPoint<AudioConfigChangedListener>();
             builder.RegisterEntryPoint<OptionChangedPresenter>();
 
+            // UIのプレゼンターを登録
             builder.RegisterEntryPoint<ViewBehaviourInitializer>();
             builder.RegisterEntryPoint<TitleBehaviourPresenter>();
             builder.RegisterEntryPoint<LicenseBehaviourPresenter>();
@@ -62,20 +58,51 @@ namespace Container
             builder.Register<PlayerInput>(Lifetime.Singleton).As<IGameInput>();
             builder.Register<CursorLocker>(Lifetime.Singleton);
             builder.Register<RespawnManager>(Lifetime.Singleton);
+            builder.Register<HubSpawner>(Lifetime.Singleton);
 
-            //ViewBehaviourの登録
-            behaviourNavigator.RegisterBehaviours();
-            builder.RegisterComponent(behaviourNavigator.GetBehaviour<OptionBehaviour>(ViewBehaviourState.Option));
-            builder.RegisterComponent(behaviourNavigator.GetBehaviour<LoadingBehaviour>(ViewBehaviourState.Loading));
-            builder.RegisterComponent(behaviourNavigator.GetBehaviour<ClearBehaviour>(ViewBehaviourState.Clear));
-            builder.RegisterComponent(behaviourNavigator.GetBehaviour<TitleBehaviour>(ViewBehaviourState.Title));
-            builder.RegisterComponent(behaviourNavigator.GetBehaviour<LicenseBehaviour>(ViewBehaviourState.License));
-            builder.RegisterComponent(behaviourNavigator.GetBehaviour<PauseBehaviour>(ViewBehaviourState.Pause));
-            builder.RegisterComponent(behaviourNavigator.GetBehaviour<CreditBehaviour>(ViewBehaviourState.Credit));
-            RegisterInstanceWithNullCheck(builder, behaviourNavigator);
+            builder.RegisterInstance(gimmickReference);
+            builder.RegisterInstance(hubSpawnPoint);
 
+            // UIパネルの登録
+            RegisterBehaviourComponents(builder);
+
+            // プレイヤーのコンポーネントの登録
             RegisterPlayerComponents(builder);
+            
+            // シーン間で使い回すコンポーネントを登録
+            RegisterReusableComponents(builder);
 
+#if UNITY_EDITOR
+            // エディタからコンポーネントにアクセスするためのクラスを登録
+            builder.RegisterEntryPoint<ExternalAccessor>();
+#endif
+        }
+
+        private void RegisterWithNullCheck<T>(IContainerBuilder builder, T instance) where T : class
+        {
+            if (instance == null)
+            {
+                throw new NullReferenceException($"{typeof(T).Name} がアタッチされていません");
+            }
+
+            builder.RegisterInstance(instance);
+        }
+
+        private void RegisterBehaviourComponents(IContainerBuilder builder)
+        {
+            behaviourNavigator.RegisterBehaviours();
+            RegisterWithNullCheck(builder, behaviourNavigator);
+            RegisterWithNullCheck(builder, behaviourNavigator.GetBehaviour<OptionBehaviour>(ViewBehaviourState.Option));
+            RegisterWithNullCheck(builder, behaviourNavigator.GetBehaviour<LoadingBehaviour>(ViewBehaviourState.Loading));
+            RegisterWithNullCheck(builder, behaviourNavigator.GetBehaviour<ClearBehaviour>(ViewBehaviourState.Clear));
+            RegisterWithNullCheck(builder, behaviourNavigator.GetBehaviour<TitleBehaviour>(ViewBehaviourState.Title));
+            RegisterWithNullCheck(builder, behaviourNavigator.GetBehaviour<LicenseBehaviour>(ViewBehaviourState.License));
+            RegisterWithNullCheck(builder, behaviourNavigator.GetBehaviour<PauseBehaviour>(ViewBehaviourState.Pause));
+            RegisterWithNullCheck(builder, behaviourNavigator.GetBehaviour<CreditBehaviour>(ViewBehaviourState.Credit));
+        }
+
+        private void RegisterReusableComponents(IContainerBuilder builder)
+        {
             var reusableComponents = new List<IReusableComponent>
             {
                 RegisterReusableComponent<SavePoint>(builder),
@@ -84,24 +111,6 @@ namespace Container
             };
 
             builder.RegisterInstance(reusableComponents).As<IReadOnlyList<IReusableComponent>>();
-            builder.RegisterInstance(gimmickReference);
-
-            builder.Register<HubSpawner>(Lifetime.Singleton);
-            builder.RegisterInstance(hubSpawnPoint);
-
-#if UNITY_EDITOR
-            builder.RegisterEntryPoint<ExternalAccessor>();
-#endif
-        }
-
-        private void RegisterInstanceWithNullCheck<T>(IContainerBuilder builder, T instance) where T : class
-        {
-            if (instance == null)
-            {
-                throw new NullReferenceException($"{typeof(T).Name} がアタッチされていません");
-            }
-
-            builder.RegisterInstance(instance);
         }
 
         private IReusableComponent RegisterReusableComponent<T>(IContainerBuilder builder) where T : Component

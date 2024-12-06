@@ -13,6 +13,14 @@ namespace Module.Gimmick
             Vector3.forward,
             Vector3.back,
         };
+        
+        private readonly Vector3[] initialDirections =
+        {
+            Vector3.right,
+            Vector3.left,
+            Vector3.forward,
+            Vector3.back,
+        };
 
         /// <summary>
         /// 指定したベクトルに近い軸のベクトルを取得します。
@@ -40,7 +48,7 @@ namespace Module.Gimmick
             Vector3 resultDir = Vector3.forward;
             float resultDot = 0f;
 
-            foreach (Vector3 direction in directions)
+            foreach (Vector3 direction in initialDirections)
             {
                 float dot = Vector3.Dot(direction, origin);
                 if (dot > resultDot)

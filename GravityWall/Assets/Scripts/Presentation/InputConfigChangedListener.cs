@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq.Expressions;
-using CoreModule.Save;
+﻿using CoreModule.Save;
 using CoreModule.Input;
 using Cysharp.Threading.Tasks;
 using Module.Config;
@@ -21,6 +19,7 @@ namespace Presentation
     {
         private readonly SaveManager<ConfigData> saveManager;
         private readonly InputValueAdjustParameter adjustParameter;
+        private readonly GamepadVibrator gamepadVibrator;
         private readonly InputBinding keyboardBinding = InputBinding.MaskByGroup("Keyboard");
         private readonly InputBinding gamepadBinding = InputBinding.MaskByGroup("Gamepad");
 
@@ -31,10 +30,12 @@ namespace Presentation
         public InputConfigChangedListener(
             SaveManager<ConfigData> saveManager,
             InputValueAdjustParameter adjustParameter,
-            InputActionAsset inputActionAsset)
+            InputActionAsset inputActionAsset,
+            GamepadVibrator gamepadVibrator)
         {
             this.saveManager = saveManager;
             this.adjustParameter = adjustParameter;
+            this.gamepadVibrator = gamepadVibrator;
             configData = saveManager.Data;
 
             //視点移動のInputActionを取得する
@@ -49,11 +50,13 @@ namespace Presentation
             //更新イベントを登録する
             configData.MouseSensibility.Subscribe(UpdateMouseSensibility);
             configData.PadSensibility.Subscribe(UpdateGamePadSensibility);
+            configData.Vibration.Subscribe(UpdateVibration);
 
             configData.MouseSensibility.Subscribe(SaveConfig);
             configData.PadSensibility.Subscribe(SaveConfig);
         }
-        
+
+
         private void SaveConfig(Vector2 _)
         {
             saveManager.Save().Forget();
@@ -79,6 +82,18 @@ namespace Presentation
 
             lookAction.ApplyParameterOverride((ScaleVector2Processor param) => param.x, sensibility.x, gamepadBinding);
             lookAction.ApplyParameterOverride((ScaleVector2Processor param) => param.y, sensibility.y, gamepadBinding);
+        }
+
+        private void UpdateVibration(bool vibration)
+        {
+            if (vibration)
+            {
+                gamepadVibrator.Enable();
+            }
+            else
+            {
+                gamepadVibrator.Disable();
+            }
         }
     }
 }
