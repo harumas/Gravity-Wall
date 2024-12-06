@@ -1,11 +1,11 @@
 ﻿using Application;
 using Application.Sequence;
+using Application.Spawn;
 using CoreModule.Input;
 using Cysharp.Threading.Tasks;
-using Module.Character;
 using Module.InputModule;
+using Module.Player;
 using R3;
-using UnityEngine;
 using UnityEngine.InputSystem;
 using VContainer;
 using VContainer.Unity;
@@ -18,7 +18,8 @@ namespace Presentation
         private readonly ViewBehaviourNavigator navigator;
         private readonly PauseBehaviour pauseBehaviour;
         private readonly CursorLocker cursorLocker;
-        private readonly GameStopper gameStopper;
+        private readonly GamepadVibrator gamepadVibrator;
+        private readonly ApplicationStopper applicationStopper;
         private readonly PlayerController playerController;
         private readonly PlayerTargetSyncer playerTargetSyncer;
         private readonly GameState gameState;
@@ -30,7 +31,8 @@ namespace Presentation
             ViewBehaviourNavigator navigator,
             PauseBehaviour pauseBehaviour,
             CursorLocker cursorLocker,
-            GameStopper gameStopper,
+            GamepadVibrator gamepadVibrator,
+            ApplicationStopper applicationStopper,
             PlayerController playerController,
             PlayerTargetSyncer playerTargetSyncer,
             GameState gameState,
@@ -40,7 +42,8 @@ namespace Presentation
             this.navigator = navigator;
             this.pauseBehaviour = pauseBehaviour;
             this.cursorLocker = cursorLocker;
-            this.gameStopper = gameStopper;
+            this.gamepadVibrator = gamepadVibrator;
+            this.applicationStopper = applicationStopper;
             this.playerController = playerController;
             this.playerTargetSyncer = playerTargetSyncer;
             this.gameState = gameState;
@@ -69,6 +72,7 @@ namespace Presentation
                         cursorLocker.IsCursorChangeBlock = true;
                         playerTargetSyncer.Lock();
                         playerController.Lock();
+                        gamepadVibrator.Pause();
                     }
                     else if (!context.isActive && context.behaviourType == ViewBehaviourState.None)
                     {
@@ -76,6 +80,7 @@ namespace Presentation
                         cursorLocker.SetCursorLock(true);
                         playerTargetSyncer.Unlock();
                         playerController.Unlock();
+                        gamepadVibrator.Resume();
                     }
                 })
                 .AddTo(pauseBehaviour);
@@ -90,7 +95,7 @@ namespace Presentation
                 hubSpawner.Respawn().Forget();
             }).AddTo(pauseView);
             pauseView.OnGoToSettingsButtonPressed.Subscribe(_ => navigator.ActivateBehaviour(ViewBehaviourState.Option)).AddTo(pauseView);
-            pauseView.OnEndGameButtonPressed.Subscribe(_ => gameStopper.Quit());
+            pauseView.OnEndGameButtonPressed.Subscribe(_ => applicationStopper.Quit());
         }
 
         private void OnExitEvent(InputAction.CallbackContext _)

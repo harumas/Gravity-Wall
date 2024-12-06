@@ -1,12 +1,10 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using Constants;
 using R3;
 using TriInspector;
 using UnityEngine;
 
-namespace Module.Gimmick
+namespace Module.Gimmick.LevelGimmick
 {
     public class Hallway : MonoBehaviour
     {

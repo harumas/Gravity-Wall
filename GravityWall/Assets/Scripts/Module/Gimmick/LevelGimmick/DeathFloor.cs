@@ -2,7 +2,7 @@ using System;
 using Constants;
 using UnityEngine;
 
-namespace Application.Sequence
+namespace Module.Gimmick.LevelGimmick
 {
     /// <summary>
     /// 死亡通知を送信するコンポーネント

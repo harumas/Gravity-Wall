@@ -1,8 +1,8 @@
-using Module.Character;
 using Module.Gravity;
+using Module.Player;
 using UnityEngine;
 
-namespace Module.Gimmick
+namespace Module.Gimmick.LevelGimmick
 {
     public class FallTrigger : MonoBehaviour
     {

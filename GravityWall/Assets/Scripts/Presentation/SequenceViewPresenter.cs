@@ -1,4 +1,4 @@
-﻿using Application.Sequence;
+﻿using Application.Spawn;
 using CoreModule.Input;
 using VContainer;
 using VContainer.Unity;
