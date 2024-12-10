@@ -72,6 +72,25 @@ MonoBehaviour:
   shader: {fileID: 4800000, guid: 1fd322882edc28e4f943d1a80df5fe1d, type: 3}
   strength: 0.125
   backgroundColor: {r: 1, g: 0.28773582, b: 0.28773582, a: 0}
+--- !u!114 &-582182133378269579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92f0c121b68f44ceebf825d616963d56, type: 3}
+  m_Name: RadialBlurFeature
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  _parameters:
+    intensity: 0.05
+    sampleCount: 3
+    radialCenter: {x: 0.5, y: 0.5}
+    useDither: 1
+  _renderPassEvent: 550
 --- !u!114 &-97907174061956125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,7 +136,8 @@ MonoBehaviour:
   - {fileID: 8479842319076534651}
   - {fileID: -811681629540117431}
   - {fileID: -4390477110974422716}
-  m_RendererFeatureMap: adc0de57c6d2eee5e32313a5f129a4fe7ba9e13ba973ae7549148dc0db53bcf444e1e24d54e411c3
+  - {fileID: -582182133378269579}
+  m_RendererFeatureMap: adc0de57c6d2eee5e32313a5f129a4fe7ba9e13ba973ae7549148dc0db53bcf444e1e24d54e411c375be68296facebf7
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
