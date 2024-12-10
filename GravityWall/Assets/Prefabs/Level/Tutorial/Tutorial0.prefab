@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &73575083896312107
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1350161554476356756}
+  m_Layer: 0
+  m_Name: SpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1350161554476356756
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 73575083896312107}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.1305262, z: -0, w: 0.9914448}
+  m_LocalPosition: {x: -9.410036, y: 1.1299973, z: 6.100915}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4135248007193244987}
+  m_LocalEulerAnglesHint: {x: 0, y: 105, z: 0}
 --- !u!1 &719877885709219520
 GameObject:
   m_ObjectHideFlags: 0
@@ -38,6 +69,7 @@ Transform:
   - {fileID: 7731216320018863205}
   - {fileID: 5541492518528713911}
   - {fileID: 2049332903575490017}
+  - {fileID: 1350161554476356756}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5441135484182943541
@@ -69,6 +101,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startActive: 1
+  activateOnOpen: 0
+  observeGate: 
   roomObject: {fileID: 5637297671072843797}
   levelGates:
   - {fileID: 4585853314581121148}
@@ -561,6 +595,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: StartRoom
+      objectReference: {fileID: 0}
+    - target: {fileID: 6129529636402265481, guid: 45ac6913b31114a7097c6b4c85af36bf,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -6.5000114
+      objectReference: {fileID: 0}
+    - target: {fileID: 6129529636402265481, guid: 45ac6913b31114a7097c6b4c85af36bf,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 8.000003
       objectReference: {fileID: 0}
     - target: {fileID: 6303795394919623536, guid: 45ac6913b31114a7097c6b4c85af36bf,
         type: 3}
