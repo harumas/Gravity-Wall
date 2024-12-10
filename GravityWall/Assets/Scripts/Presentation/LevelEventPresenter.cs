@@ -4,6 +4,7 @@ using CoreModule.Helper;
 using Cysharp.Threading.Tasks;
 using Module.Gimmick;
 using Module.Gimmick.LevelGimmick;
+using Module.Gimmick.SystemGimmick;
 using Module.Player;
 using VContainer;
 using VContainer.Unity;

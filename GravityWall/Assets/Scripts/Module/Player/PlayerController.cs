@@ -17,6 +17,8 @@ namespace Module.Player
         public bool IsRotationLocked { get; set; }
         private SimpleInertia simpleInertia;
         private PlayerFunction playerFunction;
+        
+        public PlayerControlParameter Parameter => parameter;
 
         public ReadOnlyReactiveProperty<bool> IsJumping => isJumping;
         [SerializeField] private SerializableReactiveProperty<bool> isJumping = new SerializableReactiveProperty<bool>();
@@ -35,7 +37,7 @@ namespace Module.Player
 
         public ReadOnlyReactiveProperty<(Vector3 xv, Vector3 yv)> OnMove => onMove;
         private ReactiveProperty<(Vector3 xv, Vector3 yv)> onMove = new ReactiveProperty<(Vector3 xv, Vector3 yv)>();
-
+        
         private Vector2 moveInput;
         private float landingTime;
         private bool isJumpingInput;
