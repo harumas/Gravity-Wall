@@ -39,6 +39,7 @@ namespace Module.Gimmick.LevelGimmick
         private readonly float timeScale = 0.05f;
         private readonly float fixedDeltaTime = 0.001f;
         private readonly float defaultFixedDeltaTime = 0.01f;
+        private readonly float defaultTimeScale = 1.0f;
         void BreakGlassEffect()
         {
             glass.SetActive(false);
@@ -56,7 +57,7 @@ namespace Module.Gimmick.LevelGimmick
             .SetUpdate(true)
             .OnComplete(() =>
             {
-                Time.timeScale = 1.0f;
+                Time.timeScale = defaultTimeScale;
                 Time.fixedDeltaTime = defaultFixedDeltaTime;
             });
         }

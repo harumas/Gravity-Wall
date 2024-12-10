@@ -7,10 +7,14 @@ namespace Module.Player
     {
         [SerializeField] private SkinnedMeshRenderer faceMeshRenderer;
         [SerializeField] private float blinkTime = 1.0f;
+        [SerializeField] private float blinkTimeRandomDelay = 2.0f;
         
         private float blinkTimer = 0;
+
         private static readonly int rEyeBlunk = Shader.PropertyToID("_REyeBlink");
         private static readonly int lEyeBlunk = Shader.PropertyToID("_LEyeBlink");
+
+        private readonly int faceMaterialEyesIndex = 1;
 
         private void Start()
         {
@@ -28,11 +32,11 @@ namespace Module.Player
                     .SetLoops(2, LoopType.Yoyo)
                     .OnUpdate(() =>
                     {
-                        faceMeshRenderer.materials[1].SetFloat(rEyeBlunk, scale);
-                        faceMeshRenderer.materials[1].SetFloat(lEyeBlunk, scale);
+                        faceMeshRenderer.materials[faceMaterialEyesIndex].SetFloat(rEyeBlunk, scale);
+                        faceMeshRenderer.materials[faceMaterialEyesIndex].SetFloat(lEyeBlunk, scale);
                     });
 
-                blinkTimer = Random.Range(blinkTime, blinkTime + 2.0f);
+                blinkTimer = Random.Range(blinkTime, blinkTime + blinkTimeRandomDelay);
             }
         }
     }

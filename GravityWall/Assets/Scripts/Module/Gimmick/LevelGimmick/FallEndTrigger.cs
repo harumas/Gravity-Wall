@@ -1,5 +1,6 @@
 using Cinemachine;
 using Constants;
+using Cysharp.Threading.Tasks;
 using Module.Player;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -13,8 +14,14 @@ namespace Module.Gimmick
         [SerializeField] private Volume volume;
         [SerializeField] private GameObject fallTrigger;
         [SerializeField] private UniversalRendererData rendererData;
+
         private ScriptableRendererFeature feature;
+
         private readonly string blurFeatureName = "RadialBlurFeature";
+        private readonly string animatorFallIndexName = "FallIndex";
+        private readonly int fallIndex = 2;
+        private readonly int playerControlUnlockDelay = 300;
+
 
         private void Start()
         {
@@ -25,28 +32,31 @@ namespace Module.Gimmick
             }
         }
 
-        private int minCameraPriority = 0;
+
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag(Tag.Player))
             {
-                cinemachine.Priority = minCameraPriority;
-
+                cinemachine.Priority = 0;
                 if (feature != null)
                 {
                     feature.SetActive(false);
                 }
 
-                other.GetComponent<GravitySwitcher>().Enable();
-                other.GetComponentInChildren<Animator>().SetInteger("FallIndex", 2);
-                UnlockPlayerMove(other.GetComponent<PlayerController>());
                 fallTrigger.SetActive(false);
+
+                FallEndSequence(other.gameObject).Forget();
             }
         }
 
-        void UnlockPlayerMove(PlayerController player)
+        private async UniTaskVoid FallEndSequence(GameObject player)
         {
-            player.Unlock();
+            player.GetComponentInChildren<Animator>().SetInteger(animatorFallIndexName, fallIndex);
+
+            await UniTask.Delay(playerControlUnlockDelay);
+
+            player.GetComponent<GravitySwitcher>().Enable();
+            player.GetComponent<PlayerController>().Unlock();
         }
     }
 }
