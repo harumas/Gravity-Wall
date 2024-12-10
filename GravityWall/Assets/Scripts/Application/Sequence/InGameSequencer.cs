@@ -50,9 +50,7 @@ namespace Application.Sequence
             
             respawnManager.LockPlayer();
 
-            await loadExecutor.UnloadAdditiveScenes();
-
-            await hubSpawner.Respawn();
+            await UniTask.WhenAll(loadExecutor.UnloadAdditiveScenes(), hubSpawner.Respawn());
         }
 
         public void Dispose()

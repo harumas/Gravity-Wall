@@ -14,13 +14,15 @@ namespace Module.Gimmick
     {
         public readonly Vector3 Position;
         public readonly Quaternion Rotation;
+        public readonly Vector3 Velocity;
         public readonly Vector3 Gravity;
         public readonly LevelResetter LevelResetter;
 
-        public RespawnContext(Vector3 position, Quaternion rotation, Vector3 gravity, LevelResetter levelResetter)
+        public RespawnContext(Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 gravity, LevelResetter levelResetter)
         {
             Position = position;
             Rotation = rotation;
+            Velocity = velocity;
             Gravity = gravity;
             LevelResetter = levelResetter;
         }
@@ -51,7 +53,7 @@ namespace Module.Gimmick
                 Debug.Log("セーブしました");
 
                 isSaved = true;
-                LatestContext = new RespawnContext(transform.position, transform.rotation, -transform.up, levelResetter);
+                LatestContext = new RespawnContext(transform.position, transform.rotation, Vector3.zero, -transform.up, levelResetter);
                 OnEnterPoint?.Invoke(LatestContext);
             }
         }

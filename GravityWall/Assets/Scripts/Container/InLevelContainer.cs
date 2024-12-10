@@ -5,6 +5,7 @@ using Constants;
 using CoreModule.Helper;
 using Cysharp.Threading.Tasks;
 using Module.Gimmick;
+using Module.Gimmick.SystemGimmick;
 using Presentation;
 using UnityEngine;
 using VContainer;
@@ -30,7 +31,7 @@ namespace Container
             builder.RegisterEntryPoint<SequenceViewPresenter>();
             builder.RegisterEntryPoint<GameClearPresenter>();
             builder.RegisterEntryPoint<LevelEventPresenter>();
-
+            
             var gimmickReference = Parent.Container.Resolve<GimmickReference>();
             gimmickReference.UpdateReference();
         }
