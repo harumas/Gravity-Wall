@@ -74,7 +74,7 @@ namespace Module.Gimmick.LevelGimmick
 
             gateOpenEvent.Invoke();
 
-            anim.SetBool("IsOpen",true);
+            anim.SetBool("IsOpen", true);
 
             isEnabled.Value = true;
         }
