@@ -219,7 +219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startActive: 0
-  activateOnOpen: 0
+  activateOnOpen: 1
   observeGate: 
   roomObject: {fileID: 8069692088908341122}
   levelGates:
@@ -329,12 +329,48 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a4bf52696afff459a9dba677785d2b90, type: 3}
+--- !u!114 &651783799289279010 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1710025536729778391, guid: a4bf52696afff459a9dba677785d2b90,
+    type: 3}
+  m_PrefabInstance: {fileID: 2211446379255823093}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42b9c0950af984555a1fb95129c5219a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1982566396070808343 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 374888805837091298, guid: a4bf52696afff459a9dba677785d2b90,
     type: 3}
   m_PrefabInstance: {fileID: 2211446379255823093}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6465717287724190601 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5119032973781037436, guid: a4bf52696afff459a9dba677785d2b90,
+    type: 3}
+  m_PrefabInstance: {fileID: 2211446379255823093}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42b9c0950af984555a1fb95129c5219a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6650539647197700401 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4826684871365827524, guid: a4bf52696afff459a9dba677785d2b90,
+    type: 3}
+  m_PrefabInstance: {fileID: 2211446379255823093}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42b9c0950af984555a1fb95129c5219a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3631147378102416294
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -421,18 +457,28 @@ PrefabInstance:
     - target: {fileID: 5260175374949259475, guid: 7e317563c594d4fe787b60604ecdfd7c,
         type: 3}
       propertyPath: switchMaxCount
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5260175374949259475, guid: 7e317563c594d4fe787b60604ecdfd7c,
         type: 3}
       propertyPath: observedSwitches.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 5260175374949259475, guid: 7e317563c594d4fe787b60604ecdfd7c,
+        type: 3}
+      propertyPath: observedSwitches.Array.data[0]
+      value: 
+      objectReference: {fileID: 6650539647197700401}
+    - target: {fileID: 5260175374949259475, guid: 7e317563c594d4fe787b60604ecdfd7c,
+        type: 3}
+      propertyPath: observedSwitches.Array.data[1]
+      value: 
+      objectReference: {fileID: 6465717287724190601}
     - target: {fileID: 5260175374949259475, guid: 7e317563c594d4fe787b60604ecdfd7c,
         type: 3}
       propertyPath: observedSwitches.Array.data[2]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 651783799289279010}
     - target: {fileID: 6098789576323818988, guid: 7e317563c594d4fe787b60604ecdfd7c,
         type: 3}
       propertyPath: m_LocalScale.z
@@ -488,6 +534,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1510685792117058063, guid: cbb6dcb7f3b2a4a41a5194f2b7442ede,
         type: 3}
+      propertyPath: volume
+      value: 
+      objectReference: {fileID: 344095597840598982}
+    - target: {fileID: 1510685792117058063, guid: cbb6dcb7f3b2a4a41a5194f2b7442ede,
+        type: 3}
       propertyPath: cinemachine
       value: 
       objectReference: {fileID: 9030171069557689875}
@@ -496,6 +547,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: LastRoom (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3249894087698340184, guid: cbb6dcb7f3b2a4a41a5194f2b7442ede,
+        type: 3}
+      propertyPath: volume
+      value: 
+      objectReference: {fileID: 344095597840598982}
     - target: {fileID: 5461803478225089400, guid: cbb6dcb7f3b2a4a41a5194f2b7442ede,
         type: 3}
       propertyPath: m_LocalPosition.x
