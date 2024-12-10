@@ -25,7 +25,7 @@ namespace View
             {
                 onCursorLockChange.OnNext(false);
                 titleView.FadeCanvasGroup.alpha = 1.0f;
-                DOTween.To(() => titleView.FadeCanvasGroup.alpha, (v) => titleView.FadeCanvasGroup.alpha = v, 0, 0.3f).WaitForCompletion();
+                DOTween.To(() => titleView.FadeCanvasGroup.alpha, (v) => titleView.FadeCanvasGroup.alpha = v, 0, 0.3f);
                 titleView.FadeCanvasGroup.blocksRaycasts = false;
             }
 
@@ -47,7 +47,7 @@ namespace View
             {
                 await Task.Delay(500);
 
-                DOTween.To(() => titleView.CanvasGroup.alpha, (v) => titleView.CanvasGroup.alpha = v, 0, 0.3f).WaitForCompletion();
+                DOTween.To(() => titleView.CanvasGroup.alpha, (v) => titleView.CanvasGroup.alpha = v, 0, 0.3f);
 
                 if (titleView.StartSequencer != null)
                 {

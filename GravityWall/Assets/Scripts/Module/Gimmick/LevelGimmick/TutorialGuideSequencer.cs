@@ -16,8 +16,12 @@ namespace Module.Gimmick.SystemGimmick
         [SerializeField] private VideoPlayer videoPlayer;
         [SerializeField] private GameObject movieCanvas;
         [SerializeField] private Transform pos;
+        [SerializeField] private int delayFrame = 26000;
         private PlayerController playerController;
         private bool isEnable = false;
+
+        private readonly int cameraPriority = 50;
+        private readonly int delayVideoStartFrame = 2000;
 
         private void OnTriggerEnter(Collider other)
         {
@@ -37,14 +41,14 @@ namespace Module.Gimmick.SystemGimmick
 
         private async UniTaskVoid TutorialGuidSequence()
         {
-            titleVirtualCamera.Priority = 100;
+            titleVirtualCamera.Priority = cameraPriority;
 
-            await Task.Delay(2000);
+            await Task.Delay(delayVideoStartFrame);
 
             videoPlayer.Play();
             movieCanvas.SetActive(true);
 
-            await Task.Delay(26000);
+            await Task.Delay(delayFrame);
 
             titleVirtualCamera.Priority = 0;
 

@@ -20,31 +20,34 @@ namespace Module.Effect
             {
                 if (isDeath)
                 {
-                    OnDeathEffect();
                     OnAttackHit().Forget();
                 }
 
             }).AddTo(this);
         }
 
+        private readonly float shakeDuration = 1.5f;
+        private readonly float shakeStrength = 0.7f;
+        private readonly int shakeCount = 20;
+
+        private readonly int hitStopDuration = 500;
+        private readonly int hitStopDelay = 200;
+
         private async UniTaskVoid OnAttackHit()
         {
-            cameraPivot.DOShakePosition(0.7f, 1.5f, 20);
-            await UniTask.Delay(200);
-            anim.speed = 0f;
-            await UniTask.Delay(500);
-            anim.speed = 1f;
-        }
+            cameraPivot.DOShakePosition(shakeStrength, shakeDuration, shakeCount);
 
-        public void OnDeathEffect()
-        {
             effect.gameObject.SetActive(true);
             SoundManager.Instance.Play(SoundKey.ElectricShock, MixerType.SE);
-            Invoke("OffEffect", 1.3f);
-        }
 
-        private void OffEffect()
-        {
+            await UniTask.Delay(hitStopDelay);
+
+            //ヒットストップ
+            anim.speed = 0f;
+            await UniTask.Delay(hitStopDuration);
+            anim.speed = 1f;
+
+
             effect.gameObject.SetActive(false);
         }
     }

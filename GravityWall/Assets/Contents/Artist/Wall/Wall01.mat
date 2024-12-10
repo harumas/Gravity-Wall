@@ -26,6 +26,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _AOTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 2800000, guid: b05fbf0965cb34c058c04fce5723db05, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -104,6 +108,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AO: 1
+    - _AOTextureUse: 0
     - _AlphaClip: 1
     - _AlphaToMask: 1
     - _Blend: 0
@@ -149,7 +155,9 @@ Material:
     - _BaseColor: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 1}
     - _Color: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 1}
     - _EmissionColor: {r: 6.996211, g: 1.0230309, b: 1.0230309, a: 1}
+    - _Offset: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _Tiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &1997047048674454641
 MonoBehaviour:

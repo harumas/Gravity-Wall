@@ -11,7 +11,7 @@ namespace Module.Gimmick.LevelGimmick
 {
     public class FallTrigger : MonoBehaviour
     {
-        [SerializeField] private GameObject fallColliuder;
+        [SerializeField] private GameObject fallCollider;
         [SerializeField] private GravitySwitchTrigger[] gravitySwitchTriggers;
 
         [SerializeField] private Volume volume;
@@ -22,7 +22,15 @@ namespace Module.Gimmick.LevelGimmick
         private LocalGravity targetGravity;
         private ScriptableRendererFeature feature;
 
+
         private readonly string radialBlurFeatureName = "RadialBlurFeature";
+        private readonly string cameraPivotName = "CameraPivot";
+        
+        private readonly string animatorFallIndexName = "FallIndex";
+        private readonly int fallIndex = 1;
+
+        private readonly int cameraHighPriority = 20;
+        private readonly float GravityScale = 20;
 
         private void Awake()
         {
@@ -33,7 +41,6 @@ namespace Module.Gimmick.LevelGimmick
             }
         }
 
-        private int cameraHighPriority = 20;
         private void OnTriggerExit(Collider other)
         {
             if (other.gameObject.CompareTag(Tag.Player))
@@ -45,24 +52,36 @@ namespace Module.Gimmick.LevelGimmick
                         trigger.SetEnable(false);
                     }
 
-                    other.GetComponent<GravitySwitcher>().Disable();
-                    fallColliuder.SetActive(true);
-                    other.GetComponentInChildren<Animator>().SetInteger("FallIndex", 1);
-                    other.GetComponent<PlayerController>().Lock();
+                    fallCollider.SetActive(true);
 
+                    SetPlayerSettings(other.transform);
+
+                    SetCameraPivot(other.transform.Find(cameraPivotName));
+
+                    cinemachine.Priority = cameraHighPriority;
                     if (feature != null)
                     {
                         feature.SetActive(true);
                     }
-
-                    cinemachine.Priority = cameraHighPriority;
 
                     isPlayerEnter = true;
                 }
             }
         }
 
-        private readonly float GravityScale = 20;
+        void SetCameraPivot(Transform pivot)
+        {
+            cinemachine.LookAt = pivot;
+            cinemachine.Follow = pivot;
+        }
+
+        void SetPlayerSettings(Transform player)
+        {
+            player.GetComponent<GravitySwitcher>().Disable();
+            player.GetComponentInChildren<Animator>().SetInteger(animatorFallIndexName, fallIndex);
+            player.GetComponent<PlayerController>().Lock();
+        }
+
         private void FixedUpdate()
         {
             if (isPlayerEnter)
