@@ -12,14 +12,15 @@ Material:
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _ALPHATEST_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
+  m_CustomRenderQueue: 2450
   stringTagMap:
-    RenderType: Opaque
+    RenderType: TransparentCutout
   disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
@@ -93,8 +94,8 @@ Material:
     m_Floats:
     - _AO: 1
     - _AOTextureUse: 1
-    - _AlphaClip: 0
-    - _AlphaToMask: 0
+    - _AlphaClip: 1
+    - _AlphaToMask: 1
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
@@ -113,10 +114,10 @@ Material:
     - _Glossiness: 0.2
     - _GlossyReflections: 1
     - _METALNESS: 0
-    - _MaxDistance: 0
+    - _MaxDistance: 2.41
     - _Metallic: 0
     - _MetallicIntensity: 0.51
-    - _MinDistance: 0
+    - _MinDistance: 2.12
     - _Mode: 3
     - _NormalStrength: 0.838
     - _OcclusionStrength: 1

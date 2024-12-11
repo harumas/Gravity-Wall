@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18048224, g: 0.22595261, b: 0.30703622, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3058,17 +3058,17 @@ PrefabInstance:
     - target: {fileID: 3863569561677538650, guid: 66e11150f66154c4ebbd9178fedceadf,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.023444615
+      value: 0.023444638
       objectReference: {fileID: 0}
     - target: {fileID: 3863569561677538650, guid: 66e11150f66154c4ebbd9178fedceadf,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000017149299
+      value: 0.000000017331352
       objectReference: {fileID: 0}
     - target: {fileID: 3863569561677538650, guid: 66e11150f66154c4ebbd9178fedceadf,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000015425035
+      value: -0.0000000015588788
       objectReference: {fileID: 0}
     - target: {fileID: 5979203719876794136, guid: 66e11150f66154c4ebbd9178fedceadf,
         type: 3}
@@ -3093,17 +3093,27 @@ PrefabInstance:
     - target: {fileID: 5979203719876794136, guid: 66e11150f66154c4ebbd9178fedceadf,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.023444615
+      value: 0.023444638
       objectReference: {fileID: 0}
     - target: {fileID: 5979203719876794136, guid: 66e11150f66154c4ebbd9178fedceadf,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000017149299
+      value: 0.000000017331352
       objectReference: {fileID: 0}
     - target: {fileID: 5979203719876794136, guid: 66e11150f66154c4ebbd9178fedceadf,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000015425035
+      value: -0.0000000015588788
+      objectReference: {fileID: 0}
+    - target: {fileID: 6140689075300314079, guid: 66e11150f66154c4ebbd9178fedceadf,
+        type: 3}
+      propertyPath: field of view
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 6140689075300314079, guid: 66e11150f66154c4ebbd9178fedceadf,
+        type: 3}
+      propertyPath: far clip plane
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 6224190170551648035, guid: 66e11150f66154c4ebbd9178fedceadf,
         type: 3}
@@ -3846,9 +3856,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fba20d95aae40c5bfd134eca3a498fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smokeEffect: {fileID: 1485186986}
+  walkEffect:
+    target: {fileID: 0}
+  jumpEffect:
+    target: {fileID: 0}
   playerController: {fileID: 1081291402}
   playInterval: 0.1
+  spawnRateCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spawnSizeCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  velocityCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!43 &562625372
 Mesh:
   m_ObjectHideFlags: 0
@@ -4760,6 +4791,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: JumpBoard
       objectReference: {fileID: 0}
+    - target: {fileID: 5280727716851676108, guid: 02dae8858acc24c8882d03ad766ee86e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5431,6 +5467,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PressurePlate (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 5277613775346696198, guid: ee25c7e485a84475d8b764ba91817c5e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6015486938433171763, guid: ee25c7e485a84475d8b764ba91817c5e,
         type: 3}
       propertyPath: m_Mesh
@@ -5561,7 +5602,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &913964133
 Transform:
   m_ObjectHideFlags: 0
@@ -6406,8 +6447,8 @@ Transform:
   m_GameObject: {fileID: 947235760}
   serializedVersion: 2
   m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -0.25412083, y: 8.930761, z: 14.952304}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.25412083, y: 16.24, z: 14.952304}
+  m_LocalScale: {x: 1.9685, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1496076002}
@@ -6479,6 +6520,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Gate
+      objectReference: {fileID: 0}
+    - target: {fileID: 4897957424493195374, guid: 7e317563c594d4fe787b60604ecdfd7c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5260175374949259475, guid: 7e317563c594d4fe787b60604ecdfd7c,
         type: 3}
@@ -7916,6 +7962,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PressurePlate (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 5277613775346696198, guid: ee25c7e485a84475d8b764ba91817c5e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6015486938433171763, guid: ee25c7e485a84475d8b764ba91817c5e,
         type: 3}
       propertyPath: m_Mesh
@@ -8044,6 +8095,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: BevelGravityCube (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4194902724994213223, guid: f6aca8f9c47972845a4ea3251c680a08,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6330559643968282613, guid: f6aca8f9c47972845a4ea3251c680a08,
         type: 3}
       propertyPath: m_Mesh
@@ -8092,7 +8148,7 @@ Transform:
   m_GameObject: {fileID: 1151909281}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.14, y: 2.44, z: 8.88}
+  m_LocalPosition: {x: 9.12, y: 2.44, z: 8.88}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8132,9 +8188,9 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 37.73
-  m_Range: 10
+  m_Color: {r: 0.5424528, g: 1, b: 0.98627895, a: 1}
+  m_Intensity: 56.63
+  m_Range: 17.622608
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -8299,6 +8355,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BevelGravityCube (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194902724994213223, guid: f6aca8f9c47972845a4ea3251c680a08,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6330559643968282613, guid: f6aca8f9c47972845a4ea3251c680a08,
         type: 3}
@@ -8605,7 +8666,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &1428996164
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -8907,12 +8968,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1284015135}
   m_PrefabAsset: {fileID: 0}
---- !u!2083052967 &1485186986 stripped
-VisualEffect:
-  m_CorrespondingSourceObject: {fileID: 3106181722856391963, guid: 1786104c02817bf4292555ecd12aad1b,
-    type: 3}
-  m_PrefabInstance: {fileID: 1284015135}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1491423479
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8985,6 +9040,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BevelGravityCube
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194902724994213223, guid: f6aca8f9c47972845a4ea3251c680a08,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6330559643968282613, guid: f6aca8f9c47972845a4ea3251c680a08,
         type: 3}
@@ -9112,6 +9172,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BevelGravityCube (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194902724994213223, guid: f6aca8f9c47972845a4ea3251c680a08,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6330559643968282613, guid: f6aca8f9c47972845a4ea3251c680a08,
         type: 3}
@@ -9307,6 +9372,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: BevelGravityCube (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 4194902724994213223, guid: f6aca8f9c47972845a4ea3251c680a08,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6330559643968282613, guid: f6aca8f9c47972845a4ea3251c680a08,
         type: 3}
       propertyPath: m_Mesh
@@ -9346,7 +9416,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1571344296
 Transform:
   m_ObjectHideFlags: 0
@@ -10184,6 +10254,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: BevelGravityCube (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 4194902724994213223, guid: f6aca8f9c47972845a4ea3251c680a08,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6330559643968282613, guid: f6aca8f9c47972845a4ea3251c680a08,
         type: 3}
       propertyPath: m_Mesh
@@ -10478,7 +10553,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1852383448
 Transform:
   m_ObjectHideFlags: 0
@@ -11002,6 +11077,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PressurePlate (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5277613775346696198, guid: ee25c7e485a84475d8b764ba91817c5e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6015486938433171763, guid: ee25c7e485a84475d8b764ba91817c5e,
         type: 3}
       propertyPath: m_Mesh
@@ -11345,6 +11425,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: DynamicScaffold
+      objectReference: {fileID: 0}
+    - target: {fileID: 6172288105607308324, guid: d48195b9890ef0c4192940b5b19f1d29,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6755221762583541233, guid: d48195b9890ef0c4192940b5b19f1d29,
         type: 3}
