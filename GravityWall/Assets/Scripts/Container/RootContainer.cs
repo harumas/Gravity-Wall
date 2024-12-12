@@ -20,13 +20,15 @@ namespace Container
         [SerializeField] private AudioMixer audioMixer;
         [SerializeField] private InputValueAdjustParameter inputAdjustParameter;
         [SerializeField] private VibrationParameter vibrationParameter;
+        [SerializeField] private SceneGroupTable sceneGroupTable;
         
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterEntryPoint<ApplicationStarter>();
             
-            builder.Register<ConfigLoader>(Lifetime.Singleton);
+            builder.Register<SaveDataLoader>(Lifetime.Singleton);
             builder.Register<SaveManager<ConfigData>>(Lifetime.Singleton);
+            builder.Register<SaveManager<SaveData>>(Lifetime.Singleton);
             builder.Register<ApplicationStopper>(Lifetime.Singleton);
             builder.Register<GameState>(Lifetime.Singleton);
             builder.Register<GamepadVibrator>(Lifetime.Singleton);
@@ -35,6 +37,7 @@ namespace Container
             builder.RegisterInstance(inputAdjustParameter);
             builder.RegisterInstance(vibrationParameter);
             builder.RegisterInstance(audioMixer);
+            builder.RegisterInstance(sceneGroupTable);
         }
     }
 }

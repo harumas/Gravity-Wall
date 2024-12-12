@@ -25,6 +25,11 @@ namespace Module.Gimmick.SystemGimmick
         public event Action OnSceneLoaded;
 
         /// <summary>
+        /// シーンアンロードが行われた際に呼ばれるイベント
+        /// </summary>
+        public event Action OnSceneUnload;
+
+        /// <summary>
         /// シーン読み込みを要求された際に呼ばれるイベント
         /// </summary>
         public event Action<SceneField, List<SceneField>> OnLoadRequested;
@@ -39,6 +44,12 @@ namespace Module.Gimmick.SystemGimmick
             OnSceneLoaded?.Invoke();
         }
 
+        public void CallUnload()
+        {
+            Reset();
+            OnSceneUnload?.Invoke();
+        }
+
         public void Reset()
         {
             isTouched = false;
@@ -47,7 +58,7 @@ namespace Module.Gimmick.SystemGimmick
         public void OnTriggerEnter(Collider other)
         {
             bool isTriggerDetected = triggerDetect && !isTouched;
-            
+
             // プレイヤーがトリガーに触れた場合
             if (isTriggerDetected && other.CompareTag(Tag.Player))
             {

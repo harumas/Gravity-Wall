@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using CoreModule.Helper.Attribute;
 using Cysharp.Threading.Tasks;
@@ -13,9 +14,12 @@ namespace Application.SceneManagement
     /// </summary>
     public class AdditiveSceneLoadExecutor
     {
+        public event Action OnUnloadRequested;
+        
         private readonly AdditiveSceneLoader additiveSceneLoader = new();
         private CancellationToken cancellationToken;
-        private (SceneField mainScene, List<SceneField> fields) loadContext;
+        private AdditiveLevelLoadTrigger recentTrigger;
+        
 
         public AdditiveSceneLoadExecutor()
         {
@@ -39,17 +43,18 @@ namespace Application.SceneManagement
         /// </summary>
         public UniTask UnloadAdditiveScenes()
         {
+            recentTrigger.CallUnload();
+            OnUnloadRequested?.Invoke();
             return additiveSceneLoader.UnloadAdditiveScenes(cancellationToken);
         }
         
         private async UniTaskVoid OnLoadRequested(SceneField mainScene, List<SceneField> fields, AdditiveLevelLoadTrigger trigger)
         {
-            loadContext = (mainScene, fields);
-
             // 追加シーン読み込みを非同期で行う
             await additiveSceneLoader.Load((mainScene, fields), cancellationToken);
 
             trigger.CallLoaded();
+            recentTrigger = trigger;
         }
     }
 }

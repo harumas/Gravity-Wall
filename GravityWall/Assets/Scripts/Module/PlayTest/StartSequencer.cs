@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 using Cinemachine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using System.Threading.Tasks;
 using Constants;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 
 namespace Module.PlayTest
@@ -15,10 +16,17 @@ namespace Module.PlayTest
         [SerializeField] private CanvasGroup tutorialCanvas;
         [SerializeField] private float depthFocusDistance = 200;
         [SerializeField] private float depthFocalLength = 200;
+        [SerializeField] private float startDelay = 1f;
+        [SerializeField] private float endDelay = 1.5f;
+        [SerializeField] private float tutorialGuideDelay = 4.5f;
+
         private DepthOfField depth;
-        public async Task StartSequence()
+        private Tweener fadeOutTween;
+
+        public async UniTask StartSequence()
         {
-            await Task.Delay(1000);
+            await UniTask.Delay(TimeSpan.FromSeconds(startDelay), cancellationToken: destroyCancellationToken);
+
             titleVirtualCamera.Priority = 0;
             if (volume.profile.TryGet<DepthOfField>(out depth))
             {
@@ -26,25 +34,36 @@ namespace Module.PlayTest
                 depth.focalLength.value = depthFocalLength;
             }
 
-            await Task.Delay(1500);
+            await UniTask.Delay(TimeSpan.FromSeconds(endDelay), cancellationToken: destroyCancellationToken);
 
-            Invoke("OnTutorialGuide", 3);
+            OnTutorialGuide().Forget();
         }
 
-        Tweener tweener;
 
-        void OnTutorialGuide()
+        private async UniTaskVoid OnTutorialGuide()
         {
-            tweener.Kill();
-            DOTween.To(() => tutorialCanvas.alpha, (v) => tutorialCanvas.alpha = v, 1, 1.0f);
+            await UniTask.Delay(TimeSpan.FromSeconds(tutorialGuideDelay), cancellationToken: destroyCancellationToken);
+            
+            fadeOutTween.Kill();
+            FadeInCanvas();
         }
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag(Tag.Player))
             {
-                tweener = DOTween.To(() => tutorialCanvas.alpha, (v) => tutorialCanvas.alpha = v, 0, 1.0f);
+                fadeOutTween = FadeOutCanvas();
             }
+        }
+
+        private void FadeInCanvas()
+        {
+            DOTween.To(() => tutorialCanvas.alpha, (v) => tutorialCanvas.alpha = v, 1, 1.0f);
+        }
+
+        private Tweener FadeOutCanvas()
+        {
+            return DOTween.To(() => tutorialCanvas.alpha, (v) => tutorialCanvas.alpha = v, 0, 1.0f);
         }
     }
 }

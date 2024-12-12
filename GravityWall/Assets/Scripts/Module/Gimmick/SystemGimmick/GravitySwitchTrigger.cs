@@ -7,28 +7,42 @@ namespace Module.Gimmick.SystemGimmick
     public class GravitySwitchTrigger : MonoBehaviour
     {
         private bool isEnable = true;
+        private GravitySwitcher gravitySwitcher;
+        
         public void SetEnable(bool isEnable)
         {
             this.isEnable = isEnable;
+
+            if (!isEnable && gravitySwitcher != null)
+            {
+                gravitySwitcher.Enable();
+            }
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!isEnable) return;
+            if (!isEnable)
+            {
+                return;
+            }
 
             if (other.gameObject.CompareTag(Tag.Player))
             {
-                other.GetComponent<GravitySwitcher>().Disable();
+                gravitySwitcher = other.GetComponent<GravitySwitcher>();
+                gravitySwitcher.Disable();
             }
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (!isEnable) return;
+            if (!isEnable)
+            {
+                return;
+            }
 
             if (other.gameObject.CompareTag(Tag.Player))
             {
-                other.GetComponent<GravitySwitcher>().Enable();
+                gravitySwitcher.Enable();
             }
         }
     }

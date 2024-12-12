@@ -78,7 +78,7 @@ namespace Module.PlayTest
                         {
                             Deactivate();
                         }
-                    });
+                    }).AddTo(this);
             }
         }
 
