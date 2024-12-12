@@ -7,20 +7,23 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: StylaizedWaterA 1
+  m_Name: DirtyWater
   m_Shader: {fileID: -6465566751694194690, guid: 972b8253babe6864c97263ef02d0f04d,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _ALPHAPREMULTIPLY_ON
+  - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
+  m_CustomRenderQueue: 3000
   stringTagMap:
-    RenderType: Opaque
-  disabledShaderPasses: []
+    RenderType: Transparent
+  disabledShaderPasses:
+  - DepthOnly
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -108,7 +111,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AO: 1
-    - _Alpha: 1
+    - _Alpha: 0.98
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Blend: 0
@@ -121,25 +124,28 @@ Material:
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _Distance: 4.81
-    - _DstBlend: 0
+    - _Distance: 2.57
+    - _DstBlend: 10
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
-    - _FoamAmount: 2.86
+    - _FoamAmount: 1.6
+    - _FoamCutOff: 1.13
     - _FoamCutoff: 1.16
-    - _FoamScale: 103.67
+    - _FoamNoiseScale: 8.05
+    - _FoamScale: 95.58
     - _FoamSpeed: 1.03
     - _FresnelPower: 0.35
     - _FresnelScale: 0.96
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _HightFrequency: 1.46
-    - _IridecentIntensity: 0.37
-    - _Metalic: 0.29
+    - _HightFrequency: 9.64
+    - _IridecentIntensity: 0.33
+    - _Metalic: 0.66
     - _Metallic: 0
     - _NoiseSize: 105.76
-    - _NoiseSize2: 63
+    - _NoiseSize2: 60.97
+    - _NormalIntensity: 0.35
     - _NormalStrength: 1
     - _OcclusionStrength: 1
     - _Parallax: 0.005
@@ -149,39 +155,39 @@ Material:
     - _RefractionSpeed: 0.12
     - _RefractionStrength: 0.67
     - _RenderFront: 0
-    - _SmoothEdge1: 5.2
-    - _SmoothEdge2: 0.01
-    - _Smoothness: 0
+    - _SmoothEdge1: 12.1
+    - _SmoothEdge2: 6.76
+    - _Smoothness: 0.65
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _Speed: 0.01
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
-    - _Surface: 0
+    - _Surface: 1
     - _VoronoiAngleOffset: 0.89
     - _VoronoiIntensity: 6.7
     - _VoronoiPower: 34.26
-    - _VoronoiScale: 13.2
-    - _WaveAmplitude: 0.1
-    - _WaveSpeed: 0.01
+    - _VoronoiScale: 11.41
+    - _WaveAmplitude: 0.0002
+    - _WaveSpeed: 0.02
     - _WorkflowMode: 1
     - _ZTest: 4
-    - _ZWrite: 1
+    - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
-    - _BaseColor: {r: 0.115909085, g: 0.11949676, b: 0.0056366245, a: 0}
+    - _BaseColor: {r: 0.13333334, g: 0.12892522, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DeepColor: {r: 0.8470588, g: 0, b: 1, a: 0.19215687}
+    - _DeepColor: {r: 0.5745883, g: 0.59119487, b: 0, a: 0.19215687}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FoamColor: {r: 0.9968553, g: 1, b: 0.99929404, a: 0.7411765}
+    - _FoamColor: {r: 1.8443025, g: 1.8443025, b: 1.8443025, a: 0.19215687}
     - _RefractionScale: {r: 3, g: 9.26, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _SurfaceColor: {r: 0.16139334, g: 0, b: 0.1792453, a: 1}
     - _Vector2: {r: 160.4, g: 121.44, b: 0, a: 0}
     - _VoronoiColor: {r: 0.5404413, g: 0.5660378, b: 0.20647916, a: 1}
     - _VoronoiSpeed: {r: 0.09, g: 0.13, b: 0, a: 0}
-    - _VoronoiTiling: {r: 8, g: 8, b: 0, a: 0}
-    - _WaterTiling: {r: 2.2, g: 2.2, b: 0, a: 0}
+    - _VoronoiTiling: {r: 10.46, g: 8, b: 0, a: 0}
+    - _WaterTiling: {r: 2.15, g: 2.5, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &3774382099832300297
 MonoBehaviour:
