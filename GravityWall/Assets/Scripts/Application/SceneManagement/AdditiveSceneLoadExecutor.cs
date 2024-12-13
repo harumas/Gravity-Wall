@@ -43,6 +43,11 @@ namespace Application.SceneManagement
         /// </summary>
         public UniTask UnloadAdditiveScenes()
         {
+            if (recentTrigger == null)
+            {
+                return UniTask.CompletedTask;
+            }
+            
             recentTrigger.CallUnload();
             OnUnloadRequested?.Invoke();
             return additiveSceneLoader.UnloadAdditiveScenes(cancellationToken);

@@ -32,7 +32,10 @@ namespace Presentation
 
             foreach (GameClearPoint clearPoint in clearPoints)
             {
-                clearPoint.OnClear += () => gameState.SetState(GameState.State.StageSelect);
+                if (clearPoint.StageId == 0)
+                {
+                    clearPoint.OnClear += () => gameState.SetState(GameState.State.StageSelect);
+                }
             }
 
             foreach (ClearSavePoint savePoint in savePoints)
