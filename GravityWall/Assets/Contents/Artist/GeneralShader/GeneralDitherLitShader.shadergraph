@@ -2716,7 +2716,7 @@
     "m_Type": "UnityEditor.ShaderGraph.BooleanMaterialSlot",
     "m_ObjectId": "4b413937d6a24f0d80a16d3079f1f963",
     "m_Id": 0,
-    "m_DisplayName": "Roughness?",
+    "m_DisplayName": "IsRoughness",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -4002,7 +4002,7 @@
     "m_Type": "UnityEditor.ShaderGraph.BooleanMaterialSlot",
     "m_ObjectId": "8b282be457f446548073350deadea408",
     "m_Id": 0,
-    "m_DisplayName": "AOTextureUse",
+    "m_DisplayName": "IsAOTextureUse",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -4510,6 +4510,21 @@
     "m_NormalMapSpace": 0,
     "m_EnableGlobalMipBias": true,
     "m_MipSamplingMode": 0
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "9c02af13c2774696a355393d5530db83",
+    "m_Id": 561397414,
+    "m_DisplayName": "TargetMaxDistance",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "_TargetMaxDistance",
+    "m_StageCapability": 3,
+    "m_Value": 5.0,
+    "m_DefaultValue": 0.0,
+    "m_Labels": []
 }
 
 {
@@ -6076,10 +6091,10 @@
     "m_Guid": {
         "m_GuidSerialized": "20ff88bc-5f9e-46f9-92bc-3d4a05771e8b"
     },
-    "m_Name": "AOTextureUse",
+    "m_Name": "IsAOTextureUse",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "AOTextureUse",
-    "m_DefaultReferenceName": "_AOTextureUse",
+    "m_RefNameGeneratedByDisplayName": "IsAOTextureUse",
+    "m_DefaultReferenceName": "_IsAOTextureUse",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -6210,10 +6225,10 @@
     "m_Guid": {
         "m_GuidSerialized": "a5767f98-a470-468e-9c87-ea35dafc4672"
     },
-    "m_Name": "Roughness?",
+    "m_Name": "IsRoughness",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "Roughness?",
-    "m_DefaultReferenceName": "_Roughness",
+    "m_RefNameGeneratedByDisplayName": "IsRoughness",
+    "m_DefaultReferenceName": "_IsRoughness",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
