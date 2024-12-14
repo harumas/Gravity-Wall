@@ -17,6 +17,7 @@ namespace Module.Gimmick.SystemGimmick
 
         [SerializeField, Header("読み込むシーン名")] private List<SceneField> levelReference;
         [SerializeField, Header("トリガーによる読み込みを行うか")] private bool triggerDetect;
+        [SerializeField] private GameObject[] hubBody;
         [SerializeField] private bool isTouched;
 
         /// <summary>
@@ -37,6 +38,11 @@ namespace Module.Gimmick.SystemGimmick
         public void Load()
         {
             OnLoadRequested?.Invoke(mainScene, levelReference);
+            
+            foreach (GameObject obj in hubBody)
+            {
+                obj.SetActive(false);
+            }
         }
 
         public void CallLoaded()
@@ -47,6 +53,10 @@ namespace Module.Gimmick.SystemGimmick
         public void CallUnload()
         {
             Reset();
+            foreach (GameObject obj in hubBody)
+            {
+                obj.SetActive(true);
+            }
             OnSceneUnload?.Invoke();
         }
 
