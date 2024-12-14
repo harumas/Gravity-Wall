@@ -28,7 +28,7 @@ namespace Module.Gimmick.LevelGimmick
         {
             if (collision.gameObject.CompareTag(Tag.Player))
             {
-                if (WorldGravity.Instance.Gravity == Vector3.left)
+                if (WorldGravity.Instance.Gravity == Vector3.forward)
                 {
                     BreakGlassEffect();
                 }

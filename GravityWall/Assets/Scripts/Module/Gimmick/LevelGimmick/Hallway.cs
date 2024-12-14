@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Constants;
+using Module.Gimmick.SystemGimmick;
 using R3;
 using TriInspector;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace Module.Gimmick.LevelGimmick
     public class Hallway : MonoBehaviour
     {
         [SerializeField] private GameObject hallwayBody;
+        [SerializeField] private GravitySwitchTrigger gravitySwitchTrigger;
         [SerializeField] private List<string> gimmickObjects;
         [SerializeField, ReadOnly] private List<Gate> referencedGates;
 
@@ -58,6 +60,11 @@ namespace Module.Gimmick.LevelGimmick
         {
             hallwayBody.SetActive(true);
 
+            if (gravitySwitchTrigger != null)
+            {
+                gravitySwitchTrigger.SetEnable(true);
+            }
+
             foreach (Gate otherGate in referencedGates)
             {
                 otherGate.gameObject.SetActive(true);
@@ -67,6 +74,11 @@ namespace Module.Gimmick.LevelGimmick
         private void Disable(Gate gate)
         {
             hallwayBody.SetActive(false);
+            
+            if (gravitySwitchTrigger != null)
+            {
+                gravitySwitchTrigger.SetEnable(false);
+            }
 
             foreach (Gate otherGate in referencedGates)
             {

@@ -45,7 +45,7 @@ namespace Module.Gimmick.LevelGimmick
         {
             if (other.gameObject.CompareTag(Tag.Player))
             {
-                if (WorldGravity.Instance.Gravity == Vector3.left)
+                if (WorldGravity.Instance.Gravity == Vector3.forward)
                 {
                     foreach (var trigger in gravitySwitchTriggers)
                     {
@@ -94,7 +94,7 @@ namespace Module.Gimmick.LevelGimmick
         {
             if (other.gameObject.CompareTag(Tag.Player))
             {
-                if (WorldGravity.Instance.Gravity == Vector3.left)
+                if (WorldGravity.Instance.Gravity == Vector3.forward)
                 {
                     GetComponent<GravitySwitchTrigger>().SetEnable(false);
                     other.GetComponent<GravitySwitcher>().Disable();

@@ -36,6 +36,7 @@ namespace Module.Gimmick
             }
 
             OnGimmickReferenceUpdated?.Invoke(this);
+            OnGimmickReferenceUpdated = null;
         }
 
         public bool TryGetGimmick<T>(string gimmickPath, out T gimmick) where T : GimmickObject

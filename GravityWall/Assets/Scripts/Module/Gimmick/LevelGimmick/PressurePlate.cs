@@ -36,7 +36,7 @@ namespace Module.Gimmick.LevelGimmick
         {
             Reset();
 
-            triggerEventBridge.Enter += collider =>
+            triggerEventBridge.Enter.AddListener(collider =>
             {
                 //既に押されていたら終了
                 if (state == State.Pushed)
@@ -51,9 +51,9 @@ namespace Module.Gimmick.LevelGimmick
                     pushCanceller = new CancellationTokenSource();
                     Enable();
                 }
-            };
+            });
 
-            triggerEventBridge.Exit += collider =>
+            triggerEventBridge.Exit.AddListener(collider =>
             {
                 //既に押されていたら終了
                 if (state == State.Pushed)
@@ -61,13 +61,14 @@ namespace Module.Gimmick.LevelGimmick
                     return;
                 }
 
-                // 押されている状態でターゲットのタグが離れたら押し終わる
-                if (!isEnabled.Value && state == State.Pushing && targetTags.Any(tag => collider.CompareTag(tag)))
+                // 押されていない状態でターゲットのタグが触れたら押し始める
+                if (!isEnabled.Value && state == State.NoTouch && targetTags.Any(tag => collider.CompareTag(tag)))
                 {
-                    state = State.NoTouch;
-                    CancelPush();
+                    state = State.Pushing;
+                    pushCanceller = new CancellationTokenSource();
+                    Enable();
                 }
-            };
+            });
         }
 
         public override void Enable(bool doEffect = true)
