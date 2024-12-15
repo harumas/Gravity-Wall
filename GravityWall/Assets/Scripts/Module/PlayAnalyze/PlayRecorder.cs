@@ -9,6 +9,7 @@ using Module.Player;
 using R3;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static Module.Player.PlayerController;
 
 namespace Module.PlayAnalyze
 {
@@ -27,7 +28,7 @@ namespace Module.PlayAnalyze
         private CancellationTokenSource cancellationTokenSource;
         private PlayerController playerController;
         private Action onPlayerRotate;
-        private Action onPlayerDeath;
+        private Action<DeathType> onPlayerDeath;
 
         private void Start()
         {
@@ -70,7 +71,7 @@ namespace Module.PlayAnalyze
 
             // プレイヤーの回転数と死亡数を収集
             onPlayerRotate += () => rotateCount++;
-            onPlayerDeath += () => deathCount++;
+            onPlayerDeath += (value) => { if (value != DeathType.isAlive) deathCount++; };
 
             while (!cancellationTokenSource.Token.IsCancellationRequested)
             {
@@ -152,9 +153,9 @@ namespace Module.PlayAnalyze
                 // 死亡イベント
                 controller.IsDeath.Subscribe(value =>
                 {
-                    if (value)
+                    if (value != DeathType.isAlive)
                     {
-                        onPlayerDeath?.Invoke();
+                        onPlayerDeath?.Invoke(value);
                     }
                 }).AddTo(cancellationTokenSource.Token);
             }

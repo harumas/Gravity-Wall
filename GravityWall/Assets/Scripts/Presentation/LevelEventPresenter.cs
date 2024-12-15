@@ -9,6 +9,7 @@ using Module.Player;
 using VContainer;
 using VContainer.Unity;
 using View;
+using static Module.Player.PlayerController;
 
 namespace Presentation
 {
@@ -60,26 +61,26 @@ namespace Presentation
             //死亡床のイベント登録
             foreach (DeathFloor deathFloor in deathFloors)
             {
-                deathFloor.OnEnter += () =>
+                deathFloor.OnEnter += (type) =>
                 {
                     if (respawnManager.IsRespawning)
                     {
                         return;
                     }
 
-                    OnEnterDeathFloor().Forget();
+                    OnEnterDeathFloor(type).Forget();
                 };
             }
         }
 
-        private async UniTaskVoid OnEnterDeathFloor()
+        private async UniTaskVoid OnEnterDeathFloor(DeathType type)
         {
             if (respawnDataOnDeath.LevelResetter == null)
             {
                 throw new NoNullAllowedException("チェックポイントが設定されていません！");
             }
 
-            playerController.Kill();
+            playerController.Kill(type);
 
             await respawnManager.RespawnPlayer(respawnDataOnDeath, RespawnViewSequence);
 
