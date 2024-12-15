@@ -6,6 +6,8 @@ using UnityEngine.Rendering.Universal;
 using Cinemachine;
 using Module.Gimmick.SystemGimmick;
 using Constants;
+using Core.Sound;
+using CoreModule.Sound;
 
 namespace Module.Gimmick.LevelGimmick
 {
@@ -65,6 +67,9 @@ namespace Module.Gimmick.LevelGimmick
                     }
 
                     isPlayerEnter = true;
+
+                    //ストップ機能が付いたら実装
+                    //SoundManager.Instance.Play(SoundKey.FallWind, MixerType.SE);
                 }
             }
         }
