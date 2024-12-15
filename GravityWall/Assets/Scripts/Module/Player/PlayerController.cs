@@ -37,8 +37,8 @@ namespace Module.Player
         public enum deathType
         {
             electro,
-            isAlive,
             poison,
+            isAlive,
         }
 
         public ReadOnlyReactiveProperty<(Vector3 xv, Vector3 yv)> OnMove => onMove;
@@ -48,12 +48,15 @@ namespace Module.Player
         private float landingTime;
         private bool isJumpingInput;
 
+        private void Awake()
+        {
+            isDeath.Value = deathType.isAlive;
+        }
+
         private void Start()
         {
             simpleInertia = new SimpleInertia(rigBody);
             playerFunction = new PlayerFunction(transform, cameraPivot, rigBody, localGravity, parameter);
-
-            isDeath.Value = deathType.isAlive;
 
             isRotating.Subscribe(isRotating =>
             {

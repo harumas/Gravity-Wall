@@ -40,9 +40,10 @@ namespace Module.Effect
             effect.gameObject.SetActive(type == PlayerController.deathType.electro);
             poisonEffect.gameObject.SetActive(type == PlayerController.deathType.poison);
 
-            if (type == PlayerController.deathType.electro) {
+            if (type == PlayerController.deathType.electro) 
+            {
                 SoundManager.Instance.Play(SoundKey.ElectricShock, MixerType.SE);
-            }
+            }else
             if (type == PlayerController.deathType.poison)
             {
                 SoundManager.Instance.Play(SoundKey.Poison, MixerType.SE);
