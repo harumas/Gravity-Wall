@@ -32,8 +32,14 @@ namespace Module.Player
         public ReadOnlyReactiveProperty<float> RotationAngle => rotationAngle;
         [SerializeField] private SerializableReactiveProperty<float> rotationAngle = new SerializableReactiveProperty<float>();
 
-        public ReadOnlyReactiveProperty<bool> IsDeath => isDeath;
-        [SerializeField] private SerializableReactiveProperty<bool> isDeath = new SerializableReactiveProperty<bool>();
+        public ReadOnlyReactiveProperty<DeathType> IsDeath => isDeath;
+        [SerializeField] private SerializableReactiveProperty<DeathType> isDeath = new SerializableReactiveProperty<DeathType>();
+        public enum deathType
+        {
+            electro,
+            isAlive,
+            poison,
+        }
 
         public ReadOnlyReactiveProperty<(Vector3 xv, Vector3 yv)> OnMove => onMove;
         private ReactiveProperty<(Vector3 xv, Vector3 yv)> onMove = new ReactiveProperty<(Vector3 xv, Vector3 yv)>();
@@ -46,6 +52,8 @@ namespace Module.Player
         {
             simpleInertia = new SimpleInertia(rigBody);
             playerFunction = new PlayerFunction(transform, cameraPivot, rigBody, localGravity, parameter);
+
+            isDeath.Value = DeathType.isAlive;
 
             isRotating.Subscribe(isRotating =>
             {
@@ -123,7 +131,7 @@ namespace Module.Player
             }
 
             // 速度調整
-            playerFunction.AdjustVelocity(isMoveInput, isDeath.Value);
+            playerFunction.AdjustVelocity(isMoveInput, isDeath.Value != DeathType.isAlive);
             onMove.Value = isMoveInput ? playerFunction.GetSeperatedVelocity() : (Vector3.zero, Vector3.zero);
 
             // ジャンプ中の重力を調整
@@ -168,9 +176,9 @@ namespace Module.Player
             simpleInertia?.AddInertia(inertia);
         }
 
-        public void Kill()
+        public void Kill(DeathType type)
         {
-            isDeath.Value = true;
+            isDeath.Value = type;
             isJumping.Value = false;
             isGrounding.Value = true;
             rigBody.velocity = Vector3.zero;
@@ -180,7 +188,7 @@ namespace Module.Player
 
         public void Revival()
         {
-            isDeath.Value = false;
+            isDeath.Value = DeathType.isAlive;
         }
 
         public void Lock()

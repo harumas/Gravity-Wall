@@ -15,6 +15,8 @@ namespace Core.Sound
 		ElectricShock,
 		Jump,
 		Switch,
+		FallWind,
+		Poison,
 	}
 	
 	public enum MixerType

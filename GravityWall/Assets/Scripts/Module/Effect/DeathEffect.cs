@@ -9,7 +9,7 @@ namespace Module.Effect
 {
     public class DeathEffect : MonoBehaviour
     {
-        [SerializeField] private GameObject effect;
+        [SerializeField] private GameObject effect, poisonEffect;
         [SerializeField] private PlayerController playerController;
         [SerializeField] private Transform cameraPivot;
         [SerializeField] private Animator anim;
@@ -18,9 +18,9 @@ namespace Module.Effect
         {
             playerController.IsDeath.Subscribe(isDeath =>
             {
-                if (isDeath)
+                if (isDeath != PlayerController.DeathType.isAlive)
                 {
-                    OnAttackHit().Forget();
+                    OnAttackHit(isDeath).Forget();
                 }
 
             }).AddTo(this);
@@ -33,12 +33,20 @@ namespace Module.Effect
         private readonly int hitStopDuration = 500;
         private readonly int hitStopDelay = 200;
 
-        private async UniTaskVoid OnAttackHit()
+        private async UniTaskVoid OnAttackHit(PlayerController.DeathType type)
         {
             cameraPivot.DOShakePosition(shakeStrength, shakeDuration, shakeCount);
 
-            effect.gameObject.SetActive(true);
-            SoundManager.Instance.Play(SoundKey.ElectricShock, MixerType.SE);
+            effect.gameObject.SetActive(type == PlayerController.DeathType.electro);
+            poisonEffect.gameObject.SetActive(type == PlayerController.DeathType.poison);
+
+            if (type == PlayerController.DeathType.electro) {
+                SoundManager.Instance.Play(SoundKey.ElectricShock, MixerType.SE);
+            }
+            if (type == PlayerController.DeathType.poison)
+            {
+                SoundManager.Instance.Play(SoundKey.Poison, MixerType.SE);
+            }
 
             await UniTask.Delay(hitStopDelay);
 
@@ -49,6 +57,7 @@ namespace Module.Effect
 
 
             effect.gameObject.SetActive(false);
+            poisonEffect.gameObject.SetActive(false);
         }
     }
 }
