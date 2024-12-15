@@ -9,7 +9,7 @@ namespace Module.Effect
 {
     public class DeathEffect : MonoBehaviour
     {
-        [SerializeField] private GameObject effect,poisonEffect;
+        [SerializeField] private GameObject effect, poisonEffect;
         [SerializeField] private PlayerController playerController;
         [SerializeField] private Transform cameraPivot;
         [SerializeField] private Animator anim;

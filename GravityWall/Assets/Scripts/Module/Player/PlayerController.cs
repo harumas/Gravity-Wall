@@ -34,7 +34,7 @@ namespace Module.Player
 
         public ReadOnlyReactiveProperty<DeathType> IsDeath => isDeath;
         [SerializeField] private SerializableReactiveProperty<DeathType> isDeath = new SerializableReactiveProperty<DeathType>();
-        public enum DeathType
+        public enum deathType
         {
             electro,
             isAlive,
