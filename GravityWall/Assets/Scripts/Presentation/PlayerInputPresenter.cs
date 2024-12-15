@@ -24,7 +24,7 @@ namespace Presentation
             gameInput.Move
                 .Subscribe(moveInput =>
                 {
-                    if (playerController.IsDeath.CurrentValue == PlayerController.DeathType.isAlive)
+                    if (playerController.IsDeath.CurrentValue == PlayerController.deathType.isAlive)
                     {
                         playerController.OnMoveInput(moveInput);
                     }
@@ -34,7 +34,7 @@ namespace Presentation
             gameInput.Jump
                 .Subscribe(isStarted =>
                 {
-                    if (playerController.IsDeath.CurrentValue == PlayerController.DeathType.isAlive)
+                    if (playerController.IsDeath.CurrentValue == PlayerController.deathType.isAlive)
                     {
                         if (isStarted)
                         {
@@ -51,7 +51,7 @@ namespace Presentation
             gameInput.LookDelta
                 .Subscribe(lookInput =>
                 {
-                    if (playerController.IsDeath.CurrentValue == PlayerController.DeathType.isAlive)
+                    if (playerController.IsDeath.CurrentValue == PlayerController.deathType.isAlive)
                     {
                         cameraController.OnRotateCameraInput(lookInput);
                     }
@@ -61,7 +61,7 @@ namespace Presentation
             gameInput.Move
                 .Subscribe(moveInput =>
                 {
-                    if (playerController.IsDeath.CurrentValue == PlayerController.DeathType.isAlive)
+                    if (playerController.IsDeath.CurrentValue == PlayerController.deathType.isAlive)
                     {
                         playerTargetSyncer.OnMoveInput(moveInput);
                     }
@@ -71,7 +71,7 @@ namespace Presentation
             gameInput.Move
                 .Subscribe(moveInput =>
                 {
-                    if (playerController.IsDeath.CurrentValue == PlayerController.DeathType.isAlive)
+                    if (playerController.IsDeath.CurrentValue == PlayerController.deathType.isAlive)
                     {
                         gravitySwitcher.OnMoveInput(moveInput);
                     }

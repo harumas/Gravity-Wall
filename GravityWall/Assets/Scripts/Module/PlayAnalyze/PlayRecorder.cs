@@ -28,7 +28,7 @@ namespace Module.PlayAnalyze
         private CancellationTokenSource cancellationTokenSource;
         private PlayerController playerController;
         private Action onPlayerRotate;
-        private Action<DeathType> onPlayerDeath;
+        private Action<deathType> onPlayerDeath;
 
         private void Start()
         {
@@ -71,7 +71,7 @@ namespace Module.PlayAnalyze
 
             // プレイヤーの回転数と死亡数を収集
             onPlayerRotate += () => rotateCount++;
-            onPlayerDeath += (value) => { if (value != DeathType.isAlive) deathCount++; };
+            onPlayerDeath += (value) => { if (value != deathType.isAlive) deathCount++; };
 
             while (!cancellationTokenSource.Token.IsCancellationRequested)
             {
@@ -153,7 +153,7 @@ namespace Module.PlayAnalyze
                 // 死亡イベント
                 controller.IsDeath.Subscribe(value =>
                 {
-                    if (value != DeathType.isAlive)
+                    if (value != deathType.isAlive)
                     {
                         onPlayerDeath?.Invoke(value);
                     }

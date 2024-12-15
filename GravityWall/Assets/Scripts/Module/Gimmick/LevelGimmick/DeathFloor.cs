@@ -10,9 +10,9 @@ namespace Module.Gimmick.LevelGimmick
     /// </summary>
     public class DeathFloor : MonoBehaviour
     {
-        [SerializeField] private DeathType floorType;
+        [SerializeField] private deathType floorType;
 
-        public event Action<DeathType> OnEnter;
+        public event Action<deathType> OnEnter;
         
         private void OnCollisionEnter(Collision collision)
         {

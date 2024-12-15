@@ -18,7 +18,7 @@ namespace Module.Effect
         {
             playerController.IsDeath.Subscribe(isDeath =>
             {
-                if (isDeath != PlayerController.DeathType.isAlive)
+                if (isDeath != PlayerController.deathType.isAlive)
                 {
                     OnAttackHit(isDeath).Forget();
                 }
@@ -33,17 +33,17 @@ namespace Module.Effect
         private readonly int hitStopDuration = 500;
         private readonly int hitStopDelay = 200;
 
-        private async UniTaskVoid OnAttackHit(PlayerController.DeathType type)
+        private async UniTaskVoid OnAttackHit(PlayerController.deathType type)
         {
             cameraPivot.DOShakePosition(shakeStrength, shakeDuration, shakeCount);
 
-            effect.gameObject.SetActive(type == PlayerController.DeathType.electro);
-            poisonEffect.gameObject.SetActive(type == PlayerController.DeathType.poison);
+            effect.gameObject.SetActive(type == PlayerController.deathType.electro);
+            poisonEffect.gameObject.SetActive(type == PlayerController.deathType.poison);
 
-            if (type == PlayerController.DeathType.electro) {
+            if (type == PlayerController.deathType.electro) {
                 SoundManager.Instance.Play(SoundKey.ElectricShock, MixerType.SE);
             }
-            if (type == PlayerController.DeathType.poison)
+            if (type == PlayerController.deathType.poison)
             {
                 SoundManager.Instance.Play(SoundKey.Poison, MixerType.SE);
             }

@@ -32,8 +32,8 @@ namespace Module.Player
         public ReadOnlyReactiveProperty<float> RotationAngle => rotationAngle;
         [SerializeField] private SerializableReactiveProperty<float> rotationAngle = new SerializableReactiveProperty<float>();
 
-        public ReadOnlyReactiveProperty<DeathType> IsDeath => isDeath;
-        [SerializeField] private SerializableReactiveProperty<DeathType> isDeath = new SerializableReactiveProperty<DeathType>();
+        public ReadOnlyReactiveProperty<deathType> IsDeath => isDeath;
+        [SerializeField] private SerializableReactiveProperty<deathType> isDeath = new SerializableReactiveProperty<deathType>();
         public enum deathType
         {
             electro,
@@ -53,7 +53,7 @@ namespace Module.Player
             simpleInertia = new SimpleInertia(rigBody);
             playerFunction = new PlayerFunction(transform, cameraPivot, rigBody, localGravity, parameter);
 
-            isDeath.Value = DeathType.isAlive;
+            isDeath.Value = deathType.isAlive;
 
             isRotating.Subscribe(isRotating =>
             {
@@ -131,7 +131,7 @@ namespace Module.Player
             }
 
             // 速度調整
-            playerFunction.AdjustVelocity(isMoveInput, isDeath.Value != DeathType.isAlive);
+            playerFunction.AdjustVelocity(isMoveInput, isDeath.Value != deathType.isAlive);
             onMove.Value = isMoveInput ? playerFunction.GetSeperatedVelocity() : (Vector3.zero, Vector3.zero);
 
             // ジャンプ中の重力を調整
@@ -176,7 +176,7 @@ namespace Module.Player
             simpleInertia?.AddInertia(inertia);
         }
 
-        public void Kill(DeathType type)
+        public void Kill(deathType type)
         {
             isDeath.Value = type;
             isJumping.Value = false;
@@ -188,7 +188,7 @@ namespace Module.Player
 
         public void Revival()
         {
-            isDeath.Value = DeathType.isAlive;
+            isDeath.Value = deathType.isAlive;
         }
 
         public void Lock()
