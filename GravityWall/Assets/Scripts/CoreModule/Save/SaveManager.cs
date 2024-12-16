@@ -10,18 +10,20 @@ namespace CoreModule.Save
     public class SaveManager<T> where T : ICloneable<T>
     {
         public T Data { get; private set; }
-        
-        public void Initialize(T data)
+        private T defaultSaveData;
+
+        public void Initialize(T data, T defaultSaveData)
         {
             if (Data != null)
             {
                 Debug.LogError("SaveManagerは初期化済みです");
                 return;
             }
-            
+
             Data = data;
+            this.defaultSaveData = defaultSaveData;
         }
-        
+
         /// <summary>
         /// ロード処理。ファイルがなかった場合は、SaveDataクラスの初期値を使う
         /// </summary>
@@ -29,6 +31,7 @@ namespace CoreModule.Save
         {
             string name = typeof(T).Name;
             SaveUtility.Delete(name);
+            Data = defaultSaveData.Clone();
         }
 
         /// <summary>

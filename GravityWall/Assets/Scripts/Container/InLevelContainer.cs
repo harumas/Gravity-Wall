@@ -13,6 +13,9 @@ using VContainer.Unity;
 
 namespace Container
 {
+    /// <summary>
+    /// ステージ毎のDIコンテナ
+    /// </summary>
     public class InLevelContainer : LifetimeScope
     {
         private async void Start()

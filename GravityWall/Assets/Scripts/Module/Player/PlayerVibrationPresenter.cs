@@ -27,7 +27,7 @@ namespace Module.Player
             playerController.IsDeath
                 .Subscribe(value =>
                 {
-                    if (value != PlayerController.deathType.isAlive)
+                    if (value != PlayerController.DeathType.IsAlive)
                     {
                         lastVibrationTime = Time.time;
                         gamepadVibrator.Vibrate(parameter.DeathDuration, parameter.DeathSpeed, parameter.DeathSpeed);

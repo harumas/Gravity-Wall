@@ -42,11 +42,11 @@ namespace Module.Config
             //保存されたセーブデータのロード
             SaveData defaultSaveData = new SaveData();
             SaveData saveData = await LoadData(defaultSaveData);
-            saveManager.Initialize(saveData);
+            saveManager.Initialize(saveData, defaultSaveData);
 
             //保存されたコンフィグのロード
             ConfigData configData = await LoadData(defaultConfig.GetData());
-            configManager.Initialize(configData);
+            configManager.Initialize(configData, defaultConfig.GetData());
 
             OnLoaded?.Invoke(saveData, configData);
             return true;

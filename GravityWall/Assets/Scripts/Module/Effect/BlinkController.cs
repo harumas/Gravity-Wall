@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace Module.Player
+namespace Module.Effect
 {
     public class BlinkController : MonoBehaviour
     {

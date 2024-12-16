@@ -5,7 +5,7 @@
 //---------- -------------------------- -------
 
 //Runtime Monitoring
-//File generated: 2024-10-10 18:02:49Z
+//File generated: 2024-12-17 03:50:20Z
 //Please dont change the contents of this file. Otherwise IL2CPP runtime may not work with runtime monitoring!
 //Ensure that this file is located in Assembly-CSharp. Otherwise this file may not compile.
 //If this file contains any errors please contact me and/or create an issue in the linked repository.
@@ -13,7 +13,7 @@
 
 #if ENABLE_IL2CPP && !DISABLE_MONITORING
 
-internal class IL2CPP_AOT_N8K2OXSRO5RMAXUHB695
+internal class IL2CPP_AOT_APQ6U2Z95P72O6YL9G2W
 {
     //Value Processor Method Definitions
 
@@ -43,7 +43,6 @@ internal class IL2CPP_AOT_N8K2OXSRO5RMAXUHB695
         // Baracuda.Monitoring.Modules.SystemMonitor::_consoleLogPath (System.String)
         // Baracuda.Monitoring.Modules.SystemMonitor::_streamingAssetsPath (System.String)
         // Baracuda.Monitoring.Modules.SystemMonitor::_temporaryCachePath (System.String)
-        // Module.Gimmick.Sound.PhysicsSoundEffector::collisionPowerList (System.Collections.Generic.List<System.Single>)
         Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefField<System.Object, System.Object>();
 
         // Baracuda.Monitoring.Modules.FPSMonitor::_fps (System.Single)
@@ -63,12 +62,6 @@ internal class IL2CPP_AOT_N8K2OXSRO5RMAXUHB695
 
         // System.Collections.Generic.Queue<System.String>
         Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefEnumerable<System.Object>();
-
-        // System.Collections.Generic.List<System.Single>
-        Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefEnumerable<System.Single>();
-
-        // System.Collections.Generic.List<System.Single>
-        Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefList<System.Single>();
     }
 }
 
@@ -80,13 +73,13 @@ internal class IL2CPP_AOT_N8K2OXSRO5RMAXUHB695
 
 //General
 
-//Monitored Member:               26
-//Monitored Member Instance:      26
+//Monitored Member:               25
+//Monitored Member Instance:      25
 
 //MemberInfo
 
-//Monitored Fields:               22
-//Monitored Fields Instance:      22
+//Monitored Fields:               21
+//Monitored Fields Instance:      21
 //Monitored Properties:            4
 //Monitored Properties Instance:   4
 
@@ -94,7 +87,6 @@ internal class IL2CPP_AOT_N8K2OXSRO5RMAXUHB695
 
 //Monitored float:                 1
 //Monitored int:                   2
-//Monitored List<float>:           1
 //Monitored Queue<string>:         1
 //Monitored string:               21
 
