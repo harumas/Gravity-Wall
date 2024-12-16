@@ -36,11 +36,11 @@ namespace Module.Gimmick.LevelGimmick
 
         private void Awake()
         {
-            feature = rendererData.rendererFeatures.Find(f => f.name == radialBlurFeatureName);
-            if (feature != null)
-            {
-                feature.SetActive(false);
-            }
+            //feature = rendererData.rendererFeatures.Find(f => f.name == radialBlurFeatureName);
+            // if (feature != null)
+            // {
+            //     feature.SetActive(false);
+            // }
         }
 
         private void OnTriggerExit(Collider other)

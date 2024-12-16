@@ -2,10 +2,13 @@
 
 namespace Module.Gimmick.SystemGimmick
 {
-    public class ObjectDither : MonoBehaviour
+    /// <summary>
+    /// オブジェクトを透過処理するコンポーネント
+    /// </summary>
+    public class DitherObject : MonoBehaviour
     {
         [SerializeField] private Renderer[] renderers;
-        private const float ditherStrength = 0.5f;
+        [SerializeField] private float ditherStrength = 0.5f;
 
         private static readonly int wholeDitherStrengthProperty = Shader.PropertyToID("_WholeDitherStrength");
 
@@ -14,7 +17,7 @@ namespace Module.Gimmick.SystemGimmick
             renderers = GetComponentsInChildren<Renderer>();
         }
 
-        public void Show()
+        public void Dither()
         {
             foreach (Renderer rend in renderers)
             {
@@ -22,7 +25,7 @@ namespace Module.Gimmick.SystemGimmick
             }
         }
 
-        public void Hide()
+        public void Show()
         {
             foreach (Renderer rend in renderers)
             {

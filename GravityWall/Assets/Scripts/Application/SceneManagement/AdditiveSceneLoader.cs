@@ -30,6 +30,7 @@ namespace Application.SceneManagement
             var loadStream = CreateLoadStream(loadContext.sceneFields);
 
             int loadCount = 0;
+            bool onMainSceneLoaded = false;
 
             // 数フレームおきに追加シーンを読み込む
             await foreach ((SceneField sceneField, AsyncOperation operation) context in loadStream.WithCancellation(cancellationToken))
@@ -38,7 +39,11 @@ namespace Application.SceneManagement
 
                 if (loadCount == loadContext.sceneFields.Count)
                 {
-                    context.operation.completed += _ => SetActiveMainScene(loadContext.mainScene);
+                    context.operation.completed += _ =>
+                    {
+                        SetActiveMainScene(loadContext.mainScene);
+                        onMainSceneLoaded = true;
+                    };
                 }
 
                 // シーンの有効化
@@ -49,6 +54,8 @@ namespace Application.SceneManagement
 
                 additiveScenes.Add(context.sceneField.SceneName);
             }
+
+            await UniTask.WaitUntil(() => onMainSceneLoaded, cancellationToken: cancellationToken);
         }
 
         private void SetActiveMainScene(SceneField mainScene)

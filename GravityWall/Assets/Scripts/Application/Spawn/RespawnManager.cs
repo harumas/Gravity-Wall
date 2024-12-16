@@ -1,6 +1,6 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
-using Module.Gimmick;
+using Module.Gimmick.SystemGimmick;
 using Module.Gravity;
 using Module.Player;
 using UnityEngine;

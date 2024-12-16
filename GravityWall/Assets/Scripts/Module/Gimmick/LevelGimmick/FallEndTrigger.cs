@@ -5,7 +5,7 @@ using Module.Player;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-namespace Module.Gimmick
+namespace Module.Gimmick.LevelGimmick
 {
     public class FallEndTrigger : MonoBehaviour
     {

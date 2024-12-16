@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using TriInspector;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -46,10 +43,12 @@ namespace CoreModule.Sound
             return audioMixerGroups;
         }
 
+#if UNITY_EDITOR
         [Button("SoundKeyとMixerTypeを生成")]
         private void Generate()
         {
             SoundKeyGenerator.Generate(audioClips, audioMixerGroups, exportPath);
         }
+#endif
     }
 }
