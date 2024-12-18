@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Module.Gimmick;
+using Module.Gimmick.LevelGimmick;
 using UnityEngine;
 
-namespace Application.Sequence
+namespace Module.Gimmick.SystemGimmick
 {
     /// <summary>
     /// レベルの復元を行うクラス

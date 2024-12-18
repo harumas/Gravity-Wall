@@ -1,14 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cinemachine;
 using Constants;
 using Cysharp.Threading.Tasks;
 using Module.Player;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.Video;
-namespace Module.Gimmick.SystemGimmick
+
+namespace Module.Gimmick.LevelGimmick
 {
     public class TutorialGuideSequencer : MonoBehaviour
     {

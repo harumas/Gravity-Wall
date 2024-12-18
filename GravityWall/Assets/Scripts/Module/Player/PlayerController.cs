@@ -32,13 +32,14 @@ namespace Module.Player
         public ReadOnlyReactiveProperty<float> RotationAngle => rotationAngle;
         [SerializeField] private SerializableReactiveProperty<float> rotationAngle = new SerializableReactiveProperty<float>();
 
-        public ReadOnlyReactiveProperty<deathType> IsDeath => isDeath;
-        [SerializeField] private SerializableReactiveProperty<deathType> isDeath = new SerializableReactiveProperty<deathType>();
-        public enum deathType
+        public ReadOnlyReactiveProperty<DeathType> IsDeath => isDeath;
+        [SerializeField] private SerializableReactiveProperty<DeathType> isDeath = new SerializableReactiveProperty<DeathType>();
+        
+        public enum DeathType
         {
-            electro,
-            poison,
-            isAlive,
+            Electric,
+            Poison,
+            IsAlive,
         }
 
         public ReadOnlyReactiveProperty<(Vector3 xv, Vector3 yv)> OnMove => onMove;
@@ -50,7 +51,7 @@ namespace Module.Player
 
         private void Awake()
         {
-            isDeath.Value = deathType.isAlive;
+            isDeath.Value = DeathType.IsAlive;
         }
 
         private void Start()
@@ -134,7 +135,7 @@ namespace Module.Player
             }
 
             // 速度調整
-            playerFunction.AdjustVelocity(isMoveInput, isDeath.Value != deathType.isAlive);
+            playerFunction.AdjustVelocity(isMoveInput, isDeath.Value != DeathType.IsAlive);
             onMove.Value = isMoveInput ? playerFunction.GetSeperatedVelocity() : (Vector3.zero, Vector3.zero);
 
             // ジャンプ中の重力を調整
@@ -179,7 +180,7 @@ namespace Module.Player
             simpleInertia?.AddInertia(inertia);
         }
 
-        public void Kill(deathType type)
+        public void Kill(DeathType type)
         {
             isDeath.Value = type;
             isJumping.Value = false;
@@ -191,7 +192,7 @@ namespace Module.Player
 
         public void Revival()
         {
-            isDeath.Value = deathType.isAlive;
+            isDeath.Value = DeathType.IsAlive;
         }
 
         public void Lock()

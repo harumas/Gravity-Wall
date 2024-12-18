@@ -1,7 +1,7 @@
 using CoreModule.Helper;
 using UnityEngine;
 
-namespace Module.Gimmick.LevelGimmick
+namespace Module.Effect
 {
     /// <summary>
     /// カメラとの距離によってエミッションの強さを変えるクラス

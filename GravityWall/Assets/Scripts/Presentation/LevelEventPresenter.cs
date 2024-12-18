@@ -73,7 +73,7 @@ namespace Presentation
             }
         }
 
-        private async UniTaskVoid OnEnterDeathFloor(deathType type)
+        private async UniTaskVoid OnEnterDeathFloor(DeathType type)
         {
             if (respawnDataOnDeath.LevelResetter == null)
             {

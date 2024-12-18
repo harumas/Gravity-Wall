@@ -8,6 +8,7 @@ using UnityEngine.Audio;
 
 namespace CoreModule.Sound
 {
+#if UNITY_EDITOR
     /// <summary>
     /// サウンドリソースへのキーとミキサータイプを生成するクラス
     /// </summary>
@@ -24,7 +25,7 @@ namespace CoreModule.Sound
                 // サウンドキーを生成する
                 GenerateSoundKey(codeBuilder, audioClips);
                 codeBuilder.NewLine();
-                
+
                 // ミキサータイプを生成する
                 GenerateMixerType(codeBuilder, mixerGroups);
             }
@@ -87,4 +88,5 @@ namespace CoreModule.Sound
             Debug.Log(path + "にファイルを生成しました。");
         }
     }
+#endif
 }

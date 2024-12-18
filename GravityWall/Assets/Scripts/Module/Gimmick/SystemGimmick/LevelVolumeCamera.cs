@@ -1,14 +1,12 @@
-using System;
 using Cinemachine;
 using Constants;
 using CoreModule.Helper;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using Module.Gimmick.LevelMask;
 using R3;
 using UnityEngine;
 
-namespace Module.Gimmick
+namespace Module.Gimmick.SystemGimmick
 {
     /// <summary>
     /// レベルボリュームを俯瞰するカメラ
