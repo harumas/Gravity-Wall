@@ -25,7 +25,7 @@ namespace Module.Effect
         {
             playerController.IsDeath.Subscribe(isDeath =>
             {
-                if (isDeath != PlayerController.DeathType.IsAlive)
+                if (isDeath != PlayerController.DeathType.None)
                 {
                     OnAttackHit(isDeath).Forget();
                 }
