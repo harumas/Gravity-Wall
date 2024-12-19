@@ -58,7 +58,6 @@ namespace CoreModule.Input
 
             motorRumble = Gamepad.current;
             enabled = true;
-            Debug.Log("enable");
         }
 
         /// <summary>

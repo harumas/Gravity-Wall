@@ -69,7 +69,7 @@ namespace CoreModule.Sound
             }
 
             // 最低再生間隔を保持して再生時間を決める
-            float time = Math.Max(Time.time, latestPlayInfo.PlayTime + soundSettings.MinPlayInterval);
+            float time = Math.Max(Time.unscaledTime, latestPlayInfo.PlayTime + soundSettings.MinPlayInterval);
 
             // AudioSourceを設定する
             AudioSource source = audioSources.Dequeue();
@@ -91,7 +91,7 @@ namespace CoreModule.Sound
                 PlayInfo info = scheduleQueue.Peek();
 
                 // 再生時間に到達していない場合は再生しない
-                if (info.PlayTime > Time.time)
+                if (info.PlayTime > Time.unscaledTime)
                 {
                     break;
                 }
@@ -109,7 +109,7 @@ namespace CoreModule.Sound
                 PlayInfo info = playingQueue.Peek();
 
                 // 再生が終了していない場合は削除しない
-                if (info.PlayTime + info.Source.clip.length > Time.time)
+                if (info.PlayTime + info.Source.clip.length > Time.unscaledTime)
                 {
                     break;
                 }
