@@ -41,5 +41,11 @@ namespace PropertyGenerator.Generated
 			get => target.GetFloat(408814760);
 			set => target.SetFloat(408814760, value);
 		}
+		
+		public int FallIndex
+		{
+			get => target.GetInteger(-479160146);
+			set => target.SetInteger(-479160146, value);
+		}
 	}
 }
