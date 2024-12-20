@@ -90,7 +90,7 @@ namespace Presentation
             PauseView pauseView = pauseBehaviour.PauseView;
 
             pauseView.OnContinueButtonPressed.Subscribe(_ => navigator.DeactivateBehaviour(ViewBehaviourState.Pause)).AddTo(pauseView);
-            pauseView.OnReturnToHubButton.Subscribe(_ =>
+            pauseView.OnReturnToHubButtonPressed.Subscribe(_ =>
             {
                 gameState.SetState(GameState.State.StageSelect);
                 navigator.DeactivateBehaviour(ViewBehaviourState.Pause);
