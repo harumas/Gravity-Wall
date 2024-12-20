@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -16,7 +17,7 @@ namespace View
             Deactivate(ViewBehaviourState.None);
         }
 
-        protected override UniTask OnPreActivate(ViewBehaviourState state)
+        protected override UniTask OnPreActivate(ViewBehaviourState state, CancellationToken cancellation)
         {
             return UniTask.CompletedTask;
         }
@@ -25,7 +26,7 @@ namespace View
 
         protected override void OnDeactivate() { }
 
-        protected override UniTask OnPostDeactivate(ViewBehaviourState state)
+        protected override UniTask OnPostDeactivate(ViewBehaviourState state, CancellationToken cancellation)
         {
             return UniTask.CompletedTask;
         }

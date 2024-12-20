@@ -3,7 +3,9 @@ using System.Threading;
 using Application.SceneManagement;
 using Application.Spawn;
 using Cysharp.Threading.Tasks;
+using Module.Config;
 using Module.Gravity;
+using UnityEngine.SceneManagement;
 using VContainer;
 using VContainer.Unity;
 
@@ -17,15 +19,17 @@ namespace Application.Sequence
         private readonly GameState gameState;
         private readonly HubSpawner hubSpawner;
         private readonly RespawnManager respawnManager;
+        private readonly SceneGroupTable sceneGroupTable;
         private readonly AdditiveSceneLoadExecutor loadExecutor;
         private CancellationTokenSource cTokenSource;
 
         [Inject]
-        public InGameSequencer(GameState gameState, HubSpawner hubSpawner, RespawnManager respawnManager)
+        public InGameSequencer(GameState gameState, HubSpawner hubSpawner, RespawnManager respawnManager, SceneGroupTable sceneGroupTable)
         {
             this.gameState = gameState;
             this.hubSpawner = hubSpawner;
             this.respawnManager = respawnManager;
+            this.sceneGroupTable = sceneGroupTable;
             loadExecutor = new AdditiveSceneLoadExecutor();
         }
 
@@ -36,6 +40,11 @@ namespace Application.Sequence
 
             // 重力クラスの作成
             WorldGravity.Create();
+
+            if (!IsNewGame())
+            {
+                gameState.SetState(GameState.State.StageSelect);
+            }
 
             Sequence().Forget();
 
@@ -53,6 +62,14 @@ namespace Application.Sequence
             respawnManager.LockPlayer();
 
             await UniTask.WhenAll(loadExecutor.UnloadAdditiveScenes(), hubSpawner.Respawn());
+        }
+
+        private bool IsNewGame()
+        {
+            SceneGroup sceneGroup = sceneGroupTable.SceneGroups[0];
+            string mainSceneName = sceneGroup.GetMainScene();
+
+            return mainSceneName == SceneManager.GetActiveScene().name;
         }
 
         public void Dispose()

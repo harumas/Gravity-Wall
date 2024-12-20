@@ -13,6 +13,9 @@ namespace View
         [SerializeField] private Button returnToHubButton;
         [SerializeField] private Button goToSettingsButton;
         [SerializeField] private Button endGameButton;
+        [SerializeField] private CanvasGroup canvasGroup;
+        
+        public CanvasGroup CanvasGroup => canvasGroup;
 
         public Observable<Unit> OnContinueButtonPressed => continueButton.OnClickAsObservable();
         public Observable<Unit> OnRestartButtonPressed => restartButton.OnClickAsObservable();
@@ -25,10 +28,24 @@ namespace View
         public Observable<BaseEventData> OnReturnToHubButtonSelected => returnToHubButton.OnSelectAsObservable();
         public Observable<BaseEventData> OnGoToSettingsButtonSelected => goToSettingsButton.OnSelectAsObservable();
         public Observable<BaseEventData> OnEndGameButtonSelected => endGameButton.OnSelectAsObservable();
+        
+        public bool IsFirstSelect { get; private set; }
 
         public void SelectFirst()
         {
+            IsFirstSelect = true;
             EventSystem.current.SetSelectedGameObject(continueButton.gameObject);
+            IsFirstSelect = false;
+        }
+        
+        public void SetActiveReturnToHubButton(bool isActive)
+        {
+            returnToHubButton.gameObject.SetActive(isActive);
+        }
+        
+        public void SetActiveRestartButton(bool isActive)
+        {
+            restartButton.gameObject.SetActive(isActive);
         }
     }
 }

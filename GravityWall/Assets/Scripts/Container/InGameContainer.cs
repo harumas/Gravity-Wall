@@ -13,6 +13,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using View;
+using View.Behaviour;
 using PlayerInput = Module.InputModule.PlayerInput;
 
 namespace Container
@@ -53,6 +54,7 @@ namespace Container
             builder.RegisterEntryPoint<PauseBehaviourPresenter>();
             builder.RegisterEntryPoint<OptionBehaviourPresenter>();
             builder.RegisterEntryPoint<CreditBehaviourPresenter>();
+            builder.RegisterEntryPoint<ConfirmNewGamePresenter>();
 
             builder.Register<PlayerInput>(Lifetime.Singleton).As<IGameInput>();
             builder.Register<CursorLocker>(Lifetime.Singleton);
@@ -98,6 +100,7 @@ namespace Container
             RegisterWithNullCheck(builder, behaviourNavigator.GetBehaviour<LicenseBehaviour>(ViewBehaviourState.License));
             RegisterWithNullCheck(builder, behaviourNavigator.GetBehaviour<PauseBehaviour>(ViewBehaviourState.Pause));
             RegisterWithNullCheck(builder, behaviourNavigator.GetBehaviour<CreditBehaviour>(ViewBehaviourState.Credit));
+            RegisterWithNullCheck(builder, behaviourNavigator.GetBehaviour<ConfirmNewGameBehaviour>(ViewBehaviourState.ConfirmNewGame));
         }
 
         private void RegisterReusableComponents(IContainerBuilder builder)
