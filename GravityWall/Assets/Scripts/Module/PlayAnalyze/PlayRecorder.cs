@@ -71,7 +71,7 @@ namespace Module.PlayAnalyze
 
             // プレイヤーの回転数と死亡数を収集
             onPlayerRotate += () => rotateCount++;
-            onPlayerDeath += (value) => { if (value != DeathType.IsAlive) deathCount++; };
+            onPlayerDeath += (value) => { if (value != DeathType.None) deathCount++; };
 
             while (!cancellationTokenSource.Token.IsCancellationRequested)
             {
@@ -153,7 +153,7 @@ namespace Module.PlayAnalyze
                 // 死亡イベント
                 controller.IsDeath.Subscribe(value =>
                 {
-                    if (value != DeathType.IsAlive)
+                    if (value != DeathType.None)
                     {
                         onPlayerDeath?.Invoke(value);
                     }

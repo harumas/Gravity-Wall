@@ -17,6 +17,12 @@ namespace Core.Sound
 		Switch,
 		FallWind,
 		Poison,
+		ButtonSelect,
+		ButtonSubmit,
+		Heliport,
+		MachineEnvironment01,
+		CalmRoom,
+		MagicPower,
 	}
 	
 	public enum MixerType

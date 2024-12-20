@@ -1,7 +1,9 @@
+using System;
 using System.Threading.Tasks;
 using Cinemachine;
 using Constants;
 using Cysharp.Threading.Tasks;
+using Module.Gimmick.SystemGimmick;
 using Module.Player;
 using UnityEngine;
 using UnityEngine.Video;
@@ -13,46 +15,29 @@ namespace Module.Gimmick.LevelGimmick
         [SerializeField] private CinemachineVirtualCamera titleVirtualCamera;
         [SerializeField] private VideoPlayer videoPlayer;
         [SerializeField] private GameObject movieCanvas;
-        [SerializeField] private Transform pos;
-        [SerializeField] private int delayFrame = 26000;
-        private PlayerController playerController;
-        private bool isEnable = false;
-
-        private readonly int cameraPriority = 50;
-        private readonly int delayVideoStartFrame = 2000;
-
-        private void OnTriggerEnter(Collider other)
+        [SerializeField] private InGameEventPlayerTrap playerTrap;
+        [SerializeField] private float delayTime = 26;
+        [SerializeField] private float videoStartDelayTime = 2;
+        
+        private void Start()
         {
-            if (isEnable) return;
-
-            if (other.gameObject.CompareTag(Tag.Player))
-            {
-                playerController = other.gameObject.GetComponent<PlayerController>();
-                playerController.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                other.transform.position = pos.position;
-                playerController.Lock();
-                isEnable = true;
-
-                TutorialGuidSequence().Forget();
-            }
+            playerTrap.OnTrapped += () => TutorialGuidSequence().Forget();
         }
 
         private async UniTaskVoid TutorialGuidSequence()
         {
-            titleVirtualCamera.Priority = cameraPriority;
+            titleVirtualCamera.Priority = 100;
 
-            await Task.Delay(delayVideoStartFrame);
+            await UniTask.Delay(TimeSpan.FromSeconds(videoStartDelayTime));
 
             videoPlayer.Play();
             movieCanvas.SetActive(true);
-
-            await Task.Delay(delayFrame);
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(delayTime));
 
             titleVirtualCamera.Priority = 0;
 
-            playerController.GetComponent<GravitySwitcher>().Enable();
-
-            playerController.Unlock();
+            playerTrap.Disable();
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Module.Player
         [SerializeField] private float damping;
 
         private Vector2 moveInput;
+        public bool HoldLock { get; set; }
 
         public void OnMoveInput(Vector2 moveInput)
         {
@@ -68,9 +69,14 @@ namespace Module.Player
             Reset();
             enabled = false;
         }
-        
+
         public void Unlock()
         {
+            if (HoldLock)
+            {
+                return;
+            }
+
             enabled = true;
         }
     }
