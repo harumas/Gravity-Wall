@@ -122,6 +122,7 @@ namespace Module.Player
 
         public void Enable()
         {
+            Debug.Log("Enable GravitySwitcher");
             isEnabled = true;
         }
 

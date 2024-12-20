@@ -16,6 +16,7 @@ namespace View
         License,
         Title,
         Credit,
+        ConfirmNewGame,
     }
 
     public class ViewBehaviourNavigator : MonoBehaviour

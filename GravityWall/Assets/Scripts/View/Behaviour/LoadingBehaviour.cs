@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using DG.Tweening;
@@ -20,7 +21,7 @@ namespace View
             await UniTask.Delay(TimeSpan.FromSeconds(loadingTime));
         }
 
-        protected override async UniTask OnPreActivate(ViewBehaviourState beforeState)
+        protected override async UniTask OnPreActivate(ViewBehaviourState beforeState, CancellationToken cancellation)
         {
             await UniTask.CompletedTask;
         }
@@ -29,11 +30,10 @@ namespace View
 
         protected override void OnDeactivate() { }
 
-        protected override async UniTask OnPostDeactivate(ViewBehaviourState nextState)
+        protected override async UniTask OnPostDeactivate(ViewBehaviourState nextState, CancellationToken cancellation)
         {
             loadingView.CircleMask.transform.DOScale(Vector3.one * 30, 1.0f).WaitForCompletion();
-            await UniTask.Delay(TimeSpan.FromSeconds(loadingTime));
-            await UniTask.CompletedTask;
+            await UniTask.Delay(TimeSpan.FromSeconds(loadingTime), cancellationToken: cancellation);
         }
     }
 }

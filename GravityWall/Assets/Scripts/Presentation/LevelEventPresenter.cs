@@ -6,6 +6,7 @@ using Module.Gimmick;
 using Module.Gimmick.LevelGimmick;
 using Module.Gimmick.SystemGimmick;
 using Module.Player;
+using R3;
 using VContainer;
 using VContainer.Unity;
 using View;
@@ -30,6 +31,14 @@ namespace Presentation
             this.respawnManager = respawnManager;
             this.behaviourNavigator = behaviourNavigator;
             this.playerController = playerController;
+            
+            PauseView pauseView = behaviourNavigator.GetBehaviour<PauseBehaviour>(ViewBehaviourState.Pause).PauseView;
+            pauseView.OnRestartButtonPressed.Subscribe(_ =>
+                {
+                    behaviourNavigator.DeactivateBehaviour(ViewBehaviourState.Pause);
+                    respawnManager.RespawnPlayer(respawnDataOnDeath, RespawnViewSequence).Forget();
+                })
+                .AddTo(pauseView);
 
             SubscribeComponents(savePointComponents, deathFloorComponents);
         }
@@ -54,7 +63,7 @@ namespace Presentation
                 // 既にセーブ処理が実行されていたら、そのセーブ情報でセーブを行う
                 if (savePoint.IsSaved)
                 {
-                    OnSave(savePoint.LatestContext);    
+                    OnSave(savePoint.LatestContext);
                 }
             }
 
@@ -94,6 +103,8 @@ namespace Presentation
             behaviourNavigator.DeactivateBehaviour(ViewBehaviourState.Loading);
         }
 
-        public void Initialize() { }
+        public void Initialize()
+        {
+        }
     }
 }

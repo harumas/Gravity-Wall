@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace CoreModule.Save
@@ -11,6 +12,7 @@ namespace CoreModule.Save
     {
         public T Data { get; private set; }
         private T defaultSaveData;
+        public event Action<T> OnSaved;
 
         public void Initialize(T data, T defaultSaveData)
         {
@@ -41,6 +43,7 @@ namespace CoreModule.Save
         {
             string name = typeof(T).Name;
             await SaveUtility.Save(Data, name, true);
+            OnSaved?.Invoke(Data);
         }
     }
 }

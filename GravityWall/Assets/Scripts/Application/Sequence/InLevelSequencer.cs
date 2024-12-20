@@ -1,6 +1,8 @@
 ﻿using System.Threading;
 using Application.Spawn;
+using CoreModule.Save;
 using Cysharp.Threading.Tasks;
+using Module.Config;
 using VContainer.Unity;
 
 namespace Application.Sequence
@@ -10,19 +12,29 @@ namespace Application.Sequence
     /// </summary>
     public class InLevelSequencer : IAsyncStartable
     {
-        private readonly RespawnManager respawnManager;
         private readonly GameState gameState;
+        private readonly SaveManager<SaveData> saveManager;
 
-        public InLevelSequencer(RespawnManager respawnManager,GameState gameState)
+        public InLevelSequencer(GameState gameState, SaveManager<SaveData> saveManager)
         {
             this.gameState = gameState;
-            this.respawnManager = respawnManager;
+            this.saveManager = saveManager;
         }
 
         public async UniTask StartAsync(CancellationToken cancellation = new CancellationToken())
         {
-            gameState.SetState(GameState.State.Playing);
+            bool isTutorial = !saveManager.Data.ClearedStageList[0];
             
+            if (isTutorial)
+            {
+                gameState.SetState(GameState.State.Tutorial);
+            }
+            else
+            {
+                gameState.SetState(GameState.State.Playing);
+            }
+
+
             await gameState.WaitUntilState(GameState.State.StageSelect, cancellation);
         }
     }

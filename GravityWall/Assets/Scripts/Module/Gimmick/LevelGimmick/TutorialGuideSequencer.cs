@@ -16,7 +16,7 @@ namespace Module.Gimmick.LevelGimmick
         [SerializeField] private VideoPlayer videoPlayer;
         [SerializeField] private GameObject movieCanvas;
         [SerializeField] private InGameEventPlayerTrap playerTrap;
-        [SerializeField] private float delayTime = 26;
+        [SerializeField] private float delayTime = 2.6f;
         [SerializeField] private float videoStartDelayTime = 2;
         
         private void Start()
@@ -33,7 +33,7 @@ namespace Module.Gimmick.LevelGimmick
             videoPlayer.Play();
             movieCanvas.SetActive(true);
             
-            await UniTask.Delay(TimeSpan.FromSeconds(delayTime));
+            await UniTask.Delay(TimeSpan.FromSeconds(videoPlayer.length / videoPlayer.playbackSpeed));
 
             titleVirtualCamera.Priority = 0;
 

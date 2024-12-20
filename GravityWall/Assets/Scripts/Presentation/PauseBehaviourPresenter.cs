@@ -2,7 +2,9 @@
 using Application.Sequence;
 using Application.Spawn;
 using CoreModule.Input;
+using CoreModule.Save;
 using Cysharp.Threading.Tasks;
+using Module.Config;
 using Module.InputModule;
 using Module.Player;
 using R3;
@@ -10,6 +12,7 @@ using UnityEngine.InputSystem;
 using VContainer;
 using VContainer.Unity;
 using View;
+using View.View;
 
 namespace Presentation
 {
@@ -24,6 +27,7 @@ namespace Presentation
         private readonly PlayerTargetSyncer playerTargetSyncer;
         private readonly GameState gameState;
         private readonly HubSpawner hubSpawner;
+        private readonly SaveManager<SaveData> saveManager;
         private InputEvent exitEvent;
 
         [Inject]
@@ -36,7 +40,8 @@ namespace Presentation
             PlayerController playerController,
             PlayerTargetSyncer playerTargetSyncer,
             GameState gameState,
-            HubSpawner hubSpawner 
+            HubSpawner hubSpawner,
+            SaveManager<SaveData> saveManager
         )
         {
             this.navigator = navigator;
@@ -48,6 +53,7 @@ namespace Presentation
             this.playerTargetSyncer = playerTargetSyncer;
             this.gameState = gameState;
             this.hubSpawner = hubSpawner;
+            this.saveManager = saveManager;
         }
 
         public void Start()
@@ -86,6 +92,8 @@ namespace Presentation
                     }
                 })
                 .AddTo(pauseBehaviour);
+            
+            pauseBehaviour.SetGameState(gameState);
 
             PauseView pauseView = pauseBehaviour.PauseView;
 
@@ -98,6 +106,16 @@ namespace Presentation
             }).AddTo(pauseView);
             pauseView.OnGoToSettingsButtonPressed.Subscribe(_ => navigator.ActivateBehaviour(ViewBehaviourState.Option)).AddTo(pauseView);
             pauseView.OnEndGameButtonPressed.Subscribe(_ => applicationStopper.Quit());
+
+            ClearedLevelView clearedLevelView = pauseBehaviour.ClearedLevelView;
+            clearedLevelView.SetClearedLevels(saveManager.Data.ClearedStageList);
+            saveManager.OnSaved -= SetClearedLevels;
+            saveManager.OnSaved += SetClearedLevels;
+        }
+        
+        private void SetClearedLevels(SaveData saveData)
+        {
+            pauseBehaviour.ClearedLevelView.SetClearedLevels(saveData.ClearedStageList);
         }
 
         private void OnExitEvent(InputAction.CallbackContext _)

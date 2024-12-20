@@ -1,4 +1,5 @@
 ﻿using R3;
+using R3.Triggers;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -14,9 +15,15 @@ namespace View
         [SerializeField] private Slider sensibilityYSlider;
         [SerializeField] private Toggle vibrationToggle;
         [SerializeField] private Button licenseButton;
+        [SerializeField] private CanvasGroup canvasGroup;
 
+        public CanvasGroup CanvasGroup => canvasGroup;
         public Observable<Unit> OnBackButtonPressed => backButton.OnClickAsObservable();
         public Observable<Unit> OnLicenseButtonPressed => licenseButton.OnClickAsObservable();
+        public bool IsFirstSelect { get; private set; }
+        
+        public Observable<BaseEventData> OnBackButtonSelected => backButton.OnSelectAsObservable();
+        public Observable<BaseEventData> OnLicenseButtonSelected => licenseButton.OnSelectAsObservable();
 
         public Observable<float> OnBgmVolumeChanged => bgmVolumeSlider
             .OnValueChangedAsObservable()
@@ -35,7 +42,9 @@ namespace View
 
         public void SelectFirst()
         {
+            IsFirstSelect = true;
             EventSystem.current.SetSelectedGameObject(sensibilityXSlider.gameObject);
+            IsFirstSelect = false;
         }
 
         public void SetBgmVolume(float value)
