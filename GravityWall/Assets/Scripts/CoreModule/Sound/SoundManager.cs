@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Core.Sound;
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Audio;
 using AudioSource = UnityEngine.AudioSource;
@@ -13,12 +15,15 @@ namespace CoreModule.Sound
     public class SoundManager : SingletonMonoBehaviour<SoundManager>
     {
         private SoundSettings soundSettings;
+        private AudioMixer masterMixer;
         private List<AudioMixerGroup> audioMixerGroups;
         private Queue<AudioSource> audioSources;
         private Queue<PlayInfo> scheduleQueue;
-        private Queue<PlayInfo> playingQueue;
+        private List<PlayInfo> playingQueue;
         private List<AudioClip> audioClips;
+        private Queue<PlayInfo> resumePlayQueue;
         private PlayInfo latestPlayInfo;
+        private float pauseTime;
 
         /// <summary>
         /// SoundManagerを初期化します
@@ -26,12 +31,14 @@ namespace CoreModule.Sound
         public void Construct(SoundSettings soundSettings)
         {
             this.soundSettings = soundSettings;
+            masterMixer = soundSettings.AudioMixer;
 
             // AudioSourceの最大数でQueueを初期化
             int maxSourceCount = soundSettings.MaxSourceCount;
             audioSources = new Queue<AudioSource>(maxSourceCount);
             scheduleQueue = new Queue<PlayInfo>(maxSourceCount);
-            playingQueue = new Queue<PlayInfo>(maxSourceCount);
+            playingQueue = new List<PlayInfo>(maxSourceCount);
+            resumePlayQueue = new Queue<PlayInfo>(maxSourceCount);
 
             // AudioSourceを生成する
             for (int i = 0; i < maxSourceCount; i++)
@@ -79,8 +86,40 @@ namespace CoreModule.Sound
             source.pitch = playContext.Pitch;
 
             // 再生をスケジュールする
-            latestPlayInfo = new PlayInfo(time, source);
+            latestPlayInfo = new PlayInfo(time, mixerType, source);
             scheduleQueue.Enqueue(latestPlayInfo);
+        }
+
+        public async void Pause(float fadeDuration)
+        {
+            await DOFadeOut(fadeDuration);
+
+            foreach (PlayInfo playInfo in playingQueue)
+            {
+                if (playInfo.MixerType == MixerType.BGM)
+                {
+                    playInfo.Source.Pause();
+                    resumePlayQueue.Enqueue(playInfo);
+                }
+            }
+
+            playingQueue.RemoveAll(info => info.MixerType == MixerType.BGM);
+            pauseTime = Time.unscaledTime;
+        }
+
+        public async void Resume(float fadeDuration)
+        {
+            float elapsedTime = Time.unscaledTime - pauseTime;
+
+            while (resumePlayQueue.TryDequeue(out PlayInfo playInfo))
+            {
+                playInfo.Source.UnPause();
+                playInfo = new PlayInfo(playInfo.PlayTime + elapsedTime, playInfo.MixerType, playInfo.Source);
+
+                playingQueue.Add(playInfo);
+            }
+
+            await DOFadeIn(fadeDuration);
         }
 
         private void Update()
@@ -100,24 +139,48 @@ namespace CoreModule.Sound
                 info.Source.Play();
 
                 // 再生中のキューに追加
-                playingQueue.Enqueue(scheduleQueue.Dequeue());
+                playingQueue.Add(scheduleQueue.Dequeue());
             }
 
+            int removeCount = 0;
+            Span<int> removeIndexes = stackalloc int[playingQueue.Count];
+            
             // 再生中のキューから再生が終了したものを削除する
-            while (playingQueue.Count > 0)
+            for (int i = 0; i < playingQueue.Count; i++)
             {
-                PlayInfo info = playingQueue.Peek();
+                PlayInfo info = playingQueue[i];
 
                 // 再生が終了していない場合は削除しない
                 if (info.PlayTime + info.Source.clip.length > Time.unscaledTime)
                 {
-                    break;
+                    continue;
                 }
-
                 // 再生が終了したAudioSourceを返却する
-                playingQueue.Dequeue();
                 audioSources.Enqueue(info.Source);
+                removeIndexes[removeCount++] = i;
             }
+
+            for (int i = 0; i < removeCount; i++)
+            {
+                playingQueue.RemoveAt(removeIndexes[i]);
+            }
+        }
+
+        private const string MixerKey = "GameMasterVolume";
+
+        private UniTask DOFadeOut(float duration)
+        {
+            return DOTween.To(() => 1f, x => masterMixer.SetFloat(MixerKey, GetDecibel(x)), 0f, duration).ToUniTask();
+        }
+
+        private UniTask DOFadeIn(float duration)
+        {
+            return DOTween.To(() => 0f, x => masterMixer.SetFloat(MixerKey, GetDecibel(x)), 1f, duration).ToUniTask();
+        }
+
+        private float GetDecibel(float value)
+        {
+            return Mathf.Clamp(Mathf.Log10(value) * 20f, -80f, 0f);
         }
 
         /// <summary>
@@ -126,11 +189,13 @@ namespace CoreModule.Sound
         private readonly struct PlayInfo
         {
             public readonly float PlayTime;
+            public readonly MixerType MixerType;
             public readonly AudioSource Source;
 
-            public PlayInfo(float playTime, AudioSource source)
+            public PlayInfo(float playTime, MixerType mixerType, AudioSource source)
             {
                 PlayTime = playTime;
+                MixerType = mixerType;
                 Source = source;
             }
         }
@@ -153,7 +218,7 @@ namespace CoreModule.Sound
         /// ボリューム
         /// </summary>
         public readonly float Volume;
-        
+
         /// <summary>
         /// ピッチ
         /// </summary>
