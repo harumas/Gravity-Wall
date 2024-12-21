@@ -1,6 +1,7 @@
 using System;
 using Constants;
 using UnityEngine;
+using static Module.Player.PlayerController;
 
 namespace Module.Gimmick.LevelGimmick
 {
@@ -9,13 +10,15 @@ namespace Module.Gimmick.LevelGimmick
     /// </summary>
     public class DeathFloor : MonoBehaviour
     {
-        public event Action OnEnter;
+        [SerializeField] private DeathType floorType;
+
+        public event Action<DeathType> OnEnter;
         
         private void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.CompareTag(Tag.Player))
             {
-                OnEnter?.Invoke();
+                OnEnter?.Invoke(floorType);
             }
         }
     }

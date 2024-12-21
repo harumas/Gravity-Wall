@@ -29,20 +29,39 @@ namespace Application.SceneManagement
             // シーン読み込みの非同期ストリームの作成
             var loadStream = CreateLoadStream(loadContext.sceneFields);
 
+            int loadCount = 0;
+            bool onMainSceneLoaded = false;
+
             // 数フレームおきに追加シーンを読み込む
             await foreach ((SceneField sceneField, AsyncOperation operation) context in loadStream.WithCancellation(cancellationToken))
             {
+                loadCount++;
+
+                if (loadCount == loadContext.sceneFields.Count)
+                {
+                    context.operation.completed += _ =>
+                    {
+                        SetActiveMainScene(loadContext.mainScene);
+                        onMainSceneLoaded = true;
+                    };
+                }
+
                 // シーンの有効化
                 context.operation.allowSceneActivation = true;
-                
+
                 // 次の追加シーンの読み込みまで任意のフレーム待機
                 await UniTask.DelayFrame(AdditiveLoadIntervalFrames, cancellationToken: cancellationToken);
 
                 additiveScenes.Add(context.sceneField.SceneName);
             }
 
+            await UniTask.WaitUntil(() => onMainSceneLoaded, cancellationToken: cancellationToken);
+        }
+
+        private void SetActiveMainScene(SceneField mainScene)
+        {
             // メインシーンの有効化
-            Scene lastScene = SceneManager.GetSceneByName(loadContext.mainScene.SceneName);
+            Scene lastScene = SceneManager.GetSceneByName(mainScene.SceneName);
             if (lastScene.IsValid())
             {
                 SceneManager.SetActiveScene(lastScene);
@@ -68,7 +87,7 @@ namespace Application.SceneManagement
 
             // アンロードされたシーンのリソースを解放する
             await Resources.UnloadUnusedAssets();
-            
+
             additiveScenes.Clear();
         }
 

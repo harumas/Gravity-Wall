@@ -44,14 +44,14 @@ Light:
   serializedVersion: 10
   m_Type: 0
   m_Shape: 0
-  m_Color: {r: 1, g: 0.8056032, b: 0.572327, a: 1}
+  m_Color: {r: 1, g: 0.8853211, b: 0.75, a: 1}
   m_Intensity: 200
   m_Range: 15
   m_SpotAngle: 51.124393
   m_InnerSpotAngle: 42.926468
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -84,7 +84,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 1
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 100
@@ -232,6 +232,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6201586529514922346, guid: d14bbab99d490b143a5947ed639b882d,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7056288315855583238, guid: d14bbab99d490b143a5947ed639b882d,
         type: 3}
       propertyPath: m_IsActive
@@ -349,9 +354,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 609974281842694265, guid: 4be7fec6f8c08aa46bdcdf10a9ac8279,
         type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609974281842694265, guid: 4be7fec6f8c08aa46bdcdf10a9ac8279,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: f73049e4c38aab4488797f39b5ca7aaa, type: 2}
+    - target: {fileID: 839326584667872443, guid: 4be7fec6f8c08aa46bdcdf10a9ac8279,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 839326584667872443, guid: 4be7fec6f8c08aa46bdcdf10a9ac8279,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -361,6 +376,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CeilingLight_FixSmooth
+      objectReference: {fileID: 0}
+    - target: {fileID: 7449525032694945528, guid: 4be7fec6f8c08aa46bdcdf10a9ac8279,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7449525032694945528, guid: 4be7fec6f8c08aa46bdcdf10a9ac8279,
         type: 3}

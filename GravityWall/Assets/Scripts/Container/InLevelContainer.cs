@@ -5,6 +5,7 @@ using Constants;
 using CoreModule.Helper;
 using Cysharp.Threading.Tasks;
 using Module.Gimmick;
+using Module.Gimmick.SystemGimmick;
 using Presentation;
 using UnityEngine;
 using VContainer;
@@ -12,6 +13,9 @@ using VContainer.Unity;
 
 namespace Container
 {
+    /// <summary>
+    /// ステージ毎のDIコンテナ
+    /// </summary>
     public class InLevelContainer : LifetimeScope
     {
         private async void Start()
@@ -30,7 +34,7 @@ namespace Container
             builder.RegisterEntryPoint<SequenceViewPresenter>();
             builder.RegisterEntryPoint<GameClearPresenter>();
             builder.RegisterEntryPoint<LevelEventPresenter>();
-
+            
             var gimmickReference = Parent.Container.Resolve<GimmickReference>();
             gimmickReference.UpdateReference();
         }
@@ -39,7 +43,7 @@ namespace Container
         {
             var reusableComponents = Parent.Container.Resolve<IReadOnlyList<IReusableComponent>>();
             var parents = GameObject.FindGameObjectsWithTag(Tag.LevelSegment);
-
+            
             foreach (IReusableComponent component in reusableComponents)
             {
                 component.SetComponentsInChildren(parents);

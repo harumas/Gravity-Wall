@@ -1,5 +1,6 @@
 using CoreModule.Helper;
 using UnityEngine;
+using System.Collections;
 
 namespace Module.Player
 {
@@ -8,7 +9,7 @@ namespace Module.Player
     /// </summary>
     public class CameraController : MonoBehaviour
     {
-        [Header("ロールピッチの回転軸")] [SerializeField] private Transform pivotHorizontal;
+        [Header("ロールピッチの回転軸")][SerializeField] private Transform pivotHorizontal;
         [SerializeField] private MinMaxValue horizontalRange;
         [SerializeField] private MinMaxValue verticalRange;
         [SerializeField] private bool isFreeCamera = true;
@@ -33,6 +34,35 @@ namespace Module.Player
 
             pivotHorizontal.localEulerAngles = new Vector3(eulerX, eulerY, 0f);
         }
+
+        /// <summary>
+        /// 90度回転　実装見送り
+        /// </summary>
+        private float rotationDuration = 0.2f;
+        public IEnumerator Rotate90Camera(Vector3 axis, float angle)
+        {
+            Quaternion startRotation = pivotHorizontal.rotation;
+            Quaternion endRotation = startRotation * Quaternion.AngleAxis(angle, axis);
+
+            float elapsedTime = 0f;
+
+            while (elapsedTime < rotationDuration)
+            {
+                pivotHorizontal.rotation = Quaternion.Slerp(startRotation, endRotation, elapsedTime / rotationDuration);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            float rorateValue = 90;
+
+            Vector3 finalEulerAngles = pivotHorizontal.rotation.eulerAngles;
+            finalEulerAngles.y = Mathf.Round(finalEulerAngles.y / rorateValue) * rorateValue;
+            finalEulerAngles.x = Mathf.Round(finalEulerAngles.x / rorateValue) * rorateValue;
+            finalEulerAngles.z = Mathf.Round(finalEulerAngles.z / rorateValue) * rorateValue;
+
+            pivotHorizontal.rotation = Quaternion.Euler(finalEulerAngles);
+        }
+
 
         public void SetCameraRotation(Quaternion rotation)
         {

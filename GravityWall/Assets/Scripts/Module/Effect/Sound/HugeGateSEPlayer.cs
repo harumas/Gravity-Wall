@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Module.Gimmick.LevelGimmick
+namespace Module.Effect.Sound
 {
     public class HugeGateSEPlayer : MonoBehaviour
     {

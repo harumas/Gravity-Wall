@@ -15,8 +15,11 @@ namespace Module.Player
         [SerializeField] private LocalGravity localGravity;
 
         public bool IsRotationLocked { get; set; }
+        public bool HoldLock { get; set; }
         private SimpleInertia simpleInertia;
         private PlayerFunction playerFunction;
+
+        public PlayerControlParameter Parameter => parameter;
 
         public ReadOnlyReactiveProperty<bool> IsJumping => isJumping;
         [SerializeField] private SerializableReactiveProperty<bool> isJumping = new SerializableReactiveProperty<bool>();
@@ -30,8 +33,15 @@ namespace Module.Player
         public ReadOnlyReactiveProperty<float> RotationAngle => rotationAngle;
         [SerializeField] private SerializableReactiveProperty<float> rotationAngle = new SerializableReactiveProperty<float>();
 
-        public ReadOnlyReactiveProperty<bool> IsDeath => isDeath;
-        [SerializeField] private SerializableReactiveProperty<bool> isDeath = new SerializableReactiveProperty<bool>();
+        public ReadOnlyReactiveProperty<DeathType> IsDeath => isDeath;
+        [SerializeField] private SerializableReactiveProperty<DeathType> isDeath = new SerializableReactiveProperty<DeathType>();
+
+        public enum DeathType
+        {
+            None,
+            Electric,
+            Poison,
+        }
 
         public ReadOnlyReactiveProperty<(Vector3 xv, Vector3 yv)> OnMove => onMove;
         private ReactiveProperty<(Vector3 xv, Vector3 yv)> onMove = new ReactiveProperty<(Vector3 xv, Vector3 yv)>();
@@ -39,6 +49,12 @@ namespace Module.Player
         private Vector2 moveInput;
         private float landingTime;
         private bool isJumpingInput;
+        
+
+        private void Awake()
+        {
+            isDeath.Value = DeathType.None;
+        }
 
         private void Start()
         {
@@ -121,7 +137,7 @@ namespace Module.Player
             }
 
             // 速度調整
-            playerFunction.AdjustVelocity(isMoveInput, isDeath.Value);
+            playerFunction.AdjustVelocity(isMoveInput, isDeath.Value != DeathType.None);
             onMove.Value = isMoveInput ? playerFunction.GetSeperatedVelocity() : (Vector3.zero, Vector3.zero);
 
             // ジャンプ中の重力を調整
@@ -166,9 +182,14 @@ namespace Module.Player
             simpleInertia?.AddInertia(inertia);
         }
 
-        public void Kill()
+        public void Kill(DeathType type)
         {
-            isDeath.Value = true;
+            isDeath.Value = type;
+            Refresh();
+        }
+
+        public void Refresh()
+        {
             isJumping.Value = false;
             isGrounding.Value = true;
             rigBody.velocity = Vector3.zero;
@@ -178,7 +199,7 @@ namespace Module.Player
 
         public void Revival()
         {
-            isDeath.Value = false;
+            isDeath.Value = DeathType.None;
         }
 
         public void Lock()
@@ -188,6 +209,11 @@ namespace Module.Player
 
         public void Unlock()
         {
+            if (HoldLock)
+            {
+                return;
+            }
+
             enabled = true;
         }
     }

@@ -5,47 +5,59 @@ using UnityEngine;
 using Module.Player;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
+
 namespace Module.Effect
 {
     public class DeathEffect : MonoBehaviour
     {
-        [SerializeField] private GameObject effect;
+        [SerializeField] private GameObject effect, poisonEffect;
         [SerializeField] private PlayerController playerController;
         [SerializeField] private Transform cameraPivot;
         [SerializeField] private Animator anim;
+        
+        [SerializeField] private float shakeDuration = 1.5f;
+        [SerializeField] private float shakeStrength = 0.7f;
+        [SerializeField] private int shakeCount = 20;
+        [SerializeField] private int hitStopDuration = 500;
+        [SerializeField] private int hitStopDelay = 200;
 
-        void Start()
+        private void Start()
         {
             playerController.IsDeath.Subscribe(isDeath =>
             {
-                if (isDeath)
+                if (isDeath != PlayerController.DeathType.None)
                 {
-                    OnDeathEffect();
-                    OnAttackHit().Forget();
+                    OnAttackHit(isDeath).Forget();
                 }
-
             }).AddTo(this);
         }
 
-        private async UniTaskVoid OnAttackHit()
+        private async UniTaskVoid OnAttackHit(PlayerController.DeathType type)
         {
-            cameraPivot.DOShakePosition(0.7f, 1.5f, 20);
-            await UniTask.Delay(200);
+            cameraPivot.DOShakePosition(shakeStrength, shakeDuration, shakeCount);
+
+            effect.gameObject.SetActive(type == PlayerController.DeathType.Electric);
+            poisonEffect.gameObject.SetActive(type == PlayerController.DeathType.Poison);
+
+            switch (type)
+            {
+                case PlayerController.DeathType.Electric:
+                    SoundManager.Instance.Play(SoundKey.ElectricShock, MixerType.SE);
+                    break;
+                case PlayerController.DeathType.Poison:
+                    SoundManager.Instance.Play(SoundKey.Poison, MixerType.SE);
+                    break;
+            }
+
+            await UniTask.Delay(hitStopDelay);
+
+            //ヒットストップ
             anim.speed = 0f;
-            await UniTask.Delay(500);
+            await UniTask.Delay(hitStopDuration);
             anim.speed = 1f;
-        }
 
-        public void OnDeathEffect()
-        {
-            effect.gameObject.SetActive(true);
-            SoundManager.Instance.Play(SoundKey.ElectricShock, MixerType.SE);
-            Invoke("OffEffect", 1.3f);
-        }
-
-        private void OffEffect()
-        {
             effect.gameObject.SetActive(false);
+            poisonEffect.gameObject.SetActive(false);
         }
     }
 }

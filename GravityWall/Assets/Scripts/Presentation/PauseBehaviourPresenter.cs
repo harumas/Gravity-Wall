@@ -70,6 +70,7 @@ namespace Presentation
                     {
                         cursorLocker.SetCursorLock(false);
                         cursorLocker.IsCursorChangeBlock = true;
+                        
                         playerTargetSyncer.Lock();
                         playerController.Lock();
                         gamepadVibrator.Pause();
@@ -78,6 +79,7 @@ namespace Presentation
                     {
                         cursorLocker.IsCursorChangeBlock = false;
                         cursorLocker.SetCursorLock(true);
+                        
                         playerTargetSyncer.Unlock();
                         playerController.Unlock();
                         gamepadVibrator.Resume();
@@ -88,7 +90,7 @@ namespace Presentation
             PauseView pauseView = pauseBehaviour.PauseView;
 
             pauseView.OnContinueButtonPressed.Subscribe(_ => navigator.DeactivateBehaviour(ViewBehaviourState.Pause)).AddTo(pauseView);
-            pauseView.OnReturnToHubButton.Subscribe(_ =>
+            pauseView.OnReturnToHubButtonPressed.Subscribe(_ =>
             {
                 gameState.SetState(GameState.State.StageSelect);
                 navigator.DeactivateBehaviour(ViewBehaviourState.Pause);

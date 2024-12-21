@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using Module.Config;
 using VContainer;
@@ -11,28 +12,38 @@ namespace Application
     /// </summary>
     public class ApplicationStarter : IAsyncStartable
     {
-        private readonly ConfigLoader configLoader;
-        
+        private readonly SaveDataLoader saveDataLoader;
+        private readonly SceneGroupTable sceneGroupTable;
+        private SaveData loadedSaveData;
+
         [Inject]
-        public ApplicationStarter(ConfigLoader configLoader)
+        public ApplicationStarter(SaveDataLoader saveDataLoader, SceneGroupTable sceneGroupTable)
         {
-            this.configLoader = configLoader;
+            this.saveDataLoader = saveDataLoader;
+            this.sceneGroupTable = sceneGroupTable;
+
+            saveDataLoader.OnLoaded += (saveData, configData) => { loadedSaveData = saveData; };
         }
-        
+
         public async UniTask StartAsync(CancellationToken cancellation = new CancellationToken())
         {
-            bool succeed = await configLoader.Load(cancellation);
+            bool succeed = await saveDataLoader.Load(cancellation);
 
             if (!succeed)
             {
                 return;
             }
-            
+
             // FPSの上限は120
             UnityEngine.Application.targetFrameRate = 120;
-            
+
+            // 初回プレイによって初期シーンを切り替える
+            bool isFirstPlay = loadedSaveData.ClearedStageList.All(clearFlag => !clearFlag);
+            int rootSceneIndex = isFirstPlay ? 0 : 1;
+            SceneGroup rootSceneGroup = sceneGroupTable.SceneGroups[rootSceneIndex];
+
             // タイトルシーンのロード
-            await GameBoot.LoadMainSceneAsync(cancellation);
+            GameBoot.LoadRootScene(rootSceneGroup);
         }
     }
 }

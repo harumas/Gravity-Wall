@@ -1,6 +1,7 @@
 ﻿using Module.InputModule;
 using Module.Player;
 using R3;
+using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
@@ -23,7 +24,7 @@ namespace Presentation
             gameInput.Move
                 .Subscribe(moveInput =>
                 {
-                    if (!playerController.IsDeath.CurrentValue)
+                    if (playerController.IsDeath.CurrentValue == PlayerController.DeathType.None)
                     {
                         playerController.OnMoveInput(moveInput);
                     }
@@ -33,7 +34,7 @@ namespace Presentation
             gameInput.Jump
                 .Subscribe(isStarted =>
                 {
-                    if (!playerController.IsDeath.CurrentValue)
+                    if (playerController.IsDeath.CurrentValue == PlayerController.DeathType.None)
                     {
                         if (isStarted)
                         {
@@ -50,7 +51,7 @@ namespace Presentation
             gameInput.LookDelta
                 .Subscribe(lookInput =>
                 {
-                    if (!playerController.IsDeath.CurrentValue)
+                    if (playerController.IsDeath.CurrentValue == PlayerController.DeathType.None)
                     {
                         cameraController.OnRotateCameraInput(lookInput);
                     }
@@ -60,7 +61,7 @@ namespace Presentation
             gameInput.Move
                 .Subscribe(moveInput =>
                 {
-                    if (!playerController.IsDeath.CurrentValue)
+                    if (playerController.IsDeath.CurrentValue == PlayerController.DeathType.None)
                     {
                         playerTargetSyncer.OnMoveInput(moveInput);
                     }
@@ -70,7 +71,7 @@ namespace Presentation
             gameInput.Move
                 .Subscribe(moveInput =>
                 {
-                    if (!playerController.IsDeath.CurrentValue)
+                    if (playerController.IsDeath.CurrentValue == PlayerController.DeathType.None)
                     {
                         gravitySwitcher.OnMoveInput(moveInput);
                     }

@@ -1,8 +1,9 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
-using Module.Gimmick;
+using Module.Gimmick.SystemGimmick;
 using Module.Gravity;
 using Module.Player;
+using UnityEngine;
 using VContainer;
 
 namespace Application.Spawn
@@ -35,7 +36,7 @@ namespace Application.Spawn
             this.playerTargetSyncer = playerTargetSyncer;
             this.gravitySwitcher = gravitySwitcher;
         }
-        
+
         public async UniTask RespawnPlayer(RespawnContext respawnContext, Func<UniTask> respawningTask)
         {
             isRespawning = true;
@@ -72,6 +73,12 @@ namespace Application.Spawn
             cameraController.SetCameraRotation(respawnContext.Rotation);
             playerTargetSyncer.SetRotation(respawnContext.Rotation);
             gravitySwitcher.Enable();
+
+            if (respawnContext.Velocity != Vector3.zero)
+            {
+                float jumpingGravity = playerController.Parameter.JumpingGravity;
+                playerController.AddForce(respawnContext.Velocity, ForceMode.VelocityChange, jumpingGravity, false);
+            }
         }
     }
 }

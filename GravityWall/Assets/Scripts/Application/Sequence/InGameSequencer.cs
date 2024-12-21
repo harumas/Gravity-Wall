@@ -34,25 +34,25 @@ namespace Application.Sequence
             cTokenSource = new CancellationTokenSource();
             loadExecutor.SetCancellationToken(cTokenSource.Token);
 
+            // 重力クラスの作成
+            WorldGravity.Create();
+
             Sequence().Forget();
+
+            loadExecutor.OnUnloadRequested += () => Sequence().Forget();
         }
 
         private async UniTaskVoid Sequence()
         {
-            // 重力クラスの作成
-            WorldGravity.Create();
-            
             // プレイ開始待機
             await gameState.WaitUntilState(GameState.State.Playing, cTokenSource.Token);
 
             // クリア待機
             await gameState.WaitUntilState(GameState.State.StageSelect, cTokenSource.Token);
-            
+
             respawnManager.LockPlayer();
 
-            await loadExecutor.UnloadAdditiveScenes();
-
-            await hubSpawner.Respawn();
+            await UniTask.WhenAll(loadExecutor.UnloadAdditiveScenes(), hubSpawner.Respawn());
         }
 
         public void Dispose()

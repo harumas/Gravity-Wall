@@ -17,12 +17,18 @@ namespace Module.Gimmick.SystemGimmick
 
         [SerializeField, Header("読み込むシーン名")] private List<SceneField> levelReference;
         [SerializeField, Header("トリガーによる読み込みを行うか")] private bool triggerDetect;
+        [SerializeField] private GameObject[] hubBody;
         [SerializeField] private bool isTouched;
 
         /// <summary>
         /// シーン読み込みが行われた際に呼ばれるイベント
         /// </summary>
         public event Action OnSceneLoaded;
+
+        /// <summary>
+        /// シーンアンロードが行われた際に呼ばれるイベント
+        /// </summary>
+        public event Action OnSceneUnload;
 
         /// <summary>
         /// シーン読み込みを要求された際に呼ばれるイベント
@@ -32,11 +38,26 @@ namespace Module.Gimmick.SystemGimmick
         public void Load()
         {
             OnLoadRequested?.Invoke(mainScene, levelReference);
+            
+            foreach (GameObject obj in hubBody)
+            {
+                obj.SetActive(false);
+            }
         }
 
         public void CallLoaded()
         {
             OnSceneLoaded?.Invoke();
+        }
+
+        public void CallUnload()
+        {
+            Reset();
+            foreach (GameObject obj in hubBody)
+            {
+                obj.SetActive(true);
+            }
+            OnSceneUnload?.Invoke();
         }
 
         public void Reset()
@@ -47,7 +68,7 @@ namespace Module.Gimmick.SystemGimmick
         public void OnTriggerEnter(Collider other)
         {
             bool isTriggerDetected = triggerDetect && !isTouched;
-            
+
             // プレイヤーがトリガーに触れた場合
             if (isTriggerDetected && other.CompareTag(Tag.Player))
             {

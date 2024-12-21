@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Module.Player;
 using PropertyGenerator.Generated;
 using R3;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.VFX;
 
-namespace Module.Player
+namespace Module.Effect
 {
     public class PlayerSmokeEffect : MonoBehaviour
     {

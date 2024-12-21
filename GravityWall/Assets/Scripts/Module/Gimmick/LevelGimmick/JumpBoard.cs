@@ -14,6 +14,7 @@ namespace Module.Gimmick.LevelGimmick
         [SerializeField] private MeshRenderer meshRenderer;
         
         private static readonly int jumpOnProperty = Shader.PropertyToID("_JumpOn");
+        private Tweener jumpTweener;
 
         private void OnTriggerEnter(Collider collider)
         {
@@ -28,7 +29,7 @@ namespace Module.Gimmick.LevelGimmick
             await UniTask.Delay(TimeSpan.FromSeconds(jumpDelay));
 
             float jumpOn = -1;
-            DOTween.To(() => jumpOn, (value) => jumpOn = value, 1.0f, 0.5f)
+            jumpTweener = DOTween.To(() => jumpOn, (value) => jumpOn = value, 1.0f, 0.5f)
                 .SetEase(Ease.OutBounce)
                 .OnUpdate(() =>
                 {
@@ -45,6 +46,11 @@ namespace Module.Gimmick.LevelGimmick
                 });
 
             pushable.AddForce(transform.up * jumpPower, ForceMode.VelocityChange, jumpingGravity, false);
+        }
+
+        private void OnDestroy()
+        {
+            jumpTweener?.Kill();
         }
     }
 }
