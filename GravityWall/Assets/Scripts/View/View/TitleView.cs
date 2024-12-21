@@ -4,6 +4,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Cinemachine;
 using Module.PlayTest;
+using R3.Triggers;
+
 namespace View
 {
     public class TitleView : MonoBehaviour
@@ -23,7 +25,12 @@ namespace View
         public Observable<Unit> OnContinueGameButtonPressed => continueGameButton.OnClickAsObservable();
         public Observable<Unit> OnCreditButtonPressed => creditButton.OnClickAsObservable();
         public Observable<Unit> OnEndGameButtonPressed => endGameButton.OnClickAsObservable();
-        
+
+        public Observable<BaseEventData> OnNewGameButtonSelected => newGameButton.OnSelectAsObservable();
+        public Observable<BaseEventData> OnContinueGameButtonSelected => continueGameButton.OnSelectAsObservable();
+        public Observable<BaseEventData> OnCreditButtonSelected => creditButton.OnSelectAsObservable();
+        public Observable<BaseEventData> OnEndGameButtonSelected => endGameButton.OnSelectAsObservable();
+
         public void SelectFirst()
         {
             EventSystem.current.SetSelectedGameObject(newGameButton.gameObject);
