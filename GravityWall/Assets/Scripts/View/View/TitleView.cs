@@ -14,12 +14,13 @@ namespace View
         [SerializeField] private Button continueGameButton;
         [SerializeField] private Button creditButton;
         [SerializeField] private Button endGameButton;
+        [SerializeField] private Transform buttonsParent;
         [SerializeField] private StartSequencer startSequencer;
-        [SerializeField] private CanvasGroup canvasGroup, fadeCanvasGroup;
+        [SerializeField] private CanvasGroup canvasGroup;
 
         public StartSequencer StartSequencer => startSequencer;
         public CanvasGroup CanvasGroup => canvasGroup;
-        public CanvasGroup FadeCanvasGroup => fadeCanvasGroup;
+        public bool IsFirstSelect { get; private set; }
 
         public Observable<Unit> OnNewGameButtonPressed => newGameButton.OnClickAsObservable();
         public Observable<Unit> OnContinueGameButtonPressed => continueGameButton.OnClickAsObservable();
@@ -33,7 +34,14 @@ namespace View
 
         public void SelectFirst()
         {
-            EventSystem.current.SetSelectedGameObject(newGameButton.gameObject);
+            IsFirstSelect = true;
+            EventSystem.current.SetSelectedGameObject(buttonsParent.GetChild(0).gameObject);
+            IsFirstSelect = false;
+        }
+
+        public void DisableContinueButton()
+        {
+            Destroy(continueGameButton.gameObject);
         }
     }
 }

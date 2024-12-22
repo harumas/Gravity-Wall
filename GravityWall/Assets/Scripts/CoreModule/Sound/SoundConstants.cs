@@ -23,6 +23,8 @@ namespace Core.Sound
 		MachineEnvironment01,
 		CalmRoom,
 		MagicPower,
+		OpenLock,
+		OpenHugeGate,
 	}
 	
 	public enum MixerType

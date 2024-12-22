@@ -28,6 +28,11 @@ namespace Module.Effect.Sound
 
         private void PlaySelect()
         {
+            if (titleView.IsFirstSelect)
+            {
+                return;
+            }
+            
             SoundManager.Instance.Play(SoundKey.ButtonSelect, MixerType.SE);
         }
         

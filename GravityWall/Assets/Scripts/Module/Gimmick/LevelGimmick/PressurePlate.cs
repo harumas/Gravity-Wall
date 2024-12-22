@@ -13,6 +13,7 @@ namespace Module.Gimmick.LevelGimmick
     {
         private enum State
         {
+            Locked,
             NoTouch,
             Pushing,
             Changing,
@@ -23,6 +24,7 @@ namespace Module.Gimmick.LevelGimmick
         [SerializeField] private MeshRenderer meshRenderer;
         [SerializeField] private OnTriggerEventBridge triggerEventBridge;
         [SerializeField] private UnityEvent onEvent;
+        [SerializeField] private bool unlockOnStart;
         [SerializeField, Header("当たり判定のRigidBody")] private Rigidbody buttonRig;
         [SerializeField, Header("押されたときに当たり判定を動かすオフセット")] private float collisionMoveOffset;
         [SerializeField, Header("押す時間")] private float pushDuration;
@@ -30,16 +32,18 @@ namespace Module.Gimmick.LevelGimmick
 
         private static readonly int pushRatio = Shader.PropertyToID("_PushRatio");
         private CancellationTokenSource pushCanceller;
-        private State state;
+        private State state = State.Locked;
 
         private void Start()
         {
             Reset();
 
+            state = unlockOnStart ? State.NoTouch : State.Locked;
+
             triggerEventBridge.Enter.AddListener(collider =>
             {
                 //既に押されていたら終了
-                if (state == State.Pushed)
+                if (state == State.Pushed || state == State.Locked)
                 {
                     return;
                 }
@@ -56,7 +60,7 @@ namespace Module.Gimmick.LevelGimmick
             triggerEventBridge.Exit.AddListener(collider =>
             {
                 //既に押されていたら終了
-                if (state == State.Pushed)
+                if (state == State.Pushed || state == State.Locked)
                 {
                     return;
                 }
@@ -74,6 +78,11 @@ namespace Module.Gimmick.LevelGimmick
         public override void Enable(bool doEffect = true)
         {
             EnableAsync(doEffect).Forget();
+        }
+        
+        public void Unlock()
+        {
+            state = State.NoTouch;
         }
 
         private async UniTaskVoid EnableAsync(bool doEffect)
@@ -95,6 +104,7 @@ namespace Module.Gimmick.LevelGimmick
             CancelPush();
             isEnabled.Value = false;
             meshRenderer.material.SetFloat(pushRatio, 0f);
+            state = State.NoTouch;
         }
 
         public override void Reset()
@@ -115,7 +125,7 @@ namespace Module.Gimmick.LevelGimmick
             meshRenderer.material.DOFloat(1.0f, pushRatio, pushDuration);
             buttonRig.DoMove(position, pushDuration);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(pushDuration));
+            await UniTask.Delay(TimeSpan.FromSeconds(pushDuration), cancellationToken: pushCanceller.Token);
         }
 
         private void CancelPush()
