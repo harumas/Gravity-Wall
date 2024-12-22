@@ -41,6 +41,7 @@ namespace CoreModule.Sound
             scheduleQueue = new Queue<PlayInfo>(maxSourceCount);
             playingQueue = new List<PlayInfo>(maxSourceCount);
             resumePlayQueue = new Queue<PlayInfo>(maxSourceCount);
+            stopSet = new HashSet<int>();
 
             // AudioSourceを生成する
             for (int i = 0; i < maxSourceCount; i++)
