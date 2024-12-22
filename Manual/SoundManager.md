@@ -21,7 +21,15 @@ AudioMixerをSoundSettingsに設定することで、MixerTypeもコード生成
 
 ### スクリプト上で使用する
 生成されたSoundKeyを利用する方法は以下のとおりです。
+
+再生
 `SoundManager.Instance.Play(SoundKey.設定した名前, MixerType.サウンドの種類);`
+
+再生情報を保持して停止に使う場合は、戻り値を入手しておいてください。
+`int handle = SoundManager.Instance.Play(SoundKey.設定した名前, MixerType.サウンドの種類);`
+
+停止
+`SoundManager.Instance.Stop(handle);`
 
 第3引数には`PlayContext`構造体を使用することで、再生時の音量やピッチを設定することができます。  
 `volume`: 再生ボリューム  
