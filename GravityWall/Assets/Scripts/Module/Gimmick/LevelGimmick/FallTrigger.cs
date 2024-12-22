@@ -1,3 +1,4 @@
+using System;
 using Module.Gravity;
 using Module.Player;
 using UnityEngine;
@@ -27,7 +28,7 @@ namespace Module.Gimmick.LevelGimmick
 
         private readonly string radialBlurFeatureName = "RadialBlurFeature";
         private readonly string cameraPivotName = "CameraPivot";
-        
+
         private readonly string animatorFallIndexName = "FallIndex";
         private readonly int fallIndex = 1;
 
@@ -36,11 +37,11 @@ namespace Module.Gimmick.LevelGimmick
 
         private void Awake()
         {
-            //feature = rendererData.rendererFeatures.Find(f => f.name == radialBlurFeatureName);
-            // if (feature != null)
-            // {
-            //     feature.SetActive(false);
-            // }
+            feature = rendererData.rendererFeatures.Find(f => f.name == radialBlurFeatureName);
+            if (feature != null)
+            {
+                feature.SetActive(false);
+            }
         }
 
         private void OnTriggerExit(Collider other)
@@ -105,6 +106,14 @@ namespace Module.Gimmick.LevelGimmick
                     other.GetComponent<GravitySwitcher>().Disable();
                     targetGravity = other.gameObject.GetComponent<LocalGravity>();
                 }
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (feature != null)
+            {
+                feature.SetActive(false);
             }
         }
     }

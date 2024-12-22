@@ -25,6 +25,7 @@ namespace Module.Gimmick.LevelGimmick
         private void Start()
         {
             feature = rendererData.rendererFeatures.Find(f => f.name == blurFeatureName);
+            Debug.Log(feature);
             if (feature != null)
             {
                 feature.SetActive(false);

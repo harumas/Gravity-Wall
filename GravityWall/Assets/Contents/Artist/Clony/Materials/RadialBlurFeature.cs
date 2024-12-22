@@ -18,12 +18,13 @@ public class RadialBlurParams
 public class RadialBlurFeature : ScriptableRendererFeature
 {
     [SerializeField] private RadialBlurParams _parameters;
+    [SerializeField] private Shader radialBlurShader;
     [SerializeField] private RenderPassEvent _renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
     private RadialBlurPass _pass;
 
     public override void Create()
     {
-        _pass = new RadialBlurPass(_parameters)
+        _pass = new RadialBlurPass(_parameters, radialBlurShader)
         {
             renderPassEvent = _renderPassEvent,
         };
