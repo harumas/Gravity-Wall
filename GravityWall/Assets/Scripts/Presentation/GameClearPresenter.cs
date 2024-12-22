@@ -36,7 +36,13 @@ namespace Presentation
 
             foreach (GameClearPoint clearPoint in clearPoints)
             {
-                clearPoint.OnClear += () => gameState.SetState(GameState.State.StageSelect);
+                clearPoint.OnClear += () =>
+                {
+                    if (clearPoint.StageId != 0)
+                    {
+                        gameState.SetState(GameState.State.StageSelect);
+                    }
+                };
             }
 
             foreach (ClearSavePoint savePoint in savePoints)
@@ -61,7 +67,13 @@ namespace Presentation
                     {
                         Debug.LogError("ステージIDが範囲外です");
                     }
-                    
+
+                    // チュートリアルは演出を入れない
+                    if (stageId == 0)
+                    {
+                        return;
+                    }
+
                     // クリア演出を再生
                     mainGateDirector.Play();
                 };
