@@ -22,8 +22,10 @@ namespace CoreModule.Sound
         private List<PlayInfo> playingQueue;
         private List<AudioClip> audioClips;
         private Queue<PlayInfo> resumePlayQueue;
+        private HashSet<int> stopSet;
         private PlayInfo latestPlayInfo;
         private float pauseTime;
+        private int handleCounter;
 
         /// <summary>
         /// SoundManagerを初期化します
@@ -56,9 +58,9 @@ namespace CoreModule.Sound
         /// </summary>
         /// <param name="key">AudioClipのキー</param>
         /// <param name="mixerType">AudioMixerのタイプ</param>
-        public void Play(SoundKey key, MixerType mixerType)
+        public int Play(SoundKey key, MixerType mixerType)
         {
-            Play(key, mixerType, PlayContext.Default);
+            return Play(key, mixerType, PlayContext.Default);
         }
 
         /// <summary>
@@ -67,12 +69,12 @@ namespace CoreModule.Sound
         /// <param name="key">AudioClipのキー</param>
         /// <param name="mixerType">AudioMixerのタイプ</param>
         /// <param name="playContext">再生設定</param>
-        public void Play(SoundKey key, MixerType mixerType, PlayContext playContext)
+        public int Play(SoundKey key, MixerType mixerType, PlayContext playContext)
         {
             // キーが存在しない or 再生できるAudioSourceがない場合は再生しない
             if ((int)key >= audioClips.Count || audioSources.Count == 0)
             {
-                return;
+                return -1;
             }
 
             // 最低再生間隔を保持して再生時間を決める
@@ -86,8 +88,16 @@ namespace CoreModule.Sound
             source.pitch = playContext.Pitch;
 
             // 再生をスケジュールする
-            latestPlayInfo = new PlayInfo(time, mixerType, source);
+            int handleId = handleCounter++;
+            latestPlayInfo = new PlayInfo(handleId, time, mixerType, source);
             scheduleQueue.Enqueue(latestPlayInfo);
+
+            return handleId;
+        }
+
+        public void Stop(int handle)
+        {
+            stopSet.Add(handle);
         }
 
         public async void Pause(float fadeDuration)
@@ -114,7 +124,7 @@ namespace CoreModule.Sound
             while (resumePlayQueue.TryDequeue(out PlayInfo playInfo))
             {
                 playInfo.Source.UnPause();
-                playInfo = new PlayInfo(playInfo.PlayTime + elapsedTime, playInfo.MixerType, playInfo.Source);
+                playInfo = new PlayInfo(playInfo.HandleId, playInfo.PlayTime + elapsedTime, playInfo.MixerType, playInfo.Source);
 
                 playingQueue.Add(playInfo);
             }
@@ -144,25 +154,30 @@ namespace CoreModule.Sound
 
             int removeCount = 0;
             Span<int> removeIndexes = stackalloc int[playingQueue.Count];
-            
+
             // 再生中のキューから再生が終了したものを削除する
             for (int i = 0; i < playingQueue.Count; i++)
             {
                 PlayInfo info = playingQueue[i];
 
                 // 再生が終了していない場合は削除しない
-                if (info.PlayTime + info.Source.clip.length > Time.unscaledTime)
+                if (info.PlayTime + info.Source.clip.length > Time.unscaledTime && !stopSet.Contains(info.HandleId))
                 {
                     continue;
                 }
+
                 // 再生が終了したAudioSourceを返却する
                 audioSources.Enqueue(info.Source);
                 removeIndexes[removeCount++] = i;
+                stopSet.Remove(info.HandleId);
             }
+
+            int offset = 0;
 
             for (int i = 0; i < removeCount; i++)
             {
-                playingQueue.RemoveAt(removeIndexes[i]);
+                playingQueue.RemoveAt(removeIndexes[i] + offset);
+                offset--;
             }
         }
 
@@ -188,12 +203,14 @@ namespace CoreModule.Sound
         /// </summary>
         private readonly struct PlayInfo
         {
+            public readonly int HandleId;
             public readonly float PlayTime;
             public readonly MixerType MixerType;
             public readonly AudioSource Source;
 
-            public PlayInfo(float playTime, MixerType mixerType, AudioSource source)
+            public PlayInfo(int handleId, float playTime, MixerType mixerType, AudioSource source)
             {
+                HandleId = handleId;
                 PlayTime = playTime;
                 MixerType = mixerType;
                 Source = source;
