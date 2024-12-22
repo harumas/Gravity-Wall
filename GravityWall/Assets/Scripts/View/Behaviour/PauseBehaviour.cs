@@ -20,6 +20,11 @@ namespace View
         public PauseView PauseView => pauseView;
         public ClearedLevelView ClearedLevelView => clearedLevelView;
 
+        private void Start()
+        {
+            pauseView.SetTimeScaleAnimationInvalid();
+        }
+
         public void SetGameState(GameState gameState)
         {
             this.gameState = gameState;
