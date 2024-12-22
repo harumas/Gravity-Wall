@@ -13,7 +13,7 @@ namespace Module.Player
         [SerializeField] private MinMaxValue horizontalRange;
         [SerializeField] private MinMaxValue verticalRange;
         [SerializeField] private bool isFreeCamera = true;
-
+        
         public void OnRotateCameraInput(Vector2 mouseDelta)
         {
             if (!isFreeCamera || Cursor.lockState != CursorLockMode.Locked)

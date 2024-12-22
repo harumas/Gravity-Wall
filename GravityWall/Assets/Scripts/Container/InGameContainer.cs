@@ -26,6 +26,8 @@ namespace Container
         [SerializeField] private ViewBehaviourNavigator behaviourNavigator;
         [SerializeField] private GimmickReference gimmickReference;
         [SerializeField] private HubSpawnPoint hubSpawnPoint;
+        [SerializeField] private DirectorTable directorTable;
+        [SerializeField] private MainGateOpenSequencer mainGateOpenSequencer;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -61,15 +63,18 @@ namespace Container
             builder.Register<RespawnManager>(Lifetime.Singleton);
             builder.Register<HubSpawner>(Lifetime.Singleton);
 
+            gimmickReference.UpdateReference();
             builder.RegisterInstance(gimmickReference);
             builder.RegisterInstance(hubSpawnPoint);
+            builder.RegisterInstance(directorTable);
+            RegisterWithNullCheck(builder, mainGateOpenSequencer);
 
             // UIパネルの登録
             RegisterBehaviourComponents(builder);
 
             // プレイヤーのコンポーネントの登録
             RegisterPlayerComponents(builder);
-            
+
             // シーン間で使い回すコンポーネントを登録
             RegisterReusableComponents(builder);
 
