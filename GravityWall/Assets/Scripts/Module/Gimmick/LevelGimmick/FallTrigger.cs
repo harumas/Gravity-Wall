@@ -33,7 +33,7 @@ namespace Module.Gimmick.LevelGimmick
         private readonly int fallIndex = 1;
 
         private readonly int cameraHighPriority = 20;
-        private readonly float GravityScale = 20;
+        private readonly float GravityScale = 30;
 
         private void Awake()
         {
