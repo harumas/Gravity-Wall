@@ -1,4 +1,4 @@
-Shader "Hidden/PostProcessing/RadialBlur"
+Shader "PostProcessing/RadialBlur"
 {
     SubShader
     {
