@@ -7,7 +7,10 @@ namespace View
     public class LicenseView : MonoBehaviour
     {
         [SerializeField] private Scrollbar licenseScrollbar;
-        
+        [SerializeField] private CanvasGroup canvasGroup;
+
+        public CanvasGroup CanvasGroup => canvasGroup;
+
         public void SelectFirst()
         {
             licenseScrollbar.value = 1;

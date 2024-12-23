@@ -1,3 +1,4 @@
+using System;
 using Module.Gravity;
 using Module.Player;
 using UnityEngine;
@@ -6,6 +7,8 @@ using UnityEngine.Rendering.Universal;
 using Cinemachine;
 using Module.Gimmick.SystemGimmick;
 using Constants;
+using Core.Sound;
+using CoreModule.Sound;
 
 namespace Module.Gimmick.LevelGimmick
 {
@@ -25,12 +28,12 @@ namespace Module.Gimmick.LevelGimmick
 
         private readonly string radialBlurFeatureName = "RadialBlurFeature";
         private readonly string cameraPivotName = "CameraPivot";
-        
+
         private readonly string animatorFallIndexName = "FallIndex";
         private readonly int fallIndex = 1;
 
         private readonly int cameraHighPriority = 20;
-        private readonly float GravityScale = 20;
+        private readonly float GravityScale = 30;
 
         private void Awake()
         {
@@ -45,7 +48,7 @@ namespace Module.Gimmick.LevelGimmick
         {
             if (other.gameObject.CompareTag(Tag.Player))
             {
-                if (WorldGravity.Instance.Gravity == Vector3.left)
+                if (WorldGravity.Instance.Gravity == Vector3.forward)
                 {
                     foreach (var trigger in gravitySwitchTriggers)
                     {
@@ -65,6 +68,9 @@ namespace Module.Gimmick.LevelGimmick
                     }
 
                     isPlayerEnter = true;
+
+                    //ストップ機能が付いたら実装
+                    //SoundManager.Instance.Play(SoundKey.FallWind, MixerType.SE);
                 }
             }
         }
@@ -94,12 +100,20 @@ namespace Module.Gimmick.LevelGimmick
         {
             if (other.gameObject.CompareTag(Tag.Player))
             {
-                if (WorldGravity.Instance.Gravity == Vector3.left)
+                if (WorldGravity.Instance.Gravity == Vector3.forward)
                 {
                     GetComponent<GravitySwitchTrigger>().SetEnable(false);
                     other.GetComponent<GravitySwitcher>().Disable();
                     targetGravity = other.gameObject.GetComponent<LocalGravity>();
                 }
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (feature != null)
+            {
+                feature.SetActive(false);
             }
         }
     }

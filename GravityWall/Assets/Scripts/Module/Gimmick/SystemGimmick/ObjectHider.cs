@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using Cysharp.Threading.Tasks;
 using R3;
 using UnityEngine;
 
-namespace Module.Gimmick
+namespace Module.Gimmick.SystemGimmick
 {
     [DefaultExecutionOrder(10)]
     public class ObjectHider : MonoBehaviour

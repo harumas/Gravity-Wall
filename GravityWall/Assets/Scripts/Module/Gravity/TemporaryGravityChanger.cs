@@ -1,9 +1,7 @@
-﻿using System;
-using Constants;
-using Module.Gravity;
+﻿using Constants;
 using UnityEngine;
 
-namespace Module.Gimmick.LevelGimmick
+namespace Module.Gravity
 {
     public class TemporaryGravityChanger : MonoBehaviour
     {

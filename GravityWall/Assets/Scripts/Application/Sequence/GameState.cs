@@ -12,6 +12,8 @@ namespace Application.Sequence
     {
         public enum State
         {
+            Tutorial,
+            NewGameSelected,
             StageSelect,
             Playing
         }

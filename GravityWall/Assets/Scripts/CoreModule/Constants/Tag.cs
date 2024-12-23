@@ -18,5 +18,6 @@ namespace Constants
 		public const string BatteryBox = "BatteryBox";
 		public const string LevelSegment = "LevelSegment";
 		public const string UnJumpable = "UnJumpable";
+		public const string Dither = "Dither";
 	}
 }

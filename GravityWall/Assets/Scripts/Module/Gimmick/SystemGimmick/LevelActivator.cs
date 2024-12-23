@@ -2,13 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Constants;
-using Cysharp.Threading.Tasks;
-using Module.Gimmick;
 using Module.Gimmick.LevelGimmick;
 using R3;
 using UnityEngine;
 
-namespace Module.PlayTest
+namespace Module.Gimmick.SystemGimmick
 {
     public class LevelActivator : MonoBehaviour
     {
@@ -78,7 +76,7 @@ namespace Module.PlayTest
                         {
                             Deactivate();
                         }
-                    });
+                    }).AddTo(this);
             }
         }
 

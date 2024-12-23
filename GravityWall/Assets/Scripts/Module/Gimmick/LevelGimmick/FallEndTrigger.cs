@@ -3,17 +3,16 @@ using Constants;
 using Cysharp.Threading.Tasks;
 using Module.Player;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-namespace Module.Gimmick
+namespace Module.Gimmick.LevelGimmick
 {
     public class FallEndTrigger : MonoBehaviour
     {
         [SerializeField] private CinemachineVirtualCamera cinemachine;
-        [SerializeField] private Volume volume;
         [SerializeField] private GameObject fallTrigger;
         [SerializeField] private UniversalRendererData rendererData;
+        [SerializeField] private GameObject[] tutorialObjects;
 
         private ScriptableRendererFeature feature;
 
@@ -53,10 +52,18 @@ namespace Module.Gimmick
         {
             player.GetComponentInChildren<Animator>().SetInteger(animatorFallIndexName, fallIndex);
 
-            await UniTask.Delay(playerControlUnlockDelay);
+            await UniTask.Delay(playerControlUnlockDelay, cancellationToken: destroyCancellationToken);
 
             player.GetComponent<GravitySwitcher>().Enable();
             player.GetComponent<PlayerController>().Unlock();
+
+            foreach (GameObject tutorialObject in tutorialObjects)
+            {
+                await UniTask.DelayFrame(2, cancellationToken: destroyCancellationToken);
+                Destroy(tutorialObject);
+            }
+
+            Resources.UnloadUnusedAssets();
         }
     }
 }

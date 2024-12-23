@@ -4,9 +4,8 @@ using Application;
 using Application.Sequence;
 using Application.Spawn;
 using CoreModule.Helper;
-using Module.Gimmick;
 using Module.Gimmick.LevelGimmick;
-using Module.Gravity;
+using Module.Gimmick.SystemGimmick;
 using Module.InputModule;
 using Module.Player;
 using Presentation;
@@ -14,6 +13,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using View;
+using View.Behaviour;
 using PlayerInput = Module.InputModule.PlayerInput;
 
 namespace Container
@@ -26,6 +26,8 @@ namespace Container
         [SerializeField] private ViewBehaviourNavigator behaviourNavigator;
         [SerializeField] private GimmickReference gimmickReference;
         [SerializeField] private HubSpawnPoint hubSpawnPoint;
+        [SerializeField] private DirectorTable directorTable;
+        [SerializeField] private MainGateOpenSequencer mainGateOpenSequencer;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -54,21 +56,25 @@ namespace Container
             builder.RegisterEntryPoint<PauseBehaviourPresenter>();
             builder.RegisterEntryPoint<OptionBehaviourPresenter>();
             builder.RegisterEntryPoint<CreditBehaviourPresenter>();
+            builder.RegisterEntryPoint<ConfirmNewGamePresenter>();
 
             builder.Register<PlayerInput>(Lifetime.Singleton).As<IGameInput>();
             builder.Register<CursorLocker>(Lifetime.Singleton);
             builder.Register<RespawnManager>(Lifetime.Singleton);
             builder.Register<HubSpawner>(Lifetime.Singleton);
 
+            gimmickReference.UpdateReference();
             builder.RegisterInstance(gimmickReference);
             builder.RegisterInstance(hubSpawnPoint);
+            builder.RegisterInstance(directorTable);
+            RegisterWithNullCheck(builder, mainGateOpenSequencer);
 
             // UIパネルの登録
             RegisterBehaviourComponents(builder);
 
             // プレイヤーのコンポーネントの登録
             RegisterPlayerComponents(builder);
-            
+
             // シーン間で使い回すコンポーネントを登録
             RegisterReusableComponents(builder);
 
@@ -99,6 +105,7 @@ namespace Container
             RegisterWithNullCheck(builder, behaviourNavigator.GetBehaviour<LicenseBehaviour>(ViewBehaviourState.License));
             RegisterWithNullCheck(builder, behaviourNavigator.GetBehaviour<PauseBehaviour>(ViewBehaviourState.Pause));
             RegisterWithNullCheck(builder, behaviourNavigator.GetBehaviour<CreditBehaviour>(ViewBehaviourState.Credit));
+            RegisterWithNullCheck(builder, behaviourNavigator.GetBehaviour<ConfirmNewGameBehaviour>(ViewBehaviourState.ConfirmNewGame));
         }
 
         private void RegisterReusableComponents(IContainerBuilder builder)

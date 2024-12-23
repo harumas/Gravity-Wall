@@ -1,7 +1,6 @@
-using Application.Sequence;
 using UnityEngine;
 
-namespace Module.Gimmick.LevelGimmick
+namespace Module.Gimmick.SystemGimmick
 {
     public class HubSpawnPoint : MonoBehaviour
     {

@@ -122,7 +122,6 @@ namespace Module.Player
 
         public void Enable()
         {
-            Debug.Log("Enable!!");
             isEnabled = true;
         }
 

@@ -1,5 +1,5 @@
-using Constants;
-using Module.Player;
+using Module.Gimmick.SystemGimmick;
+using PropertyGenerator.Generated;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -7,11 +7,19 @@ namespace Module.Gimmick.LevelGimmick
 {
     public class GoalSwitch : GimmickObject
     {
-        [SerializeField] private Animator animator;
+        [SerializeField] private ImportantSwitchWrapper animator;
         [SerializeField] private AudioSource audioSource;
-        [SerializeField] private Transform switchPos;
         [SerializeField] private PowerPipe[] powerPipes;
         [SerializeField] private UnityEvent goalEvent;
+        [SerializeField] private InGameEventPlayerTrap playerTrap;
+
+        private void Start()
+        {
+            playerTrap.OnTrapped += () =>
+            {
+                animator.SetOnSwitchTrigger();
+            };
+        }
 
         public override void Disable(bool doEffect = true)
         {
@@ -28,21 +36,6 @@ namespace Module.Gimmick.LevelGimmick
 
         }
 
-        private PlayerController playerController;
-        private void OnTriggerEnter(Collider other)
-        {
-            if (isEnabled.Value) return;
-
-            if (other.gameObject.CompareTag(Tag.Player))
-            {
-                playerController = other.gameObject.GetComponent<PlayerController>();
-                playerController.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                playerController.transform.position = switchPos.position;
-                playerController.Lock();
-                animator.SetTrigger("OnSwitch");
-            }
-        }
-
         public void OnSEPlay(float count)
         {
             audioSource.pitch = count;
@@ -51,9 +44,7 @@ namespace Module.Gimmick.LevelGimmick
 
         public void OnEvent()
         {
-            if (playerController == null) return;
-
-            playerController.Unlock();
+            playerTrap.Disable();
 
             foreach (var pipe in powerPipes)
             {

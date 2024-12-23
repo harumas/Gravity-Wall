@@ -1,20 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class SEPlayer : MonoBehaviour
+namespace Module.Effect.Sound
 {
-    [SerializeField] private AudioClip audioClip;
-    private AudioSource audioSource;
-
-    void Start()
+    public class SEPlayer : MonoBehaviour
     {
-        audioSource = GetComponent<AudioSource>();
-    }
+        [SerializeField] private AudioClip audioClip;
+        private AudioSource audioSource;
 
-    public void Play()
-    {
-        audioSource.clip = audioClip;
-        audioSource.Play();
+        void Start()
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
+
+        public void Play()
+        {
+            audioSource.clip = audioClip;
+            audioSource.Play();
+        }
     }
 }

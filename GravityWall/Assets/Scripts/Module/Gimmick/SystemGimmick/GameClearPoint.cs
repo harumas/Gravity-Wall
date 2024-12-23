@@ -1,14 +1,16 @@
 using System;
 using Constants;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-namespace Application.Sequence
+namespace Module.Gimmick.SystemGimmick
 {
     public class GameClearPoint : MonoBehaviour
     {
+        [SerializeField] private int stageId;
         public event Action OnClear;
         private bool firstTouch = false;
+        
+        public int StageId => stageId;
 
         private void OnTriggerEnter(Collider other)
         {

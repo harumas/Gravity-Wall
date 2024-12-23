@@ -1,5 +1,6 @@
 ﻿using CoreModule.Helper;
 using Module.Gimmick;
+using Module.Gimmick.SystemGimmick;
 using Module.InputModule;
 using Module.Player;
 using R3;

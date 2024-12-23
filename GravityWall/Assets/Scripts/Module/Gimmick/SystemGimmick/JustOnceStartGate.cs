@@ -1,5 +1,4 @@
 ﻿using Module.Gimmick.LevelGimmick;
-using Module.PlayTest;
 using R3;
 using UnityEngine;
 
@@ -14,11 +13,18 @@ namespace Module.Gimmick.SystemGimmick
         {
             targetGate.IsEnabled.Skip(1).Subscribe(isEnabled =>
             {
-                if (startRoom.IsPlayerEnter && !isEnabled)
+                if (!startRoom.IsPlayerEnter && !isEnabled)
                 {
                     gameObject.SetActive(false);
                 }
             }).AddTo(this);
+        }
+
+        public void Reset()
+        {
+            gameObject.SetActive(true);
+            targetGate.gameObject.SetActive(true);
+            targetGate.Reset();
         }
     }
 }

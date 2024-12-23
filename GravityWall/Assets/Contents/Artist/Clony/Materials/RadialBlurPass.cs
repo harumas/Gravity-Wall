@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+
 public class RadialBlurPass : ScriptableRenderPass
 {
     private Material _material;
@@ -12,12 +13,11 @@ public class RadialBlurPass : ScriptableRenderPass
     private static readonly int _idSampleCountParams = Shader.PropertyToID("_SampleCountParams");
     private static readonly int _idRadialCenter = Shader.PropertyToID("_RadialCenter");
 
-    public RadialBlurPass(RadialBlurParams parameters)
+    public RadialBlurPass(RadialBlurParams parameters, Shader shader)
     {
         _parameters = parameters;
         //シェーダーの取得、マテリアルとキーワードの生成。
         //あまり好ましい取得方法ではありません。あくまでもサンプル。
-        Shader shader = Shader.Find("Hidden/PostProcessing/RadialBlur");
         _material = CoreUtils.CreateEngineMaterial(shader);
         _keywordUseDither = new LocalKeyword(shader, "USE_DITHER");
     }

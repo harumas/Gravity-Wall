@@ -1,13 +1,14 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace CoreModule.Helper
 {
     public class OnCollisionEventBridge : MonoBehaviour
     {
-        public event Action<Collision> Enter;
-        public event Action<Collision> Stay;
-        public event Action<Collision> Exit;
+        public UnityEvent<Collision> Enter;
+        public UnityEvent<Collision> Stay;
+        public UnityEvent<Collision> Exit;
 
         private void OnCollisionEnter(Collision collision)
         {

@@ -13,6 +13,9 @@ using VContainer.Unity;
 
 namespace Container
 {
+    /// <summary>
+    /// ステージ毎のDIコンテナ
+    /// </summary>
     public class InLevelContainer : LifetimeScope
     {
         private async void Start()
@@ -40,7 +43,7 @@ namespace Container
         {
             var reusableComponents = Parent.Container.Resolve<IReadOnlyList<IReusableComponent>>();
             var parents = GameObject.FindGameObjectsWithTag(Tag.LevelSegment);
-
+            
             foreach (IReusableComponent component in reusableComponents)
             {
                 component.SetComponentsInChildren(parents);

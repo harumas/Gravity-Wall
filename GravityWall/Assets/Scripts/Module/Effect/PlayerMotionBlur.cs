@@ -1,9 +1,10 @@
+using Module.Player;
 using R3;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-namespace Module.Player
+namespace Module.Effect
 {
     public class PlayerMotionBlur : MonoBehaviour
     {

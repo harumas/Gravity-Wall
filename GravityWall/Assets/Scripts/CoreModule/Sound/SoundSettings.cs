@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using TriInspector;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -30,9 +27,11 @@ namespace CoreModule.Sound
         [SerializeField, Header("同時再生ソースの最大数")] private int maxSourceCount;
 
         [Header("サウンドリソース設定")] [SerializeField] private string exportPath;
+        [SerializeField] private AudioMixer audioMixer;
         [SerializeField] private List<AudioClipPair> audioClips;
         [SerializeField] private List<AudioMixerGroup> audioMixerGroups;
 
+        public AudioMixer AudioMixer => audioMixer;
         public float MinPlayInterval => minPlayInterval;
         public int MaxSourceCount => maxSourceCount;
 
@@ -40,16 +39,18 @@ namespace CoreModule.Sound
         {
             return audioClips.ConvertAll(pair => pair.Value);
         }
-
+        
         public List<AudioMixerGroup> GetAudioMixerGroups()
         {
             return audioMixerGroups;
         }
 
+#if UNITY_EDITOR
         [Button("SoundKeyとMixerTypeを生成")]
         private void Generate()
         {
             SoundKeyGenerator.Generate(audioClips, audioMixerGroups, exportPath);
         }
+#endif
     }
 }

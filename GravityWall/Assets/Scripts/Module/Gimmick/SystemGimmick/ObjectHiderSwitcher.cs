@@ -1,12 +1,10 @@
-using System;
 using System.Collections.Generic;
 using Constants;
 using Module.Gimmick.LevelGimmick;
-using Module.PlayTest;
 using R3;
 using UnityEngine;
 
-namespace Module.Gimmick
+namespace Module.Gimmick.SystemGimmick
 {
     public class ObjectHiderSwitcher : MonoBehaviour
     {
