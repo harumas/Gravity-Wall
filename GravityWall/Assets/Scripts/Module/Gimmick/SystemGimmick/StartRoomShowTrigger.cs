@@ -21,13 +21,18 @@ namespace Module.Gimmick.SystemGimmick
                 roomBody.SetActive(true);
             }
         }
-        
+
         private void OnTriggerExit(Collider other)
         {
             if (!startRoom.IsPlayerEnter && other.CompareTag(Tag.Player))
             {
                 roomBody.SetActive(false);
             }
+        }
+
+        public void Reset()
+        {
+            roomBody.SetActive(false);
         }
     }
 }

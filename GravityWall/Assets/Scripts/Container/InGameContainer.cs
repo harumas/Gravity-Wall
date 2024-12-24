@@ -57,6 +57,7 @@ namespace Container
             builder.RegisterEntryPoint<OptionBehaviourPresenter>();
             builder.RegisterEntryPoint<CreditBehaviourPresenter>();
             builder.RegisterEntryPoint<ConfirmNewGamePresenter>();
+            builder.RegisterEntryPoint<HubResetTriggerPresenter>();
 
             builder.Register<PlayerInput>(Lifetime.Singleton).As<IGameInput>();
             builder.Register<CursorLocker>(Lifetime.Singleton);
