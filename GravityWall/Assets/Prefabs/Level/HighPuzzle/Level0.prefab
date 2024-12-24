@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8217414363638009661}
   - component: {fileID: 6272061226507868156}
+  - component: {fileID: 8506096311361889870}
   m_Layer: 0
   m_Name: Global Volume
   m_TagString: Untagged
@@ -44,11 +45,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IsGlobal: 1
+  m_IsGlobal: 0
   priority: 0
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: b2176108f60f5a547b715613e9e13d5a, type: 2}
+--- !u!65 &8506096311361889870
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4682741386698694920}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 33.494255, y: 25.116512, z: 65.170166}
+  m_Center: {x: 1.4086227, y: 10.694307, z: 0.4058838}
 --- !u!1 &5429898660306992078
 GameObject:
   m_ObjectHideFlags: 0
@@ -62,9 +84,9 @@ GameObject:
   - component: {fileID: 1721259034044895098}
   - component: {fileID: 3786999530959098165}
   - component: {fileID: 3324747972887180134}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Level0
-  m_TagString: Untagged
+  m_TagString: LevelSegment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,8 +122,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startActive: 1
-  activateOnOpen: 0
-  observeGate: 
+  activateOnOpen: 1
+  observeGate: HubLevel/HighPuzzle-StartRoom/Body/StartRoomBody/Gate1
   roomObject: {fileID: 7876083977127499529}
   levelGates:
   - {fileID: 6831426236445951296}
@@ -119,7 +141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parentReference:
     TypeName: Container.InGameContainer
-  autoRun: 1
+  autoRun: 0
   autoInjectGameObjects: []
 --- !u!114 &3786999530959098165
 MonoBehaviour:
