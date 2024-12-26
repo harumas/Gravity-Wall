@@ -25,6 +25,7 @@ namespace Module.Gimmick.LevelGimmick
         [SerializeField, ReadOnly] private int usingCount = 0;
         [SerializeField] private Material lockHoloMaterial, openHoloMaterial;
         [SerializeField] private MeshRenderer hologramMeshRenderer;
+        [SerializeField] private bool isEffect;
 
         private int switchCount = 0;
         private List<Material> lightMaterials = new List<Material>();
@@ -149,6 +150,8 @@ namespace Module.Gimmick.LevelGimmick
 
         void GateAnimation(bool isOpen)
         {
+            if (!isEffect) return;
+
             gateLeft.DOLocalMoveX(isOpen ? 0.9f : 0, 0.3f);
             gateRight.DOLocalMoveX(isOpen ? -0.9f : 0, 0.3f);
 

@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 839745991053402958}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 4.65, z: -1.508}
+  m_LocalPosition: {x: 0, y: 4.65, z: -1.98}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -41,6 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1527824643484932023}
   - component: {fileID: 3649707127085477136}
+  - component: {fileID: -6922118114275841289}
   m_Layer: 9
   m_Name: HugeGate
   m_TagString: Untagged
@@ -88,11 +89,44 @@ MonoBehaviour:
   gimmickPath: HugeGate
   gateOpenEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3649707127085477136}
+        m_TargetAssemblyTypeName: Module.Gimmick.LevelGimmick.HugeGate, Module.Gimmick
+        m_MethodName: OnOpenAnimationEvent
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   gateCloseEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3649707127085477136}
+        m_TargetAssemblyTypeName: Module.Gimmick.LevelGimmick.HugeGate, Module.Gimmick
+        m_MethodName: OnOpenAnimationEvent
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  gate: {fileID: 6082602701387202514}
+  gateMeshRenderers:
+  - {fileID: 4496943828753178830}
+  - {fileID: 2889016232962276801}
+  - {fileID: 2470251408647703919}
+  - {fileID: 6299742138273492888}
+  - {fileID: 6727542351626005353}
   lightBasePosition: {fileID: 7470221308329926431}
+  gateLeft: {fileID: 0}
+  gateRight: {fileID: 0}
   pooledLights:
   - {fileID: 7016254309861924982}
   - {fileID: 4137862570923313701}
@@ -104,7 +138,108 @@ MonoBehaviour:
   - {fileID: 0}
   setWidth: 4
   usingCount: 0
+  lockHoloMaterial: {fileID: 0}
+  openHoloMaterial: {fileID: 0}
+  hologramMeshRenderer: {fileID: 0}
+  isEffect: 0
   anim: {fileID: 7969956786054204853}
+--- !u!82 &-6922118114275841289
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3868531052302066820}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 7464499346863558571, guid: 0440154dd0a47c743a0a7cc1e6a0d2ab,
+    type: 2}
+  m_audioClip: {fileID: 8300000, guid: ae68cda7f94f943a9af139d1a6e88c44, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &6082602701387202514
 GameObject:
   m_ObjectHideFlags: 0
@@ -399,6 +534,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1527824643484932023}
     m_Modifications:
+    - target: {fileID: 1609147059547102007, guid: 5c36d95bda85d400b9769273ab5e4ca1,
+        type: 3}
+      propertyPath: audioSource
+      value: 
+      objectReference: {fileID: -6922118114275841289}
     - target: {fileID: 2031984079132183784, guid: 5c36d95bda85d400b9769273ab5e4ca1,
         type: 3}
       propertyPath: m_Name
@@ -479,14 +619,68 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    - target: {fileID: 7371988795293883148, guid: 5c36d95bda85d400b9769273ab5e4ca1,
+        type: 3}
+      propertyPath: gimmickPath
+      value: HugeGate/HubGate
+      objectReference: {fileID: 0}
+    - target: {fileID: 7371988795293883148, guid: 5c36d95bda85d400b9769273ab5e4ca1,
+        type: 3}
+      propertyPath: lightRenderers.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7371988795293883148, guid: 5c36d95bda85d400b9769273ab5e4ca1,
+        type: 3}
+      propertyPath: lightRenderers.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7371988795293883148, guid: 5c36d95bda85d400b9769273ab5e4ca1,
+        type: 3}
+      propertyPath: lightRenderers.Array.data[2]
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7371988795293883148, guid: 5c36d95bda85d400b9769273ab5e4ca1, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 6588094341053473883, guid: 5c36d95bda85d400b9769273ab5e4ca1, type: 3}
+    - {fileID: 1692781039591067477, guid: 5c36d95bda85d400b9769273ab5e4ca1, type: 3}
+    - {fileID: 6532249540061698372, guid: 5c36d95bda85d400b9769273ab5e4ca1, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c36d95bda85d400b9769273ab5e4ca1, type: 3}
 --- !u!4 &1990204241496004878 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6574949534751520274, guid: 5c36d95bda85d400b9769273ab5e4ca1,
+    type: 3}
+  m_PrefabInstance: {fileID: 4656803321219362588}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &2470251408647703919 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7127035899455038067, guid: 5c36d95bda85d400b9769273ab5e4ca1,
+    type: 3}
+  m_PrefabInstance: {fileID: 4656803321219362588}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &2889016232962276801 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7545659162788500189, guid: 5c36d95bda85d400b9769273ab5e4ca1,
+    type: 3}
+  m_PrefabInstance: {fileID: 4656803321219362588}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &4496943828753178830 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 9135573167452213202, guid: 5c36d95bda85d400b9769273ab5e4ca1,
+    type: 3}
+  m_PrefabInstance: {fileID: 4656803321219362588}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &6299742138273492888 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1715141289134669956, guid: 5c36d95bda85d400b9769273ab5e4ca1,
+    type: 3}
+  m_PrefabInstance: {fileID: 4656803321219362588}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &6727542351626005353 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2160955883816993909, guid: 5c36d95bda85d400b9769273ab5e4ca1,
     type: 3}
   m_PrefabInstance: {fileID: 4656803321219362588}
   m_PrefabAsset: {fileID: 0}
