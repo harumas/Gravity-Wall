@@ -40,8 +40,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1527824643484932023}
-  - component: {fileID: 3649707127085477136}
+  - component: {fileID: 5765691853445088206}
   - component: {fileID: -6922118114275841289}
+  - component: {fileID: 7194560036373734087}
+  - component: {fileID: 874502324158323913}
   m_Layer: 9
   m_Name: HugeGate
   m_TagString: Untagged
@@ -72,7 +74,7 @@ Transform:
   - {fileID: 1990204241496004878}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 900, z: 0}
---- !u!114 &3649707127085477136
+--- !u!114 &5765691853445088206
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -81,7 +83,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3868531052302066820}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 619479b4a35898446a2efe25f3d48a5e, type: 3}
+  m_Script: {fileID: 11500000, guid: 37a12bf7c8e64493bbe278ca2f56dbab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isEnabled:
@@ -90,9 +92,21 @@ MonoBehaviour:
   gateOpenEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3649707127085477136}
-        m_TargetAssemblyTypeName: Module.Gimmick.LevelGimmick.HugeGate, Module.Gimmick
-        m_MethodName: OnOpenAnimationEvent
+      - m_Target: {fileID: 7194560036373734087}
+        m_TargetAssemblyTypeName: Module.Gimmick.SystemGimmick.ObjectHider, Module.Gimmick
+        m_MethodName: Disable
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 874502324158323913}
+        m_TargetAssemblyTypeName: Module.Effect.AnimatorStateSetter, Module.Effect
+        m_MethodName: AnimatorSetBool
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -105,9 +119,21 @@ MonoBehaviour:
   gateCloseEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3649707127085477136}
-        m_TargetAssemblyTypeName: Module.Gimmick.LevelGimmick.HugeGate, Module.Gimmick
-        m_MethodName: OnOpenAnimationEvent
+      - m_Target: {fileID: 7194560036373734087}
+        m_TargetAssemblyTypeName: Module.Gimmick.SystemGimmick.ObjectHider, Module.Gimmick
+        m_MethodName: Enable
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 874502324158323913}
+        m_TargetAssemblyTypeName: Module.Effect.AnimatorStateSetter, Module.Effect
+        m_MethodName: AnimatorSetBool
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -124,7 +150,7 @@ MonoBehaviour:
   - {fileID: 2470251408647703919}
   - {fileID: 6299742138273492888}
   - {fileID: 6727542351626005353}
-  lightBasePosition: {fileID: 7470221308329926431}
+  lightBasePosition: {fileID: 0}
   gateLeft: {fileID: 0}
   gateRight: {fileID: 0}
   pooledLights:
@@ -134,15 +160,13 @@ MonoBehaviour:
   - {fileID: 7540271231136727233}
   - {fileID: 3267124653707298711}
   switchMaxCount: 1
-  observedSwitches:
-  - {fileID: 0}
+  observedSwitches: []
   setWidth: 4
   usingCount: 0
   lockHoloMaterial: {fileID: 0}
   openHoloMaterial: {fileID: 0}
   hologramMeshRenderer: {fileID: 0}
   isEffect: 0
-  anim: {fileID: 7969956786054204853}
 --- !u!82 &-6922118114275841289
 AudioSource:
   m_ObjectHideFlags: 0
@@ -240,6 +264,33 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7194560036373734087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3868531052302066820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee7754dc2b1c4e442af2d966e9cd8ac0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hideAngle: 80
+  activeOnStart: 0
+--- !u!114 &874502324158323913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3868531052302066820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70d1df43d0f1f4c4cb51ec7141402ecb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 7969956786054204853}
 --- !u!1 &6082602701387202514
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,6 +300,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7188831146990383859}
+  - component: {fileID: 6091668915810382352}
   m_Layer: 9
   m_Name: GateObj (1)
   m_TagString: Untagged
@@ -271,6 +323,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1527824643484932023}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &6091668915810382352
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6082602701387202514}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.5, y: 11.5, z: 1}
+  m_Center: {x: 0, y: 2.4, z: 0}
 --- !u!1001 &914045525789923589
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -562,27 +635,32 @@ PrefabInstance:
     - target: {fileID: 6574949534751520274, guid: 5c36d95bda85d400b9769273ab5e4ca1,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.1013153
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6574949534751520274, guid: 5c36d95bda85d400b9769273ab5e4ca1,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.1762902
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6574949534751520274, guid: 5c36d95bda85d400b9769273ab5e4ca1,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6574949534751520274, guid: 5c36d95bda85d400b9769273ab5e4ca1,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.000000024849
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6574949534751520274, guid: 5c36d95bda85d400b9769273ab5e4ca1,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.79
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6574949534751520274, guid: 5c36d95bda85d400b9769273ab5e4ca1,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.69
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6574949534751520274, guid: 5c36d95bda85d400b9769273ab5e4ca1,
         type: 3}
@@ -641,6 +719,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7371988795293883148, guid: 5c36d95bda85d400b9769273ab5e4ca1, type: 3}
+    - {fileID: 5017013306869036396, guid: 5c36d95bda85d400b9769273ab5e4ca1, type: 3}
     m_RemovedGameObjects:
     - {fileID: 6588094341053473883, guid: 5c36d95bda85d400b9769273ab5e4ca1, type: 3}
     - {fileID: 1692781039591067477, guid: 5c36d95bda85d400b9769273ab5e4ca1, type: 3}
