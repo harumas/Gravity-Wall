@@ -37,7 +37,16 @@ namespace View
             EventSystem.current.SetSelectedGameObject(continueButton.gameObject);
             IsFirstSelect = false;
         }
-        
+
+        public void SetTimeScaleAnimationInvalid()
+        {
+            continueButton.GetComponent<Animator>().updateMode = AnimatorUpdateMode.UnscaledTime;
+            restartButton.GetComponent<Animator>().updateMode = AnimatorUpdateMode.UnscaledTime;
+            returnToHubButton.GetComponent<Animator>().updateMode = AnimatorUpdateMode.UnscaledTime;
+            goToSettingsButton.GetComponent<Animator>().updateMode = AnimatorUpdateMode.UnscaledTime;
+            endGameButton.GetComponent<Animator>().updateMode = AnimatorUpdateMode.UnscaledTime;
+        }
+
         public void SetActiveReturnToHubButton(bool isActive)
         {
             returnToHubButton.gameObject.SetActive(isActive);

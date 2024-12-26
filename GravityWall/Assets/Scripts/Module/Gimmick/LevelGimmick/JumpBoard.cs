@@ -1,4 +1,5 @@
 using System;
+using CoreModule.Sound;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Module.Player;
@@ -26,6 +27,9 @@ namespace Module.Gimmick.LevelGimmick
 
         private async UniTaskVoid Push(IPushable pushable)
         {
+
+            SoundManager.Instance.Play(Core.Sound.SoundKey.JumpBoard,Core.Sound.MixerType.SE);
+
             await UniTask.Delay(TimeSpan.FromSeconds(jumpDelay));
 
             float jumpOn = -1;

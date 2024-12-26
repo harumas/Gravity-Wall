@@ -34,9 +34,6 @@ namespace Application
                 return;
             }
 
-            // FPSの上限は120
-            UnityEngine.Application.targetFrameRate = 120;
-
             // 初回プレイによって初期シーンを切り替える
             bool isFirstPlay = loadedSaveData.ClearedStageList.All(clearFlag => !clearFlag);
             int rootSceneIndex = isFirstPlay ? 0 : 1;
