@@ -50,8 +50,6 @@ namespace View
             pauseView.SetActiveRestartButton(gameState.Current.CurrentValue != GameState.State.StageSelect);
 
             pauseView.SelectFirst();
-
-            await UniTask.CompletedTask;
         }
 
         protected override void OnActivate()
