@@ -25,6 +25,7 @@ namespace Presentation
         public LevelEventPresenter(RespawnManager respawnManager,
             ViewBehaviourNavigator behaviourNavigator,
             PlayerController playerController,
+            GravitySwitcher gravitySwitcher,
             ReusableComponents<SavePoint> savePointComponents,
             ReusableComponents<DeathFloor> deathFloorComponents)
         {
@@ -36,6 +37,7 @@ namespace Presentation
             pauseView.OnRestartButtonPressed.Subscribe(_ =>
                 {
                     behaviourNavigator.DeactivateBehaviour(ViewBehaviourState.Pause);
+                    respawnDataOnDeath.IsGravitySwitcherEnabled = gravitySwitcher.IsEnabled;
                     respawnManager.RespawnPlayer(respawnDataOnDeath, RespawnViewSequence).Forget();
                 })
                 .AddTo(pauseView);

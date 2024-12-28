@@ -7,13 +7,14 @@ namespace Module.Gimmick.SystemGimmick
     /// <summary>
     /// リスポーン情報を格納する構造体
     /// </summary>
-    public readonly struct RespawnContext
+    public struct RespawnContext
     {
-        public readonly Vector3 Position;
-        public readonly Quaternion Rotation;
-        public readonly Vector3 Velocity;
-        public readonly Vector3 Gravity;
-        public readonly LevelResetter LevelResetter;
+        public Vector3 Position;
+        public Quaternion Rotation;
+        public Vector3 Velocity;
+        public Vector3 Gravity;
+        public bool IsGravitySwitcherEnabled;
+        public LevelResetter LevelResetter;
 
         public RespawnContext(Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 gravity, LevelResetter levelResetter)
         {
@@ -22,6 +23,7 @@ namespace Module.Gimmick.SystemGimmick
             Velocity = velocity;
             Gravity = gravity;
             LevelResetter = levelResetter;
+            IsGravitySwitcherEnabled = false;
         }
     }
 

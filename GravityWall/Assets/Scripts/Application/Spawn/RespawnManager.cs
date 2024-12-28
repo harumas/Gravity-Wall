@@ -72,7 +72,11 @@ namespace Application.Spawn
             playerController.transform.SetPositionAndRotation(respawnContext.Position, respawnContext.Rotation);
             cameraController.SetCameraRotation(respawnContext.Rotation);
             playerTargetSyncer.SetRotation(respawnContext.Rotation);
-            gravitySwitcher.Enable();
+
+            if (respawnContext.IsGravitySwitcherEnabled)
+            {
+                gravitySwitcher.Enable();
+            }
 
             if (respawnContext.Velocity != Vector3.zero)
             {
