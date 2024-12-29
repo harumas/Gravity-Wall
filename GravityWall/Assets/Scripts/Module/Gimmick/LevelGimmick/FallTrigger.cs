@@ -68,9 +68,6 @@ namespace Module.Gimmick.LevelGimmick
                     }
 
                     isPlayerEnter = true;
-
-                    //ストップ機能が付いたら実装
-                    //SoundManager.Instance.Play(SoundKey.FallWind, MixerType.SE);
                 }
             }
         }
