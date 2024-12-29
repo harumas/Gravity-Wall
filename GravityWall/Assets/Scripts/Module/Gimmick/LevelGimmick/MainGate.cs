@@ -1,4 +1,6 @@
 using System;
+using CoreModule.Sound;
+using Cysharp.Threading.Tasks;
 using PropertyGenerator.Generated;
 using UnityEngine;
 
@@ -16,10 +18,16 @@ namespace Module.Gimmick.LevelGimmick
         public bool CanOpen => enableCount >= minEnableCount;
         public event Action OnLightEnabled;
         private static readonly int emissionColorProperty = Shader.PropertyToID("_EmissionColor");
+        private static readonly string lightEffectName = "OpenEffect";
 
         public void EnableLight()
         {
-            lightRenderers[enableCount++].material.SetColor(emissionColorProperty, enableLightColor);
+            lightRenderers[enableCount].material.SetColor(emissionColorProperty, enableLightColor);
+            var lightEffect = lightRenderers[enableCount++].transform.Find(lightEffectName).gameObject;
+            lightEffect.SetActive(true);
+
+            SoundManager.Instance.Play(Core.Sound.SoundKey.HubGateLight,Core.Sound.MixerType.SE);
+
             OnLightEnabled?.Invoke();
         }
 

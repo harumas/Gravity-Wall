@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Module.Gimmick.SystemGimmick;
 using PropertyGenerator.Generated;
 using UnityEngine;
@@ -12,6 +13,9 @@ namespace Module.Gimmick.LevelGimmick
         [SerializeField] private PowerPipe[] powerPipes;
         [SerializeField] private UnityEvent goalEvent;
         [SerializeField] private InGameEventPlayerTrap playerTrap;
+
+        private readonly int cutSceneDelayCount = 2000;
+        private readonly int switchEventDelayCount = 500;
 
         private void Start()
         {
@@ -44,17 +48,25 @@ namespace Module.Gimmick.LevelGimmick
 
         public void OnEvent()
         {
-            playerTrap.Disable();
+            OnEventTask().Forget();
+        }
 
+        private async UniTaskVoid OnEventTask()
+        {
             foreach (var pipe in powerPipes)
             {
                 pipe.OnPowerPipe(true);
             }
 
-            isEnabled.Value = true;
+            await UniTask.Delay(switchEventDelayCount);
 
+            isEnabled.Value = true;
             //カットシーン
             goalEvent.Invoke();
+
+            await UniTask.Delay(cutSceneDelayCount);
+
+            playerTrap.Disable();
         }
     }
 }
