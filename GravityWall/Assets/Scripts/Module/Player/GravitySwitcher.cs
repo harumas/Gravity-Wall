@@ -39,6 +39,8 @@ namespace Module.Player
         private ThresholdChecker rotateAngleChecker;
         private DelayableProperty<bool> canRotateProperty = new();
 
+        public bool IsEnabled => isEnabled;
+
         private void Awake()
         {
             rotateAngleChecker = new ThresholdChecker(constrainedAngleThreshold, angleChangeDuration);
@@ -79,14 +81,14 @@ namespace Module.Player
 
         private void Update()
         {
-            isLegalStep = isEnabled && canSwitchGravity && IsLegalStep();
+            isLegalStep = IsEnabled && canSwitchGravity && IsLegalStep();
 
             canRotateProperty.Update();
         }
 
         private void FixedUpdate()
         {
-            if (isEnabled)
+            if (IsEnabled)
             {
                 SwitchGravity();
             }

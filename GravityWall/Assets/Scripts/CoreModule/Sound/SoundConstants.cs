@@ -27,6 +27,7 @@ namespace Core.Sound
 		OpenHugeGate,
 		JumpBoard,
 		HubGateLight,
+		Fall,
 	}
 	
 	public enum MixerType

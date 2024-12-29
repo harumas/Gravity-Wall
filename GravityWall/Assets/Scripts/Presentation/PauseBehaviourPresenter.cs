@@ -8,6 +8,7 @@ using Module.Config;
 using Module.InputModule;
 using Module.Player;
 using R3;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using VContainer;
 using VContainer.Unity;
@@ -96,7 +97,6 @@ namespace Presentation
             pauseBehaviour.SetGameState(gameState);
 
             PauseView pauseView = pauseBehaviour.PauseView;
-
             pauseView.OnContinueButtonPressed.Subscribe(_ => navigator.DeactivateBehaviour(ViewBehaviourState.Pause)).AddTo(pauseView);
             pauseView.OnReturnToHubButtonPressed.Subscribe(_ =>
             {
