@@ -12,7 +12,8 @@ namespace View.View
 
         public void SetClearedLevels(bool[] clearedLevels)
         {
-            for (var i = 0; i < clearedLevelIcons.Length; i++)
+            // チュートリアルは0番目なので無視
+            for (var i = 1; i < clearedLevelIcons.Length; i++)
             {
                 if (clearedLevels[i])
                 {
