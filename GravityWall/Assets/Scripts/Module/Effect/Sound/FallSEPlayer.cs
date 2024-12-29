@@ -15,6 +15,12 @@ namespace Module.Effect
         [SerializeField] private float minFallTime;
         [SerializeField] private AudioSource audioSource;
 
+        private readonly float volumeChangeRate = 0.1f;
+        private readonly float pitchChangeRate = 0.1f;
+        private readonly float initialVolume = 0.3f;
+        private readonly float initialPitch = 0.8f;
+        private readonly float fadeTime = 0.3f;
+
         private Tween tween;
 
         private float timer;
@@ -33,17 +39,17 @@ namespace Module.Effect
                     audioSource.Play();
                 }
 
-                audioSource.volume += Time.deltaTime * 0.1f;
-                audioSource.pitch += Time.deltaTime * 0.1f;
+                audioSource.volume += Time.deltaTime * volumeChangeRate;
+                audioSource.pitch += Time.deltaTime * pitchChangeRate;
             }
             else
             {
                 tween?.Kill();
-                tween = DOTween.To(() => audioSource.volume,(v) => audioSource.volume = v,0,0.3f).OnComplete(() =>
+                tween = DOTween.To(() => audioSource.volume,(v) => audioSource.volume = v,0, fadeTime).OnComplete(() =>
                 {
                     audioSource.Pause();
-                    audioSource.volume = 0.3f;
-                    audioSource.pitch = 0.8f;
+                    audioSource.volume = initialVolume;
+                    audioSource.pitch = initialPitch;
                     timer = 0;
                 });
             }
