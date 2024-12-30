@@ -2,6 +2,7 @@
 using Cysharp.Threading.Tasks;
 using R3;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace View
 {
@@ -32,6 +33,10 @@ namespace View
         public async void Deactivate(ViewBehaviourState nextState)
         {
             OnDeactivate();
+            
+            // 選択解除
+            EventSystem.current.SetSelectedGameObject(null);
+            
             await OnPostDeactivate(nextState, destroyCancellationToken);
             onActiveStateChanged.OnNext((false, nextState));
             isActive.Value = false;
