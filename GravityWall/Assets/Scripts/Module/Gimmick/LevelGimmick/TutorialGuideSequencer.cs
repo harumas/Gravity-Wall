@@ -18,7 +18,7 @@ namespace Module.Gimmick.LevelGimmick
         [SerializeField] private InGameEventPlayerTrap playerTrap;
         [SerializeField] private float delayTime = 2.6f;
         [SerializeField] private float videoStartDelayTime = 2;
-        
+
         private void Start()
         {
             playerTrap.OnTrapped += () => TutorialGuidSequence().Forget();
@@ -32,12 +32,12 @@ namespace Module.Gimmick.LevelGimmick
 
             videoPlayer.Play();
             movieCanvas.SetActive(true);
-            
+
             await UniTask.Delay(TimeSpan.FromSeconds(videoPlayer.length / videoPlayer.playbackSpeed));
 
             titleVirtualCamera.Priority = 0;
 
-            playerTrap.Disable();
+            playerTrap.Disable(true);
         }
     }
 }
