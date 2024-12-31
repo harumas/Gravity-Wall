@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using Cysharp.Threading.Tasks;
+using Module.Gimmick;
 using Module.Gimmick.LevelGimmick;
 using R3;
 using UnityEngine;
@@ -12,11 +14,15 @@ namespace Application.Sequence
         [SerializeField] private MainGate mainGate;
         [SerializeField] private PressurePlate mainGateSwitch;
         [SerializeField] private PlayableDirector mainGateOpenDirector;
+        [SerializeField] private HubHologramSetter[] hubHologramSetters;
 
-        public void Initialize(int clearedStageCount)
+        public void Initialize(bool[] isClearedStages)
         {
+            int clearedStageCount = isClearedStages.Count(isClear => isClear);
+
             EnableMainGateLights(clearedStageCount);
-            
+            SetHologram(isClearedStages);
+
             mainGateSwitch.IsEnabled.Subscribe(isEnabled =>
             {
                 if (isEnabled)
@@ -49,6 +55,14 @@ namespace Application.Sequence
             if (mainGate.CanOpen)
             {
                 mainGateSwitch.Unlock();
+            }
+        }
+
+        private void SetHologram(bool[] isClearedStages)
+        {
+            for (int i = 0; i < hubHologramSetters.Length; i++)
+            {
+                hubHologramSetters[i].SetHologramMaterial(isClearedStages[i] == true);
             }
         }
     }
