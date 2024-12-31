@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using Module.Gimmick;
 using Module.Gimmick.LevelGimmick;
@@ -17,12 +18,7 @@ namespace Application.Sequence
 
         public void Initialize(bool[] isClearedStages)
         {
-            int clearedStageCount = 0;
-            foreach (bool isClearedStage in isClearedStages)
-            {
-                if (!isClearedStage) continue;
-                clearedStageCount++;
-            }
+            int clearedStageCount = isClearedStages.Count(isClear => isClear);
 
             EnableMainGateLights(clearedStageCount);
             SetHologram(isClearedStages);
