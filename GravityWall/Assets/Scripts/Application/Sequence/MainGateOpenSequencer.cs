@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using CoreModule.Sound;
 using Cysharp.Threading.Tasks;
 using Module.Gimmick;
 using Module.Gimmick.LevelGimmick;

@@ -26,8 +26,6 @@ namespace Module.Gimmick.LevelGimmick
             var lightEffect = lightRenderers[enableCount++].transform.Find(lightEffectName).gameObject;
             lightEffect.SetActive(true);
 
-            SoundManager.Instance.Play(Core.Sound.SoundKey.HubGateLight,Core.Sound.MixerType.SE);
-
             OnLightEnabled?.Invoke();
         }
 
