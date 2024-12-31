@@ -85,11 +85,10 @@ namespace Application.Sequence
 
         private void InitMainGate()
         {
-            bool[] clearedStageList = saveManager.Data.ClearedStageList;
-
             // チュートリアル以外のクリアデータをメインゲートに反映する
-            int count = clearedStageList.Skip(1).Count(isClear => isClear);
-            sequencer.Initialize(count);
+            bool[] clearedStageList = saveManager.Data.ClearedStageList.Skip(1).ToArray();
+
+            sequencer.Initialize(clearedStageList);
         }
 
         private bool IsNewGame()
