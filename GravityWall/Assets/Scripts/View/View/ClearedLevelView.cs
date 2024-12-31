@@ -12,10 +12,10 @@ namespace View.View
 
         public void SetClearedLevels(bool[] clearedLevels)
         {
-            // チュートリアルは0番目なので無視
-            for (var i = 1; i < clearedLevelIcons.Length; i++)
+            for (var i = 0; i < clearedLevelIcons.Length; i++)
             {
-                if (clearedLevels[i])
+                // チュートリアルは0番目なので無視
+                if (clearedLevels[i + 1])
                 {
                     clearedLevelIcons[i].color = clearedColor;
                 }
