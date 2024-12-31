@@ -66,7 +66,7 @@ namespace Module.Gimmick.LevelGimmick
 
             await UniTask.Delay(cutSceneDelayCount);
 
-            playerTrap.Disable();
+            playerTrap.Disable(false);
         }
     }
 }

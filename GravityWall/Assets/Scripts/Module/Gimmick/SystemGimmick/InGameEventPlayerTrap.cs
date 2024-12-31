@@ -56,15 +56,18 @@ namespace Module.Gimmick.SystemGimmick
             playerTargetSyncer.HoldLock = true;
         }
 
-        public void Disable()
+        public void Disable(bool isGravityEnable)
         {
             playerController.HoldLock = false;
             playerTargetSyncer.HoldLock = false;
 
             cameraController.SetFreeCamera(true);
             playerController.Unlock();
-            gravitySwitcher.Enable();
             playerTargetSyncer.Unlock();
+            if (isGravityEnable)
+            {
+                gravitySwitcher.Enable();
+            }
         }
     }
 }
