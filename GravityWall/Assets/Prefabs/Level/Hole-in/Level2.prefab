@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 1291970471195882680}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: -0.7071068}
-  m_LocalPosition: {x: -146.22089, y: 119.908134, z: 29.74461}
+  m_LocalPosition: {x: 72.140015, y: 28.93171, z: 17.831833}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -36,7 +36,7 @@ Transform:
   - {fileID: 2564725836164687305}
   - {fileID: 5567042206995777929}
   - {fileID: 8809398636613101176}
-  m_Father: {fileID: 8588400749298269822}
+  m_Father: {fileID: 1760795883610197903}
   m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
 --- !u!114 &5323873251857911089
 MonoBehaviour:
@@ -172,6 +172,57 @@ Transform:
   - {fileID: 8588400749298269822}
   m_Father: {fileID: 329674013325303685}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3888556695473506270
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1760795883610197903}
+  - component: {fileID: 8804142425635448946}
+  m_Layer: 0
+  m_Name: Pipes
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1760795883610197903
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3888556695473506270}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -218.3609, y: 90.976425, z: 11.912777}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2869173817430233136}
+  - {fileID: 3597611693656996014}
+  m_Father: {fileID: 8588400749298269822}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8804142425635448946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3888556695473506270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 893fae6bac27bef43b3746210f68c2e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isEnabled:
+    value: 0
+  gimmickPath: Level2/Room/Environment/Pipes
+  observedSwitches:
+  - {fileID: 8150761008571180101}
 --- !u!1 &5577317908045743408
 GameObject:
   m_ObjectHideFlags: 0
@@ -1297,8 +1348,7 @@ Transform:
   - {fileID: 2066868440524005806}
   - {fileID: 5542283630325886884}
   - {fileID: 1898155409017875037}
-  - {fileID: 2869173817430233136}
-  - {fileID: 3597611693656996014}
+  - {fileID: 1760795883610197903}
   m_Father: {fileID: 4604078548701704459}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8685505588895319079
@@ -7169,7 +7219,7 @@ Transform:
   m_GameObject: {fileID: 8914635324130277350}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: -0.7071068}
-  m_LocalPosition: {x: -147.26115, y: 117.10488, z: 24.180492}
+  m_LocalPosition: {x: 71.09975, y: 26.128456, z: 12.267715}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7178,7 +7228,7 @@ Transform:
   - {fileID: 6467827880935359650}
   - {fileID: 2521443700962080539}
   - {fileID: 6127729797518052289}
-  m_Father: {fileID: 8588400749298269822}
+  m_Father: {fileID: 1760795883610197903}
   m_LocalEulerAnglesHint: {x: 270, y: 0, z: 0}
 --- !u!114 &4454203653072231313
 MonoBehaviour:
@@ -9590,7 +9640,7 @@ PrefabInstance:
     - target: {fileID: 624629796947512473, guid: 0f395e5f4315144c2ae44e454977f80f,
         type: 3}
       propertyPath: m_Name
-      value: Switch0
+      value: Switch
       objectReference: {fileID: 0}
     - target: {fileID: 624629796947512473, guid: 0f395e5f4315144c2ae44e454977f80f,
         type: 3}
@@ -9610,7 +9660,7 @@ PrefabInstance:
     - target: {fileID: 2097836411523704022, guid: 0f395e5f4315144c2ae44e454977f80f,
         type: 3}
       propertyPath: gimmickPath
-      value: Level2/Room/Switch0
+      value: Level2/Room/Switch
       objectReference: {fileID: 0}
     - target: {fileID: 2097836411523704022, guid: 0f395e5f4315144c2ae44e454977f80f,
         type: 3}

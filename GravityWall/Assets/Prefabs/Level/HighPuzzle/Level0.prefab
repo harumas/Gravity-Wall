@@ -1,5 +1,55 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4036817693167139686
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2387638061124295303}
+  - component: {fileID: 199043376852698189}
+  m_Layer: 0
+  m_Name: Pipes
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2387638061124295303
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4036817693167139686}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -5.836492, y: 4.0257683, z: 25.264816}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 196722159857484937}
+  m_Father: {fileID: 2667679841518976120}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &199043376852698189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4036817693167139686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 893fae6bac27bef43b3746210f68c2e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isEnabled:
+    value: 0
+  gimmickPath: Level0/Room/Enviloment/Pipes
+  observedSwitches:
+  - {fileID: 2130340153331352128}
 --- !u!1 &4682741386698694920
 GameObject:
   m_ObjectHideFlags: 0
@@ -6411,7 +6461,7 @@ Transform:
   m_GameObject: {fileID: 6165382597037866059}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 11.09669, y: 1.6408384, z: -0.11}
+  m_LocalPosition: {x: 16.933182, y: -2.38493, z: -25.374817}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6420,7 +6470,7 @@ Transform:
   - {fileID: 6402226304425756494}
   - {fileID: 3078503028158788938}
   - {fileID: 7596479268337494245}
-  m_Father: {fileID: 2667679841518976120}
+  m_Father: {fileID: 2387638061124295303}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &8122111938837706022
 MonoBehaviour:
@@ -8052,7 +8102,7 @@ Transform:
   - {fileID: 3502068179315089598}
   - {fileID: 8311137682559137472}
   - {fileID: 7713543015896749530}
-  - {fileID: 196722159857484937}
+  - {fileID: 2387638061124295303}
   m_Father: {fileID: 6300043222264133019}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9185269041021978735
