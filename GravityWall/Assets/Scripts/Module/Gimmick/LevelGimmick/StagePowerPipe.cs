@@ -10,23 +10,21 @@ namespace Module.Gimmick.LevelGimmick
     public class StagePowerPipe : GimmickObject
     {
         [SerializeField] private GimmickObject[] observedSwitches;
-        [SerializeField] private int switchMaxCount = 1;
+        private int switchMaxCount = 1;
         private int switchCount = 0;
 
-        [SerializeField] private bool isGetChild;
-        [SerializeField] private MeshRenderer[] meshRenderers;
+        private MeshRenderer[] meshRenderers;
         private static readonly int emissionIntensity = Shader.PropertyToID("_EmissionIntensity");
 
         void Start()
         {
-            if(isGetChild) 
-            {
-                meshRenderers = GetComponentsInChildren<MeshRenderer>();
-            }
+            meshRenderers = GetComponentsInChildren<MeshRenderer>();
+
             foreach (GimmickObject gimmick in observedSwitches)
             {
                 gimmick.IsEnabled.Skip(1).Subscribe(UpdateMoveState).AddTo(this);
             }
+
             OnPowerPipe(false);
         }
 
