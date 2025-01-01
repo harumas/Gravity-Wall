@@ -1,10 +1,7 @@
 using System;
-using System.Threading.Tasks;
 using Cinemachine;
-using Constants;
 using Cysharp.Threading.Tasks;
 using Module.Gimmick.SystemGimmick;
-using Module.Player;
 using UnityEngine;
 using UnityEngine.Video;
 
@@ -32,12 +29,14 @@ namespace Module.Gimmick.LevelGimmick
 
             videoPlayer.Play();
             movieCanvas.SetActive(true);
+            playerTrap.PlayPlayerInstallAnimation(true);
 
             await UniTask.Delay(TimeSpan.FromSeconds(videoPlayer.length / videoPlayer.playbackSpeed));
 
             titleVirtualCamera.Priority = 0;
 
             playerTrap.Disable(true);
+            playerTrap.PlayPlayerInstallAnimation(false);
         }
     }
 }

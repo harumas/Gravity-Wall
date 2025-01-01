@@ -15,7 +15,9 @@ namespace Module.Gimmick.SystemGimmick
         private GravitySwitcher gravitySwitcher;
         private PlayerTargetSyncer playerTargetSyncer;
         private CameraController cameraController;
+        private Animator playerAnimator;
         private bool isEnable = false;
+        private readonly string isInstallAnimationName = "IsInstall";
 
         private void OnTriggerEnter(Collider other)
         {
@@ -32,6 +34,7 @@ namespace Module.Gimmick.SystemGimmick
                 gravitySwitcher = obj.GetComponent<GravitySwitcher>();
                 playerTargetSyncer = obj.GetComponentInChildren<PlayerTargetSyncer>();
                 cameraController = obj.GetComponentInChildren<CameraController>();
+                playerAnimator = obj.GetComponentInChildren<Animator>();
 
                 Enable();
 
@@ -68,6 +71,11 @@ namespace Module.Gimmick.SystemGimmick
             {
                 gravitySwitcher.Enable();
             }
+        }
+
+        public void PlayPlayerInstallAnimation(bool isInstall)
+        {
+            playerAnimator.SetBool(isInstallAnimationName, isInstall);
         }
     }
 }
