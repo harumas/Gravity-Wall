@@ -125,33 +125,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &185651806 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2506069733633657563, guid: 366938403033dfe46aef589c92aa42a0,
-    type: 3}
-  m_PrefabInstance: {fileID: 4514937955158811394}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &185651810
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 185651806}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.0000007, y: 0.20000179, z: 0.981375}
-  m_Center: {x: 0.0000009536743, y: -0.17949805, z: -0.70850545}
 --- !u!43 &416999070
 Mesh:
   m_ObjectHideFlags: 0
@@ -2004,6 +1977,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: RootCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 2221418922000663145, guid: 1c627573ba7f46e42b7d28a8275e1977,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 512.69995
+      objectReference: {fileID: 0}
+    - target: {fileID: 2221418922000663145, guid: 1c627573ba7f46e42b7d28a8275e1977,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 62.80005
+      objectReference: {fileID: 0}
     - target: {fileID: 3184703828494696510, guid: 1c627573ba7f46e42b7d28a8275e1977,
         type: 3}
       propertyPath: startSequencer
@@ -3426,11 +3409,6 @@ PrefabInstance:
       propertyPath: hubBody.Array.data[1]
       value: 
       objectReference: {fileID: 1023203426}
-    - target: {fileID: 2146529919206593341, guid: 366938403033dfe46aef589c92aa42a0,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2370085646877604117, guid: 366938403033dfe46aef589c92aa42a0,
         type: 3}
       propertyPath: m_Mesh
@@ -3476,6 +3454,11 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 2109722901}
+    - target: {fileID: 3561990754982469433, guid: 366938403033dfe46aef589c92aa42a0,
+        type: 3}
+      propertyPath: hubBody.Array.data[1]
+      value: 
+      objectReference: {fileID: 1023203426}
     - target: {fileID: 3647254062486071368, guid: 366938403033dfe46aef589c92aa42a0,
         type: 3}
       propertyPath: m_Mesh
@@ -3551,36 +3534,6 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 574913515}
-    - target: {fileID: 5919416842828861700, guid: 366938403033dfe46aef589c92aa42a0,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 1.7395105
-      objectReference: {fileID: 0}
-    - target: {fileID: 5919416842828861700, guid: 366938403033dfe46aef589c92aa42a0,
-        type: 3}
-      propertyPath: m_Size.z
-      value: 2.271297
-      objectReference: {fileID: 0}
-    - target: {fileID: 5919416842828861700, guid: 366938403033dfe46aef589c92aa42a0,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5919416842828861700, guid: 366938403033dfe46aef589c92aa42a0,
-        type: 3}
-      propertyPath: m_Center.x
-      value: -0.0069801984
-      objectReference: {fileID: 0}
-    - target: {fileID: 5919416842828861700, guid: 366938403033dfe46aef589c92aa42a0,
-        type: 3}
-      propertyPath: m_Center.y
-      value: 0.36975425
-      objectReference: {fileID: 0}
-    - target: {fileID: 5919416842828861700, guid: 366938403033dfe46aef589c92aa42a0,
-        type: 3}
-      propertyPath: m_Center.z
-      value: -0.32565033
-      objectReference: {fileID: 0}
     - target: {fileID: 6624806974972929841, guid: 366938403033dfe46aef589c92aa42a0,
         type: 3}
       propertyPath: m_Mesh
@@ -3669,11 +3622,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2506069733633657563, guid: 366938403033dfe46aef589c92aa42a0,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 185651810}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 366938403033dfe46aef589c92aa42a0, type: 3}
 --- !u!114 &4514937955158811395 stripped
 MonoBehaviour:
