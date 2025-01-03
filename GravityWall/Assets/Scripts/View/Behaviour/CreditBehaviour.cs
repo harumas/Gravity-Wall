@@ -2,6 +2,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
+using View.View;
 
 namespace View
 {
@@ -12,8 +13,11 @@ namespace View
         [SerializeField] private CreditView creditView;
         [SerializeField] private float fadeDuration = 0.3f;
 
+        public CreditView CreditView => creditView;
+
         protected override void OnActivate()
         {
+            creditView.SelectFirst();
         }
 
         protected override void OnDeactivate()
