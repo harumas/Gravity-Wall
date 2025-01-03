@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks.Linq;
 using Module.Player;
 using R3;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Module.Gimmick.LevelGimmick
 {
@@ -15,14 +16,15 @@ namespace Module.Gimmick.LevelGimmick
         [SerializeField] private Transform pointB;
         [Header("移動速度")][SerializeField] private float moveSpeed;
 
-        [Header("目標地点で待機する時間")] [SerializeField] private float stopDuration;
+        [Header("目標地点で待機する時間")][SerializeField] private float stopDuration;
 
-        [Header("引っかかりを待つ時間")] [SerializeField] private float reverseDuration;
+        [Header("引っかかりを待つ時間")][SerializeField] private float reverseDuration;
 
-        [Header("最初から動かすか")] [SerializeField] private bool enableOnAwake = true;
+        [Header("最初から動かすか")][SerializeField] private bool enableOnAwake = true;
 
         [SerializeField] private GimmickObject[] observedSwitches;
         [SerializeField] private int switchMaxCount = 1;
+        [SerializeField] private UnityEvent startEvent, goalEvent;
         private int switchCount = 0;
         private CancellationTokenSource cTokenSource;
         private Rigidbody rigBody;
@@ -32,7 +34,7 @@ namespace Module.Gimmick.LevelGimmick
         private Transform currentTarget;
         private IPushable pushement;
         private float trappedTimer;
-      [SerializeField]  private int contactCount;
+        [SerializeField] private int contactCount;
 
         private const float StopThreshold = 0.01f;
 
@@ -63,7 +65,7 @@ namespace Module.Gimmick.LevelGimmick
             {
                 gimmick.IsEnabled.Skip(1).Subscribe(UpdateMoveState).AddTo(this);
             }
-            
+
             if (enableOnAwake)
             {
                 Enable();
@@ -91,6 +93,8 @@ namespace Module.Gimmick.LevelGimmick
             {
                 return;
             }
+
+            startEvent.Invoke();
 
             cTokenSource = new CancellationTokenSource();
             MoveLoop().Forget();
@@ -145,6 +149,7 @@ namespace Module.Gimmick.LevelGimmick
                 //目標地点に到達できたら指定時間待機
                 if (arrived)
                 {
+                    goalEvent.Invoke();
                     await UniTask.WaitForSeconds(stopDuration, delayTiming: PlayerLoopTiming.FixedUpdate, cancellationToken: cancellationToken);
                 }
             }
