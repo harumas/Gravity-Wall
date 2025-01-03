@@ -24,6 +24,11 @@ namespace View
         
         public Observable<BaseEventData> OnBackButtonSelected => backButton.OnSelectAsObservable();
         public Observable<BaseEventData> OnLicenseButtonSelected => licenseButton.OnSelectAsObservable();
+        public Observable<BaseEventData> OnBgmVolumeSelected => bgmVolumeSlider.OnSelectAsObservable();
+        public Observable<BaseEventData> OnSeVolumeSelected => seVolumeSlider.OnSelectAsObservable();
+        public Observable<BaseEventData> OnSensibilityXSelected => sensibilityXSlider.OnSelectAsObservable();
+        public Observable<BaseEventData> OnSensibilityYSelected => sensibilityYSlider.OnSelectAsObservable();
+        public Observable<BaseEventData> OnVibrationToggleSelected => vibrationToggle.OnSelectAsObservable();
 
         public Observable<float> OnBgmVolumeChanged => bgmVolumeSlider
             .OnValueChangedAsObservable()

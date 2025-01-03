@@ -65,7 +65,6 @@ namespace Module.Gimmick.SystemGimmick
         {
             if (reference.TryGetGimmick(observeGate, out Gate gate))
             {
-                Debug.Log(gate.name);
                 gate.IsEnabled.Skip(1)
                     .Subscribe(isEnabled =>
                     {
