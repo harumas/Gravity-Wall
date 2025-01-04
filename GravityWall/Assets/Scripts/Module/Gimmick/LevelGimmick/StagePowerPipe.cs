@@ -45,16 +45,17 @@ namespace Module.Gimmick.LevelGimmick
 
         public void OnPowerPipe(bool isOn)
         {
-            foreach (var mesh in meshRenderers)
-            {
-                float value = isOn ? 0.0f : 1.0f;
-                DOTween.To(() => value, (v) => value = v, isOn ? 1.0f : 0.0f, 0.3f)
+            float value = isOn ? 0.0f : 1.0f;
+            DOTween.To(() => value, (v) => value = v, isOn ? 1.0f : 0.0f, 0.3f)
                 .OnUpdate(() =>
                 {
-                    mesh.material.SetFloat(emissionIntensity, value);
+                    foreach (var mesh in meshRenderers)
+                    {
+                        mesh.material.SetFloat(emissionIntensity, value);
+                    }
                 });
-            }
         }
+
         public override void Enable(bool doEffect = true)
         {
             OnPowerPipe(true);
@@ -71,4 +72,3 @@ namespace Module.Gimmick.LevelGimmick
         }
     }
 }
-    

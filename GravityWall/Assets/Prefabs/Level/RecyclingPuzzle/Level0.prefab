@@ -51,8 +51,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startActive: 1
-  activateOnOpen: 0
-  observeGate: 
+  activateOnOpen: 1
+  observeGate: HubLevel/Recycle-StartRoom/Body/StartRoomBody/Gate1
   roomObject: {fileID: 1474075315494314698}
   levelGates:
   - {fileID: 3479054952615079080}
@@ -1596,7 +1596,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3649
+  m_VersionIndex: 3652
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1794,6 +1794,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5685316009643691795}
   - component: {fileID: 2529639931736451069}
+  - component: {fileID: 849019116682575445}
   m_Layer: 0
   m_Name: Global Volume
   m_TagString: Untagged
@@ -1828,11 +1829,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IsGlobal: 1
+  m_IsGlobal: 0
   priority: 0
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: 4ef5e991297d6a74d80d546d3f5aff1d, type: 2}
+--- !u!65 &849019116682575445
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3827510918500256385}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 47.441826, y: 18.816713, z: 87.920654}
+  m_Center: {x: -3.2252579, y: 8.908357, z: -19.774475}
 --- !u!1 &4228901087359424112
 GameObject:
   m_ObjectHideFlags: 0
@@ -8460,7 +8482,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3747
+  m_VersionIndex: 3750
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -9221,7 +9243,7 @@ PrefabInstance:
     - target: {fileID: 4666205903397099147, guid: 5b5287a13ab2e004e8fad368189340bb,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 2998
+      value: 3001
       objectReference: {fileID: 0}
     - target: {fileID: 4716034564354573398, guid: 5b5287a13ab2e004e8fad368189340bb,
         type: 3}
@@ -11032,7 +11054,7 @@ PrefabInstance:
     - target: {fileID: 4666205903397099147, guid: 5b5287a13ab2e004e8fad368189340bb,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 2998
+      value: 3001
       objectReference: {fileID: 0}
     - target: {fileID: 4716034564354573398, guid: 5b5287a13ab2e004e8fad368189340bb,
         type: 3}
