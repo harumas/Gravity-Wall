@@ -11,11 +11,12 @@ namespace Module.Effect
         void Start()
         {
             visualEffects = GetComponentsInChildren<VisualEffect>();
+            PlayEffect();
         }
 
         private void OnEnable()
         {
-            PlayEffect();
+            //PlayEffect();
         }
 
         public void PlayEffect()
