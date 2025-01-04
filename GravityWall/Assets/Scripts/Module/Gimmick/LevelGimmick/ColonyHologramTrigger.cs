@@ -3,6 +3,7 @@ using Module.Gimmick.LevelGimmick;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System;
+using CoreModule.Sound;
 
 namespace Module.LevelGimmick
 {
@@ -25,6 +26,7 @@ namespace Module.LevelGimmick
             foreach (var holo in endingHologramSetters)
             {
                 holo.SetHologram();
+                SoundManager.Instance.Play(Core.Sound.SoundKey.OpenLock,Core.Sound.MixerType.SE);
 
                 await UniTask.Delay(TimeSpan.FromSeconds(delayArray[index++]));
             }

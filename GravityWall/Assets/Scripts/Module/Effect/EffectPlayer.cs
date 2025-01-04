@@ -14,11 +14,6 @@ namespace Module.Effect
             PlayEffect();
         }
 
-        private void OnEnable()
-        {
-            //PlayEffect();
-        }
-
         public void PlayEffect()
         {
             foreach (var effect in visualEffects)
