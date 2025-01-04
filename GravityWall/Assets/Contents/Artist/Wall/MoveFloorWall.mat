@@ -23,7 +23,8 @@ Material:
   m_CustomRenderQueue: 3000
   stringTagMap:
     RenderType: Transparent
-  disabledShaderPasses: []
+  disabledShaderPasses:
+  - DepthOnly
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -110,7 +111,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AO: 0.2
+    - _AO: 0.3
     - _AOTextureUse: 0
     - _AlphaClip: 1
     - _AlphaToMask: 0
@@ -126,7 +127,7 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 10
     - _DstBlendAlpha: 0
-    - _EmissionIntensity: 0.143
+    - _EmissionIntensity: 0
     - _EnvironmentReflections: 1
     - _FadeOffset: 0
     - _GlossMapScale: 0
@@ -156,8 +157,8 @@ Material:
     - _WholeDitherStrength: 0
     - _WorkflowMode: 1
     - _ZTest: 4
-    - _ZWrite: 1
-    - _ZWriteControl: 1
+    - _ZWrite: 0
+    - _ZWriteControl: 0
     m_Colors:
     - _BaseColor: {r: 0.9245283, g: 0.9245283, b: 0.9245283, a: 1}
     - _Color: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 1}
