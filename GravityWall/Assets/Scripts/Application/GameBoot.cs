@@ -1,4 +1,5 @@
 ﻿using CoreModule.Helper.Attribute;
+using Cysharp.Threading.Tasks;
 using Module.Config;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -18,6 +19,7 @@ namespace Application
 
         private static string startScene;
         private static bool lockStartScene;
+        private static AsyncOperation rootSceneOperation;
         private const string BootSceneName = "Root";
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -40,25 +42,18 @@ namespace Application
         /// メインシーンをロードします
         /// </summary>
         /// <param name="sceneGroup"></param>
-        public static void LoadRootScene(SceneGroup sceneGroup)
+        public static async UniTask LoadRootScene(SceneField sceneGroup)
         {
             IsBooted = true;
 
-            if (lockStartScene)
-            {
-                SceneManager.LoadScene(startScene, LoadSceneMode.Single);
-            }
-            else
-            {
-                int loadCount = 0;
+            string sceneName = lockStartScene ? startScene : sceneGroup;
 
-                foreach (SceneField sceneField in sceneGroup.GetScenes())
-                {
-                    LoadSceneMode mode = loadCount == 0 ? LoadSceneMode.Single : LoadSceneMode.Additive;
-                    SceneManager.LoadScene(sceneField, mode);
-                    loadCount++;
-                }
-            }
+            await SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+        }
+
+        public static void ActivateRootScene()
+        {
+            rootSceneOperation.allowSceneActivation = true;
         }
     }
 }
