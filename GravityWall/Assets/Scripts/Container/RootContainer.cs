@@ -3,6 +3,7 @@ using Application.Sequence;
 using CoreModule.Input;
 using CoreModule.Save;
 using Module.Config;
+using Module.Effect;
 using Module.InputModule;
 using Presentation;
 using UnityEngine;
@@ -21,6 +22,7 @@ namespace Container
         [SerializeField] private InputValueAdjustParameter inputAdjustParameter;
         [SerializeField] private VibrationParameter vibrationParameter;
         [SerializeField] private SceneGroupTable sceneGroupTable;
+        [SerializeField] private SplashScreen splashScreen;
         
         protected override void Configure(IContainerBuilder builder)
         {
@@ -38,6 +40,7 @@ namespace Container
             builder.RegisterInstance(vibrationParameter);
             builder.RegisterInstance(audioMixer);
             builder.RegisterInstance(sceneGroupTable);
+            builder.RegisterInstance(splashScreen);
         }
     }
 }
