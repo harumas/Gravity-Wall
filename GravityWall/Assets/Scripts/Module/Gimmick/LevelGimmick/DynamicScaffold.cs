@@ -14,7 +14,7 @@ namespace Module.Gimmick.LevelGimmick
     {
         [SerializeField] private Transform pointA;
         [SerializeField] private Transform pointB;
-        [Header("移動速度")][SerializeField] private float moveSpeed;
+        [Header("移動速度")] [SerializeField] private float moveSpeed;
 
         [Header("目標地点で待機する時間")][SerializeField] private float stopDuration;
 
@@ -25,6 +25,8 @@ namespace Module.Gimmick.LevelGimmick
         [SerializeField] private GimmickObject[] observedSwitches;
         [SerializeField] private int switchMaxCount = 1;
         [SerializeField] private UnityEvent startEvent, goalEvent;
+        [SerializeField] private int contactCount;
+
         private int switchCount = 0;
         private CancellationTokenSource cTokenSource;
         private Rigidbody rigBody;
@@ -34,7 +36,6 @@ namespace Module.Gimmick.LevelGimmick
         private Transform currentTarget;
         private IPushable pushement;
         private float trappedTimer;
-        [SerializeField] private int contactCount;
 
         private const float StopThreshold = 0.01f;
 
@@ -71,6 +72,7 @@ namespace Module.Gimmick.LevelGimmick
                 Enable();
             }
         }
+
         private void UpdateMoveState(bool switchEnabled)
         {
             switchCount += switchEnabled ? 1 : -1;
@@ -212,24 +214,30 @@ namespace Module.Gimmick.LevelGimmick
 
         private void OnCollisionEnter(Collision other)
         {
-            contactCount++;
-
-            //床に設置したプレイヤーを取得
-            if (contactCount == 1 && other.gameObject.CompareTag(Tag.Player))
+            if (other.gameObject.TryGetComponent(out IPushable pushable))
             {
-                pushement = other.gameObject.GetComponent<IPushable>();
+                contactCount++;
+
+                //床に設置したプレイヤーを取得
+                if (contactCount == 1 && other.gameObject.CompareTag(Tag.Player))
+                {
+                    pushement = pushable;
+                }
             }
         }
 
         private void OnCollisionExit(Collision other)
         {
-            contactCount--;
-
-            if (contactCount == 0 && other.gameObject.CompareTag(Tag.Player))
+            if (other.gameObject.TryGetComponent(out IPushable _))
             {
-                //コリジョンから離れる時は、慣性を付与する
-                pushement.AddInertia(moveDelta);
-                pushement = null;
+                contactCount--;
+
+                if (contactCount == 0 && other.gameObject.CompareTag(Tag.Player))
+                {
+                    //コリジョンから離れる時は、慣性を付与する
+                    pushement.AddInertia(moveDelta);
+                    pushement = null;
+                }
             }
         }
 

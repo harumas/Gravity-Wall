@@ -25,25 +25,9 @@ namespace Presentation
 
         public void Start()
         {
-            backEvent = InputActionProvider.CreateEvent(ActionGuid.UI.Cancel);
+            var creditView = creditBehaviour.CreditView;
 
-            creditBehaviour.OnActiveStateChanged.Subscribe(context =>
-                {
-                    if (context.isActive)
-                    {
-                        backEvent.Started += OnBackButtonPressed;
-                    }
-                    else
-                    {
-                        backEvent.Started -= OnBackButtonPressed;
-                    }
-                })
-                .AddTo(creditBehaviour);
-        }
-
-        private void OnBackButtonPressed(InputAction.CallbackContext _)
-        {
-            navigator.DeactivateBehaviour(ViewBehaviourState.Credit);
+            creditView.OnBackButtonPressed.Subscribe(_ => navigator.DeactivateBehaviour(ViewBehaviourState.Credit)).AddTo(creditView);
         }
     }
 }
