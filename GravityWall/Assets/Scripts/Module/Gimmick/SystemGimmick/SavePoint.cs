@@ -1,5 +1,6 @@
 using System;
 using Constants;
+using Module.Player;
 using UnityEngine;
 
 namespace Module.Gimmick.SystemGimmick
@@ -16,14 +17,15 @@ namespace Module.Gimmick.SystemGimmick
         public bool IsGravitySwitcherEnabled;
         public LevelResetter LevelResetter;
 
-        public RespawnContext(Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 gravity, LevelResetter levelResetter)
+        public RespawnContext(Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 gravity, LevelResetter levelResetter,
+            bool canSwitchGravity)
         {
             Position = position;
             Rotation = rotation;
             Velocity = velocity;
             Gravity = gravity;
             LevelResetter = levelResetter;
-            IsGravitySwitcherEnabled = false;
+            IsGravitySwitcherEnabled = canSwitchGravity;
         }
     }
 
@@ -51,7 +53,16 @@ namespace Module.Gimmick.SystemGimmick
             {
                 Debug.Log("セーブしました");
                 isSaved = true;
-                LatestContext = new RespawnContext(transform.position, transform.rotation, Vector3.zero, -transform.up, levelResetter);
+
+                GravitySwitcher gravitySwitcher = other.GetComponent<GravitySwitcher>();
+                bool canSwitchGravity = gravitySwitcher.IsEnabled;
+                LatestContext = new RespawnContext(transform.position,
+                    transform.rotation,
+                    Vector3.zero,
+                    -transform.up,
+                    levelResetter,
+                    canSwitchGravity);
+                
                 OnEnterPoint?.Invoke(LatestContext);
             }
         }

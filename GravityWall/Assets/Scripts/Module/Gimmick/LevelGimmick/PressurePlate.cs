@@ -25,8 +25,6 @@ namespace Module.Gimmick.LevelGimmick
         [SerializeField] private OnTriggerEventBridge triggerEventBridge;
         [SerializeField] private UnityEvent onEvent;
         [SerializeField] private bool unlockOnStart;
-        [SerializeField, Header("当たり判定のRigidBody")] private Rigidbody buttonRig;
-        [SerializeField, Header("押されたときに当たり判定を動かすオフセット")] private float collisionMoveOffset;
         [SerializeField, Header("押す時間")] private float pushDuration;
         [SerializeField, Header("押し始めるまでの遅延")] private float pushDelay;
 
@@ -79,7 +77,7 @@ namespace Module.Gimmick.LevelGimmick
         {
             EnableAsync(doEffect).Forget();
         }
-        
+
         public void Unlock()
         {
             state = State.NoTouch;
@@ -119,11 +117,8 @@ namespace Module.Gimmick.LevelGimmick
 
             state = State.Changing;
 
-            Vector3 position = buttonRig.position + transform.up * collisionMoveOffset;
-
             // 演出の遷移
             meshRenderer.material.DOFloat(1.0f, pushRatio, pushDuration);
-            buttonRig.DoMove(position, pushDuration);
 
             await UniTask.Delay(TimeSpan.FromSeconds(pushDuration), cancellationToken: pushCanceller.Token);
         }
