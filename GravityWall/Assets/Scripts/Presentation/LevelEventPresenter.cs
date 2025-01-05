@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Threading;
 using Application.Spawn;
 using CoreModule.Helper;
 using Cysharp.Threading.Tasks;
@@ -7,6 +8,7 @@ using Module.Gimmick.LevelGimmick;
 using Module.Gimmick.SystemGimmick;
 using Module.Player;
 using R3;
+using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using View;
@@ -98,10 +100,10 @@ namespace Presentation
             playerController.Revival();
         }
 
-        private async UniTask RespawnViewSequence()
+        private async UniTask RespawnViewSequence(CancellationToken cancellationToken)
         {
             var behaviour = behaviourNavigator.ActivateBehaviour<LoadingBehaviour>(ViewBehaviourState.Loading);
-            await behaviour.SequenceLoading();
+            await behaviour.SequenceLoading(cancellationToken);
             behaviourNavigator.DeactivateBehaviour(ViewBehaviourState.Loading);
         }
 

@@ -47,13 +47,30 @@ namespace Module.Gimmick.SystemGimmick
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!isSaved && other.CompareTag(Tag.Player))
+            if (isSaved || !other.CompareTag(Tag.Player))
             {
-                Debug.Log("セーブしました");
-                isSaved = true;
-                LatestContext = new RespawnContext(transform.position, transform.rotation, Vector3.zero, -transform.up, levelResetter);
-                OnEnterPoint?.Invoke(LatestContext);
+                return;
             }
+
+            Save();
+        }
+
+        private void OnTriggerStay(Collider other)
+        {
+            if (isSaved || !other.CompareTag(Tag.Player))
+            {
+                return;
+            }
+
+            Save();
+        }
+
+        private void Save()
+        {
+            Debug.Log("セーブしました");
+            isSaved = true;
+            LatestContext = new RespawnContext(transform.position, transform.rotation, Vector3.zero, -transform.up, levelResetter);
+            OnEnterPoint?.Invoke(LatestContext);
         }
     }
 }

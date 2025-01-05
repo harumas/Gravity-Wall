@@ -31,6 +31,7 @@ namespace Module.Gimmick.LevelGimmick
 
         public override void Enable(bool doEffect = true)
         {
+            hubGateWrapper.IsOpen = true;
         }
 
         public override void Disable(bool doEffect = true)

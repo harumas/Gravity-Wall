@@ -124,6 +124,7 @@ namespace Module.Player
 
         public void Enable()
         {
+            nearestNormal = transform.up;
             isEnabled = true;
         }
 

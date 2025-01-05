@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using Module.Gimmick.SystemGimmick;
 using Module.Gravity;
@@ -37,14 +38,16 @@ namespace Application.Spawn
             this.gravitySwitcher = gravitySwitcher;
         }
 
-        public async UniTask RespawnPlayer(RespawnContext respawnContext, Func<UniTask> respawningTask)
+        public async UniTask RespawnPlayer(RespawnContext respawnContext, Func<CancellationToken, UniTask> respawningTask)
         {
             isRespawning = true;
             LockPlayer();
 
             //リスポーン演出があれば実行
-            var task = respawningTask != null ? respawningTask() : UniTask.CompletedTask;
+            var task = respawningTask != null ? respawningTask(playerController.destroyCancellationToken) : UniTask.CompletedTask;
             await task;
+
+            Debug.Log(respawnContext.Gravity);
 
             //重力の復元
             WorldGravity.Instance.SetValue(respawnContext.Gravity);
@@ -59,6 +62,7 @@ namespace Application.Spawn
         public void LockPlayer()
         {
             playerTargetSyncer.Lock();
+            playerController.Refresh();
             playerController.Lock();
             playerTargetSyncer.Reset();
             gravitySwitcher.Disable();
