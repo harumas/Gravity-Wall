@@ -28,6 +28,8 @@ namespace Core.Sound
 		JumpBoard,
 		HubGateLight,
 		Fall,
+		Bomb,
+		LastBGMSample,
 	}
 	
 	public enum MixerType
