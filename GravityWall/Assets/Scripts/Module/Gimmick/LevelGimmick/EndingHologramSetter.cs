@@ -12,7 +12,6 @@ namespace Module.Gimmick.LevelGimmick
         {
             namePlate.SetActive(false);
             colonyHoloObject.SetActive(true);
-            Debug.Log("");
         }
     }
 }
