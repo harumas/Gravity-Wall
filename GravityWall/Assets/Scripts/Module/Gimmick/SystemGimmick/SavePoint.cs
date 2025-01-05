@@ -49,13 +49,15 @@ namespace Module.Gimmick.SystemGimmick
 
         private void OnTriggerEnter(Collider other)
         {
+            bool canSwitchGravity = false;
+
             if (isSaved || !other.CompareTag(Tag.Player))
             {
                 Debug.Log("セーブしました");
                 isSaved = true;
 
                 GravitySwitcher gravitySwitcher = other.GetComponent<GravitySwitcher>();
-                bool canSwitchGravity = gravitySwitcher.IsEnabled;
+                canSwitchGravity = gravitySwitcher.IsEnabled;
                 LatestContext = new RespawnContext(transform.position,
                     transform.rotation,
                     Vector3.zero,
@@ -66,7 +68,7 @@ namespace Module.Gimmick.SystemGimmick
                 OnEnterPoint?.Invoke(LatestContext);
             }
 
-            Save();
+            Save(canSwitchGravity);
         }
 
         private void OnTriggerStay(Collider other)
@@ -76,14 +78,16 @@ namespace Module.Gimmick.SystemGimmick
                 return;
             }
 
-            Save();
+            GravitySwitcher gravitySwitcher = other.GetComponent<GravitySwitcher>();
+            bool canSwitchGravity = gravitySwitcher.IsEnabled;
+            Save(canSwitchGravity);
         }
 
-        private void Save()
+        private void Save(bool canSwitchGravity)
         {
             Debug.Log("セーブしました");
             isSaved = true;
-            LatestContext = new RespawnContext(transform.position, transform.rotation, Vector3.zero, -transform.up, levelResetter);
+            LatestContext = new RespawnContext(transform.position, transform.rotation, Vector3.zero, -transform.up, levelResetter, canSwitchGravity);
             OnEnterPoint?.Invoke(LatestContext);
         }
     }
