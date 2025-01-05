@@ -16,18 +16,21 @@ namespace Presentation
         private readonly SaveManager<SaveData> saveManager;
         private readonly SceneGroupTable sceneGroupTable;
         private readonly GameState gameState;
+        private readonly ViewBehaviourNavigator navigator;
 
         [Inject]
         public ConfirmNewGamePresenter(
             ConfirmNewGameBehaviour confirmNewGameBehaviour,
             SaveManager<SaveData> saveManager,
             SceneGroupTable sceneGroupTable,
-            GameState gameState)
+            GameState gameState,
+            ViewBehaviourNavigator navigator)
         {
             this.confirmNewGameBehaviour = confirmNewGameBehaviour;
             this.saveManager = saveManager;
             this.sceneGroupTable = sceneGroupTable;
             this.gameState = gameState;
+            this.navigator = navigator;
         }
 
         public void Start()
@@ -39,7 +42,7 @@ namespace Presentation
                 saveManager.Reset();
                 SceneManager.LoadScene(sceneGroupTable.SceneGroups[0].GetMainScene());
             }).AddTo(view);
-            view.OnCancelButtonPressed.Subscribe(_ => confirmNewGameBehaviour.Deactivate(ViewBehaviourState.Title)).AddTo(view);
+            view.OnCancelButtonPressed.Subscribe(_ => navigator.DeactivateBehaviour(ViewBehaviourState.ConfirmNewGame)).AddTo(view);
         }
     }
 }

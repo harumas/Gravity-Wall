@@ -18,6 +18,7 @@ namespace View.Behaviour
 
         protected override void OnActivate()
         {
+            confirmNewGameView.SelectFirst();
         }
 
         protected override void OnDeactivate()
