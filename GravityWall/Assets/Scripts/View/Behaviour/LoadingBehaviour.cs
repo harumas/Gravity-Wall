@@ -14,11 +14,11 @@ namespace View
         [SerializeField] private LoadingView loadingView;
         public LoadingView LoadingView => loadingView;
 
-        public async UniTask SequenceLoading()
+        public async UniTask SequenceLoading(CancellationToken cancellationToken)
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(1.0f));
+            await UniTask.Delay(TimeSpan.FromSeconds(1.0f), cancellationToken: cancellationToken);
             loadingView.CircleMask.transform.DOScale(Vector3.zero, 0.5f).WaitForCompletion();
-            await UniTask.Delay(TimeSpan.FromSeconds(loadingTime));
+            await UniTask.Delay(TimeSpan.FromSeconds(loadingTime), cancellationToken: cancellationToken);
         }
 
         protected override async UniTask OnPreActivate(ViewBehaviourState beforeState, CancellationToken cancellation)

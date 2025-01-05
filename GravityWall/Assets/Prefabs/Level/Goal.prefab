@@ -566,7 +566,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2047
+  m_VersionIndex: 2050
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1094,7 +1094,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6689418202745290903}
   m_Father: {fileID: 950182416316848031}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3608613854394182698
@@ -1435,7 +1436,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 14545
+  m_VersionIndex: 14548
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1781,11 +1782,11 @@ Transform:
   m_GameObject: {fileID: 4410629567087701074}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -99.233, y: -12.72, z: 23.471}
+  m_LocalPosition: {x: -99.23297, y: -12.719999, z: 23.471}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 950182416316848031}
+  m_Father: {fileID: 2292795377989544553}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4660859234308963580
 MonoBehaviour:
@@ -1818,8 +1819,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 18.157387, y: 17.10487, z: 32.453873}
-  m_Center: {x: 0.15108871, y: 3.7852666, z: -11.927591}
+  m_Size: {x: 4.85376, y: 6.1042786, z: 12.380276}
+  m_Center: {x: -0.27716303, y: -0.6275749, z: -2.3240795}
 --- !u!1 &4458809464328999476
 GameObject:
   m_ObjectHideFlags: 0
@@ -2386,7 +2387,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2047
+  m_VersionIndex: 2050
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -2524,7 +2525,7 @@ Transform:
   m_GameObject: {fileID: 4586589182335878109}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.027, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3765,7 +3766,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 13900
+  m_VersionIndex: 13903
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -4554,7 +4555,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2047
+  m_VersionIndex: 2050
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -6303,7 +6304,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 14778
+  m_VersionIndex: 14581
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -6616,7 +6617,6 @@ Transform:
   - {fileID: 2292795377989544553}
   - {fileID: 1481372720067989359}
   - {fileID: 6175760565363931146}
-  - {fileID: 6689418202745290903}
   - {fileID: 4015912365770395938}
   - {fileID: 4698806352770648261}
   - {fileID: 5603955065591884710}
@@ -7189,7 +7189,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2047
+  m_VersionIndex: 2050
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -8126,6 +8126,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 950182416316848031}
     m_Modifications:
+    - target: {fileID: 1706609514237489590, guid: 7e317563c594d4fe787b60604ecdfd7c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 4304468164229452824, guid: 7e317563c594d4fe787b60604ecdfd7c,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -9055,7 +9060,7 @@ PrefabInstance:
     - target: {fileID: 2881103842280701110, guid: 02dae8858acc24c8882d03ad766ee86e,
         type: 3}
       propertyPath: jumpPower
-      value: 35
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 2885077424482721466, guid: 02dae8858acc24c8882d03ad766ee86e,
         type: 3}
@@ -9085,7 +9090,7 @@ PrefabInstance:
     - target: {fileID: 3215580141815911304, guid: 02dae8858acc24c8882d03ad766ee86e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -15.18
+      value: -15.207001
       objectReference: {fileID: 0}
     - target: {fileID: 3215580141815911304, guid: 02dae8858acc24c8882d03ad766ee86e,
         type: 3}

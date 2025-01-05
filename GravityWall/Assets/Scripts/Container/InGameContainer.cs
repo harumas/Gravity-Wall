@@ -60,6 +60,7 @@ namespace Container
             builder.RegisterEntryPoint<HubResetTriggerPresenter>();
 
             builder.Register<PlayerInput>(Lifetime.Singleton).As<IGameInput>();
+            builder.Register<InputLocker>(Lifetime.Singleton);
             builder.Register<CursorLocker>(Lifetime.Singleton);
             builder.Register<RespawnManager>(Lifetime.Singleton);
             builder.Register<HubSpawner>(Lifetime.Singleton);
