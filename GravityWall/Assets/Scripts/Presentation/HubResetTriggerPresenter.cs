@@ -1,4 +1,5 @@
-﻿using Module.Gimmick.SystemGimmick;
+﻿using Application.Spawn;
+using Module.Gimmick.SystemGimmick;
 using R3;
 using UnityEngine;
 using VContainer;
@@ -9,25 +10,25 @@ namespace Presentation
 {
     public class HubResetTriggerPresenter : IInitializable
     {
-        private readonly PauseView pauseView;
+        private readonly HubSpawner hubSpawner;
         private readonly StartRoomShowTrigger[] startRoomShowTriggers;
 
         [Inject]
-        public HubResetTriggerPresenter(PauseBehaviour pauseBehaviour)
+        public HubResetTriggerPresenter(HubSpawner hubSpawner)
         {
-            pauseView = pauseBehaviour.PauseView;
+            this.hubSpawner = hubSpawner;
             startRoomShowTriggers = Object.FindObjectsByType<StartRoomShowTrigger>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         }
 
         public void Initialize()
         {
-            pauseView.OnReturnToHubButtonPressed.Subscribe(_ =>
+            hubSpawner.OnRespawn += () =>
             {
                 foreach (var trigger in startRoomShowTriggers)
                 {
                     trigger.Reset();
                 }
-            });
+            };
         }
     }
 }

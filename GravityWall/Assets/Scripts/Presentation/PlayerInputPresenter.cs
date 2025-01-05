@@ -15,16 +15,20 @@ namespace Presentation
         [Inject]
         public PlayerInputPresenter(
             IGameInput gameInput,
+            InputLocker inputLocker,
             PlayerController playerController,
             CameraController cameraController,
             PlayerTargetSyncer playerTargetSyncer,
             GravitySwitcher gravitySwitcher
         )
         {
+            var lockProperty = playerController.IsDeath.Select(value => value != PlayerController.DeathType.None).ToReadOnlyReactiveProperty();
+            inputLocker.AddCondition(lockProperty, playerController.destroyCancellationToken);
+
             gameInput.Move
                 .Subscribe(moveInput =>
                 {
-                    if (playerController.IsDeath.CurrentValue == PlayerController.DeathType.None)
+                    if (!inputLocker.IsLocked)
                     {
                         playerController.OnMoveInput(moveInput);
                     }
@@ -34,7 +38,7 @@ namespace Presentation
             gameInput.Jump
                 .Subscribe(isStarted =>
                 {
-                    if (playerController.IsDeath.CurrentValue == PlayerController.DeathType.None)
+                    if (!inputLocker.IsLocked)
                     {
                         if (isStarted)
                         {
@@ -51,7 +55,7 @@ namespace Presentation
             gameInput.LookDelta
                 .Subscribe(lookInput =>
                 {
-                    if (playerController.IsDeath.CurrentValue == PlayerController.DeathType.None)
+                    if (!inputLocker.IsLocked)
                     {
                         cameraController.OnRotateCameraInput(lookInput);
                     }
@@ -61,7 +65,7 @@ namespace Presentation
             gameInput.Move
                 .Subscribe(moveInput =>
                 {
-                    if (playerController.IsDeath.CurrentValue == PlayerController.DeathType.None)
+                    if (!inputLocker.IsLocked)
                     {
                         playerTargetSyncer.OnMoveInput(moveInput);
                     }
@@ -71,7 +75,7 @@ namespace Presentation
             gameInput.Move
                 .Subscribe(moveInput =>
                 {
-                    if (playerController.IsDeath.CurrentValue == PlayerController.DeathType.None)
+                    if (!inputLocker.IsLocked)
                     {
                         gravitySwitcher.OnMoveInput(moveInput);
                     }
@@ -79,6 +83,8 @@ namespace Presentation
                 .AddTo(playerTargetSyncer);
         }
 
-        public void Initialize() { }
+        public void Initialize()
+        {
+        }
     }
 }

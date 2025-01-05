@@ -1,4 +1,5 @@
-﻿using Application;
+﻿using System;
+using Application;
 using Application.Sequence;
 using Application.Spawn;
 using CoreModule.Input;
@@ -31,6 +32,8 @@ namespace Presentation
         private readonly SaveManager<SaveData> saveManager;
         private InputEvent exitEvent;
 
+        private readonly ReactiveProperty<bool> doInput;
+
         [Inject]
         public PauseBehaviourPresenter(
             ViewBehaviourNavigator navigator,
@@ -42,6 +45,7 @@ namespace Presentation
             PlayerTargetSyncer playerTargetSyncer,
             GameState gameState,
             HubSpawner hubSpawner,
+            InputLocker inputLocker,
             SaveManager<SaveData> saveManager
         )
         {
@@ -55,6 +59,9 @@ namespace Presentation
             this.gameState = gameState;
             this.hubSpawner = hubSpawner;
             this.saveManager = saveManager;
+
+            doInput = new ReactiveProperty<bool>(true);
+            inputLocker.AddCondition(doInput, pauseBehaviour.destroyCancellationToken);
         }
 
         public void Start()
@@ -71,39 +78,12 @@ namespace Presentation
                 }
             }).AddTo(pauseBehaviour);
 
-            pauseBehaviour.OnActiveStateChanged.Subscribe(context =>
-                {
-                    if (context.isActive && context.behaviourType == ViewBehaviourState.None)
-                    {
-                        cursorLocker.SetCursorLock(false);
-                        cursorLocker.IsCursorChangeBlock = true;
-                        
-                        playerTargetSyncer.Lock();
-                        playerController.Lock();
-                        gamepadVibrator.Pause();
-                    }
-                    else if (!context.isActive && context.behaviourType == ViewBehaviourState.None)
-                    {
-                        cursorLocker.IsCursorChangeBlock = false;
-                        cursorLocker.SetCursorLock(true);
-                        
-                        playerTargetSyncer.Unlock();
-                        playerController.Unlock();
-                        gamepadVibrator.Resume();
-                    }
-                })
-                .AddTo(pauseBehaviour);
-            
+            pauseBehaviour.OnActiveStateChanged.Subscribe(OnActiveStateChanged).AddTo(pauseBehaviour);
             pauseBehaviour.SetGameState(gameState);
 
             PauseView pauseView = pauseBehaviour.PauseView;
             pauseView.OnContinueButtonPressed.Subscribe(_ => navigator.DeactivateBehaviour(ViewBehaviourState.Pause)).AddTo(pauseView);
-            pauseView.OnReturnToHubButtonPressed.Subscribe(_ =>
-            {
-                gameState.SetState(GameState.State.StageSelect);
-                navigator.DeactivateBehaviour(ViewBehaviourState.Pause);
-                hubSpawner.Respawn().Forget();
-            }).AddTo(pauseView);
+            pauseView.OnReturnToHubButtonPressed.Subscribe(OnReturnToHubButtonPressed).AddTo(pauseView);
             pauseView.OnGoToSettingsButtonPressed.Subscribe(_ => navigator.ActivateBehaviour(ViewBehaviourState.Option)).AddTo(pauseView);
             pauseView.OnEndGameButtonPressed.Subscribe(_ => applicationStopper.Quit());
 
@@ -112,7 +92,48 @@ namespace Presentation
             saveManager.OnSaved -= SetClearedLevels;
             saveManager.OnSaved += SetClearedLevels;
         }
-        
+
+        private void OnActiveStateChanged((bool isActive, ViewBehaviourState behaviourType) context)
+        {
+            if (context.isActive && context.behaviourType == ViewBehaviourState.None)
+            {
+                cursorLocker.SetCursorLock(false);
+                cursorLocker.IsCursorChangeBlock = true;
+
+                playerTargetSyncer.Lock();
+                playerController.Lock();
+                gamepadVibrator.Pause();
+            }
+            else if (!context.isActive && context.behaviourType == ViewBehaviourState.None)
+            {
+                cursorLocker.IsCursorChangeBlock = false;
+                cursorLocker.SetCursorLock(true);
+
+                playerTargetSyncer.Unlock();
+                playerController.Unlock();
+                gamepadVibrator.Resume();
+            }
+        }
+
+        private async void OnReturnToHubButtonPressed(Unit _)
+        {
+            // ポーズ画面のフェード中の入力をロック
+            doInput.Value = false;
+
+            navigator.DeactivateBehaviour(ViewBehaviourState.Pause);
+
+            // フェード待機
+            const float uiLockDuration = 1f;
+            await UniTask.Delay(TimeSpan.FromSeconds(uiLockDuration));
+
+            // ロック解除
+            doInput.Value = true;
+
+            // ハブにリスポーン
+            gameState.SetState(GameState.State.StageSelect);
+            hubSpawner.Respawn().Forget();
+        }
+
         private void SetClearedLevels(SaveData saveData)
         {
             pauseBehaviour.ClearedLevelView.SetClearedLevels(saveData.ClearedStageList);
