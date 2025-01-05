@@ -31,7 +31,7 @@ namespace View
             }
 
             titleView.CanvasGroup.alpha = 0.0f;
-            DOTween.To(() => titleView.CanvasGroup.alpha, (v) => titleView.CanvasGroup.alpha = v, 1f, fadeDuration);
+            await DOTween.To(() => titleView.CanvasGroup.alpha, (v) => titleView.CanvasGroup.alpha = v, 1f, fadeDuration);
             
             await UniTask.Yield();
             
