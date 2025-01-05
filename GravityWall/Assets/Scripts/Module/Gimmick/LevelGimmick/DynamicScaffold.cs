@@ -16,15 +16,15 @@ namespace Module.Gimmick.LevelGimmick
         [SerializeField] private Transform pointB;
         [Header("移動速度")] [SerializeField] private float moveSpeed;
 
-        [Header("目標地点で待機する時間")][SerializeField] private float stopDuration;
+        [Header("目標地点で待機する時間")] [SerializeField] private float stopDuration;
 
-        [Header("引っかかりを待つ時間")][SerializeField] private float reverseDuration;
+        [Header("引っかかりを待つ時間")] [SerializeField] private float reverseDuration;
 
-        [Header("最初から動かすか")][SerializeField] private bool enableOnAwake = true;
+        [Header("最初から動かすか")] [SerializeField] private bool enableOnAwake = true;
 
         [SerializeField] private GimmickObject[] observedSwitches;
         [SerializeField] private int switchMaxCount = 1;
-        [SerializeField] private UnityEvent startEvent, goalEvent;
+        [SerializeField] private UnityEvent startEvent, goalEvent, resetEvent;
         [SerializeField] private int contactCount;
 
         private int switchCount = 0;
@@ -36,8 +36,6 @@ namespace Module.Gimmick.LevelGimmick
         private Transform currentTarget;
         private IPushable pushement;
         private float trappedTimer;
-
-        private const float StopThreshold = 0.01f;
 
         private CancellationTokenSource cancellationToken;
 
@@ -120,6 +118,7 @@ namespace Module.Gimmick.LevelGimmick
             rigBody.position = pointA.position;
             previousPosition = rigBody.position;
             currentTarget = pointB;
+            resetEvent.Invoke();
         }
 
         private async UniTaskVoid MoveLoop()
@@ -127,6 +126,7 @@ namespace Module.Gimmick.LevelGimmick
             CancellationToken cancelOnDestroyToken = this.GetCancellationTokenOnDestroy();
             CancellationTokenSource canceller = CancellationTokenSource.CreateLinkedTokenSource(cancelOnDestroyToken, cTokenSource.Token);
             CancellationToken cancellationToken = canceller.Token;
+
             while (!cancellationToken.IsCancellationRequested)
             {
                 bool arrived = false;
@@ -159,6 +159,8 @@ namespace Module.Gimmick.LevelGimmick
 
         private Vector3 GetMoveTarget()
         {
+            const float StopThreshold = 0.01f;
+
             float distance = Vector3.Distance(transform.position, currentTarget.position);
             Vector3 position = Vector3.Lerp(transform.position, currentTarget.position, moveSpeed / distance);
 
@@ -214,30 +216,38 @@ namespace Module.Gimmick.LevelGimmick
 
         private void OnCollisionEnter(Collision other)
         {
-            if (other.gameObject.TryGetComponent(out IPushable pushable))
+            if (!other.gameObject.TryGetComponent(out IPushable pushable))
             {
-                contactCount++;
+                return;
+            }
 
-                //床に設置したプレイヤーを取得
-                if (contactCount == 1 && other.gameObject.CompareTag(Tag.Player))
-                {
-                    pushement = pushable;
-                }
+            contactCount++;
+
+            //床に設置したプレイヤーを取得
+            if (contactCount == 1 && other.gameObject.CompareTag(Tag.Player))
+            {
+                pushement = pushable;
             }
         }
 
         private void OnCollisionExit(Collision other)
         {
-            if (other.gameObject.TryGetComponent(out IPushable _))
+            if (!other.gameObject.TryGetComponent(out IPushable _))
             {
-                contactCount--;
+                return;
+            }
 
-                if (contactCount == 0 && other.gameObject.CompareTag(Tag.Player))
+            contactCount--;
+
+            if (contactCount == 0 && other.gameObject.CompareTag(Tag.Player))
+            {
+                if (isEnabled.Value)
                 {
                     //コリジョンから離れる時は、慣性を付与する
                     pushement.AddInertia(moveDelta);
-                    pushement = null;
                 }
+
+                pushement = null;
             }
         }
 
