@@ -87,6 +87,7 @@ namespace CoreModule.Sound
             source.clip = audioClips[(int)key];
             source.volume = playContext.Volume;
             source.pitch = playContext.Pitch;
+            source.loop = mixerType == MixerType.BGM;
 
             // 再生をスケジュールする
             int handleId = handleCounter++;
