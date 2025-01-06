@@ -16,6 +16,7 @@ namespace Module.Gimmick.SystemGimmick
         private PlayerTargetSyncer playerTargetSyncer;
         private CameraController cameraController;
         private Animator playerAnimator;
+        private CameraShaker cameraShaker;
         private bool isEnable = false;
         private readonly string isInstallAnimationName = "IsInstall";
 
@@ -35,6 +36,7 @@ namespace Module.Gimmick.SystemGimmick
                 playerTargetSyncer = obj.GetComponentInChildren<PlayerTargetSyncer>();
                 cameraController = obj.GetComponentInChildren<CameraController>();
                 playerAnimator = obj.GetComponentInChildren<Animator>();
+                cameraShaker = obj.GetComponentInChildren<CameraShaker>();
 
                 Enable();
 

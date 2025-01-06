@@ -30,6 +30,7 @@ namespace Core.Sound
 		Fall,
 		Bomb,
 		LastBGMSample,
+		TutorialBGM1,
 	}
 	
 	public enum MixerType
