@@ -22,7 +22,7 @@ namespace Presentation
             GravitySwitcher gravitySwitcher
         )
         {
-            var lockProperty = playerController.IsDeath.Select(value => value != PlayerController.DeathType.None).ToReadOnlyReactiveProperty();
+            var lockProperty = playerController.IsDeath.Select(value => value == PlayerController.DeathType.None).ToReadOnlyReactiveProperty();
             inputLocker.AddCondition(lockProperty, playerController.destroyCancellationToken);
 
             gameInput.Move
