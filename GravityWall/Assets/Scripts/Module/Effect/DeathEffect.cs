@@ -44,6 +44,7 @@ namespace Module.Effect
                 case PlayerController.DeathType.Electric:
                     SoundManager.Instance.Play(SoundKey.ElectricShock, MixerType.SE);
                     break;
+                
                 case PlayerController.DeathType.Poison:
                     SoundManager.Instance.Play(SoundKey.Poison, MixerType.SE);
                     break;
@@ -51,7 +52,7 @@ namespace Module.Effect
 
             await UniTask.Delay(hitStopDelay);
 
-            //ƒqƒbƒgƒXƒgƒbƒv
+            //ãƒ’ãƒƒãƒˆã‚¹ãƒˆãƒƒãƒ—
             anim.speed = 0f;
             await UniTask.Delay(hitStopDuration);
             anim.speed = 1f;
