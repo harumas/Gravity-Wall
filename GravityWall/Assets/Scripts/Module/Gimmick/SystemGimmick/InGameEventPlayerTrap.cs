@@ -40,7 +40,7 @@ namespace Module.Gimmick.SystemGimmick
 
                 Enable();
 
-                other.transform.position = target.position;
+                other.transform.SetPositionAndRotation(target.position, target.rotation);
                 isEnable = true;
 
                 OnTrapped?.Invoke();
