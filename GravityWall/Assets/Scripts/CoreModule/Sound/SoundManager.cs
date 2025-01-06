@@ -59,9 +59,9 @@ namespace CoreModule.Sound
         /// </summary>
         /// <param name="key">AudioClipのキー</param>
         /// <param name="mixerType">AudioMixerのタイプ</param>
-        public int Play(SoundKey key, MixerType mixerType)
+        public int Play(SoundKey key, MixerType mixerType, bool isLoop = false)
         {
-            return Play(key, mixerType, PlayContext.Default);
+            return Play(key, mixerType, PlayContext.Default, isLoop);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace CoreModule.Sound
 
             // 最低再生間隔を保持して再生時間を決める
             float time = Math.Max(Time.unscaledTime, latestPlayInfo.PlayTime + soundSettings.MinPlayInterval);
-            AudioSource source = GetSource(key, mixerType, playContext);
+            AudioSource source = GetSource(key, mixerType, playContext, isLoop);
 
             // 再生をスケジュールする
             int handleId = handleCounter++;
@@ -90,7 +90,7 @@ namespace CoreModule.Sound
             return handleId;
         }
 
-        public AudioSource GetSource(SoundKey key, MixerType mixerType, PlayContext playContext)
+        public AudioSource GetSource(SoundKey key, MixerType mixerType, PlayContext playContext, bool isLoop)
         {
             // AudioSourceを設定する
             AudioSource source = audioSources.Dequeue();
@@ -98,6 +98,7 @@ namespace CoreModule.Sound
             source.clip = audioClips[(int)key];
             source.volume = playContext.Volume;
             source.pitch = playContext.Pitch;
+            source.loop = isLoop;
 
             return source;
         }
