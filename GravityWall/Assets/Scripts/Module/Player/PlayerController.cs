@@ -41,6 +41,7 @@ namespace Module.Player
             None,
             Electric,
             Poison,
+            Fall,
         }
 
         public ReadOnlyReactiveProperty<(Vector3 xv, Vector3 yv)> OnMove => onMove;
