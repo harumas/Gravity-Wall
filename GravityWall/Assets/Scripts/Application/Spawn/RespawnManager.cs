@@ -77,10 +77,7 @@ namespace Application.Spawn
             cameraController.SetCameraRotation(respawnContext.Rotation);
             playerTargetSyncer.SetRotation(respawnContext.Rotation);
 
-            if (respawnContext.IsGravitySwitcherEnabled)
-            {
-                gravitySwitcher.Enable();
-            }
+            gravitySwitcher.Enable();
 
             if (respawnContext.Velocity != Vector3.zero)
             {
