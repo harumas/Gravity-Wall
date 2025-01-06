@@ -59,7 +59,7 @@ namespace Application.Sequence
             }
         }
 
-        private void SetHologram(bool[] isClearedStages)
+        public void SetHologram(bool[] isClearedStages)
         {
             for (int i = 0; i < hubHologramSetters.Length; i++)
             {

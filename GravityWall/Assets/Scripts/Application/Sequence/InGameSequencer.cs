@@ -35,7 +35,8 @@ namespace Application.Sequence
             RespawnManager respawnManager,
             SceneGroupTable sceneGroupTable,
             SaveManager<SaveData> saveManager,
-            MainGateOpenSequencer mainGateOpenSequencer)
+            MainGateOpenSequencer mainGateOpenSequencer
+        )
         {
             this.gameState = gameState;
             this.hubSpawner = hubSpawner;
@@ -81,6 +82,8 @@ namespace Application.Sequence
             respawnManager.LockPlayer();
 
             await UniTask.WhenAll(loadExecutor.UnloadAdditiveScenes(), hubSpawner.Respawn());
+            
+            RefreshClearState();
         }
 
         private void InitMainGate()
@@ -89,6 +92,12 @@ namespace Application.Sequence
             bool[] clearedStageList = saveManager.Data.ClearedStageList.Skip(1).ToArray();
 
             sequencer.Initialize(clearedStageList);
+        }
+
+        private void RefreshClearState()
+        {
+            bool[] clearedStageList = saveManager.Data.ClearedStageList.Skip(1).ToArray();
+            sequencer.SetHologram(clearedStageList);
         }
 
         private bool IsNewGame()
