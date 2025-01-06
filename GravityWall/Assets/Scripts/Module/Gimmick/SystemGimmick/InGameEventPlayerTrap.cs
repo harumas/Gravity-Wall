@@ -57,12 +57,10 @@ namespace Module.Gimmick.SystemGimmick
 
             playerController.HoldLock = true;
             playerTargetSyncer.HoldLock = true;
-            Debug.Log("Enable");
         }
 
         public void Disable(bool isGravityEnable)
         {
-            Debug.Log("Disable");
             playerController.HoldLock = false;
             playerTargetSyncer.HoldLock = false;
 

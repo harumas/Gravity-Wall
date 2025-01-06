@@ -47,8 +47,6 @@ namespace Application.Spawn
             var task = respawningTask != null ? respawningTask(playerController.destroyCancellationToken) : UniTask.CompletedTask;
             await task;
 
-            Debug.Log(respawnContext.Gravity);
-
             //重力の復元
             WorldGravity.Instance.SetValue(respawnContext.Gravity);
 
