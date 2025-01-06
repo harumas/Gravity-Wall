@@ -70,7 +70,7 @@ namespace CoreModule.Sound
         /// <param name="key">AudioClipのキー</param>
         /// <param name="mixerType">AudioMixerのタイプ</param>
         /// <param name="playContext">再生設定</param>
-        public int Play(SoundKey key, MixerType mixerType, PlayContext playContext)
+        public int Play(SoundKey key, MixerType mixerType, PlayContext playContext, bool isLoop = false)
         {
             // キーが存在しない or 再生できるAudioSourceがない場合は再生しない
             if ((int)key >= audioClips.Count || audioSources.Count == 0)
@@ -80,7 +80,18 @@ namespace CoreModule.Sound
 
             // 最低再生間隔を保持して再生時間を決める
             float time = Math.Max(Time.unscaledTime, latestPlayInfo.PlayTime + soundSettings.MinPlayInterval);
+            AudioSource source = GetSource(key, mixerType, playContext);
 
+            // 再生をスケジュールする
+            int handleId = handleCounter++;
+            latestPlayInfo = new PlayInfo(handleId, time, isLoop, mixerType, source);
+            scheduleQueue.Enqueue(latestPlayInfo);
+
+            return handleId;
+        }
+
+        public AudioSource GetSource(SoundKey key, MixerType mixerType, PlayContext playContext)
+        {
             // AudioSourceを設定する
             AudioSource source = audioSources.Dequeue();
             source.outputAudioMixerGroup = audioMixerGroups[(int)mixerType];
@@ -88,12 +99,7 @@ namespace CoreModule.Sound
             source.volume = playContext.Volume;
             source.pitch = playContext.Pitch;
 
-            // 再生をスケジュールする
-            int handleId = handleCounter++;
-            latestPlayInfo = new PlayInfo(handleId, time, mixerType, source);
-            scheduleQueue.Enqueue(latestPlayInfo);
-
-            return handleId;
+            return source;
         }
 
         public void Stop(int handle)
@@ -125,7 +131,7 @@ namespace CoreModule.Sound
             while (resumePlayQueue.TryDequeue(out PlayInfo playInfo))
             {
                 playInfo.Source.UnPause();
-                playInfo = new PlayInfo(playInfo.HandleId, playInfo.PlayTime + elapsedTime, playInfo.MixerType, playInfo.Source);
+                playInfo = new PlayInfo(playInfo.HandleId, playInfo.PlayTime + elapsedTime, playInfo.IsLoop, playInfo.MixerType, playInfo.Source);
 
                 playingQueue.Add(playInfo);
             }
@@ -162,7 +168,7 @@ namespace CoreModule.Sound
                 PlayInfo info = playingQueue[i];
 
                 // 再生が終了していない場合は削除しない
-                if (info.PlayTime + info.Source.clip.length > Time.unscaledTime && !stopSet.Contains(info.HandleId))
+                if (info.IsLoop || info.PlayTime + info.Source.clip.length > Time.unscaledTime && !stopSet.Contains(info.HandleId))
                 {
                     continue;
                 }
@@ -206,13 +212,15 @@ namespace CoreModule.Sound
         {
             public readonly int HandleId;
             public readonly float PlayTime;
+            public readonly bool IsLoop;
             public readonly MixerType MixerType;
             public readonly AudioSource Source;
 
-            public PlayInfo(int handleId, float playTime, MixerType mixerType, AudioSource source)
+            public PlayInfo(int handleId, float playTime, bool isLoop, MixerType mixerType, AudioSource source)
             {
                 HandleId = handleId;
                 PlayTime = playTime;
+                IsLoop = isLoop;
                 MixerType = mixerType;
                 Source = source;
             }
@@ -221,9 +229,7 @@ namespace CoreModule.Sound
         [Serializable]
         private class AudioMixerPair : SerializablePair<MixerType, AudioMixerGroup>
         {
-            public AudioMixerPair(MixerType key, AudioMixerGroup value) : base(key, value)
-            {
-            }
+            public AudioMixerPair(MixerType key, AudioMixerGroup value) : base(key, value) { }
         }
     }
 
