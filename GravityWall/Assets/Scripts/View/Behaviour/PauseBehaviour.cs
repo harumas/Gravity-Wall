@@ -3,6 +3,7 @@ using Application.Sequence;
 using CoreModule.Helper.Attribute;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using R3;
 using UnityEngine;
 using View.View;
 
@@ -15,7 +16,9 @@ namespace View
         [SerializeField] private PauseView pauseView;
         [SerializeField] private ClearedLevelView clearedLevelView;
         [SerializeField] private float fadeDuration = 0.3f;
+
         private GameState gameState;
+        private ReadOnlyReactiveProperty<bool> playerLockState;
 
         public PauseView PauseView => pauseView;
         public ClearedLevelView ClearedLevelView => clearedLevelView;
@@ -25,9 +28,10 @@ namespace View
             pauseView.SetTimeScaleAnimationInvalid();
         }
 
-        public void SetGameState(GameState gameState)
+        public void Construct(GameState gameState, ReadOnlyReactiveProperty<bool> lockState)
         {
             this.gameState = gameState;
+            this.playerLockState = lockState;
         }
 
         protected override async UniTask OnPreActivate(ViewBehaviourState beforeState, CancellationToken cancellation)
@@ -47,18 +51,18 @@ namespace View
             }
 
             pauseView.SetActiveReturnToHubButton(gameState.Current.CurrentValue == GameState.State.Playing);
-            pauseView.SetActiveRestartButton(gameState.Current.CurrentValue != GameState.State.StageSelect);
+
+            bool isPlaying = gameState.Current.CurrentValue != GameState.State.StageSelect;
+            bool isLocked = playerLockState.CurrentValue;
+
+            pauseView.SetActiveRestartButton(isPlaying && !isLocked);
 
             pauseView.SelectFirst();
         }
 
-        protected override void OnActivate()
-        {
-        }
+        protected override void OnActivate() { }
 
-        protected override void OnDeactivate()
-        {
-        }
+        protected override void OnDeactivate() { }
 
         protected override async UniTask OnPostDeactivate(ViewBehaviourState nextState, CancellationToken cancellation)
         {

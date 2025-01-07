@@ -53,7 +53,6 @@ namespace Application.Sequence
             // 重力クラスの作成
             WorldGravity.Create();
 
-
             cTokenSource = new CancellationTokenSource();
             loadExecutor.SetCancellationToken(cTokenSource.Token);
 
