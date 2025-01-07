@@ -10,10 +10,10 @@ namespace Module.Player
         [SerializeField] private Transform pivot;
         private Tweener tweener;
 
-        public void ShakeCamera(float time,float strength)
+        public void ShakeCamera(float time, float strength)
         {
             tweener?.Kill();
-            tweener = pivot.DOShakePosition(time,strength,20);
+            tweener = pivot.DOShakePosition(time, strength, 20);
         }
     }
 }

@@ -37,10 +37,12 @@ namespace Module.Gimmick.SystemGimmick
                 cameraController = obj.GetComponentInChildren<CameraController>();
                 playerAnimator = obj.GetComponentInChildren<Animator>();
                 cameraShaker = obj.GetComponentInChildren<CameraShaker>();
+                
+                obj.transform.position = target.position;
+                playerTargetSyncer.SetRotation(target.rotation);
 
                 Enable();
 
-                other.transform.SetPositionAndRotation(target.position, target.rotation);
                 isEnable = true;
 
                 OnTrapped?.Invoke();
