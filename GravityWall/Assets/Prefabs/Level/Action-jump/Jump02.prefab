@@ -8547,6 +8547,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   floorType: 1
+  isHubPoint: 0
 --- !u!1 &3592037774397140373
 GameObject:
   m_ObjectHideFlags: 0
@@ -19696,6 +19697,15 @@ MonoBehaviour:
   enableOnAwake: 1
   observedSwitches: []
   switchMaxCount: 1
+  startEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  goalEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  resetEvent:
+    m_PersistentCalls:
+      m_Calls: []
   contactCount: 0
 --- !u!1 &8679443393223067905
 GameObject:
@@ -27634,6 +27644,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0.563
       objectReference: {fileID: 0}
+    - target: {fileID: 3185423724820707220, guid: 259ab425c9f9d1c49aa0f9c368769605,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3267124653707298711, guid: 259ab425c9f9d1c49aa0f9c368769605,
         type: 3}
       propertyPath: m_IsActive
@@ -27680,6 +27695,11 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4137862570923313701, guid: 259ab425c9f9d1c49aa0f9c368769605,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4170657806920190193, guid: 259ab425c9f9d1c49aa0f9c368769605,
         type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -36975,6 +36995,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   floorType: 2
+  isHubPoint: 0
 --- !u!1001 &8403366862602801773
 PrefabInstance:
   m_ObjectHideFlags: 0
