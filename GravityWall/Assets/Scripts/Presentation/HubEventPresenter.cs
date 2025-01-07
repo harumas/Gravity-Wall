@@ -10,7 +10,7 @@ using Object = UnityEngine.Object;
 
 namespace Presentation
 {
-    public class HubEventPresenter : IStartable,IDisposable
+    public class HubEventPresenter : IStartable, IDisposable
     {
         private readonly HubSpawner hubSpawner;
         private readonly PlayerController playerController;
@@ -29,8 +29,13 @@ namespace Presentation
             //死亡床のイベント登録
             foreach (DeathFloor deathFloor in deathFloors)
             {
-                deathFloor.OnEnter += async (type) =>
+                deathFloor.OnEnter += async (type, isHubPoint) =>
                 {
+                    if (!isHubPoint)
+                    {
+                        return;
+                    }
+                    
                     playerController.Kill(type);
 
                     await UniTask.Delay(TimeSpan.FromSeconds(3f));
@@ -42,9 +47,6 @@ namespace Presentation
             }
         }
 
-        public void Dispose()
-        {
-            
-        }
+        public void Dispose() { }
     }
 }

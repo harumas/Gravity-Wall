@@ -3,12 +3,10 @@ using System.Threading;
 using Application.Spawn;
 using CoreModule.Helper;
 using Cysharp.Threading.Tasks;
-using Module.Gimmick;
 using Module.Gimmick.LevelGimmick;
 using Module.Gimmick.SystemGimmick;
 using Module.Player;
 using R3;
-using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using View;
@@ -24,17 +22,19 @@ namespace Presentation
         private RespawnContext respawnDataOnDeath;
 
         [Inject]
-        public LevelEventPresenter(RespawnManager respawnManager,
+        public LevelEventPresenter(
+            RespawnManager respawnManager,
             ViewBehaviourNavigator behaviourNavigator,
             PlayerController playerController,
             GravitySwitcher gravitySwitcher,
             ReusableComponents<SavePoint> savePointComponents,
-            ReusableComponents<DeathFloor> deathFloorComponents)
+            ReusableComponents<DeathFloor> deathFloorComponents
+        )
         {
             this.respawnManager = respawnManager;
             this.behaviourNavigator = behaviourNavigator;
             this.playerController = playerController;
-            
+
             PauseView pauseView = behaviourNavigator.GetBehaviour<PauseBehaviour>(ViewBehaviourState.Pause).PauseView;
             pauseView.OnRestartButtonPressed.Subscribe(_ =>
                 {
@@ -54,7 +54,8 @@ namespace Presentation
 
         private void SubscribeComponents(
             ReusableComponents<SavePoint> savePointComponents,
-            ReusableComponents<DeathFloor> deathFloorComponents)
+            ReusableComponents<DeathFloor> deathFloorComponents
+        )
         {
             var savePoints = savePointComponents.GetComponents();
             var deathFloors = deathFloorComponents.GetComponents();
@@ -74,7 +75,7 @@ namespace Presentation
             //死亡床のイベント登録
             foreach (DeathFloor deathFloor in deathFloors)
             {
-                deathFloor.OnEnter += (type) =>
+                deathFloor.OnEnter += (type, isHubPoint) =>
                 {
                     if (respawnManager.IsRespawning)
                     {
@@ -107,8 +108,6 @@ namespace Presentation
             behaviourNavigator.DeactivateBehaviour(ViewBehaviourState.Loading);
         }
 
-        public void Initialize()
-        {
-        }
+        public void Initialize() { }
     }
 }

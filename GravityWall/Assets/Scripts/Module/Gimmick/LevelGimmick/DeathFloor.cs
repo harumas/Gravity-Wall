@@ -11,14 +11,15 @@ namespace Module.Gimmick.LevelGimmick
     public class DeathFloor : MonoBehaviour
     {
         [SerializeField] private DeathType floorType;
+        [SerializeField] private bool isHubPoint;
 
-        public event Action<DeathType> OnEnter;
-        
+        public event Action<DeathType, bool> OnEnter;
+
         private void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.CompareTag(Tag.Player))
             {
-                OnEnter?.Invoke(floorType);
+                OnEnter?.Invoke(floorType, isHubPoint);
             }
         }
     }

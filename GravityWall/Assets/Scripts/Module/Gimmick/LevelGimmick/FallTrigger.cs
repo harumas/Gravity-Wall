@@ -1,4 +1,3 @@
-using System;
 using Module.Gravity;
 using Module.Player;
 using UnityEngine;
@@ -7,8 +6,6 @@ using UnityEngine.Rendering.Universal;
 using Cinemachine;
 using Module.Gimmick.SystemGimmick;
 using Constants;
-using Core.Sound;
-using CoreModule.Sound;
 
 namespace Module.Gimmick.LevelGimmick
 {
@@ -82,7 +79,10 @@ namespace Module.Gimmick.LevelGimmick
         {
             player.GetComponent<GravitySwitcher>().Disable();
             player.GetComponentInChildren<Animator>().SetInteger(animatorFallIndexName, fallIndex);
-            player.GetComponent<PlayerController>().Lock();
+            
+            PlayerController playerController = player.GetComponent<PlayerController>();
+            playerController.Lock();
+            playerController.HoldLock = true;
         }
 
         private void FixedUpdate()
