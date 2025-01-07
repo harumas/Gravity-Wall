@@ -38,10 +38,7 @@ namespace Presentation
             {
                 clearPoint.OnClear += () =>
                 {
-                    if (clearPoint.StageId != 0)
-                    {
-                        gameState.SetState(GameState.State.StageSelect);
-                    }
+                    gameState.SetState(GameState.State.StageSelect);
                 };
             }
 

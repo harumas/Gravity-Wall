@@ -69,17 +69,18 @@ namespace Presentation
             exitEvent = InputActionProvider.CreateEvent(ActionGuid.UI.ExitScreen);
 
             navigator.OnStateChanged.Subscribe(state =>
-            {
-                exitEvent.Started -= OnExitEvent;
-
-                if (state == ViewBehaviourState.Pause || state == ViewBehaviourState.None)
                 {
-                    exitEvent.Started += OnExitEvent;
-                }
-            }).AddTo(pauseBehaviour);
+                    exitEvent.Started -= OnExitEvent;
+
+                    if (state == ViewBehaviourState.Pause || state == ViewBehaviourState.None)
+                    {
+                        exitEvent.Started += OnExitEvent;
+                    }
+                })
+                .AddTo(pauseBehaviour);
 
             pauseBehaviour.OnActiveStateChanged.Subscribe(OnActiveStateChanged).AddTo(pauseBehaviour);
-            pauseBehaviour.SetGameState(gameState);
+            pauseBehaviour.Construct(gameState, playerController.LockState);
 
             PauseView pauseView = pauseBehaviour.PauseView;
             pauseView.OnContinueButtonPressed.Subscribe(_ => navigator.DeactivateBehaviour(ViewBehaviourState.Pause)).AddTo(pauseView);
@@ -95,7 +96,12 @@ namespace Presentation
 
         private void OnActiveStateChanged((bool isActive, ViewBehaviourState behaviourType) context)
         {
-            if (context.isActive && context.behaviourType == ViewBehaviourState.None)
+            if (context.behaviourType != ViewBehaviourState.None)
+            {
+                return;
+            }
+            
+            if (context.isActive)
             {
                 cursorLocker.SetCursorLock(false);
                 cursorLocker.IsCursorChangeBlock = true;
@@ -104,7 +110,7 @@ namespace Presentation
                 playerController.Lock();
                 gamepadVibrator.Pause();
             }
-            else if (!context.isActive && context.behaviourType == ViewBehaviourState.None)
+            else
             {
                 cursorLocker.IsCursorChangeBlock = false;
                 cursorLocker.SetCursorLock(true);

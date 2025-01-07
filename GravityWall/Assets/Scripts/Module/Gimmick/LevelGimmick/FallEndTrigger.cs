@@ -31,21 +31,22 @@ namespace Module.Gimmick.LevelGimmick
             }
         }
 
-
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.CompareTag(Tag.Player))
+            if (!other.gameObject.CompareTag(Tag.Player))
             {
-                cinemachine.Priority = 0;
-                if (feature != null)
-                {
-                    feature.SetActive(false);
-                }
-
-                fallTrigger.SetActive(false);
-
-                FallEndSequence(other.gameObject).Forget();
+                return;
             }
+
+            cinemachine.Priority = 0;
+            if (feature != null)
+            {
+                feature.SetActive(false);
+            }
+
+            fallTrigger.SetActive(false);
+
+            FallEndSequence(other.gameObject).Forget();
         }
 
         private async UniTaskVoid FallEndSequence(GameObject player)
@@ -55,7 +56,10 @@ namespace Module.Gimmick.LevelGimmick
             await UniTask.Delay(playerControlUnlockDelay, cancellationToken: destroyCancellationToken);
 
             player.GetComponent<GravitySwitcher>().Enable();
-            player.GetComponent<PlayerController>().Unlock();
+
+            PlayerController playerController = player.GetComponent<PlayerController>();
+            playerController.HoldLock = false;
+            playerController.Unlock();
 
             foreach (GameObject tutorialObject in tutorialObjects)
             {

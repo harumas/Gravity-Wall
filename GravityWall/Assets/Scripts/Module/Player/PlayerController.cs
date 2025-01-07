@@ -36,6 +36,9 @@ namespace Module.Player
         public ReadOnlyReactiveProperty<DeathType> IsDeath => isDeath;
         [SerializeField] private SerializableReactiveProperty<DeathType> isDeath = new SerializableReactiveProperty<DeathType>();
 
+        public ReadOnlyReactiveProperty<bool> LockState => lockState;
+        [SerializeField] private SerializableReactiveProperty<bool> lockState = new SerializableReactiveProperty<bool>();
+
         public enum DeathType
         {
             None,
@@ -50,7 +53,7 @@ namespace Module.Player
         private Vector2 moveInput;
         private float landingTime;
         private bool isJumpingInput;
-        
+
 
         private void Awake()
         {
@@ -205,6 +208,7 @@ namespace Module.Player
         public void Lock()
         {
             enabled = false;
+            lockState.Value = true;
         }
 
         public void Unlock()
@@ -215,6 +219,7 @@ namespace Module.Player
             }
 
             enabled = true;
+            lockState.Value = false;
         }
     }
 }
