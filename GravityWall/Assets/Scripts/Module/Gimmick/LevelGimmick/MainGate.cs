@@ -22,9 +22,16 @@ namespace Module.Gimmick.LevelGimmick
 
         public void EnableLight()
         {
+            if (enableCount >= lightRenderers.Length)
+            {
+                return;
+            }
+
             lightRenderers[enableCount].material.SetColor(emissionColorProperty, enableLightColor);
-            var lightEffect = lightRenderers[enableCount++].transform.Find(lightEffectName).gameObject;
+            var lightEffect = lightRenderers[enableCount].transform.Find(lightEffectName).gameObject;
             lightEffect.SetActive(true);
+
+            enableCount++;
 
             OnLightEnabled?.Invoke();
         }
@@ -46,8 +53,6 @@ namespace Module.Gimmick.LevelGimmick
             enableCount = 0;
         }
 
-        public override void Reset()
-        {
-        }
+        public override void Reset() { }
     }
 }

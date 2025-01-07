@@ -17,8 +17,14 @@ namespace Module.Gimmick.SystemGimmick
         public bool IsGravitySwitcherEnabled;
         public LevelResetter LevelResetter;
 
-        public RespawnContext(Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 gravity, LevelResetter levelResetter,
-            bool canSwitchGravity)
+        public RespawnContext(
+            Vector3 position,
+            Quaternion rotation,
+            Vector3 velocity,
+            Vector3 gravity,
+            LevelResetter levelResetter,
+            bool canSwitchGravity
+        )
         {
             Position = position;
             Rotation = rotation;
@@ -35,6 +41,7 @@ namespace Module.Gimmick.SystemGimmick
     public class SavePoint : MonoBehaviour
     {
         [SerializeField] private LevelResetter levelResetter;
+        [SerializeField] private bool canSwitchGravity = true;
 
         public event Action<RespawnContext> OnEnterPoint;
         public RespawnContext LatestContext { get; private set; }
@@ -49,23 +56,9 @@ namespace Module.Gimmick.SystemGimmick
 
         private void OnTriggerEnter(Collider other)
         {
-            bool canSwitchGravity = false;
-
             if (isSaved || !other.CompareTag(Tag.Player))
             {
-                Debug.Log("セーブしました");
-                isSaved = true;
-
-                GravitySwitcher gravitySwitcher = other.GetComponent<GravitySwitcher>();
-                canSwitchGravity = gravitySwitcher.IsEnabled;
-                LatestContext = new RespawnContext(transform.position,
-                    transform.rotation,
-                    Vector3.zero,
-                    -transform.up,
-                    levelResetter,
-                    canSwitchGravity);
-                
-                OnEnterPoint?.Invoke(LatestContext);
+                return;
             }
 
             Save(canSwitchGravity);
@@ -78,8 +71,6 @@ namespace Module.Gimmick.SystemGimmick
                 return;
             }
 
-            GravitySwitcher gravitySwitcher = other.GetComponent<GravitySwitcher>();
-            bool canSwitchGravity = gravitySwitcher.IsEnabled;
             Save(canSwitchGravity);
         }
 

@@ -41,6 +41,7 @@ namespace Module.Player
             None,
             Electric,
             Poison,
+            Fall,
         }
 
         public ReadOnlyReactiveProperty<(Vector3 xv, Vector3 yv)> OnMove => onMove;
@@ -111,7 +112,6 @@ namespace Module.Player
         private void FixedUpdate()
         {
             //接地判定
-
             if (isJumping.Value)
             {
                 // 再びジャンプ可能になったらフラグを解除

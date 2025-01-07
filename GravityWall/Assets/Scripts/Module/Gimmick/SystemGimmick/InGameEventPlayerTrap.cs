@@ -16,6 +16,7 @@ namespace Module.Gimmick.SystemGimmick
         private PlayerTargetSyncer playerTargetSyncer;
         private CameraController cameraController;
         private Animator playerAnimator;
+        private CameraShaker cameraShaker;
         private bool isEnable = false;
         private readonly string isInstallAnimationName = "IsInstall";
 
@@ -35,10 +36,13 @@ namespace Module.Gimmick.SystemGimmick
                 playerTargetSyncer = obj.GetComponentInChildren<PlayerTargetSyncer>();
                 cameraController = obj.GetComponentInChildren<CameraController>();
                 playerAnimator = obj.GetComponentInChildren<Animator>();
+                cameraShaker = obj.GetComponentInChildren<CameraShaker>();
+                
+                obj.transform.position = target.position;
+                playerTargetSyncer.SetRotation(target.rotation);
 
                 Enable();
 
-                other.transform.position = target.position;
                 isEnable = true;
 
                 OnTrapped?.Invoke();
@@ -57,12 +61,10 @@ namespace Module.Gimmick.SystemGimmick
 
             playerController.HoldLock = true;
             playerTargetSyncer.HoldLock = true;
-            Debug.Log("Enable");
         }
 
         public void Disable(bool isGravityEnable)
         {
-            Debug.Log("Disable");
             playerController.HoldLock = false;
             playerTargetSyncer.HoldLock = false;
 

@@ -35,7 +35,7 @@ namespace Module.InputModule
         
         private void UpdateLockState()
         {
-            IsLocked = conditions.All(property => property.CurrentValue);
+            IsLocked = conditions.All(property => !property.CurrentValue);
         }
     }
 }
