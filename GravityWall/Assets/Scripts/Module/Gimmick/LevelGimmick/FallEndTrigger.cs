@@ -1,5 +1,6 @@
 using Cinemachine;
 using Constants;
+using CoreModule.Sound;
 using Cysharp.Threading.Tasks;
 using Module.Player;
 using UnityEngine;
@@ -53,6 +54,8 @@ namespace Module.Gimmick.LevelGimmick
             player.GetComponentInChildren<Animator>().SetInteger(animatorFallIndexName, fallIndex);
 
             await UniTask.Delay(playerControlUnlockDelay, cancellationToken: destroyCancellationToken);
+
+            SoundManager.Instance.Pause(0.5f);
 
             player.GetComponent<GravitySwitcher>().Enable();
             player.GetComponent<PlayerController>().Unlock();
