@@ -54,9 +54,10 @@ namespace Module.Gimmick.LevelGimmick
         {
             player.GetComponentInChildren<Animator>().SetInteger(animatorFallIndexName, fallIndex);
 
-            await UniTask.Delay(playerControlUnlockDelay, cancellationToken: destroyCancellationToken);
+            SoundManager.Instance.Pause(1.0f);
+            SoundManager.Instance.Play(Core.Sound.SoundKey.Jump,Core.Sound.MixerType.SE);
 
-            SoundManager.Instance.Pause(0.5f);
+            await UniTask.Delay(playerControlUnlockDelay, cancellationToken: destroyCancellationToken);
 
             player.GetComponent<GravitySwitcher>().Enable();
 

@@ -6,6 +6,7 @@ using UnityEngine.Rendering.Universal;
 using Cinemachine;
 using Module.Gimmick.SystemGimmick;
 using Constants;
+using CoreModule.Sound;
 
 namespace Module.Gimmick.LevelGimmick
 {
@@ -57,6 +58,8 @@ namespace Module.Gimmick.LevelGimmick
                     SetPlayerSettings(other.transform);
 
                     SetCameraPivot(other.transform.Find(cameraPivotName));
+
+                    SoundManager.Instance.Play(Core.Sound.SoundKey.TutorialBGM2, Core.Sound.MixerType.BGM, true);
 
                     cinemachine.Priority = cameraHighPriority;
                     if (feature != null)
