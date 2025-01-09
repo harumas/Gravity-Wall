@@ -37,7 +37,7 @@ namespace Module.Gimmick.SystemGimmick
                 cameraController = obj.GetComponentInChildren<CameraController>();
                 playerAnimator = obj.GetComponentInChildren<Animator>();
                 cameraShaker = obj.GetComponentInChildren<CameraShaker>();
-                
+
                 obj.transform.position = target.position;
                 playerTargetSyncer.SetRotation(target.rotation);
 
@@ -54,8 +54,12 @@ namespace Module.Gimmick.SystemGimmick
             cameraController.SetCameraRotation(target.rotation);
             cameraController.SetFreeCamera(false);
 
+            const RigidbodyConstraints freezeXZ = RigidbodyConstraints.FreezePositionX |
+                                                  RigidbodyConstraints.FreezePositionZ |
+                                                  RigidbodyConstraints.FreezeRotation;
+
             playerController.Refresh();
-            playerController.Lock();
+            playerController.Lock(freezeXZ);
             gravitySwitcher.Disable();
             playerTargetSyncer.Lock();
 
@@ -71,7 +75,7 @@ namespace Module.Gimmick.SystemGimmick
             cameraController.SetFreeCamera(true);
             playerController.Unlock();
             playerTargetSyncer.Unlock();
-            
+
             if (isGravityEnable)
             {
                 gravitySwitcher.Enable();

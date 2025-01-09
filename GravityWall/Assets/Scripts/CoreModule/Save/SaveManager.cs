@@ -1,5 +1,6 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
+using R3;
 using UnityEngine;
 
 namespace CoreModule.Save
@@ -11,9 +12,11 @@ namespace CoreModule.Save
     public class SaveManager<T> where T : ICloneable<T>
     {
         public T Data { get; private set; }
+        public Observable<T> OnSaved => onSaved;
+        
         private T defaultSaveData;
-        public event Action<T> OnSaved;
-
+        private readonly Subject<T> onSaved = new Subject<T>();
+        
         public void Initialize(T data, T defaultSaveData)
         {
             if (Data != null)
@@ -43,7 +46,7 @@ namespace CoreModule.Save
         {
             string name = typeof(T).Name;
             await SaveUtility.Save(Data, name, true);
-            OnSaved?.Invoke(Data);
+            onSaved.OnNext(Data);
         }
     }
 }

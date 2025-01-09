@@ -51,12 +51,14 @@ namespace Presentation
                     // 既にクリア済みの場合はスキップ
                     if (stageList[stageId])
                     {
+                        Debug.Log("既にクリア済みです");
                         return;
                     }
 
                     // クリアデータの保存
                     if (stageId < stageList.Length)
                     {
+                        Debug.Log("セーブしました");
                         stageList[stageId] = true;
                         saveManager.Save().Forget();
                     }

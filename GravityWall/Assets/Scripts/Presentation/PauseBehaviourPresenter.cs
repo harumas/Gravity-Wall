@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Application;
 using Application.Sequence;
 using Application.Spawn;
@@ -18,7 +19,7 @@ using View.View;
 
 namespace Presentation
 {
-    public class PauseBehaviourPresenter : IStartable
+    public class PauseBehaviourPresenter : IStartable,IDisposable
     {
         private readonly ViewBehaviourNavigator navigator;
         private readonly PauseBehaviour pauseBehaviour;
@@ -90,8 +91,7 @@ namespace Presentation
 
             ClearedLevelView clearedLevelView = pauseBehaviour.ClearedLevelView;
             clearedLevelView.SetClearedLevels(saveManager.Data.ClearedStageList);
-            saveManager.OnSaved -= SetClearedLevels;
-            saveManager.OnSaved += SetClearedLevels;
+            saveManager.OnSaved.Subscribe(SetClearedLevels).AddTo(clearedLevelView);
         }
 
         private void OnActiveStateChanged((bool isActive, ViewBehaviourState behaviourType) context)
@@ -155,6 +155,11 @@ namespace Presentation
             {
                 navigator.ActivateBehaviour(ViewBehaviourState.Pause);
             }
+        }
+
+        public void Dispose()
+        {
+            doInput?.Dispose();
         }
     }
 }

@@ -205,10 +205,11 @@ namespace Module.Player
             isDeath.Value = DeathType.None;
         }
 
-        public void Lock()
+        public void Lock(RigidbodyConstraints freezeOption = RigidbodyConstraints.FreezeRotation)
         {
             enabled = false;
             lockState.Value = true;
+            rigBody.constraints = freezeOption;
         }
 
         public void Unlock()
@@ -220,6 +221,7 @@ namespace Module.Player
 
             enabled = true;
             lockState.Value = false;
+            rigBody.constraints = RigidbodyConstraints.FreezeRotation;
         }
     }
 }
