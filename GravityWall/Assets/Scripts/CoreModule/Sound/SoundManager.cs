@@ -169,10 +169,12 @@ namespace CoreModule.Sound
                 PlayInfo info = playingQueue[i];
 
                 // 再生が終了していない場合は削除しない
-                if (info.IsLoop || info.PlayTime + info.Source.clip.length > Time.unscaledTime && !stopSet.Contains(info.HandleId))
+                if ((info.IsLoop || info.PlayTime + info.Source.clip.length > Time.unscaledTime) && !stopSet.Contains(info.HandleId))
                 {
                     continue;
                 }
+                
+                info.Source.Stop();
 
                 // 再生が終了したAudioSourceを返却する
                 audioSources.Enqueue(info.Source);
