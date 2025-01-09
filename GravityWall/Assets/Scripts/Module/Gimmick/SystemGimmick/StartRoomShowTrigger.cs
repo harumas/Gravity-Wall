@@ -8,6 +8,9 @@ namespace Module.Gimmick.SystemGimmick
     {
         [SerializeField] private StartRoom startRoom;
         [SerializeField] private GameObject roomBody;
+        [SerializeField] private GameObject levelPipe;
+
+        private bool isPlayerEnter = false;
 
         private void Start()
         {
@@ -19,6 +22,7 @@ namespace Module.Gimmick.SystemGimmick
             if (other.CompareTag(Tag.Player))
             {
                 roomBody.SetActive(true);
+                isPlayerEnter = true;
             }
         }
 
@@ -27,12 +31,23 @@ namespace Module.Gimmick.SystemGimmick
             if (!startRoom.IsPlayerEnter && other.CompareTag(Tag.Player))
             {
                 roomBody.SetActive(false);
+                isPlayerEnter = false;
             }
         }
 
         public void Reset()
         {
             roomBody.SetActive(false);
+            levelPipe.SetActive(true);
+            isPlayerEnter = false;
+        }
+
+        private void OnDisable()
+        {
+            if (!isPlayerEnter)
+            {
+                levelPipe.SetActive(false);
+            }
         }
     }
 }
