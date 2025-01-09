@@ -10,12 +10,16 @@ namespace Module.LevelGimmick
     public class ColonyHologramTrigger : MonoBehaviour
     {
         [SerializeField] private EndingHologramSetter[] endingHologramSetters;
+        private bool wasHologram = false;
 
         private void OnTriggerEnter(Collider other)
         {
+            if (wasHologram) return;
+
             if (other.CompareTag(Tag.Player))
             {
                 OnHologram().Forget();
+                wasHologram = true;
             }
         }
 
