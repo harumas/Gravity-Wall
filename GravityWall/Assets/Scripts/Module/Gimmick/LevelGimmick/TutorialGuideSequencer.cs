@@ -33,7 +33,7 @@ namespace Module.Gimmick.LevelGimmick
             videoPlayer.Play();
             movieCanvas.SetActive(true);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(5));
+            await UniTask.Delay(TimeSpan.FromSeconds(4));
             playerTrap.PlayPlayerInstallAnimation(true);
 
             await UniTask.Delay(TimeSpan.FromSeconds(2));
@@ -51,7 +51,7 @@ namespace Module.Gimmick.LevelGimmick
             playerTrap.PlayPlayerInstallAnimation(false);
 
 
-            await UniTask.Delay(TimeSpan.FromSeconds(videoPlayer.length / videoPlayer.playbackSpeed - 15));
+            await UniTask.Delay(TimeSpan.FromSeconds(videoPlayer.length / videoPlayer.playbackSpeed - 16));
 
             titleVirtualCamera.Priority = 0;
 
