@@ -15,8 +15,8 @@ namespace Module.Effect
         [SerializeField] private float minFallTime;
         [SerializeField] private AudioSource audioSource;
 
-        private readonly float volumeChangeRate = 0.1f;
-        private readonly float pitchChangeRate = 0.1f;
+        private readonly float volumeChangeRate = 0.5f;
+        private readonly float pitchChangeRate = 0.3f;
         private readonly float initialVolume = 0.3f;
         private readonly float initialPitch = 0.8f;
         private readonly float fadeTime = 0.3f;
