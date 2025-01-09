@@ -32,6 +32,8 @@ namespace Core.Sound
 		LastBGMSample,
 		TutorialBGM1,
 		TutorialBGM2,
+		PlugOn,
+		PlugOff,
 	}
 	
 	public enum MixerType
