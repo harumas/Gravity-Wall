@@ -36,6 +36,7 @@ namespace Module.LevelGimmick
             {
                 if (WorldGravity.Instance.Gravity == GetDirection() || direction == Direction.none)
                 {
+                    Debug.Log("Play!!");
                     tween?.Kill();
                     audioSource.volume = volume;
                     audioSource.Play();
@@ -49,6 +50,7 @@ namespace Module.LevelGimmick
             if (!isPlaying) return;
             if (other.CompareTag(Tag.Player))
             {
+                Debug.Log("Stop");
                 tween?.Kill();
                 tween = DOTween.To(() => audioSource.volume,(v) => audioSource.volume = v,0, fadeTime).OnComplete(() =>
                 {

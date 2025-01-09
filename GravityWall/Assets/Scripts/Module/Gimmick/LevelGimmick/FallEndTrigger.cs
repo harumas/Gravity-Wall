@@ -2,6 +2,7 @@ using Cinemachine;
 using Constants;
 using CoreModule.Sound;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using Module.Player;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -14,6 +15,7 @@ namespace Module.Gimmick.LevelGimmick
         [SerializeField] private GameObject fallTrigger;
         [SerializeField] private UniversalRendererData rendererData;
         [SerializeField] private GameObject[] tutorialObjects;
+        [SerializeField] private AudioSource audioSource;
 
         private ScriptableRendererFeature feature;
 
@@ -54,7 +56,11 @@ namespace Module.Gimmick.LevelGimmick
         {
             player.GetComponentInChildren<Animator>().SetInteger(animatorFallIndexName, fallIndex);
 
-            SoundManager.Instance.Pause(1.0f);
+            DOTween.To(() => audioSource.volume, (v) => audioSource.volume = v, 0, 1.0f).OnComplete(() =>
+            {
+                audioSource.Stop();
+            });
+
             SoundManager.Instance.Play(Core.Sound.SoundKey.Jump,Core.Sound.MixerType.SE);
 
             await UniTask.Delay(playerControlUnlockDelay, cancellationToken: destroyCancellationToken);

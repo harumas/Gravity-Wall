@@ -19,6 +19,8 @@ namespace Module.Gimmick.LevelGimmick
         [SerializeField] private CinemachineVirtualCamera cinemachine;
         [SerializeField] private UniversalRendererData rendererData;
 
+        [SerializeField] private AudioSource audioSource;
+
         bool isPlayerEnter;
         private LocalGravity targetGravity;
         private ScriptableRendererFeature feature;
@@ -59,7 +61,7 @@ namespace Module.Gimmick.LevelGimmick
 
                     SetCameraPivot(other.transform.Find(cameraPivotName));
 
-                    SoundManager.Instance.Play(Core.Sound.SoundKey.TutorialBGM2, Core.Sound.MixerType.BGM, true);
+                    audioSource.Play();
 
                     cinemachine.Priority = cameraHighPriority;
                     if (feature != null)
