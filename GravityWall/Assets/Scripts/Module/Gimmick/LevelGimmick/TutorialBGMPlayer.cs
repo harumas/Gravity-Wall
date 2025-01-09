@@ -43,6 +43,7 @@ namespace Module.LevelGimmick
             if (other.CompareTag(Tag.Player))
             {
                 audioSource.Stop();
+                isPlaying = false;
             }
         }
 
