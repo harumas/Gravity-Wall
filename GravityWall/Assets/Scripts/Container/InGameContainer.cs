@@ -25,7 +25,6 @@ namespace Container
     {
         [SerializeField] private ViewBehaviourNavigator behaviourNavigator;
         [SerializeField] private GimmickReference gimmickReference;
-        [SerializeField] private HubSpawnPoint hubSpawnPoint;
         [SerializeField] private DirectorTable directorTable;
         [SerializeField] private MainGateOpenSequencer mainGateOpenSequencer;
 
@@ -68,7 +67,6 @@ namespace Container
 
             gimmickReference.UpdateReference();
             builder.RegisterInstance(gimmickReference);
-            builder.RegisterInstance(hubSpawnPoint);
             builder.RegisterInstance(directorTable);
             RegisterWithNullCheck(builder, mainGateOpenSequencer);
 
