@@ -11,6 +11,7 @@ namespace Module.Effect.Sound
         [SerializeField] private AdditiveLevelLoadTrigger loadTrigger;
         [SerializeField] private SoundKey soundKey;
         [SerializeField, Range(0f, 1f)] private float volume = 1f;
+        [SerializeField, Range(0f, 3f)] private float pitch = 1f;
         private int soundHandle = -1;
 
         private void Awake()
@@ -21,7 +22,7 @@ namespace Module.Effect.Sound
 
         private void OnSceneLoaded()
         {
-            PlayContext context = new PlayContext(volume, 1f);
+            PlayContext context = new PlayContext(volume, pitch);
             soundHandle = SoundManager.Instance.Play(soundKey, MixerType.BGM, context, true);
         }
 
