@@ -174,8 +174,7 @@ namespace Module.Player
         public void AddForce(Vector3 force, ForceMode mode, float forcedGravity, bool allowAdditionalPower)
         {
             playerFunction.AddForce(force, mode, forcedGravity);
-            isJumping.Value = true;
-            isJumping.ForceNotify();
+            isJumping.OnNext(true);
             isGrounding.Value = false;
             isJumpingInput = allowAdditionalPower;
         }

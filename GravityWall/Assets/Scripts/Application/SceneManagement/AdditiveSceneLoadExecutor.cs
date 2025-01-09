@@ -19,7 +19,6 @@ namespace Application.SceneManagement
         private readonly AdditiveSceneLoader additiveSceneLoader = new();
         private CancellationToken cancellationToken;
         private AdditiveLevelLoadTrigger recentTrigger;
-        
 
         public AdditiveSceneLoadExecutor()
         {

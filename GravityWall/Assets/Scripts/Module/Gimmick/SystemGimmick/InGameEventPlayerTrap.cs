@@ -51,8 +51,8 @@ namespace Module.Gimmick.SystemGimmick
 
         private void Enable()
         {
-            cameraController.SetCameraRotation(target.rotation);
             cameraController.SetFreeCamera(false);
+            cameraController.SetCameraRotation(target.rotation);
 
             const RigidbodyConstraints freezeXZ = RigidbodyConstraints.FreezePositionX |
                                                   RigidbodyConstraints.FreezePositionZ |

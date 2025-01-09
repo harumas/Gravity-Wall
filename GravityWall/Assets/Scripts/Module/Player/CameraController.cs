@@ -9,11 +9,11 @@ namespace Module.Player
     /// </summary>
     public class CameraController : MonoBehaviour
     {
-        [Header("ロールピッチの回転軸")][SerializeField] private Transform pivotHorizontal;
+        [Header("ロールピッチの回転軸")] [SerializeField] private Transform pivotHorizontal;
         [SerializeField] private MinMaxValue horizontalRange;
         [SerializeField] private MinMaxValue verticalRange;
         [SerializeField] private bool isFreeCamera = true;
-        
+
         public void OnRotateCameraInput(Vector2 mouseDelta)
         {
             if (!isFreeCamera || Cursor.lockState != CursorLockMode.Locked)
@@ -39,6 +39,7 @@ namespace Module.Player
         /// 90度回転　実装見送り
         /// </summary>
         private float rotationDuration = 0.2f;
+
         public IEnumerator Rotate90Camera(Vector3 axis, float angle)
         {
             Quaternion startRotation = pivotHorizontal.rotation;
@@ -63,9 +64,13 @@ namespace Module.Player
             pivotHorizontal.rotation = Quaternion.Euler(finalEulerAngles);
         }
 
-
         public void SetCameraRotation(Quaternion rotation)
         {
+            if (isFreeCamera)
+            {
+                return;
+            }
+
             pivotHorizontal.rotation = rotation;
         }
 
