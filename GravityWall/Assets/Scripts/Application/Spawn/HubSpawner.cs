@@ -1,9 +1,11 @@
 ﻿using System;
+using UnityEngine;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Module.Gimmick.SystemGimmick;
 using Module.InputModule;
 using R3;
+using Object = UnityEngine.Object;
 
 namespace Application.Spawn
 {
@@ -13,21 +15,30 @@ namespace Application.Spawn
     public class HubSpawner
     {
         private readonly RespawnManager respawnManager;
-        private readonly HubSpawnPoint spawnPoint;
-        private readonly RespawnContext respawnContext;
         private readonly ReactiveProperty<bool> doInput;
         private float respawnLockDuration = 2f;
 
         public event Action OnRespawn;
+        private HubSpawnPoint currentSpawnPoint;
+        private RespawnContext currentContext;
 
-        public HubSpawner(RespawnManager respawnManager, HubSpawnPoint spawnPoint, InputLocker inputLocker)
+        public HubSpawner(RespawnManager respawnManager, InputLocker inputLocker)
         {
             this.respawnManager = respawnManager;
-            this.spawnPoint = spawnPoint;
-            respawnContext = spawnPoint.GetContext();
 
+            var hubSpawnPoints = Object.FindObjectsByType<HubSpawnPoint>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+            foreach (HubSpawnPoint spawnPoint in hubSpawnPoints)
+            {
+                spawnPoint.OnEnabled += context =>
+                {
+                    currentSpawnPoint = spawnPoint;
+                    currentContext = context;
+                };
+            }
+            
             doInput = new ReactiveProperty<bool>(true);
-            inputLocker.AddCondition(doInput, spawnPoint.destroyCancellationToken);
+            inputLocker.AddCondition(doInput, hubSpawnPoints[0].destroyCancellationToken);
         }
 
         /// <summary>
@@ -36,12 +47,12 @@ namespace Application.Spawn
         public async UniTask Respawn()
         {
             OnRespawn?.Invoke();
-            
+
             doInput.Value = false;
 
-            await respawnManager.RespawnPlayer(respawnContext, null);
-            await UniTask.Delay(TimeSpan.FromSeconds(respawnLockDuration), cancellationToken: spawnPoint.destroyCancellationToken);
-            
+            await respawnManager.RespawnPlayer(currentContext, null);
+            await UniTask.Delay(TimeSpan.FromSeconds(respawnLockDuration), cancellationToken: currentSpawnPoint.destroyCancellationToken);
+
             doInput.Value = true;
         }
     }
