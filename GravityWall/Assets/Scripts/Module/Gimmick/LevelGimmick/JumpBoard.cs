@@ -29,7 +29,7 @@ namespace Module.Gimmick.LevelGimmick
         {
             SoundManager.Instance.Play(Core.Sound.SoundKey.JumpBoard, Core.Sound.MixerType.SE);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(jumpDelay));
+            await UniTask.Delay(TimeSpan.FromSeconds(jumpDelay), cancellationToken: destroyCancellationToken);
 
             float jumpOn = -1;
             jumpTweener = DOTween.To(() => jumpOn, (value) => jumpOn = value, 1.0f, 0.5f)
@@ -37,7 +37,7 @@ namespace Module.Gimmick.LevelGimmick
                 .OnUpdate(() => { meshRenderer.material.SetFloat(jumpOnProperty, jumpOn); })
                 .OnComplete(() =>
                 {
-                    DOTween.To(() => jumpOn, (value) => jumpOn = value, -0.65f, 0.3f)
+                    jumpTweener = DOTween.To(() => jumpOn, (value) => jumpOn = value, -0.65f, 0.3f)
                         .SetEase(Ease.OutBounce)
                         .OnUpdate(() => { meshRenderer.material.SetFloat(jumpOnProperty, jumpOn); });
                 });

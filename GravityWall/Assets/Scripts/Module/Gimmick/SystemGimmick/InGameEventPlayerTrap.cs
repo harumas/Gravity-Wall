@@ -8,6 +8,7 @@ namespace Module.Gimmick.SystemGimmick
     public class InGameEventPlayerTrap : MonoBehaviour
     {
         [SerializeField] private Transform target;
+        [SerializeField] private RigidbodyConstraints[] constraints;
 
         public event Action OnTrapped;
 
@@ -16,8 +17,17 @@ namespace Module.Gimmick.SystemGimmick
         private PlayerTargetSyncer playerTargetSyncer;
         private CameraController cameraController;
         private Animator playerAnimator;
+        private RigidbodyConstraints constraintsFlag;
         private bool isEnable = false;
         private readonly string isInstallAnimationName = "IsInstall";
+
+        private void Awake()
+        {
+            foreach (RigidbodyConstraints constraint in constraints)
+            {
+                constraintsFlag |= constraint;
+            }
+        }
 
         private void OnTriggerEnter(Collider other)
         {
@@ -73,12 +83,8 @@ namespace Module.Gimmick.SystemGimmick
             cameraController.SetFreeCamera(false);
             cameraController.SetCameraRotation(target.rotation);
 
-            const RigidbodyConstraints freezeXZ = RigidbodyConstraints.FreezePositionX |
-                                                  RigidbodyConstraints.FreezePositionZ |
-                                                  RigidbodyConstraints.FreezeRotation;
-
             playerController.Refresh();
-            playerController.Lock(freezeXZ);
+            playerController.Lock(constraintsFlag);
             gravitySwitcher.Disable();
             playerTargetSyncer.Lock();
 
