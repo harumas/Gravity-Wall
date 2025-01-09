@@ -35,7 +35,7 @@ namespace Module.Gimmick.SystemGimmick
 
             if (playerController == null)
             {
-                CacheComponents();
+                CacheComponents(obj);
             }
 
             if (!IsValidDirection(playerController.transform.up))
@@ -53,13 +53,13 @@ namespace Module.Gimmick.SystemGimmick
             OnTrapped?.Invoke();
         }
 
-        private void CacheComponents()
+        private void CacheComponents(GameObject gameObject)
         {
-            playerController = GetComponent<PlayerController>();
-            gravitySwitcher = GetComponent<GravitySwitcher>();
-            playerTargetSyncer = GetComponentInChildren<PlayerTargetSyncer>();
-            cameraController = GetComponentInChildren<CameraController>();
-            playerAnimator = GetComponentInChildren<Animator>();
+            playerController = gameObject.GetComponent<PlayerController>();
+            gravitySwitcher = gameObject.GetComponent<GravitySwitcher>();
+            playerTargetSyncer = gameObject.GetComponentInChildren<PlayerTargetSyncer>();
+            cameraController = gameObject.GetComponentInChildren<CameraController>();
+            playerAnimator = gameObject.GetComponentInChildren<Animator>();
         }
 
         private bool IsValidDirection(Vector3 up)
