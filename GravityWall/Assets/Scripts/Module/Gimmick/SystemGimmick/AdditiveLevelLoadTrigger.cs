@@ -53,10 +53,12 @@ namespace Module.Gimmick.SystemGimmick
         public void CallUnload()
         {
             Reset();
+            
             foreach (GameObject obj in hubBody)
             {
                 obj.SetActive(true);
             }
+            
             OnSceneUnload?.Invoke();
         }
 

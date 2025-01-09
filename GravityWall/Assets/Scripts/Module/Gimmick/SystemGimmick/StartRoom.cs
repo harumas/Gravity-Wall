@@ -59,6 +59,7 @@ namespace Module.Gimmick.SystemGimmick
         {
             justOnceStartGate.Reset();
             roomObject.SetActive(true);
+            objectHider.Disable();
         }
 
         private void OnTriggerEnter(Collider other)

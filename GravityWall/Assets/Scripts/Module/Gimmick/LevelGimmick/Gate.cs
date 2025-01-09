@@ -29,6 +29,7 @@ namespace Module.Gimmick.LevelGimmick
 
         private int switchCount = 0;
         private List<Material> lightMaterials = new List<Material>();
+        private Tween closeTween;
         private static readonly int emissionColor = Shader.PropertyToID("_EmissionColor");
         private static readonly int alphaProperty = Shader.PropertyToID("_Alpha");
 
@@ -101,12 +102,16 @@ namespace Module.Gimmick.LevelGimmick
             {
                 return;
             }
+            
+            closeTween?.Kill();
 
             if (doEffect)
             {
                 SoundManager.Instance.Play(SoundKey.GateOpen, MixerType.SE);
                 GateAnimation(false);
             }
+
+            hologramMeshRenderer.material.SetFloat(alphaProperty, 0.2f);
 
             gateCloseEvent.Invoke();
             gate.SetActive(true);
@@ -144,7 +149,7 @@ namespace Module.Gimmick.LevelGimmick
             }
             else
             {
-                lightMaterials[switchCount -1].SetColor(emissionColor, red * 5.0f);
+                lightMaterials[switchCount - 1].SetColor(emissionColor, red * 5.0f);
             }
         }
 
@@ -161,16 +166,9 @@ namespace Module.Gimmick.LevelGimmick
             {
                 float alpha = 0.2f;
                 hologramMeshRenderer.transform.DOShakeScale(0.3f);
-                DOTween.To(() => alpha, (a) => alpha = a, 0, 1.0f)
+                closeTween = DOTween.To(() => alpha, (a) => alpha = a, 0, 1.0f)
                     .SetDelay(0.3f)
-                    .OnUpdate(() =>
-                    {
-                        hologramMeshRenderer.material.SetFloat(alphaProperty, alpha);
-                    });
-            }
-            else
-            {
-                hologramMeshRenderer.material.SetFloat(alphaProperty, 0.2f);
+                    .OnUpdate(() => { hologramMeshRenderer.material.SetFloat(alphaProperty, alpha); });
             }
         }
 

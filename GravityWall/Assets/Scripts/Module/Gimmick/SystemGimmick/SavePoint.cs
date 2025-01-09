@@ -76,7 +76,6 @@ namespace Module.Gimmick.SystemGimmick
 
         private void Save(bool canSwitchGravity)
         {
-            Debug.Log("セーブしました");
             isSaved = true;
             LatestContext = new RespawnContext(transform.position, transform.rotation, Vector3.zero, -transform.up, levelResetter, canSwitchGravity);
             OnEnterPoint?.Invoke(LatestContext);
