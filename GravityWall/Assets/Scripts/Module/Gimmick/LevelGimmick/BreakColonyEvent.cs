@@ -34,7 +34,7 @@ namespace Module.Gimmick
         {
             if (breakGlassHouse && !wasBreak)
             {
-                SoundManager.Instance.Play(Core.Sound.SoundKey.LastBGMSample, Core.Sound.MixerType.BGM);
+                SoundManager.Instance.Play(Core.Sound.SoundKey.LastBGMSample, Core.Sound.MixerType.BGM, new PlayContext(0.5f,1),true);
             }
 
             if (!building) return;
