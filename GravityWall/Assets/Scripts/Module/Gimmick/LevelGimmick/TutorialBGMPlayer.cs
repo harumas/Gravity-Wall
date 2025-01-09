@@ -23,7 +23,7 @@ namespace Module.LevelGimmick
             audioSource = GetComponent<AudioSource>();
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void OnTriggerStay(Collider other)
         {
             if (isPlaying) return;
 

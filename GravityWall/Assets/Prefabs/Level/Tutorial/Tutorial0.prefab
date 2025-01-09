@@ -24285,7 +24285,7 @@ GameObject:
   - component: {fileID: 6114021146661279175}
   - component: {fileID: 2190909636081882882}
   - component: {fileID: 1006716773664332118}
-  m_Layer: 10
+  m_Layer: 7
   m_Name: BGMStartTrigger
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -24326,8 +24326,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 98.56799, y: 4.168701, z: 2.856385}
-  m_Center: {x: 48.783997, y: 1.5843506, z: 0.6652591}
+  m_Size: {x: 100.382935, y: 4.168701, z: 2.8563855}
+  m_Center: {x: 47.876526, y: 1.5843506, z: 0.6652592}
 --- !u!114 &2190909636081882882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29480,9 +29480,10 @@ GameObject:
   - component: {fileID: 5533428859681493933}
   - component: {fileID: 283163524843754688}
   - component: {fileID: 2808804046511531951}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
+  - component: {fileID: 109853087585761166}
+  m_Layer: 7
+  m_Name: EnviromentAudio
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -29620,6 +29621,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &109853087585761166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4789652998012498502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05543dc29ee9113449ad044357601c32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  direction: 0
 --- !u!1 &4800509916934422645
 GameObject:
   m_ObjectHideFlags: 0
