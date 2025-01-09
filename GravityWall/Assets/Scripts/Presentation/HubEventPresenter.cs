@@ -24,7 +24,7 @@ namespace Presentation
 
         public void Start()
         {
-            var deathFloors = Object.FindObjectsByType<DeathFloor>(FindObjectsSortMode.None);
+            var deathFloors = Object.FindObjectsByType<DeathFloor>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
             //死亡床のイベント登録
             foreach (DeathFloor deathFloor in deathFloors)
@@ -35,7 +35,7 @@ namespace Presentation
                     {
                         return;
                     }
-                    
+
                     playerController.Kill(type);
 
                     await UniTask.Delay(TimeSpan.FromSeconds(3f));
@@ -47,6 +47,8 @@ namespace Presentation
             }
         }
 
-        public void Dispose() { }
+        public void Dispose()
+        {
+        }
     }
 }

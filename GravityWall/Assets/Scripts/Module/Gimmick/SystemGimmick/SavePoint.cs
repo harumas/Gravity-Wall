@@ -51,7 +51,7 @@ namespace Module.Gimmick.SystemGimmick
 
         private void Start()
         {
-            levelResetter.RegisterObjects();
+            levelResetter?.RegisterObjects();
         }
 
         private void OnTriggerEnter(Collider other)
