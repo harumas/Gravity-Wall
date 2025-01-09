@@ -24,8 +24,8 @@ namespace View
         private Dictionary<ViewBehaviourState, ViewBehaviour> viewBehaviours;
         private Stack<ViewBehaviour> activeBehaviours;
 
-        private readonly Subject<ViewBehaviourState> onStateChanged = new();
-        public Observable<ViewBehaviourState> OnStateChanged => onStateChanged;
+        [SerializeField] private SerializableReactiveProperty<ViewBehaviourState> onStateChanged;
+        public ReadOnlyReactiveProperty<ViewBehaviourState> OnStateChanged => onStateChanged;
 
         public ViewBehaviourState CurrentBehaviourState
         {
@@ -78,7 +78,7 @@ namespace View
         public void ActivateBehaviour(ViewBehaviourState state)
         {
             ViewBehaviour behaviour = GetBehaviour(state);
-            
+
             if (behaviour == null)
             {
                 return;
@@ -93,7 +93,7 @@ namespace View
             }
 
             behaviour.Activate(beforeState);
-            onStateChanged.OnNext(state);
+            onStateChanged.Value = state;
             activeBehaviours.Push(behaviour);
         }
 
@@ -103,7 +103,7 @@ namespace View
             {
                 return;
             }
-            
+
             ViewBehaviour behaviour = activeBehaviours.Peek();
 
             if (state != behaviour.ViewBehaviourState)
@@ -127,7 +127,7 @@ namespace View
                 beforeBehaviour.Activate(state);
             }
 
-            onStateChanged.OnNext(nextState);
+            onStateChanged.Value = nextState;
         }
     }
 }

@@ -16,7 +16,6 @@ namespace Module.Gimmick.SystemGimmick
         private PlayerTargetSyncer playerTargetSyncer;
         private CameraController cameraController;
         private Animator playerAnimator;
-        private CameraShaker cameraShaker;
         private bool isEnable = false;
         private readonly string isInstallAnimationName = "IsInstall";
 
@@ -29,30 +28,50 @@ namespace Module.Gimmick.SystemGimmick
 
             GameObject obj = other.gameObject;
 
-            if (obj.CompareTag(Tag.Player))
+            if (!obj.CompareTag(Tag.Player))
             {
-                playerController = obj.GetComponent<PlayerController>();
-                gravitySwitcher = obj.GetComponent<GravitySwitcher>();
-                playerTargetSyncer = obj.GetComponentInChildren<PlayerTargetSyncer>();
-                cameraController = obj.GetComponentInChildren<CameraController>();
-                playerAnimator = obj.GetComponentInChildren<Animator>();
-                cameraShaker = obj.GetComponentInChildren<CameraShaker>();
-
-                obj.transform.position = target.position;
-                playerTargetSyncer.SetRotation(target.rotation);
-
-                Enable();
-
-                isEnable = true;
-
-                OnTrapped?.Invoke();
+                return;
             }
+
+            if (playerController == null)
+            {
+                CacheComponents(obj);
+            }
+
+            if (!IsValidDirection(playerController.transform.up))
+            {
+                return;
+            }
+
+            obj.transform.position = target.position;
+            playerTargetSyncer.SetRotation(target.rotation);
+
+            Enable();
+
+            isEnable = true;
+
+            OnTrapped?.Invoke();
+        }
+
+        private void CacheComponents(GameObject gameObject)
+        {
+            playerController = gameObject.GetComponent<PlayerController>();
+            gravitySwitcher = gameObject.GetComponent<GravitySwitcher>();
+            playerTargetSyncer = gameObject.GetComponentInChildren<PlayerTargetSyncer>();
+            cameraController = gameObject.GetComponentInChildren<CameraController>();
+            playerAnimator = gameObject.GetComponentInChildren<Animator>();
+        }
+
+        private bool IsValidDirection(Vector3 up)
+        {
+            const float tolerance = 0.01f;
+            return (up - target.up).sqrMagnitude < tolerance * tolerance;
         }
 
         private void Enable()
         {
-            cameraController.SetCameraRotation(target.rotation);
             cameraController.SetFreeCamera(false);
+            cameraController.SetCameraRotation(target.rotation);
 
             const RigidbodyConstraints freezeXZ = RigidbodyConstraints.FreezePositionX |
                                                   RigidbodyConstraints.FreezePositionZ |

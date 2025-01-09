@@ -85,6 +85,9 @@ namespace Application.SceneManagement
                 await UniTask.Yield();
             }
 
+            // ライトマップの初期化
+            LightmapSettings.lightmaps = null;
+
             // アンロードされたシーンのリソースを解放する
             await Resources.UnloadUnusedAssets();
 

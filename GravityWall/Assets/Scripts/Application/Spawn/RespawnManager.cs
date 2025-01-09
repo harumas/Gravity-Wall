@@ -64,6 +64,7 @@ namespace Application.Spawn
             playerController.Lock();
             playerTargetSyncer.Reset();
             gravitySwitcher.Disable();
+            cameraController.SetFreeCamera(false);
         }
 
         public void UnlockPlayer(RespawnContext respawnContext)
@@ -73,6 +74,7 @@ namespace Application.Spawn
             playerController.Unlock();
             playerController.transform.SetPositionAndRotation(respawnContext.Position, respawnContext.Rotation);
             cameraController.SetCameraRotation(respawnContext.Rotation);
+            cameraController.SetFreeCamera(true);
             playerTargetSyncer.SetRotation(respawnContext.Rotation);
 
             if (respawnContext.IsGravitySwitcherEnabled)

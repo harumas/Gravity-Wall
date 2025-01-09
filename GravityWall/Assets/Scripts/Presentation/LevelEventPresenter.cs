@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Threading;
 using Application.Spawn;
 using CoreModule.Helper;
@@ -14,12 +15,14 @@ using static Module.Player.PlayerController;
 
 namespace Presentation
 {
-    public class LevelEventPresenter : IInitializable
+    public class LevelEventPresenter : IInitializable, IDisposable
     {
         private readonly RespawnManager respawnManager;
         private readonly PlayerController playerController;
         private readonly ViewBehaviourNavigator behaviourNavigator;
         private RespawnContext respawnDataOnDeath;
+
+        private readonly CancellationTokenSource levelCancellation = new();
 
         [Inject]
         public LevelEventPresenter(
@@ -42,7 +45,7 @@ namespace Presentation
                     respawnDataOnDeath.IsGravitySwitcherEnabled = gravitySwitcher.IsEnabled;
                     respawnManager.RespawnPlayer(respawnDataOnDeath, RespawnViewSequence).Forget();
                 })
-                .AddTo(pauseView);
+                .AddTo(levelCancellation.Token);
 
             SubscribeComponents(savePointComponents, deathFloorComponents);
         }
@@ -108,6 +111,14 @@ namespace Presentation
             behaviourNavigator.DeactivateBehaviour(ViewBehaviourState.Loading);
         }
 
-        public void Initialize() { }
+        public void Initialize()
+        {
+        }
+
+        public void Dispose()
+        {
+            levelCancellation.Cancel();
+            levelCancellation.Dispose();
+        }
     }
 }

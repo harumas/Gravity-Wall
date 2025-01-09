@@ -19,7 +19,7 @@ using View.View;
 
 namespace Presentation
 {
-    public class PauseBehaviourPresenter : IStartable,IDisposable
+    public class PauseBehaviourPresenter : IStartable, IDisposable
     {
         private readonly ViewBehaviourNavigator navigator;
         private readonly PauseBehaviour pauseBehaviour;
@@ -100,15 +100,16 @@ namespace Presentation
             {
                 return;
             }
-            
+
             if (context.isActive)
             {
                 cursorLocker.SetCursorLock(false);
                 cursorLocker.IsCursorChangeBlock = true;
 
                 playerTargetSyncer.Lock();
-                playerController.Lock();
                 gamepadVibrator.Pause();
+
+                doInput.Value = false;
             }
             else
             {
@@ -116,8 +117,9 @@ namespace Presentation
                 cursorLocker.SetCursorLock(true);
 
                 playerTargetSyncer.Unlock();
-                playerController.Unlock();
                 gamepadVibrator.Resume();
+
+                doInput.Value = true;
             }
         }
 
@@ -137,7 +139,7 @@ namespace Presentation
 
             // ハブにリスポーン
             gameState.SetState(GameState.State.StageSelect);
-            hubSpawner.Respawn().Forget();
+            // hubSpawner.Respawn().Forget();
         }
 
         private void SetClearedLevels(SaveData saveData)
