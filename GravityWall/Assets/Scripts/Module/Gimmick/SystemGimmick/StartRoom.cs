@@ -13,6 +13,7 @@ namespace Module.Gimmick.SystemGimmick
         [SerializeField] private Gate roomGate;
         [SerializeField] private ObjectHider objectHider;
         [SerializeField] private GameObject roomObject;
+        [SerializeField] private GameObject levelPipe;
         [SerializeField] private JustOnceStartGate justOnceStartGate;
 
         public bool IsPlayerEnter => isPlayerEnter;
@@ -28,6 +29,7 @@ namespace Module.Gimmick.SystemGimmick
                 if (!isEnable && !isPlayerEnter)
                 {
                     roomObject.SetActive(false);
+                    levelPipe.SetActive(false);
                     objectHider.Enable();
                 }
             });
