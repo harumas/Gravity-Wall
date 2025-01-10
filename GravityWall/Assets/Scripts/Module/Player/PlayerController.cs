@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Module.Gravity;
 using R3;
 using UnityEngine;
@@ -53,6 +54,7 @@ namespace Module.Player
         private Vector2 moveInput;
         private float landingTime;
         private bool isJumpingInput;
+        private bool unlockFrame;
 
 
         private void Awake()
@@ -181,6 +183,11 @@ namespace Module.Player
 
         public void AddInertia(Vector3 inertia)
         {
+            if (!enabled || unlockFrame)
+            {
+                return;
+            }
+
             simpleInertia?.AddInertia(inertia);
         }
 
@@ -197,6 +204,7 @@ namespace Module.Player
             rigBody.velocity = Vector3.zero;
             moveInput = Vector2.zero;
             onMove.Value = (Vector3.zero, Vector3.zero);
+            simpleInertia.SetInertia(Vector3.zero);
         }
 
         public void Revival()
@@ -211,7 +219,7 @@ namespace Module.Player
             rigBody.constraints = freezeOption;
         }
 
-        public void Unlock()
+        public async void Unlock()
         {
             if (HoldLock)
             {
@@ -220,7 +228,12 @@ namespace Module.Player
 
             enabled = true;
             lockState.Value = false;
+            unlockFrame = true;
             rigBody.constraints = RigidbodyConstraints.FreezeRotation;
+
+            await UniTask.Yield(destroyCancellationToken);
+
+            unlockFrame = false;
         }
     }
 }
