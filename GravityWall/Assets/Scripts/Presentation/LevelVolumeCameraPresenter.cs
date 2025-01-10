@@ -1,4 +1,5 @@
-﻿using CoreModule.Helper;
+﻿using Application.Spawn;
+using CoreModule.Helper;
 using Module.Gimmick;
 using Module.Gimmick.SystemGimmick;
 using Module.InputModule;
@@ -20,6 +21,7 @@ namespace Presentation
             ReusableComponents<LevelVolumeCamera> volumeCameras,
             CameraController cameraController,
             PlayerController playerController,
+            RespawnManager respawnManager,
             IGameInput gameInput)
         {
             this.cameraController = cameraController;
@@ -37,10 +39,21 @@ namespace Presentation
                 cam.IsRotating.Skip(1).Subscribe(isRotating => playerController.IsRotationLocked = isRotating);
 
                 gameInput.CameraRotate.Skip(1).Subscribe(value => cam.EnableAdditionalRotate(value)).AddTo(cam);
+
+                respawnManager.IsRespawning.Skip(1).Subscribe(isRespawning =>
+                {
+                    if (cam.IsEnabled.CurrentValue && !isRespawning)
+                    {
+                        cameraController.SetFreeCamera(false);
+                        cam.SetDirection(cameraController.transform.forward);
+                    }
+                }).AddTo(cam);
             }
         }
 
-        public void Initialize() { }
+        public void Initialize()
+        {
+        }
 
         private void OnEnableChanged(bool isEnable)
         {

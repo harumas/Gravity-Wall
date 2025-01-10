@@ -37,6 +37,16 @@ namespace Module.Gimmick.SystemGimmick
             this.playerTransform = playerTransform;
         }
 
+        public void SetDirection(Vector3 direction)
+        {
+            //カメラに一番近い前方ベクトルを取得
+            Vector3 forward = verticalAdjuster.GetNearestDirection(direction);
+            currentUpVector = verticalAdjuster.GetVerticalDirection(playerTransform.up);
+
+            //カメラの前方ベクトルにバーチャルカメラの基準を設定
+            cameraPivot.rotation = Quaternion.LookRotation(forward, currentUpVector);
+        }
+
         private void Start()
         {
             verticalAdjuster = new VerticalAdjuster();
@@ -167,20 +177,10 @@ namespace Module.Gimmick.SystemGimmick
         private async UniTaskVoid Enable()
         {
             await UniTask.WaitUntil(() => playerTransform != null);
-            
-            InitializeDirection();
+
+            SetDirection(cameraBrain.transform.forward);
             virtualCamera.Priority = 11;
             isEnabled.Value = true;
-        }
-
-        private void InitializeDirection()
-        {
-            //カメラに一番近い前方ベクトルを取得
-            Vector3 forward = verticalAdjuster.GetNearestDirection(cameraBrain.transform.forward);
-            currentUpVector = verticalAdjuster.GetVerticalDirection(playerTransform.up);
-
-            //カメラの前方ベクトルにバーチャルカメラの基準を設定
-            cameraPivot.rotation = Quaternion.LookRotation(forward, currentUpVector);
         }
 
         private void Disable()

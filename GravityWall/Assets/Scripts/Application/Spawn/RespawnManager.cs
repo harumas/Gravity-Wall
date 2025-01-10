@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using Module.Gimmick.SystemGimmick;
 using Module.Gravity;
 using Module.Player;
+using R3;
 using UnityEngine;
 using VContainer;
 
@@ -18,12 +19,12 @@ namespace Application.Spawn
         private readonly CameraController cameraController;
         private readonly PlayerTargetSyncer playerTargetSyncer;
         private readonly GravitySwitcher gravitySwitcher;
-        private bool isRespawning;
+        private readonly ReactiveProperty<bool> isRespawning;
 
         /// <summary>
         /// リスポーン中かどうか
         /// </summary>
-        public bool IsRespawning => isRespawning;
+        public ReadOnlyReactiveProperty<bool> IsRespawning => isRespawning;
 
         [Inject]
         public RespawnManager(
@@ -36,11 +37,13 @@ namespace Application.Spawn
             this.cameraController = cameraController;
             this.playerTargetSyncer = playerTargetSyncer;
             this.gravitySwitcher = gravitySwitcher;
+
+            isRespawning = new ReactiveProperty<bool>();
         }
 
         public async UniTask RespawnPlayer(RespawnContext respawnContext, Func<CancellationToken, UniTask> respawningTask)
         {
-            isRespawning = true;
+            isRespawning.Value = true;
             LockPlayer();
 
             //リスポーン演出があれば実行
@@ -54,7 +57,7 @@ namespace Application.Spawn
             respawnContext.LevelResetter?.ResetLevel();
 
             UnlockPlayer(respawnContext);
-            isRespawning = false;
+            isRespawning.Value = false;
         }
 
         public void LockPlayer()

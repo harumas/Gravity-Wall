@@ -8,6 +8,7 @@ using Module.Gimmick.LevelGimmick;
 using Module.Gimmick.SystemGimmick;
 using Module.Player;
 using R3;
+using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using View;
@@ -23,6 +24,7 @@ namespace Presentation
         private RespawnContext respawnDataOnDeath;
 
         private readonly CancellationTokenSource levelCancellation = new();
+        private SavePoint latestSavePoint;
 
         [Inject]
         public LevelEventPresenter(
@@ -50,9 +52,15 @@ namespace Presentation
             SubscribeComponents(savePointComponents, deathFloorComponents);
         }
 
-        private void OnSave(RespawnContext respawnContext)
+        private void OnSave(SavePoint savePoint, RespawnContext respawnContext)
         {
+            if (latestSavePoint != null)
+            {
+                latestSavePoint.Reset();
+            }
+            
             respawnDataOnDeath = respawnContext;
+            latestSavePoint = savePoint;
         }
 
         private void SubscribeComponents(
@@ -71,7 +79,7 @@ namespace Presentation
                 // 既にセーブ処理が実行されていたら、そのセーブ情報でセーブを行う
                 if (savePoint.IsSaved)
                 {
-                    OnSave(savePoint.LatestContext);
+                    OnSave(savePoint, savePoint.LatestContext);
                 }
             }
 
@@ -80,7 +88,7 @@ namespace Presentation
             {
                 deathFloor.OnEnter += (type, isHubPoint) =>
                 {
-                    if (respawnManager.IsRespawning)
+                    if (respawnManager.IsRespawning.CurrentValue)
                     {
                         return;
                     }
