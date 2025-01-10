@@ -9,8 +9,8 @@ namespace Module.Effect.Sound
     public class EndingViewSoundPlayer : MonoBehaviour
     {
         [SerializeField] private EndingView endingView;
-        // Start is called before the first frame update
-        void Start()
+
+        private void Start()
         {
             endingView.OnContinueButtonPressed.Subscribe(_ => PlaySubmit()).AddTo(this);
             endingView.OnContinueButtonSelected.Subscribe(_ => PlaySelect()).AddTo(this);
