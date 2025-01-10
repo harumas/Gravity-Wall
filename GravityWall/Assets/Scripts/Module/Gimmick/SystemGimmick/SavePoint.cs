@@ -42,8 +42,9 @@ namespace Module.Gimmick.SystemGimmick
     {
         [SerializeField] private LevelResetter levelResetter;
         [SerializeField] private bool canSwitchGravity = true;
+        [SerializeField] private bool canResave = false;
 
-        public event Action<RespawnContext> OnEnterPoint;
+        public event Action<SavePoint, RespawnContext> OnEnterPoint;
         public RespawnContext LatestContext { get; private set; }
 
         public bool IsSaved => isSaved;
@@ -78,7 +79,15 @@ namespace Module.Gimmick.SystemGimmick
         {
             isSaved = true;
             LatestContext = new RespawnContext(transform.position, transform.rotation, Vector3.zero, -transform.up, levelResetter, canSwitchGravity);
-            OnEnterPoint?.Invoke(LatestContext);
+            OnEnterPoint?.Invoke(this, LatestContext);
+        }
+
+        public void Reset()
+        {
+            if (canResave)
+            {
+                isSaved = false;
+            }
         }
     }
 }

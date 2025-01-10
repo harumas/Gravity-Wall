@@ -67,7 +67,7 @@ namespace Module.Gimmick.SystemGimmick
 
         private void OnDisable()
         {
-            if (isPlayerEnter)
+            if (isPlayerEnter && gravitySwitcher != null)
             {
                 gravitySwitcher.Enable();
                 isPlayerEnter = false;

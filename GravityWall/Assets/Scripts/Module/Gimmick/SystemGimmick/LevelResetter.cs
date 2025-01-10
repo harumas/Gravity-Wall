@@ -6,17 +6,30 @@ using UnityEngine;
 
 namespace Module.Gimmick.SystemGimmick
 {
+    internal struct TransformData
+    {
+        public Vector3 Position;
+        public Quaternion Rotation;
+        public Rigidbody Rigidbody;
+
+        public TransformData(Vector3 position, Quaternion rotation, Rigidbody rigidbody)
+        {
+            Position = position;
+            Rotation = rotation;
+            Rigidbody = rigidbody;
+        }
+    }
+
     /// <summary>
     /// レベルの復元を行うクラス
     /// </summary>
     [Serializable]
-    public class LevelResetter 
+    public class LevelResetter
     {
-        [Header("リスポーン時に復元したいオブジェクト")]
-        [SerializeField] private GameObject[] levelObjects;
+        [Header("リスポーン時に復元したいオブジェクト")] [SerializeField] private GameObject[] levelObjects;
 
         private readonly List<(GimmickObject gimmick, bool isEnable)> gimmicks = new List<(GimmickObject gimmick, bool enabled)>();
-        private readonly List<Vector3> levelObjectPositions = new List<Vector3>();
+        private readonly List<TransformData> levelObjectTransforms = new List<TransformData>();
 
         public void RegisterObjects()
         {
@@ -31,7 +44,9 @@ namespace Module.Gimmick.SystemGimmick
 
             foreach (var levelObject in levelObjects)
             {
-                levelObjectPositions.Add(levelObject.transform.position);
+                Rigidbody rig = levelObject.GetComponent<Rigidbody>();
+                var transformData = new TransformData(levelObject.transform.position, levelObject.transform.rotation, rig);
+                levelObjectTransforms.Add(transformData);
             }
         }
 
@@ -41,7 +56,15 @@ namespace Module.Gimmick.SystemGimmick
             for (int i = 0; i < levelObjects.Length; i++)
             {
                 levelObjects[i].gameObject.SetActive(true);
-                levelObjects[i].transform.position = levelObjectPositions[i];
+                TransformData transformData = levelObjectTransforms[i];
+
+                if (transformData.Rigidbody != null)
+                {
+                    transformData.Rigidbody.velocity = Vector3.zero;
+                    transformData.Rigidbody.angularVelocity = Vector3.zero;
+                }
+
+                levelObjects[i].transform.SetPositionAndRotation(transformData.Position, transformData.Rotation);
             }
 
             //ギミックはリセット
@@ -49,7 +72,7 @@ namespace Module.Gimmick.SystemGimmick
             {
                 gimmick.Reset();
             }
-            
+
             //ギミックの有効状態を復元
             foreach (var (gimmick, isEnable) in gimmicks)
             {
