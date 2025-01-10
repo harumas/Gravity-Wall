@@ -1,24 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
+using CoreModule.Save;
 using UnityEngine;
 using View;
 using R3;
 using DG.Tweening;
+using Module.Config;
 using UnityEngine.SceneManagement;
 using UnityEngine.Video;
+using VContainer;
+using VContainer.Unity;
 
 namespace Presentation
 {
-    public class EndingPresenter : MonoBehaviour
+    public class EndingPresenter : IStartable
     {
-        [SerializeField] EndingView endingView;
+        private readonly EndingView endingView;
+        private readonly SaveManager<SaveData> saveManager;
         private bool isSelected = false;
-        // Start is called before the first frame update
-        void Start()
+
+        [Inject]
+        public EndingPresenter(EndingView endingView, SaveManager<SaveData> saveManager)
+        {
+            this.endingView = endingView;
+            this.saveManager = saveManager;
+        }
+
+        public void Start()
         {
             endingView.OnContinueButtonPressed.Subscribe(_ => OnPressedButtonEvent("Hub"));
             endingView.OnNewGameButtonPressed.Subscribe(_ => OnPressedButtonEvent("Hub-Additive"));
-
 
             //‰¹—ÊÝ’è
             //endingView.VideoPlayer.SetDirectAudioVolume(0,1);
@@ -28,14 +39,14 @@ namespace Presentation
             endingView.SelectFirst();
         }
 
-        void OnVideoEnd(VideoPlayer vp)
+        private void OnVideoEnd(VideoPlayer vp)
         {
             endingView.VideoPlayer.gameObject.SetActive(false);
             endingView.gameObject.SetActive(true);
             DOTween.To(() => endingView.CanvasGroup.alpha, (alpha) => endingView.CanvasGroup.alpha = alpha, 1, 1.0f).SetDelay(1);
         }
 
-        void OnPressedButtonEvent(string sceneName)
+        private void OnPressedButtonEvent(string sceneName)
         {
             if (isSelected) return;
 
@@ -43,6 +54,7 @@ namespace Presentation
 
             DOTween.To(() => endingView.CanvasGroup.alpha, (alpha) => endingView.CanvasGroup.alpha = alpha, 0, 1.0f).OnComplete(() =>
             {
+                saveManager.Reset();
                 SceneManager.LoadScene(sceneName);
             });
         }
