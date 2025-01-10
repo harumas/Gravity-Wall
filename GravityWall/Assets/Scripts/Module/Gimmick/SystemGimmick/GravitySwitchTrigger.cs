@@ -1,3 +1,4 @@
+using System;
 using Constants;
 using Module.Player;
 using UnityEngine;
@@ -58,6 +59,15 @@ namespace Module.Gimmick.SystemGimmick
             }
 
             if (other.gameObject.CompareTag(Tag.Player))
+            {
+                gravitySwitcher.Enable();
+                isPlayerEnter = false;
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (isPlayerEnter)
             {
                 gravitySwitcher.Enable();
                 isPlayerEnter = false;
