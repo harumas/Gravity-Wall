@@ -1,6 +1,4 @@
 using Constants;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
@@ -12,7 +10,8 @@ namespace Module.Gimmick
 {
     public class BreakColonyEvent : MonoBehaviour
     {
-        [SerializeField] private GameObject startWall, dengerWall,breakGlassHouse;
+        [SerializeField] private GameObject startWall, dengerWall, breakGlassHouse;
+        [SerializeField] private AudioSource audioSource;
         private CameraShaker cameraShaker;
 
         private bool wasBreak;
@@ -34,7 +33,7 @@ namespace Module.Gimmick
         {
             if (breakGlassHouse && !wasBreak)
             {
-                SoundManager.Instance.Play(Core.Sound.SoundKey.LastBGMSample, Core.Sound.MixerType.BGM, new PlayContext(0.5f,1),true);
+                audioSource.Play();
             }
 
             if (!building) return;
@@ -45,7 +44,7 @@ namespace Module.Gimmick
                 .OnComplete(() =>
                 {
                     building.transform.Find("Effects").gameObject.SetActive(true);
-                    SoundManager.Instance.Play(Core.Sound.SoundKey.Bomb,Core.Sound.MixerType.SE);
+                    SoundManager.Instance.Play(Core.Sound.SoundKey.Bomb, Core.Sound.MixerType.SE);
                     cameraShaker?.ShakeCamera(0.5f, 1);
                 });
         }

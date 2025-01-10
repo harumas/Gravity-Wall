@@ -13,6 +13,7 @@ namespace Module.LevelGimmick
     {
         [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private InGameEventPlayerTrap playerTrap;
+        [SerializeField] private AudioSource audioSource;
 
         private readonly static string sceneName = "EndingMovie";
 
@@ -20,9 +21,9 @@ namespace Module.LevelGimmick
         {
             if (other.CompareTag(Tag.Player))
             {
-                SoundManager.Instance.Pause(1.0f);
+                DOTween.To(() => audioSource.volume, (v) => audioSource.volume = v, 0, 1.0f);
 
-                DOTween.To(() => canvasGroup.alpha,(a) => canvasGroup.alpha = a,1,1.0f).OnComplete(() =>
+                DOTween.To(() => canvasGroup.alpha, (a) => canvasGroup.alpha = a, 1, 1.0f).OnComplete(() =>
                 {
                     SceneManager.LoadScene(sceneName);
                 });
