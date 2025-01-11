@@ -31,7 +31,7 @@ namespace Presentation
             endingView.OnContinueButtonPressed.Subscribe(_ => OnPressedButtonEvent("Hub"));
             endingView.OnNewGameButtonPressed.Subscribe(_ => OnPressedButtonEvent("Hub-Additive"));
 
-            //‰¹—ÊÝ’è
+            //ï¿½ï¿½ï¿½ÊÝ’ï¿½
             //endingView.VideoPlayer.SetDirectAudioVolume(0,1);
             endingView.VideoPlayer.loopPointReached += OnVideoEnd;
             endingView.VideoPlayer.Play();
@@ -41,8 +41,12 @@ namespace Presentation
         {
             endingView.VideoPlayer.gameObject.SetActive(false);
             endingView.gameObject.SetActive(true);
-            endingView.SelectFirst();
-            DOTween.To(() => endingView.CanvasGroup.alpha, (alpha) => endingView.CanvasGroup.alpha = alpha, 1, 1.0f).SetDelay(1);
+            endingView.CanvasGroup.gameObject.SetActive(true);
+            DOTween.To(() => endingView.CanvasGroup.alpha, (alpha) => endingView.CanvasGroup.alpha = alpha, 1, 1.0f).SetDelay(1).OnComplete(() =>
+            {
+                endingView.CanvasGroup.interactable = true;
+                endingView.SelectFirst();
+            });
         }
 
         private void OnPressedButtonEvent(string sceneName)
