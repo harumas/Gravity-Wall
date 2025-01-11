@@ -35,14 +35,13 @@ namespace Presentation
             //endingView.VideoPlayer.SetDirectAudioVolume(0,1);
             endingView.VideoPlayer.loopPointReached += OnVideoEnd;
             endingView.VideoPlayer.Play();
-
-            endingView.SelectFirst();
         }
 
         private void OnVideoEnd(VideoPlayer vp)
         {
             endingView.VideoPlayer.gameObject.SetActive(false);
             endingView.gameObject.SetActive(true);
+            endingView.SelectFirst();
             DOTween.To(() => endingView.CanvasGroup.alpha, (alpha) => endingView.CanvasGroup.alpha = alpha, 1, 1.0f).SetDelay(1);
         }
 
