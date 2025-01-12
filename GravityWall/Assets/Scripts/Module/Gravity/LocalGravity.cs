@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Module.Gravity
 {
@@ -43,7 +44,7 @@ namespace Module.Gravity
             frameMultiplier = multiplier;
             isSetFrameMultiplier = true;
         }
-
+        
         public void Enable()
         {
             enabled = true;
@@ -52,6 +53,11 @@ namespace Module.Gravity
         public void Disable()
         {
             enabled = false;
+            Reset();
+        }
+
+        public void Reset()
+        {
             rigBody.velocity = Vector3.zero;
         }
     }

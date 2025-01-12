@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2364932751008575486}
   - component: {fileID: 7821633098690667856}
   - component: {fileID: 7310782963836759888}
+  - component: {fileID: 2300469358146914477}
   m_Layer: 10
   m_Name: Hallway2
   m_TagString: Untagged
@@ -75,6 +76,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 9.568347, y: 4.2786098, z: 1.8944168}
   m_Center: {x: 5.7600102, y: 1.9009826, z: -18.262741}
+--- !u!114 &2300469358146914477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377908582040476415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad5de17b3d8349c4ab2dc5d119646f62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  temporaryGravityMultiplier: 0.8
+  constraintDirection: {x: 1, y: 0, z: 0}
+  velocityMultiplier: 0.3
 --- !u!1 &992850051734494723
 GameObject:
   m_ObjectHideFlags: 0
@@ -393,7 +409,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 5146
+  m_VersionIndex: 5158
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -509,6 +525,7 @@ GameObject:
   - component: {fileID: 4736550521394203662}
   - component: {fileID: 5302905230367617482}
   - component: {fileID: 1757914206312445526}
+  - component: {fileID: 4030856521058348260}
   m_Layer: 10
   m_Name: HallwayBreak
   m_TagString: Untagged
@@ -573,6 +590,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.7323046, y: 5.104476, z: 11.122768}
   m_Center: {x: 0.26045084, y: 2.052237, z: -0.9451313}
+--- !u!114 &4030856521058348260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021157394677676102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad5de17b3d8349c4ab2dc5d119646f62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  temporaryGravityMultiplier: 0.8
+  constraintDirection: {x: 0, y: 0, z: -1}
+  velocityMultiplier: 0.3
 --- !u!1 &1862778065524196105
 GameObject:
   m_ObjectHideFlags: 0
@@ -637,8 +669,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 7.241309, y: 6.0218916, z: 20.335411}
-  m_Center: {x: 0.4415598, y: 1.2877116, z: 1.6367474}
+  m_Size: {x: 3.0600586, y: 5.117262, z: 12.759373}
+  m_Center: {x: 0.5701968, y: 0.83539677, z: 0.6529541}
 --- !u!1 &4755782400329289845
 GameObject:
   m_ObjectHideFlags: 0
@@ -650,6 +682,7 @@ GameObject:
   - component: {fileID: 8887637774734896039}
   - component: {fileID: 1827600982974785295}
   - component: {fileID: 8580463742533653638}
+  - component: {fileID: 7706482603260605550}
   m_Layer: 10
   m_Name: Hallway1
   m_TagString: Untagged
@@ -714,6 +747,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.6767607, y: 4.220685, z: 10.779175}
   m_Center: {x: -5.819134, y: 1.9802556, z: -6.0518713}
+--- !u!114 &7706482603260605550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4755782400329289845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad5de17b3d8349c4ab2dc5d119646f62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  temporaryGravityMultiplier: 0.8
+  constraintDirection: {x: 0, y: 0, z: -1}
+  velocityMultiplier: 0.3
 --- !u!1 &4781550190251616690
 GameObject:
   m_ObjectHideFlags: 0
@@ -778,8 +826,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 5.591758, y: 7.327572, z: 22.18343}
-  m_Center: {x: 0.052888393, y: 1.9405518, z: -0.15350533}
+  m_Size: {x: 3.102078, y: 4.6585236, z: 13.364807}
+  m_Center: {x: 0.3041711, y: 0.84931946, z: 0.48263454}
 --- !u!1 &5427470103315998133
 GameObject:
   m_ObjectHideFlags: 0
@@ -1098,7 +1146,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 5354
+  m_VersionIndex: 5366
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1521,7 +1569,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4899
+  m_VersionIndex: 4911
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1690,8 +1738,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 7.996613, y: 7.0227585, z: 24.278316}
-  m_Center: {x: 0.39972997, y: 1.7881451, z: 0.6193085}
+  m_Size: {x: 3.1880784, y: 4.9045753, z: 14.140015}
+  m_Center: {x: 0.28486323, y: 0.86720467, z: 0.5198355}
 --- !u!1 &7880027441825853036
 GameObject:
   m_ObjectHideFlags: 0
@@ -1703,6 +1751,7 @@ GameObject:
   - component: {fileID: 7406274129973306973}
   - component: {fileID: 8362392846225457247}
   - component: {fileID: 8871409866978041589}
+  - component: {fileID: 1412992324411296040}
   m_Layer: 10
   m_Name: Hallway0
   m_TagString: Untagged
@@ -1767,6 +1816,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.786446, y: 4.7361965, z: 11.251076}
   m_Center: {x: -6.0169783, y: 2.2622638, z: 18.225645}
+--- !u!114 &1412992324411296040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7880027441825853036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad5de17b3d8349c4ab2dc5d119646f62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  temporaryGravityMultiplier: 0.8
+  constraintDirection: {x: 0, y: 0, z: -1}
+  velocityMultiplier: 0.3
 --- !u!1 &7945288526582511219
 GameObject:
   m_ObjectHideFlags: 0
@@ -2085,7 +2149,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 5074
+  m_VersionIndex: 5086
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -2254,8 +2318,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 7.052009, y: 6.1155195, z: 22.482962}
-  m_Center: {x: 0.29757857, y: 1.3345256, z: 0.69053555}
+  m_Size: {x: 3.4844007, y: 5.2837467, z: 13.157837}
+  m_Center: {x: 0.26329637, y: 0.9186392, z: 0.6221912}
 --- !u!1 &8941000195698989622
 GameObject:
   m_ObjectHideFlags: 0
