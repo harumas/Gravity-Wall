@@ -4,23 +4,20 @@ namespace Module.Gimmick.SystemGimmick
 {
     public class VerticalAdjuster
     {
-        private readonly Vector3[] directions =
+        private readonly Vector3[] initialDirections;
+
+        public VerticalAdjuster(Transform cameraTransform)
         {
-            Vector3.up,
-            Vector3.down,
-            Vector3.right,
-            Vector3.left,
-            Vector3.forward,
-            Vector3.back,
-        };
-        
-        private readonly Vector3[] initialDirections =
-        {
-            Vector3.right,
-            Vector3.left,
-            Vector3.forward,
-            Vector3.back,
-        };
+            initialDirections = new Vector3[]
+            {
+                cameraTransform.right,
+                -cameraTransform.right,
+                cameraTransform.forward,
+                -cameraTransform.forward,
+                cameraTransform.up,
+                -cameraTransform.up,
+            };
+        }
 
         /// <summary>
         /// 指定したベクトルに近い軸のベクトルを取得します。
@@ -31,7 +28,7 @@ namespace Module.Gimmick.SystemGimmick
         {
             const float error = 0.01f;
 
-            foreach (Vector3 direction in directions)
+            foreach (Vector3 direction in initialDirections)
             {
                 if (1f - Vector3.Dot(direction, origin) < error)
                 {

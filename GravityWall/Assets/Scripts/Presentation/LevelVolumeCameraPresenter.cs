@@ -32,7 +32,7 @@ namespace Presentation
 
             foreach (var cam in cameras)
             {
-                cam.AssignPlayerTransform(playerTransform);
+                cam.AssignPlayerTransform(playerTransform, cameraController);
                 cam.IsEnabled.Skip(1).Subscribe(OnEnableChanged).AddTo(cam);
                 cam.Rotation.Skip(1).Subscribe(cameraController.SetCameraRotation).AddTo(cam);
 
