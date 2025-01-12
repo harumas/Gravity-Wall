@@ -195,6 +195,11 @@ namespace Module.Player
 
         private void OnCollisionStay(Collision collision)
         {
+            if (!isEnabled)
+            {
+                return;
+            }
+            
             ContactPoint contact = GetNearestContact(collision);
             (bool canTouch, _) = CheckCollision(contact);
 

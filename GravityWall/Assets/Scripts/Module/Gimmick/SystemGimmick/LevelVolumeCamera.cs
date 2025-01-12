@@ -3,6 +3,7 @@ using Constants;
 using CoreModule.Helper;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Module.Player;
 using R3;
 using UnityEngine;
 
@@ -28,13 +29,15 @@ namespace Module.Gimmick.SystemGimmick
         public Observable<Quaternion> Rotation => Observable.EveryValueChanged(cameraPivot, target => target.rotation);
 
         private CinemachineBrain cameraBrain;
+        private CameraController cameraController;
         private VerticalAdjuster verticalAdjuster;
         private Transform playerTransform;
         private Vector3 currentUpVector;
 
-        public void AssignPlayerTransform(Transform playerTransform)
+        public void AssignPlayerTransform(Transform playerTransform, CameraController cameraController)
         {
             this.playerTransform = playerTransform;
+            this.cameraController = cameraController;
         }
 
         public void SetDirection(Vector3 direction)
@@ -49,7 +52,7 @@ namespace Module.Gimmick.SystemGimmick
 
         private void Start()
         {
-            verticalAdjuster = new VerticalAdjuster();
+            verticalAdjuster = new VerticalAdjuster(virtualCamera.transform);
             cameraBrain = Camera.main.GetComponent<CinemachineBrain>();
         }
 
@@ -148,6 +151,7 @@ namespace Module.Gimmick.SystemGimmick
                 isLastRotation = false;
             }
 
+
             cameraPivot.rotation = nextRotation;
 
             return isLastRotation;
@@ -177,7 +181,7 @@ namespace Module.Gimmick.SystemGimmick
         private async UniTaskVoid Enable()
         {
             await UniTask.WaitUntil(() => playerTransform != null);
-
+            
             SetDirection(cameraBrain.transform.forward);
             virtualCamera.Priority = 11;
             isEnabled.Value = true;
@@ -185,6 +189,7 @@ namespace Module.Gimmick.SystemGimmick
 
         private void Disable()
         {
+            cameraController.SetCameraRotation(cameraPivot.rotation);
             isEnabled.Value = false;
             virtualCamera.Priority = 0;
         }
