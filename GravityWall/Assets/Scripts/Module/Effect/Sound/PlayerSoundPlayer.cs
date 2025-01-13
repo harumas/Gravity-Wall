@@ -1,4 +1,3 @@
-using System.Media;
 using Core.Sound;
 using CoreModule.Sound;
 using Module.Player;

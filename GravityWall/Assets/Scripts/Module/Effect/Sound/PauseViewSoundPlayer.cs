@@ -6,6 +6,9 @@ using View;
 
 namespace Module.Effect.Sound
 {
+    /// <summary>
+    /// ポーズ画面のサウンドを再生するクラス
+    /// </summary>
     public class PauseViewSoundPlayer : MonoBehaviour
     {
         [SerializeField] private PauseView pauseView;

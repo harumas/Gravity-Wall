@@ -45,7 +45,7 @@ namespace Module.Effect
                 // 移動中でない場合は待機
                 await UniTask.WaitUntil(() =>
                 {
-                    bool isPlaySmoke = IsPlaySmoke();
+                    bool isPlaySmoke = CanPlaySmoke();
 
                     if (!isPlaySmoke)
                     {
@@ -69,10 +69,12 @@ namespace Module.Effect
             }
         }
 
-        private bool IsPlaySmoke()
+        private bool CanPlaySmoke()
         {
+            // 着地していて移動中の場合
             (Vector3 vx, Vector3 vy) = GetMovement();
             bool isMoving = vx != Vector3.zero || vy != Vector3.zero;
+            
             return !playerController.IsJumping.CurrentValue && isMoving;
         }
 

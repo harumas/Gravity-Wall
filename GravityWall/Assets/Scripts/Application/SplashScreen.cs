@@ -1,7 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Application
@@ -16,6 +15,7 @@ namespace Application
 
         private void Awake()
         {
+            // 開始時は透明にする
             Color color = splashImage.color;
             color.a = 0f;
             splashImage.color = color;
@@ -23,6 +23,7 @@ namespace Application
 
         public DOTweenAsyncExtensions.TweenAwaiter Show()
         {
+            // フェードイン
             DG.Tweening.Sequence sequence = DOTween.Sequence();
             sequence.Append(splashImage.DOFade(1f, fadeDuration).SetDelay(fadeDelay).SetAutoKill(false));
             sequence.AppendInterval(showDuration);

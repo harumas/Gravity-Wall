@@ -6,7 +6,6 @@ using Application.Spawn;
 using CoreModule.Save;
 using Cysharp.Threading.Tasks;
 using Module.Config;
-using Module.Gimmick.LevelGimmick;
 using Module.Gravity;
 using UnityEngine.SceneManagement;
 using VContainer;
@@ -80,6 +79,7 @@ namespace Application.Sequence
 
             respawnManager.LockPlayer();
 
+            // ステージのアンロードとリスポーンを待機する
             await UniTask.WhenAll(loadExecutor.UnloadAdditiveScenes(), hubSpawner.Respawn());
             
             RefreshClearState();

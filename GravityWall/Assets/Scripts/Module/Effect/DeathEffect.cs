@@ -14,17 +14,18 @@ namespace Module.Effect
         [SerializeField] private PlayerController playerController;
         [SerializeField] private Transform cameraPivot;
         [SerializeField] private Animator anim;
-        
-        [SerializeField] private float shakeDuration = 1.5f;
-        [SerializeField] private float shakeStrength = 0.7f;
-        [SerializeField] private int shakeCount = 20;
-        [SerializeField] private int hitStopDuration = 500;
-        [SerializeField] private int hitStopDelay = 200;
+
+        [SerializeField] private float shakeDuration;
+        [SerializeField] private float shakeStrength;
+        [SerializeField] private int shakeCount;
+        [SerializeField] private int hitStopDuration;
+        [SerializeField] private int hitStopDelay;
 
         private void Start()
         {
             playerController.IsDeath.Subscribe(isDeath =>
             {
+                // 死亡状態になったらエフェクトを再生
                 if (isDeath != PlayerController.DeathType.None)
                 {
                     OnAttackHit(isDeath).Forget();
@@ -34,31 +35,36 @@ namespace Module.Effect
 
         private async UniTaskVoid OnAttackHit(PlayerController.DeathType type)
         {
+            // カメラを揺らす
             cameraPivot.DOShakePosition(shakeStrength, shakeDuration, shakeCount);
 
-            effect.gameObject.SetActive(type == PlayerController.DeathType.Electric);
-            poisonEffect.gameObject.SetActive(type == PlayerController.DeathType.Poison);
-
-            switch (type)
-            {
-                case PlayerController.DeathType.Electric:
-                    SoundManager.Instance.Play(SoundKey.ElectricShock, MixerType.SE);
-                    break;
-                
-                case PlayerController.DeathType.Poison:
-                    SoundManager.Instance.Play(SoundKey.Poison, MixerType.SE);
-                    break;
-            }
-
-            await UniTask.Delay(hitStopDelay);
+            // SE & エフェクト再生
+            PlayEffect(type);
 
             //ヒットストップ
+            await UniTask.Delay(hitStopDelay);
             anim.speed = 0f;
             await UniTask.Delay(hitStopDuration);
             anim.speed = 1f;
 
             effect.gameObject.SetActive(false);
             poisonEffect.gameObject.SetActive(false);
+        }
+
+        private void PlayEffect(PlayerController.DeathType type)
+        {
+            switch (type)
+            {
+                case PlayerController.DeathType.Electric:
+                    effect.gameObject.SetActive(true);
+                    SoundManager.Instance.Play(SoundKey.ElectricShock, MixerType.SE);
+                    break;
+
+                case PlayerController.DeathType.Poison:
+                    poisonEffect.gameObject.SetActive(true);
+                    SoundManager.Instance.Play(SoundKey.Poison, MixerType.SE);
+                    break;
+            }
         }
     }
 }

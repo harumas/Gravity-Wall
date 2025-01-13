@@ -1,14 +1,15 @@
-﻿using System;
-using Core.Sound;
+﻿using Core.Sound;
 using CoreModule.Sound;
 using R3;
 using UnityEngine;
-using View;
 using View.View;
 
 namespace Module.Effect.Sound
 {
-    public class ConfirmNewGaemeViewSoundPlayer : MonoBehaviour
+    /// <summary>
+    /// ゲーム初期化の確認画面のサウンドを再生するクラス
+    /// </summary>
+    public class ConfirmNewGameViewSoundPlayer : MonoBehaviour
     {
         [SerializeField] private ConfirmNewGameView confirmNewGameView;
         

@@ -322,7 +322,12 @@ MonoBehaviour:
   rigidbody: {fileID: 7460748491671481615}
   playerController: {fileID: 4984162288576153998}
   minVelocity: 0
-  minFallTime: 0.3
+  minFallTime: 0.5
+  fadeInDuration: 8
+  fadeInPitchDuration: 10
+  fadeOutDuration: 0.3
+  initialVolume: 0.3
+  initialPitch: 0.8
   audioSource: {fileID: 2335897420075949211}
 --- !u!82 &2335897420075949211
 AudioSource:
@@ -2850,8 +2855,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   faceMeshRenderer: {fileID: 1528954490125991728}
-  blinkTime: 4
-  blinkTimeRandomDelay: 2
+  blinkTime:
+    min: 5
+    max: 8
 --- !u!1 &6197031874662398367
 GameObject:
   m_ObjectHideFlags: 0

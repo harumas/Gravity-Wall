@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace Module.Effect.Sound
 {
+    /// <summary>
+    /// プレイヤーの足音を再生するクラス
+    /// </summary>
     public class PlayerFootEventPlayer : MonoBehaviour
     {
         [SerializeField] private float speedThreshold;
@@ -14,8 +17,10 @@ namespace Module.Effect.Sound
 
         public void FootEvent()
         {
+            // 速度が一定以上の場合は足音を再生
             if (anim.Speed > speedThreshold || anim.IsJumping)
             {
+                // ピッチをランダムにして足音を変化させる
                 float pitch = pitchRange.GetRandom();
                 PlayContext context = new PlayContext(1f, pitch);
 

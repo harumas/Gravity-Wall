@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using System.Threading;
 using Cysharp.Threading.Tasks;
 using Module.Gimmick.SystemGimmick;
 using Module.InputModule;

@@ -33,6 +33,7 @@ namespace Application
             // スプラッシュ画面を表示
             var splashAwaiter = splashScreen.Show();
 
+            // セーブデータ読み込み
             bool succeed = await saveDataLoader.Load(cancellation);
 
             if (!succeed)
@@ -40,19 +41,24 @@ namespace Application
                 return;
             }
 
+            SceneField rootScene = GetRootScene();
+
+            // スプラッシュ画面を表示し切るまで待つ
+            await splashAwaiter;
+
+            // タイトルシーンのロード
+            await GameBoot.LoadRootScene(rootScene);
+
+            // スプラッシュ画面を削除
+            splashScreen.Destroy();
+        }
+
+        private SceneField GetRootScene()
+        {
             // 初回プレイによって初期シーンを切り替える
             bool isFirstPlay = loadedSaveData.ClearedStageList.All(clearFlag => !clearFlag);
             int rootSceneIndex = isFirstPlay ? 0 : 1;
-            SceneField rootScene = sceneGroupTable.SceneGroups[rootSceneIndex].GetScenes().First();
-            
-            // スプラッシュ画面を表示し切るまで待つ
-            await splashAwaiter;
-            
-            // タイトルシーンのロード
-            await GameBoot.LoadRootScene(rootScene);
-            
-            // スプラッシュ画面を削除
-            splashScreen.Destroy();
+            return sceneGroupTable.SceneGroups[rootSceneIndex].GetScenes().First();
         }
     }
 }

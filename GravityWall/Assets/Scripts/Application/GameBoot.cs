@@ -1,6 +1,5 @@
 ﻿using CoreModule.Helper.Attribute;
 using Cysharp.Threading.Tasks;
-using Module.Config;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -18,7 +17,7 @@ namespace Application
         public static bool IsBooted { get; private set; } = false;
 
         private static string startScene;
-        private static bool lockStartScene;
+        private static bool forceStartScene;
         private static AsyncOperation rootSceneOperation;
         private const string BootSceneName = "Root";
 
@@ -27,11 +26,12 @@ namespace Application
         {
             startScene = SceneManager.GetActiveScene().name;
 
+            // エディタ上では初期シーンを強制的に決める
 #if UNITY_EDITOR
-            lockStartScene = EditorPrefs.GetBool("LockStartScene", true);
+            forceStartScene = EditorPrefs.GetBool("LockStartScene", true);
 #endif
 
-            //強制的に初期シーンに遷移する
+            // 強制的に初期シーンに遷移する
             if (startScene != BootSceneName)
             {
                 SceneManager.LoadScene(BootSceneName);
@@ -46,14 +46,9 @@ namespace Application
         {
             IsBooted = true;
 
-            string sceneName = lockStartScene ? startScene : sceneGroup;
+            string sceneName = forceStartScene ? startScene : sceneGroup;
 
             await SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
-        }
-
-        public static void ActivateRootScene()
-        {
-            rootSceneOperation.allowSceneActivation = true;
         }
     }
 }

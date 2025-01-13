@@ -1,13 +1,14 @@
-﻿using System;
-using Core.Sound;
+﻿using Core.Sound;
 using CoreModule.Sound;
 using R3;
 using UnityEngine;
-using View;
 using View.View;
 
 namespace Module.Effect.Sound
 {
+    /// <summary>
+    /// クレジット画面のサウンドを再生するクラス
+    /// </summary>
     public class CreditViewSoundPlayer : MonoBehaviour
     {
         [SerializeField] private CreditView creditView;

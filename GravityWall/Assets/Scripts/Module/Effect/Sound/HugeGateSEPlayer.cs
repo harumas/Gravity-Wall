@@ -6,6 +6,7 @@ namespace Module.Effect.Sound
     {
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private AudioClip open, unlock, steam;
+        
         public void UnlockSEPlay()
         {
             audioSource.PlayOneShot(unlock);

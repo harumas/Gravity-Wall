@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Module.Player;
-using CoreModule.Sound;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Module.Gravity;
+using Module.Player;
+using UnityEngine;
 
-namespace Module.Effect
+namespace Module.Effect.Sound
 {
     public class FallSEPlayer : MonoBehaviour
     {
@@ -13,46 +12,81 @@ namespace Module.Effect
         [SerializeField] private PlayerController playerController;
         [SerializeField] private float minVelocity;
         [SerializeField] private float minFallTime;
+        [SerializeField] private float fadeInDuration;
+        [SerializeField] private float fadeInPitchDuration;
+        [SerializeField] private float fadeOutDuration;
+        [SerializeField] private float initialVolume;
+        [SerializeField] private float initialPitch;
         [SerializeField] private AudioSource audioSource;
 
-        private readonly float volumeChangeRate = 0.5f;
-        private readonly float pitchChangeRate = 0.3f;
-        private readonly float initialVolume = 0.3f;
-        private readonly float initialPitch = 0.8f;
-        private readonly float fadeTime = 0.3f;
-
-        private Tween tween;
-
+        private Tween volumeTween;
+        private Tween pitchTween;
+        private Tween fadeOutTween;
         private float timer;
 
-        // Update is called once per frame
-        private void FixedUpdate()
+        private void Update()
         {
-            if (!playerController.IsGrounding.CurrentValue && rigidbody.velocity.magnitude >= minVelocity)
+            Vector3 velocity = rigidbody.velocity;
+            Vector3 gravity = WorldGravity.Instance.Gravity;
+            
+            // 重力方向に一定速度以上で落下しているか
+            bool isFalling = !playerController.IsGrounding.CurrentValue && 
+                             Vector3.Dot(velocity, gravity) > 0 &&
+                             velocity.sqrMagnitude >= minVelocity * minVelocity;
+
+            if (isFalling)
             {
                 timer += Time.deltaTime;
 
-                if (timer < minFallTime) return;
-
-                if (!audioSource.isPlaying) 
+                if (timer < minFallTime)
                 {
-                    audioSource.Play();
+                    return;
                 }
 
-                audioSource.volume += Time.deltaTime * volumeChangeRate;
-                audioSource.pitch += Time.deltaTime * pitchChangeRate;
+                FadeIn();
             }
             else
             {
-                tween?.Kill();
-                tween = DOTween.To(() => audioSource.volume,(v) => audioSource.volume = v,0, fadeTime).OnComplete(() =>
-                {
-                    audioSource.Pause();
-                    audioSource.volume = initialVolume;
-                    audioSource.pitch = initialPitch;
-                    timer = 0;
-                });
+                FadeOut();
             }
+        }
+
+        private void FadeIn()
+        {
+            if (audioSource.isPlaying)
+            {
+                return;
+            }
+
+            fadeOutTween?.Kill();
+            Reset();
+            audioSource.Play();
+
+            volumeTween = DOTween.To(() => audioSource.volume, (v) => audioSource.volume = v, 1, fadeInDuration);
+            pitchTween = DOTween.To(() => audioSource.pitch, (v) => audioSource.pitch = v, 3, fadeInPitchDuration);
+        }
+
+        private void FadeOut()
+        {
+            if (!audioSource.isPlaying)
+            {
+                return;
+            }
+
+            volumeTween?.Kill();
+            pitchTween?.Kill();
+
+            // 音量をフェードアウト
+            fadeOutTween = DOTween.To(() => audioSource.volume, (v) => audioSource.volume = v, 0, fadeOutDuration).OnComplete(Reset);
+        }
+
+        private void Reset()
+        {
+            // 再生を停止して初期化
+            audioSource.Pause();
+            audioSource.volume = initialVolume;
+            audioSource.pitch = initialPitch;
+            timer = 0;
         }
     }
 }

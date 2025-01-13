@@ -9,11 +9,13 @@ namespace Module.Effect
     public class PlayerMotionBlur : MonoBehaviour
     {
         [SerializeField] private PlayerController playerController;
-        MotionBlur blur;
+        private MotionBlur blur;
         private Volume volume;
+        
         private void Start()
         {
             volume = GameObject.Find("Global Volume").GetComponent<Volume>();
+            
             // 回転のイベント登録
             playerController.IsRotating.Subscribe(isRotating =>
             {

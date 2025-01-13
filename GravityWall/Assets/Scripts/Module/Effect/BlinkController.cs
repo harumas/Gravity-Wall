@@ -1,43 +1,49 @@
+using System;
+using CoreModule.Helper;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Module.Effect
 {
+    /// <summary>
+    /// プレイヤーの瞬きを制御するクラス
+    /// </summary>
     public class BlinkController : MonoBehaviour
     {
         [SerializeField] private SkinnedMeshRenderer faceMeshRenderer;
-        [SerializeField] private float blinkTime = 1.0f;
-        [SerializeField] private float blinkTimeRandomDelay = 2.0f;
-        
-        private float blinkTimer = 0;
+        [SerializeField] private MinMaxValue blinkTime;
 
-        private static readonly int rEyeBlunk = Shader.PropertyToID("_REyeBlink");
-        private static readonly int lEyeBlunk = Shader.PropertyToID("_LEyeBlink");
+        private static readonly int rEyeBlink = Shader.PropertyToID("_REyeBlink");
+        private static readonly int lEyeBlink = Shader.PropertyToID("_LEyeBlink");
 
         private readonly int faceMaterialEyesIndex = 1;
 
-        private void Start()
+        private async void Start()
         {
-            blinkTimer = blinkTime;
+            while (!destroyCancellationToken.IsCancellationRequested)
+            {
+                DOBlink();
+
+                // 瞬きの間隔をランダムに設定
+                float waitTime = blinkTime.GetRandom();
+                await UniTask.Delay(TimeSpan.FromSeconds(waitTime), cancellationToken: destroyCancellationToken);
+            }
         }
 
-        private void Update()
+        private void DOBlink()
         {
-            blinkTimer -= Time.deltaTime;
-
-            if (blinkTimer <= 0)
-            {
-                float scale = 0;
-                DOTween.To(() => scale, (v) => scale = v, 3, 0.15f)
-                    .SetLoops(2, LoopType.Yoyo)
-                    .OnUpdate(() =>
-                    {
-                        faceMeshRenderer.materials[faceMaterialEyesIndex].SetFloat(rEyeBlunk, scale);
-                        faceMeshRenderer.materials[faceMaterialEyesIndex].SetFloat(lEyeBlunk, scale);
-                    });
-
-                blinkTimer = Random.Range(blinkTime, blinkTime + blinkTimeRandomDelay);
-            }
+            float scale = 0;
+            
+            // 目を小さくしてから元に戻す
+            DOTween.To(() => scale, (v) => scale = v, 3, 0.15f)
+                .SetLoops(2, LoopType.Yoyo)
+                .OnUpdate(() =>
+                {
+                    faceMeshRenderer.materials[faceMaterialEyesIndex].SetFloat(rEyeBlink, scale);
+                    faceMeshRenderer.materials[faceMaterialEyesIndex].SetFloat(lEyeBlink, scale);
+                });
         }
     }
 }

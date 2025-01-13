@@ -6,6 +6,9 @@ using View;
 
 namespace Module.Effect.Sound
 {
+    /// <summary>
+    /// エンディング画面のサウンドを再生するクラス
+    /// </summary>
     public class EndingViewSoundPlayer : MonoBehaviour
     {
         [SerializeField] private EndingView endingView;

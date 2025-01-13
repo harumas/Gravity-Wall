@@ -1,4 +1,3 @@
-using System;
 using Core.Sound;
 using CoreModule.Sound;
 using R3;
@@ -7,6 +6,9 @@ using View;
 
 namespace Module.Effect.Sound
 {
+    /// <summary>
+    /// 設定画面のサウンドを再生するクラス
+    /// </summary>
     public class OptionSoundPlayer : MonoBehaviour
     {
         [SerializeField] private OptionView optionView;
@@ -21,7 +23,9 @@ namespace Module.Effect.Sound
             
             optionView.OnBgmVolumeSelected.Subscribe(_ => PlaySelect()).AddTo(this);
             optionView.OnSeVolumeSelected.Subscribe(_ => PlaySelect()).AddTo(this);
+            
             optionView.OnVibrationToggleSelected.Subscribe(_ => PlaySelect()).AddTo(this);
+            
             optionView.OnSensibilityXSelected.Subscribe(_ => PlaySelect()).AddTo(this);
             optionView.OnSensibilityYSelected.Subscribe(_ => PlaySelect()).AddTo(this);
             

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Module.Effect
@@ -7,10 +5,11 @@ namespace Module.Effect
     public class AnimatorStateSetter : MonoBehaviour
     {
         [SerializeField] private Animator animator;
-        [SerializeField] private readonly string paramaterName = "IsOpen";
+        [SerializeField] private string parameterName = "IsOpen";
+
         public void AnimatorSetBool(bool isActive)
         {
-            animator.SetBool(paramaterName, isActive);
+            animator.SetBool(parameterName, isActive);
         }
     }
 }

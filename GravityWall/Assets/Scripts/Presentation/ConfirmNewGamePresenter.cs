@@ -7,6 +7,7 @@ using VContainer;
 using VContainer.Unity;
 using View;
 using View.Behaviour;
+using View.View;
 
 namespace Presentation
 {

@@ -12,10 +12,10 @@ namespace Application.Sequence
     {
         public enum State
         {
-            Tutorial,
-            NewGameSelected,
-            StageSelect,
-            Playing
+            Tutorial, // チュートリアル
+            NewGameSelected, // はじめから選択
+            StageSelect, // ハブでステージ選択中
+            Playing // ステージプレイ中
         }
 
         private readonly ReactiveProperty<State> current = new();

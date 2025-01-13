@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace View
+namespace View.View
 {
     public class ConfirmNewGameView : MonoBehaviour
     {

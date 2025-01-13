@@ -1,5 +1,4 @@
-﻿using System;
-using Core.Sound;
+﻿using Core.Sound;
 using CoreModule.Sound;
 using R3;
 using UnityEngine;

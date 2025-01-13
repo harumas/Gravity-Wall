@@ -1,7 +1,5 @@
-using System;
 using Core.Sound;
 using CoreModule.Sound;
-using Module.Gimmick.LevelGimmick;
 using UnityEngine;
 
 namespace Module.Effect.Sound
