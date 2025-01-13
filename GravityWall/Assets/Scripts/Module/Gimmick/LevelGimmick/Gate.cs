@@ -57,6 +57,14 @@ namespace Module.Gimmick.LevelGimmick
             {
                 gimmick.IsEnabled.Skip(1).Subscribe(UpdateGateState).AddTo(this);
             }
+
+            if (isEnabled.Value)
+            {
+                SetGate(true);
+                gateOpenEvent.Invoke();
+                gate.SetActive(false);
+                ChangeGateLight(true);
+            }
         }
 
         private void UpdateGateState(bool switchEnabled)
@@ -88,6 +96,10 @@ namespace Module.Gimmick.LevelGimmick
                 SoundManager.Instance.Play(SoundKey.GateOpen, MixerType.SE);
                 GateAnimation(true);
             }
+            else
+            {
+                SetGate(true);
+            }
 
             gateOpenEvent.Invoke();
             gate.SetActive(false);
@@ -109,6 +121,10 @@ namespace Module.Gimmick.LevelGimmick
             {
                 SoundManager.Instance.Play(SoundKey.GateOpen, MixerType.SE);
                 GateAnimation(false);
+            }
+            else
+            {
+                SetGate(false);
             }
 
             hologramMeshRenderer.material.SetFloat(alphaProperty, 0.2f);
@@ -168,8 +184,15 @@ namespace Module.Gimmick.LevelGimmick
                 hologramMeshRenderer.transform.DOShakeScale(0.3f);
                 closeTween = DOTween.To(() => alpha, (a) => alpha = a, 0, 1.0f)
                     .SetDelay(0.3f)
-                    .OnUpdate(() => { hologramMeshRenderer.material.SetFloat(alphaProperty, alpha); });
+                    .OnUpdate(() => { hologramMeshRenderer.material = isOpen ? openHoloMaterial : lockHoloMaterial; });
             }
+        }
+
+        void SetGate(bool isOpen)
+        {
+            gateLeft.transform.localPosition = new Vector3(isOpen ? 0.9f : 0, gateLeft.transform.localPosition.y, gateLeft.transform.localPosition.z);
+            gateRight.transform.localPosition = new Vector3(isOpen ? -0.9f : 0, gateLeft.transform.localPosition.y, gateLeft.transform.localPosition.z);
+            hologramMeshRenderer.material.SetFloat(alphaProperty, 0f);
         }
 
         void InstantiateCounterLights()
