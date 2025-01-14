@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Module.Gimmick.LevelGimmick
 {
+    /// <summary>
+    /// 有効/無効状態を持つギミックオブジェクトの抽象クラス
+    /// </summary>
     public abstract class GimmickObject : MonoBehaviour
     {
         [SerializeField] protected SerializableReactiveProperty<bool> isEnabled;
@@ -27,6 +30,9 @@ namespace Module.Gimmick.LevelGimmick
         public abstract void Disable(bool doEffect = true);
         public abstract void Reset();
 
+        /// <summary>
+        /// 親オブジェクトからの親子関係のパスを取得します
+        /// </summary>
         private string GetGimmickPath()
         {
             StringBuilder builder = new StringBuilder();

@@ -1,27 +1,29 @@
-using UnityEngine;
-using Module.Gravity;
 using Constants;
 using DG.Tweening;
+using Module.Gravity;
+using UnityEngine;
 
-namespace Module.LevelGimmick
+namespace Module.Gimmick.LevelGimmick
 {
     public class TutorialBGMPlayer : MonoBehaviour
     {
         [SerializeField] private float fadeTime = 0.3f;
         [SerializeField] private Direction direction;
-        enum Direction
+
+        private enum Direction
         {
-            none,
-            back,
-            forward,
-            right,
-            left
+            None,
+            Back,
+            Forward,
+            Right,
+            Left
         }
 
         private AudioSource audioSource;
-        bool isPlaying = false;
+        private bool isPlaying = false;
         private Tween tween;
         private float volume;
+        
         private void Start()
         {
             audioSource = GetComponent<AudioSource>();
@@ -30,11 +32,14 @@ namespace Module.LevelGimmick
 
         private void OnTriggerStay(Collider other)
         {
-            if (isPlaying) return;
+            if (isPlaying)
+            {
+                return;
+            }
 
             if (other.CompareTag(Tag.Player))
             {
-                if (WorldGravity.Instance.Gravity == GetDirection() || direction == Direction.none)
+                if (WorldGravity.Instance.Gravity == GetDirection() || direction == Direction.None)
                 {
                     tween?.Kill();
                     audioSource.volume = volume;
@@ -46,7 +51,11 @@ namespace Module.LevelGimmick
 
         private void OnTriggerExit(Collider other)
         {
-            if (!isPlaying) return;
+            if (!isPlaying)
+            {
+                return;
+            }
+            
             if (other.CompareTag(Tag.Player))
             {
                 tween?.Kill();
@@ -62,9 +71,9 @@ namespace Module.LevelGimmick
         {
             switch (direction)
             {
-                case Direction.back:
+                case Direction.Back:
                     return Vector3.back;
-                case Direction.forward:
+                case Direction.Forward:
                     return Vector3.forward;
             }
 

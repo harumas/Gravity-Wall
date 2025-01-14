@@ -54,7 +54,7 @@ namespace Module.Player
 
             playerController.IsDeath.Subscribe(isDeath =>
                 {
-                    animator.IsDeath = isDeath != PlayerController.DeathType.None;
+                    animator.IsDeath = isDeath != DeathType.None;
                 })
                 .AddTo(this);
 

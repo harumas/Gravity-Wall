@@ -4,7 +4,6 @@ using Module.Gravity;
 using DG.Tweening;
 using Constants;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.Events;
 
 namespace Module.Gimmick.LevelGimmick

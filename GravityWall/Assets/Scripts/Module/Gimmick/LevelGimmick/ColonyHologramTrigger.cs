@@ -1,11 +1,10 @@
-using Constants;
-using Module.Gimmick.LevelGimmick;
-using UnityEngine;
-using Cysharp.Threading.Tasks;
 using System;
+using Constants;
 using CoreModule.Sound;
+using Cysharp.Threading.Tasks;
+using UnityEngine;
 
-namespace Module.LevelGimmick
+namespace Module.Gimmick.LevelGimmick
 {
     public class ColonyHologramTrigger : MonoBehaviour
     {

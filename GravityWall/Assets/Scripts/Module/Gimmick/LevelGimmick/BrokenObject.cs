@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Module.Gimmick.LevelGimmick
 {
+    /// <summary>
+    /// エンディングの破壊オブジェクトの移動コンポーネント
+    /// </summary>
     public class BrokenObject : MonoBehaviour
     {
         [SerializeField] private GameObject levels;
@@ -14,6 +17,7 @@ namespace Module.Gimmick.LevelGimmick
             gameObject.SetActive(true);
             levels.gameObject.SetActive(true);
 
+            // 初期位置まで移動させてからエフェクトを再生
             return levels.transform
                 .DOLocalMove(Vector3.zero, 0.5f)
                 .OnComplete(() =>

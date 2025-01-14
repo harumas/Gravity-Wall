@@ -26,14 +26,14 @@ namespace Module.Effect
             playerController.IsDeath.Subscribe(isDeath =>
             {
                 // 死亡状態になったらエフェクトを再生
-                if (isDeath != PlayerController.DeathType.None)
+                if (isDeath != DeathType.None)
                 {
                     OnAttackHit(isDeath).Forget();
                 }
             }).AddTo(this);
         }
 
-        private async UniTaskVoid OnAttackHit(PlayerController.DeathType type)
+        private async UniTaskVoid OnAttackHit(DeathType type)
         {
             // カメラを揺らす
             cameraPivot.DOShakePosition(shakeStrength, shakeDuration, shakeCount);
@@ -51,16 +51,16 @@ namespace Module.Effect
             poisonEffect.gameObject.SetActive(false);
         }
 
-        private void PlayEffect(PlayerController.DeathType type)
+        private void PlayEffect(DeathType type)
         {
             switch (type)
             {
-                case PlayerController.DeathType.Electric:
+                case DeathType.Electric:
                     effect.gameObject.SetActive(true);
                     SoundManager.Instance.Play(SoundKey.ElectricShock, MixerType.SE);
                     break;
 
-                case PlayerController.DeathType.Poison:
+                case DeathType.Poison:
                     poisonEffect.gameObject.SetActive(true);
                     SoundManager.Instance.Play(SoundKey.Poison, MixerType.SE);
                     break;

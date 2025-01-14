@@ -1,17 +1,15 @@
 using R3;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.VFX;
 
 namespace Module.Gimmick.LevelGimmick
 {
     public class RocketGate : GimmickObject
     {
         [SerializeField] private GimmickObject[] observedSwitches;
-        [SerializeField] UnityEvent openEvent;
+        [SerializeField] private UnityEvent openEvent;
         private Animator animator;
+        private static readonly int isOpen = Animator.StringToHash("IsOpen");
 
         private void Start()
         {
@@ -30,7 +28,7 @@ namespace Module.Gimmick.LevelGimmick
 
         public override void Enable(bool doEffect = true)
         {
-            animator.SetBool("IsOpen",true);
+            animator.SetBool(isOpen,true);
         }
 
         public override void Reset()

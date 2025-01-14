@@ -1,6 +1,5 @@
 using System;
 using Constants;
-using Module.Player;
 using UnityEngine;
 
 namespace Module.Gimmick.SystemGimmick

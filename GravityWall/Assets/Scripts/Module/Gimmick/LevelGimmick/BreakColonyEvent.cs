@@ -1,31 +1,26 @@
-using Constants;
-using UnityEngine;
-using Cysharp.Threading.Tasks;
 using System;
+using Constants;
+using Cysharp.Threading.Tasks;
 using Module.Player;
-using Module.Gimmick.LevelGimmick;
+using UnityEngine;
 
-namespace Module.Gimmick
+namespace Module.Gimmick.LevelGimmick
 {
     public class BreakColonyEvent : MonoBehaviour
     {
-        [SerializeField] private BrokenObject startWall, dangerWall, breakGlassHouse;
-        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private BrokenObject startWall, dangerWall;
         private CameraShaker cameraShaker;
 
         private bool wasBreak;
 
         private async UniTaskVoid OnBreakColony()
         {
-            audioSource.Play();
-            SetBuilding(breakGlassHouse).Forget();
             SetBuilding(startWall).Forget();
 
             wasBreak = true;
 
             await UniTask.Delay(TimeSpan.FromSeconds(1));
 
-            audioSource.Play();
             SetBuilding(dangerWall).Forget();
         }
 

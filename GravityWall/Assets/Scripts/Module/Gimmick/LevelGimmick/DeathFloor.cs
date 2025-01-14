@@ -1,5 +1,6 @@
 using System;
 using Constants;
+using Module.Player;
 using UnityEngine;
 using static Module.Player.PlayerController;
 

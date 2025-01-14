@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Module.Player
 {
+    /// <summary>
+    /// プレイヤーの処理関数をまとめたクラス
+    /// </summary>
     public class PlayerFunction
     {
         private readonly WorldGravity worldGravity;
@@ -122,14 +125,6 @@ namespace Module.Player
             return isHit && !hitInfo.transform.CompareTag(Tag.UnJumpable);
         }
 
-        public bool IsGrounding()
-        {
-            Vector3 rayDirection = worldGravity.Direction;
-            bool isHit = Physics.Raycast(transform.position, rayDirection, out RaycastHit hitInfo, parameter.AllowJumpDistance, GroundLayerMask);
-
-            return isHit;
-        }
-
         public bool CanGroundingAgain(float landingTime)
         {
             // 前のジャンプから一定時間が経過していたらチェック開始
@@ -160,6 +155,7 @@ namespace Module.Player
 
         public void PerformAdditionalJump()
         {
+            // 時間経過に応じてジャンプ力を変化させる
             float time = Time.time - lastJumpTime;
             float jumpPower = parameter.GetAdditionalJumpPower(time);
             Vector3 force = -worldGravity.Direction * jumpPower;

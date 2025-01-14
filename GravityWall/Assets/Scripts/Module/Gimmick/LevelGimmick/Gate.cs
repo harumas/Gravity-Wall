@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Media;
 using Core.Sound;
 using CoreModule.Sound;
 using DG.Tweening;
@@ -12,29 +11,33 @@ namespace Module.Gimmick.LevelGimmick
 {
     public class Gate : GimmickObject
     {
+        [Header("ゲートの開閉イベント")]
         [SerializeField] private UnityEvent gateOpenEvent;
+
         [SerializeField] private UnityEvent gateCloseEvent;
+
         [SerializeField] private GameObject gate;
         [SerializeField] private MeshRenderer[] gateMeshRenderers;
-        [SerializeField] private Transform lightBasePosition;
         [SerializeField] private Transform gateLeft, gateRight;
         [SerializeField] private GameObject[] pooledLights;
-        [SerializeField] private int switchMaxCount = 1;
+        [SerializeField] private int switchMaxCount;
         [SerializeField] private GimmickObject[] observedSwitches;
-        [SerializeField] private float setWidth = 2.7f;
+        [SerializeField] private float setWidth;
+        [SerializeField] private float openGateWidth = 0.9f;
+        [SerializeField] private float openGateDuration = 0.3f;
         [SerializeField, ReadOnly] private int usingCount = 0;
         [SerializeField] private Material lockHoloMaterial, openHoloMaterial;
         [SerializeField] private MeshRenderer hologramMeshRenderer;
+        [SerializeField, ColorUsage(true, true)] private Color enableColor;
+        [SerializeField, ColorUsage(true, true)] private Color disableColor;
         [SerializeField] private bool isEffect;
 
         private int switchCount = 0;
         private List<Material> lightMaterials = new List<Material>();
         private Tween closeTween;
+
         private static readonly int emissionColor = Shader.PropertyToID("_EmissionColor");
         private static readonly int alphaProperty = Shader.PropertyToID("_Alpha");
-
-        private Color green = new Color(1.2f, 12f, 7);
-        private Color red = new Color(12f, 1.1f, 2);
 
         public bool IsUsing => UsingCount > 0;
 
@@ -48,19 +51,21 @@ namespace Module.Gimmick.LevelGimmick
             }
         }
 
-
         private void Start()
         {
+            // ライトの初期化
             InstantiateCounterLights();
             ChangeGateLight(false);
+
             foreach (GimmickObject gimmick in observedSwitches)
             {
                 gimmick.IsEnabled.Skip(1).Subscribe(UpdateGateState).AddTo(this);
             }
 
+            // 最初から有効の場合はゲートを開く
             if (isEnabled.Value)
             {
-                SetGate(true);
+                SetGateNoEffect(true);
                 gateOpenEvent.Invoke();
                 gate.SetActive(false);
                 ChangeGateLight(true);
@@ -71,7 +76,10 @@ namespace Module.Gimmick.LevelGimmick
         {
             ChangeCounterLights(switchEnabled);
 
+            // スイッチの入力に応じてカウントを増減
             switchCount += switchEnabled ? 1 : -1;
+
+            // カウントが最大値に達したらゲートを開く
             bool isOpen = switchCount >= switchMaxCount;
 
             if (isOpen)
@@ -98,7 +106,7 @@ namespace Module.Gimmick.LevelGimmick
             }
             else
             {
-                SetGate(true);
+                SetGateNoEffect(true);
             }
 
             gateOpenEvent.Invoke();
@@ -114,7 +122,7 @@ namespace Module.Gimmick.LevelGimmick
             {
                 return;
             }
-            
+
             closeTween?.Kill();
 
             if (doEffect)
@@ -124,7 +132,7 @@ namespace Module.Gimmick.LevelGimmick
             }
             else
             {
-                SetGate(false);
+                SetGateNoEffect(false);
             }
 
             hologramMeshRenderer.material.SetFloat(alphaProperty, 0.2f);
@@ -142,60 +150,66 @@ namespace Module.Gimmick.LevelGimmick
             Disable(false);
         }
 
-        void ChangeGateLight(bool isOpen)
+        private void ChangeGateLight(bool isOpen)
         {
-            for (int i = 0; i < gateMeshRenderers.Length; i++)
+            foreach (var gate in gateMeshRenderers)
             {
-                if (isOpen)
-                {
-                    gateMeshRenderers[i].material.SetColor(emissionColor, green * 5.0f);
-                }
-                else
-                {
-                    gateMeshRenderers[i].material.SetColor(emissionColor, red * 5.0f);
-                }
+                gate.material.SetColor(emissionColor, isOpen ? enableColor : disableColor);
             }
         }
 
-        void ChangeCounterLights(bool isOn)
+        private void ChangeCounterLights(bool isOn)
         {
             if (isOn)
             {
-                lightMaterials[switchCount].SetColor(emissionColor, green * 5.0f);
+                lightMaterials[switchCount].SetColor(emissionColor, enableColor);
             }
             else
             {
-                lightMaterials[switchCount - 1].SetColor(emissionColor, red * 5.0f);
+                lightMaterials[switchCount - 1].SetColor(emissionColor, disableColor);
             }
         }
 
-        void GateAnimation(bool isOpen)
+        private void GateAnimation(bool isOpen)
         {
-            if (!isEffect) return;
+            if (!isEffect)
+            {
+                return;
+            }
 
-            gateLeft.DOLocalMoveX(isOpen ? 0.9f : 0, 0.3f);
-            gateRight.DOLocalMoveX(isOpen ? -0.9f : 0, 0.3f);
+            // ゲートの開閉アニメーション
+            gateLeft.DOLocalMoveX(isOpen ? openGateWidth : 0, openGateDuration);
+            gateRight.DOLocalMoveX(isOpen ? -openGateWidth : 0, openGateDuration);
 
             hologramMeshRenderer.material = isOpen ? openHoloMaterial : lockHoloMaterial;
 
+            // 鍵穴の開放エフェクトの再生
             if (isOpen)
             {
-                float alpha = 0.2f;
-                hologramMeshRenderer.transform.DOShakeScale(0.3f);
-                closeTween = DOTween.To(() => alpha, (a) => alpha = a, 0, 1.0f)
-                    .SetDelay(0.3f)
-                    .OnUpdate(() => { hologramMeshRenderer.material = isOpen ? openHoloMaterial : lockHoloMaterial; });
+                PlayKeyHoleEffect();
             }
         }
 
-        void SetGate(bool isOpen)
+        private void PlayKeyHoleEffect()
         {
-            gateLeft.transform.localPosition = new Vector3(isOpen ? 0.9f : 0, gateLeft.transform.localPosition.y, gateLeft.transform.localPosition.z);
-            gateRight.transform.localPosition = new Vector3(isOpen ? -0.9f : 0, gateLeft.transform.localPosition.y, gateLeft.transform.localPosition.z);
+            float alpha = 0.2f;
+            hologramMeshRenderer.transform.DOShakeScale(openGateDuration);
+            hologramMeshRenderer.material = openHoloMaterial;
+
+            closeTween = DOTween.To(() => alpha, (a) => alpha = a, 0, 1.0f)
+                .SetDelay(openGateDuration)
+                .OnUpdate(() => { hologramMeshRenderer.material.SetFloat(alphaProperty, alpha); });
+        }
+
+        private void SetGateNoEffect(bool isOpen)
+        {
+            float x = isOpen ? openGateWidth : 0;
+            gateLeft.transform.localPosition = new Vector3(x, gateLeft.transform.localPosition.y, gateLeft.transform.localPosition.z);
+            gateRight.transform.localPosition = new Vector3(-x, gateRight.transform.localPosition.y, gateRight.transform.localPosition.z);
             hologramMeshRenderer.material.SetFloat(alphaProperty, 0f);
         }
 
-        void InstantiateCounterLights()
+        private void InstantiateCounterLights()
         {
             if (switchMaxCount > pooledLights.Length)
             {
@@ -203,6 +217,7 @@ namespace Module.Gimmick.LevelGimmick
                 return;
             }
 
+            // 設定された幅から間隔を計算する
             int numberOfGaps = switchMaxCount + 1;
             float spacing = setWidth / numberOfGaps;
 
@@ -210,8 +225,15 @@ namespace Module.Gimmick.LevelGimmick
             {
                 var lightObj = pooledLights[i];
                 lightObj.SetActive(true);
+
+                // 設定された幅で中央揃えで配置する
                 float xPosition = -setWidth / 2 + spacing * (i + 1);
-                lightObj.transform.localPosition = new Vector3(xPosition, lightObj.transform.localPosition.y, lightObj.transform.localPosition.z);
+
+                // ローカル座標を変更
+                Vector3 localPosition = lightObj.transform.localPosition;
+                localPosition = new Vector3(xPosition, localPosition.y, localPosition.z);
+                lightObj.transform.localPosition = localPosition;
+
                 lightMaterials.Add(lightObj.GetComponent<Renderer>().material);
             }
         }

@@ -40,14 +40,6 @@ namespace Module.Player
         public ReadOnlyReactiveProperty<bool> LockState => lockState;
         [SerializeField] private SerializableReactiveProperty<bool> lockState = new SerializableReactiveProperty<bool>();
 
-        public enum DeathType
-        {
-            None,
-            Electric,
-            Poison,
-            Fall,
-        }
-
         public ReadOnlyReactiveProperty<(Vector3 xv, Vector3 yv)> OnMove => onMove;
         private ReactiveProperty<(Vector3 xv, Vector3 yv)> onMove = new ReactiveProperty<(Vector3 xv, Vector3 yv)>();
 
@@ -55,7 +47,6 @@ namespace Module.Player
         private float landingTime;
         private bool isJumpingInput;
         private bool unlockFrame;
-
 
         private void Awake()
         {
@@ -231,9 +222,18 @@ namespace Module.Player
             unlockFrame = true;
             rigBody.constraints = RigidbodyConstraints.FreezeRotation;
 
+            // 有効化直後のゲームループが終わるまで1フレーム待機
             await UniTask.Yield(destroyCancellationToken);
 
             unlockFrame = false;
         }
+    }
+
+    public enum DeathType
+    {
+        None,
+        Electric,
+        Poison,
+        Fall,
     }
 }

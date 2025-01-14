@@ -1,8 +1,5 @@
 using DG.Tweening;
 using R3;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
 namespace Module.Gimmick.LevelGimmick

@@ -6,7 +6,6 @@ using UnityEngine.Rendering.Universal;
 using Cinemachine;
 using Module.Gimmick.SystemGimmick;
 using Constants;
-using CoreModule.Sound;
 
 namespace Module.Gimmick.LevelGimmick
 {

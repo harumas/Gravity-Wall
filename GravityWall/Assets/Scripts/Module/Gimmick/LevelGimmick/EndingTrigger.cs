@@ -1,13 +1,10 @@
 using Constants;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using DG.Tweening;
 using Module.Gimmick.SystemGimmick;
+using UnityEngine;
 using UnityEngine.SceneManagement;
-using CoreModule.Sound;
 
-namespace Module.LevelGimmick
+namespace Module.Gimmick.LevelGimmick
 {
     public class EndingTrigger : MonoBehaviour
     {

@@ -22,9 +22,11 @@ namespace Module.Gimmick.LevelGimmick
 
         private async UniTaskVoid CloseAsync()
         {
+            // ダクトの扉が閉まるアニメーションを待機
             await UniTask.Delay(TimeSpan.FromSeconds(closeInterval), cancellationToken: destroyCancellationToken);
             controller.IsOpen = false;
             
+            // カメラがプレイヤーに戻るまで待
             await UniTask.Delay(TimeSpan.FromSeconds(returnCameraInterval), cancellationToken: destroyCancellationToken);
             virtualCamera.Priority = 0;
         }
