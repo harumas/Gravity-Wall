@@ -17,21 +17,20 @@ namespace Module.Gimmick
 
         private async UniTaskVoid OnBreakColony()
         {
+            audioSource.Play();
             SetBuilding(breakGlassHouse).Forget();
-
             SetBuilding(startWall).Forget();
 
             wasBreak = true;
 
             await UniTask.Delay(TimeSpan.FromSeconds(1));
 
+            audioSource.Play();
             SetBuilding(dangerWall).Forget();
         }
 
         private async UniTaskVoid SetBuilding(BrokenObject building)
         {
-            audioSource.Play();
-
             await building.DoMove();
 
             cameraShaker.ShakeCamera(0.5f, 1);
