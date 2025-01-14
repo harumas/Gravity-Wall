@@ -1,57 +1,48 @@
 using Constants;
 using UnityEngine;
-using DG.Tweening;
 using Cysharp.Threading.Tasks;
 using System;
 using Module.Player;
-using CoreModule.Sound;
+using Module.Gimmick.LevelGimmick;
 
 namespace Module.Gimmick
 {
     public class BreakColonyEvent : MonoBehaviour
     {
-        [SerializeField] private GameObject startWall, dengerWall, breakGlassHouse;
+        [SerializeField] private BrokenObject startWall, dangerWall, breakGlassHouse;
         [SerializeField] private AudioSource audioSource;
         private CameraShaker cameraShaker;
 
         private bool wasBreak;
 
-        async UniTaskVoid OnBreakColony()
+        private async UniTaskVoid OnBreakColony()
         {
-            SetBuilding(breakGlassHouse);
+            SetBuilding(breakGlassHouse).Forget();
 
-            SetBuilding(startWall);
+            SetBuilding(startWall).Forget();
 
             wasBreak = true;
 
             await UniTask.Delay(TimeSpan.FromSeconds(1));
 
-            SetBuilding(dengerWall);
+            SetBuilding(dangerWall).Forget();
         }
 
-        private void SetBuilding(GameObject building)
+        private async UniTaskVoid SetBuilding(BrokenObject building)
         {
-            if (breakGlassHouse && !wasBreak)
-            {
-                audioSource.Play();
-            }
+            audioSource.Play();
 
-            if (!building) return;
+            await building.DoMove();
 
-            var dengerWallLevels = building.transform.Find("Levels").gameObject;
-            building.gameObject.SetActive(true);
-            dengerWallLevels.transform.DOLocalMove(Vector3.zero, 0.5f)
-                .OnComplete(() =>
-                {
-                    building.transform.Find("Effects").gameObject.SetActive(true);
-                    SoundManager.Instance.Play(Core.Sound.SoundKey.Bomb, Core.Sound.MixerType.SE);
-                    cameraShaker?.ShakeCamera(0.5f, 1);
-                });
+            cameraShaker.ShakeCamera(0.5f, 1);
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (wasBreak) return;
+            if (wasBreak)
+            {
+                return;
+            }
 
             if (other.CompareTag(Tag.Player))
             {

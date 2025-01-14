@@ -35,6 +35,8 @@ namespace Module.Gimmick.LevelGimmick
         private readonly int cameraHighPriority = 20;
         private readonly float GravityScale = 30;
 
+        private DepthOfField depth;
+
         private void Awake()
         {
             feature = rendererData.rendererFeatures.Find(f => f.name == radialBlurFeatureName);
@@ -43,6 +45,10 @@ namespace Module.Gimmick.LevelGimmick
                 feature.SetActive(false);
             }
         }
+
+        private readonly float depthFocusDistance = 200;
+        private readonly float depthFocalLength = 120;
+        private readonly float defaultDepthAperture = 17;
 
         private void OnTriggerExit(Collider other)
         {
@@ -53,6 +59,13 @@ namespace Module.Gimmick.LevelGimmick
                     foreach (var trigger in gravitySwitchTriggers)
                     {
                         trigger.SetEnable(false);
+                    }
+
+                    if (volume.profile.TryGet<DepthOfField>(out depth))
+                    {
+                        depth.focusDistance.value = depthFocusDistance;
+                        depth.focalLength.value = depthFocalLength;
+                        depth.aperture.value = defaultDepthAperture;
                     }
 
                     fallCollider.SetActive(true);

@@ -5,8 +5,8 @@ namespace Module.Effect
     public class EffectPlayer : MonoBehaviour
     {
         private VisualEffect[] visualEffects;
-        
-        void Start()
+
+        private void Start()
         {
             visualEffects = GetComponentsInChildren<VisualEffect>();
             PlayEffect();

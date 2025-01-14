@@ -15,7 +15,8 @@ namespace Module.PlayTest
         [SerializeField] private Volume volume;
         [SerializeField] private CanvasGroup tutorialCanvas;
         [SerializeField] private float depthFocusDistance = 200;
-        [SerializeField] private float depthFocalLength = 200;
+        [SerializeField] private float depthFocalLength = 120;
+        private readonly float defaultDepthAperture = 17;
         [SerializeField] private float startDelay = 1f;
         [SerializeField] private float endDelay = 1.5f;
         [SerializeField] private float tutorialGuideDelay = 4.5f;
@@ -32,6 +33,7 @@ namespace Module.PlayTest
             {
                 depth.focusDistance.value = depthFocusDistance;
                 depth.focalLength.value = depthFocalLength;
+                depth.aperture.value = defaultDepthAperture;
             }
 
             await UniTask.Delay(TimeSpan.FromSeconds(endDelay), cancellationToken: destroyCancellationToken);
