@@ -12,6 +12,7 @@ namespace Module.Gimmick.LevelGimmick
         public Tween DoMove()
         {
             gameObject.SetActive(true);
+            levels.gameObject.SetActive(true);
 
             return levels.transform
                 .DOLocalMove(Vector3.zero, 0.5f)
