@@ -1,13 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using Module.Gravity;
 using DG.Tweening;
 using Constants;
+using UnityEngine.Rendering;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
-namespace Module.Gimmick
+
+namespace Module.Gimmick.LevelGimmick
 {
     public class BreakGlass : MonoBehaviour
     {
@@ -16,6 +15,7 @@ namespace Module.Gimmick
         [SerializeField] private PlayableDirector director;
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private UnityEvent onClear;
+        [SerializeField] private Volume volume;
         Vector3 scale;
 
         void Start()
@@ -27,27 +27,38 @@ namespace Module.Gimmick
         {
             if (collision.gameObject.CompareTag(Tag.Player))
             {
-                if (WorldGravity.Instance.Gravity == Vector3.left)
+                if (WorldGravity.Instance.Gravity == Vector3.forward)
                 {
-                    glass.SetActive(false);
-                    breakedGlass.SetActive(true);
-                    Time.timeScale = 0.05f;
-                    Time.fixedDeltaTime = 0.001f;
-                    collider.enabled = false;
-
-                    onClear.Invoke();
-
-                    audioSource.Play();
-
-                    breakedGlass.transform.localScale = scale;
-                    breakedGlass.transform.DOScaleZ(0.7f, 3.0f).SetUpdate(true).OnComplete(() =>
-                    {
-                        Time.timeScale = 1.0f;
-                        Time.fixedDeltaTime = 0.01f;
-                        SceneManager.LoadScene("Test_stairs_01");
-                    });
+                    BreakGlassEffect();
                 }
             }
+        }
+
+
+        private readonly float timeScale = 0.05f;
+        private readonly float fixedDeltaTime = 0.001f;
+        private readonly float defaultFixedDeltaTime = 0.01f;
+        private readonly float defaultTimeScale = 1.0f;
+        void BreakGlassEffect()
+        {
+            glass.SetActive(false);
+            breakedGlass.SetActive(true);
+            Time.timeScale = timeScale;
+            Time.fixedDeltaTime = fixedDeltaTime;
+            collider.enabled = false;
+
+            onClear.Invoke();
+
+            audioSource.Play();
+
+            breakedGlass.transform.localScale = scale;
+            breakedGlass.transform.DOScaleZ(0.7f, 1.0f)
+            .SetUpdate(true)
+            .OnComplete(() =>
+            {
+                Time.timeScale = defaultTimeScale;
+                Time.fixedDeltaTime = defaultFixedDeltaTime;
+            });
         }
     }
 }

@@ -16,5 +16,8 @@ namespace Constants
 		public const string GameController = "GameController";
 		public const string Wall = "Wall";
 		public const string BatteryBox = "BatteryBox";
+		public const string LevelSegment = "LevelSegment";
+		public const string UnJumpable = "UnJumpable";
+		public const string Dither = "Dither";
 	}
 }

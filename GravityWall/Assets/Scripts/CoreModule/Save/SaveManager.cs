@@ -1,4 +1,6 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using Cysharp.Threading.Tasks;
+using R3;
 using UnityEngine;
 
 namespace CoreModule.Save
@@ -10,18 +12,23 @@ namespace CoreModule.Save
     public class SaveManager<T> where T : ICloneable<T>
     {
         public T Data { get; private set; }
+        public Observable<T> OnSaved => onSaved;
         
-        public void Initialize(T data)
+        private T defaultSaveData;
+        private readonly Subject<T> onSaved = new Subject<T>();
+        
+        public void Initialize(T data, T defaultSaveData)
         {
             if (Data != null)
             {
                 Debug.LogError("SaveManagerは初期化済みです");
                 return;
             }
-            
+
             Data = data;
+            this.defaultSaveData = defaultSaveData;
         }
-        
+
         /// <summary>
         /// ロード処理。ファイルがなかった場合は、SaveDataクラスの初期値を使う
         /// </summary>
@@ -29,6 +36,7 @@ namespace CoreModule.Save
         {
             string name = typeof(T).Name;
             SaveUtility.Delete(name);
+            Data = defaultSaveData.Clone();
         }
 
         /// <summary>
@@ -38,6 +46,7 @@ namespace CoreModule.Save
         {
             string name = typeof(T).Name;
             await SaveUtility.Save(Data, name, true);
+            onSaved.OnNext(Data);
         }
     }
 }

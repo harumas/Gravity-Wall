@@ -19,11 +19,11 @@ namespace Module.LevelEditor
 #if UNITY_EDITOR_WIN
             sceneDirLevel = @"Scenes\Level\Main";
             sceneDirTitle = @"Scenes\Title";
-            initialLoadScene = @"Scenes\Title\Root.unity";
+            initialLoadScene = @"Scenes\Level\Main\Root.unity";
 #elif UNITY_EDITOR_OSX
             sceneDirLevel = "Scenes/Level/Main";
             sceneDirTitle = "Scenes/Title";
-            initialLoadScene = "Scenes/Title/Root.unity";
+            initialLoadScene = "Scenes/Level/Main/Root.unity";
 #endif
         }
 

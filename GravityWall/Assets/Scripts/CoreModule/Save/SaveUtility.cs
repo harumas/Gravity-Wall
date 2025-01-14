@@ -36,7 +36,7 @@ namespace CoreModule.Save
 
             string text = obj.GetType().IsPrimitiveOrString() ? obj.ToString() : JsonUtility.ToJson(obj, format);
 
-            using (StreamWriter sw = new StreamWriter(NameToFilePath(name), false))
+            await using (StreamWriter sw = new StreamWriter(NameToFilePath(name), false))
             {
                 try
                 {

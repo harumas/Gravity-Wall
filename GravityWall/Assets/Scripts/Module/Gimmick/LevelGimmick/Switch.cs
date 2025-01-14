@@ -1,16 +1,18 @@
 using System.Collections.Generic;
 using System.Linq;
+using Core.Sound;
+using CoreModule.Sound;
 using UnityEngine;
-using UnityEngine.Events;
 
-namespace Module.Gimmick
+namespace Module.Gimmick.LevelGimmick
 {
     public class Switch : GimmickObject
     {
         [SerializeField] private bool initializeIsOn = false;
         [SerializeField, Tag] private List<string> targetTags;
-        [SerializeField] private AudioSource audioSource;
         [SerializeField] private MeshRenderer meshRenderer, RayMeshRenderer;
+        private static readonly int emissionIntensity = Shader.PropertyToID("_EmissionIntensity");
+        private static readonly int powerOn = Shader.PropertyToID("_PowerOn");
 
         private int pushingCount = 0;
 
@@ -19,6 +21,10 @@ namespace Module.Gimmick
             if (initializeIsOn)
             {
                 Enable();
+            }
+            else
+            {
+                Disable();
             }
         }
 
@@ -46,17 +52,17 @@ namespace Module.Gimmick
 
         public override void Enable(bool doEffect = true)
         {
-            audioSource.Play();
-            meshRenderer.material.SetFloat("_EmissionIntensity", 1.0f);
-            RayMeshRenderer.material.SetInt("_PowerOn", 0);
+            SoundManager.Instance.Play(SoundKey.Switch, MixerType.SE);
+            meshRenderer.material.SetFloat(emissionIntensity, 1.0f);
+            RayMeshRenderer.material.SetInt(powerOn, 0);
             isEnabled.Value = true;
         }
 
         public override void Disable(bool doEffect = true)
         {
             //offEvent.Invoke();
-            meshRenderer.material.SetFloat("_EmissionIntensity", 0f);
-            RayMeshRenderer.material.SetInt("_PowerOn", 1);
+            meshRenderer.material.SetFloat(emissionIntensity, 0f);
+            RayMeshRenderer.material.SetInt(powerOn, 1);
             isEnabled.Value = false;
         }
 

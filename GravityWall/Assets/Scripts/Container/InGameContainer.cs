@@ -1,16 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using Application;
 using Application.Sequence;
-using Constants;
-using Module.Character;
-using Module.Gimmick;
-using Module.Gravity;
+using Application.Spawn;
+using CoreModule.Helper;
+using Module.Gimmick.LevelGimmick;
+using Module.Gimmick.SystemGimmick;
 using Module.InputModule;
+using Module.Player;
 using Presentation;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using View;
+using View.Behaviour;
 using PlayerInput = Module.InputModule.PlayerInput;
 
 namespace Container
@@ -21,6 +24,9 @@ namespace Container
     public class InGameContainer : LifetimeScope
     {
         [SerializeField] private ViewBehaviourNavigator behaviourNavigator;
+        [SerializeField] private GimmickReference gimmickReference;
+        [SerializeField] private DirectorTable directorTable;
+        [SerializeField] private MainGateOpenSequencer mainGateOpenSequencer;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -30,29 +36,56 @@ namespace Container
                 return;
             }
 
-            //重力の生成 (後で消す)
-            WorldGravity.Create();
+            // ゲームの進行を管理するクラスの登録
+            builder.RegisterEntryPoint<InGameSequencer>();
 
-            UnityEngine.Application.targetFrameRate = 120;
+            // プレイヤーの入力を受け取るプレゼンターを登録
+            builder.RegisterEntryPoint<PlayerInputPresenter>();
+            builder.RegisterEntryPoint<PlayerVibrationPresenter>();
+            builder.RegisterEntryPoint<HubEventPresenter>();
 
+            // コンフィグ変更のリスナーを登録
             builder.RegisterEntryPoint<InputConfigChangedListener>();
             builder.RegisterEntryPoint<AudioConfigChangedListener>();
-            builder.RegisterEntryPoint<PlayerInputPresenter>();
-            builder.RegisterEntryPoint<LevelVolumeCameraPresenter>();
-            builder.RegisterEntryPoint<SequenceViewPresenter>();
+            builder.RegisterEntryPoint<OptionChangedPresenter>();
+
+            // UIのプレゼンターを登録
+            builder.RegisterEntryPoint<ViewBehaviourInitializer>();
+            builder.RegisterEntryPoint<TitleBehaviourPresenter>();
+            builder.RegisterEntryPoint<LicenseBehaviourPresenter>();
+            builder.RegisterEntryPoint<PauseBehaviourPresenter>();
+            builder.RegisterEntryPoint<OptionBehaviourPresenter>();
+            builder.RegisterEntryPoint<CreditBehaviourPresenter>();
+            builder.RegisterEntryPoint<ConfirmNewGamePresenter>();
+            builder.RegisterEntryPoint<HubResetTriggerPresenter>();
+
+            builder.Register<PlayerInput>(Lifetime.Singleton).As<IGameInput>();
+            builder.Register<InputLocker>(Lifetime.Singleton);
+            builder.Register<CursorLocker>(Lifetime.Singleton);
+            builder.Register<RespawnManager>(Lifetime.Singleton);
+            builder.Register<HubSpawner>(Lifetime.Singleton);
+
+            gimmickReference.UpdateReference();
+            builder.RegisterInstance(gimmickReference);
+            builder.RegisterInstance(directorTable);
+            RegisterWithNullCheck(builder, mainGateOpenSequencer);
+
+            // UIパネルの登録
+            RegisterBehaviourComponents(builder);
+
+            // プレイヤーのコンポーネントの登録
+            RegisterPlayerComponents(builder);
+
+            // シーン間で使い回すコンポーネントを登録
+            RegisterReusableComponents(builder);
 
 #if UNITY_EDITOR
+            // エディタからコンポーネントにアクセスするためのクラスを登録
             builder.RegisterEntryPoint<ExternalAccessor>();
 #endif
-
-            builder.Register<RespawnManager>(Lifetime.Singleton);
-            builder.Register<PlayerInput>(Lifetime.Singleton).As<IGameInput>();
-
-            RegisterInstanceWithNullCheck(builder, behaviourNavigator);
-            RegisterPlayerComponents(builder);
         }
 
-        private void RegisterInstanceWithNullCheck<T>(IContainerBuilder builder, T instance) where T : class
+        private void RegisterWithNullCheck<T>(IContainerBuilder builder, T instance) where T : class
         {
             if (instance == null)
             {
@@ -60,6 +93,40 @@ namespace Container
             }
 
             builder.RegisterInstance(instance);
+        }
+
+        private void RegisterBehaviourComponents(IContainerBuilder builder)
+        {
+            behaviourNavigator.RegisterBehaviours();
+            RegisterWithNullCheck(builder, behaviourNavigator);
+            RegisterWithNullCheck(builder, behaviourNavigator.GetBehaviour<OptionBehaviour>(ViewBehaviourState.Option));
+            RegisterWithNullCheck(builder, behaviourNavigator.GetBehaviour<LoadingBehaviour>(ViewBehaviourState.Loading));
+            RegisterWithNullCheck(builder, behaviourNavigator.GetBehaviour<ClearBehaviour>(ViewBehaviourState.Clear));
+            RegisterWithNullCheck(builder, behaviourNavigator.GetBehaviour<TitleBehaviour>(ViewBehaviourState.Title));
+            RegisterWithNullCheck(builder, behaviourNavigator.GetBehaviour<LicenseBehaviour>(ViewBehaviourState.License));
+            RegisterWithNullCheck(builder, behaviourNavigator.GetBehaviour<PauseBehaviour>(ViewBehaviourState.Pause));
+            RegisterWithNullCheck(builder, behaviourNavigator.GetBehaviour<CreditBehaviour>(ViewBehaviourState.Credit));
+            RegisterWithNullCheck(builder, behaviourNavigator.GetBehaviour<ConfirmNewGameBehaviour>(ViewBehaviourState.ConfirmNewGame));
+        }
+
+        private void RegisterReusableComponents(IContainerBuilder builder)
+        {
+            var reusableComponents = new List<IReusableComponent>
+            {
+                RegisterReusableComponent<SavePoint>(builder),
+                RegisterReusableComponent<DeathFloor>(builder),
+                RegisterReusableComponent<LevelVolumeCamera>(builder)
+            };
+
+            builder.RegisterInstance(reusableComponents).As<IReadOnlyList<IReusableComponent>>();
+        }
+
+        private IReusableComponent RegisterReusableComponent<T>(IContainerBuilder builder) where T : Component
+        {
+            var reusableComponent = new ReusableComponents<T>();
+            builder.RegisterInstance(reusableComponent);
+
+            return reusableComponent;
         }
 
         private void RegisterPlayerComponents(IContainerBuilder builder)

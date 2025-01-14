@@ -1,5 +1,47 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8803934832736502328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 980a78cc4df543b29a2663be288cd2f5, type: 3}
+  m_Name: UniversalBlurFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  <PassIndex>k__BackingField: 0
+  injectionPoint: 600
+  <Intensity>k__BackingField: 1
+  downsample: 3
+  iterations: 6
+  scale: 0.5
+  scaleBlurWith: 0
+  scaleReferenceSize: 1080
+  shader: {fileID: 4800000, guid: bb11bdc2e8aaf4c80b5315f3778d7ad4, type: 3}
+--- !u!114 &-7652325350720864383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92f0c121b68f44ceebf825d616963d56, type: 3}
+  m_Name: RadialBlurFeature
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  _parameters:
+    intensity: 0.07
+    sampleCount: 3
+    radialCenter: {x: 0.5, y: 0.5}
+    useDither: 1
+  radialBlurShader: {fileID: 4800000, guid: 6f4f6b45f32b6487fb6e6dda835a45a2, type: 3}
+  _renderPassEvent: 550
 --- !u!114 &-1878332245247344467
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15,12 +57,12 @@ MonoBehaviour:
   m_Active: 1
   m_Settings:
     AOMethod: 1
-    Downsample: 0
+    Downsample: 1
     AfterOpaque: 0
     Source: 1
     NormalSamples: 1
     Intensity: 0.5
-    DirectLightingStrength: 0.25
+    DirectLightingStrength: 0.8
     Radius: 0.25
     Samples: 0
     BlurQuality: 0
@@ -50,8 +92,8 @@ MonoBehaviour:
   m_Active: 1
   m_Settings:
     technique: 0
-    maxDrawDistance: 1000
-    decalLayers: 0
+    maxDrawDistance: 50
+    decalLayers: 1
     dBufferSettings:
       surfaceData: 2
     screenSpaceSettings:
@@ -77,7 +119,9 @@ MonoBehaviour:
   m_RendererFeatures:
   - {fileID: -1878332245247344467}
   - {fileID: -97907174061956125}
-  m_RendererFeatureMap: adc0de57c6d2eee5e32313a5f129a4fe
+  - {fileID: -7652325350720864383}
+  - {fileID: -8803934832736502328}
+  m_RendererFeatureMap: adc0de57c6d2eee5e32313a5f129a4fe81ff9024a37acd95c87d0d35ea23d285
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -114,9 +158,30 @@ MonoBehaviour:
     passOperation: 2
     failOperation: 0
     zFailOperation: 0
-  m_ShadowTransparentReceive: 1
+  m_ShadowTransparentReceive: 0
   m_RenderingMode: 1
-  m_DepthPrimingMode: 0
+  m_DepthPrimingMode: 2
   m_CopyDepthMode: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
+--- !u!114 &3311174857098149013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52e2e32e102e44abeb72209e7ce030c3, type: 3}
+  m_Name: KawaseBlur
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    renderPassEvent: 500
+    blurMaterial: {fileID: 2100000, guid: a00afda211f274f6ca6cce958e4e13a5, type: 2}
+    blurPasses: 2
+    downsample: 1
+    copyToFramebuffer: 1
+    targetName: _blurTexture
+    backgroundColor: {r: 0, g: 0, b: 0, a: 0}

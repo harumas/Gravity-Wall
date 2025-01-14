@@ -1,8 +1,12 @@
-﻿using Module.Character;
+﻿using Application.Spawn;
+using CoreModule.Helper;
 using Module.Gimmick;
+using Module.Gimmick.SystemGimmick;
 using Module.InputModule;
+using Module.Player;
 using R3;
 using UnityEngine;
+using VContainer;
 using VContainer.Unity;
 
 namespace Presentation
@@ -12,27 +16,44 @@ namespace Presentation
         private readonly CameraController cameraController;
         private readonly PlayerController playerController;
 
-        public LevelVolumeCameraPresenter(CameraController cameraController, PlayerController playerController, IGameInput gameInput)
+        [Inject]
+        public LevelVolumeCameraPresenter(
+            ReusableComponents<LevelVolumeCamera> volumeCameras,
+            CameraController cameraController,
+            PlayerController playerController,
+            RespawnManager respawnManager,
+            IGameInput gameInput)
         {
             this.cameraController = cameraController;
             this.playerController = playerController;
 
             Transform playerTransform = playerController.transform;
-            LevelVolumeCamera[] cameras = Object.FindObjectsByType<LevelVolumeCamera>(FindObjectsSortMode.None);
+            var cameras = volumeCameras.GetComponents();
 
             foreach (var cam in cameras)
             {
-                cam.AssignPlayerTransform(playerTransform);
-                cam.IsEnabled.Subscribe(OnEnableChanged).AddTo(cam);
-                cam.Rotation.Subscribe(cameraController.SetCameraRotation).AddTo(cam);
+                cam.AssignPlayerTransform(playerTransform, cameraController);
+                cam.IsEnabled.Skip(1).Subscribe(OnEnableChanged).AddTo(cam);
+                cam.Rotation.Skip(1).Subscribe(cameraController.SetCameraRotation).AddTo(cam);
 
-                cam.IsRotating.Subscribe(isRotating => playerController.IsRotationLocked = isRotating);
+                cam.IsRotating.Skip(1).Subscribe(isRotating => playerController.IsRotationLocked = isRotating);
 
-                gameInput.CameraRotate.Subscribe(value => cam.EnableAdditionalRotate(value)).AddTo(cam);
+                gameInput.CameraRotate.Skip(1).Subscribe(value => cam.EnableAdditionalRotate(value)).AddTo(cam);
+
+                respawnManager.IsRespawning.Skip(1).Subscribe(isRespawning =>
+                {
+                    if (cam.IsEnabled.CurrentValue && !isRespawning)
+                    {
+                        cameraController.SetFreeCamera(false);
+                        cam.SetDirection(cameraController.transform.forward);
+                    }
+                }).AddTo(cam);
             }
         }
 
-        public void Initialize() { }
+        public void Initialize()
+        {
+        }
 
         private void OnEnableChanged(bool isEnable)
         {

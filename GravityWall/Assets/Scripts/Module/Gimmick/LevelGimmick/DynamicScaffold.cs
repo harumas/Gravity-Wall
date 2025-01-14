@@ -1,20 +1,20 @@
-using System;
 using System.Threading;
 using Constants;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using Domain;
+using Module.Player;
+using R3;
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.Events;
 
-namespace Module.Gimmick.DynamicScaffold
+namespace Module.Gimmick.LevelGimmick
 {
     [RequireComponent(typeof(Rigidbody))]
     public class DynamicScaffold : GimmickObject
     {
         [SerializeField] private Transform pointA;
         [SerializeField] private Transform pointB;
-        [Header("移動速度")][SerializeField] private float moveSpeed;
+        [Header("移動速度")] [SerializeField] private float moveSpeed;
 
         [Header("目標地点で待機する時間")] [SerializeField] private float stopDuration;
 
@@ -22,6 +22,12 @@ namespace Module.Gimmick.DynamicScaffold
 
         [Header("最初から動かすか")] [SerializeField] private bool enableOnAwake = true;
 
+        [SerializeField] private GimmickObject[] observedSwitches;
+        [SerializeField] private int switchMaxCount = 1;
+        [SerializeField] private UnityEvent startEvent, goalEvent, resetEvent;
+        [SerializeField] private int contactCount;
+
+        private int switchCount = 0;
         private CancellationTokenSource cTokenSource;
         private Rigidbody rigBody;
         private Vector3 previousTargetPosition;
@@ -30,9 +36,6 @@ namespace Module.Gimmick.DynamicScaffold
         private Transform currentTarget;
         private IPushable pushement;
         private float trappedTimer;
-        private int contactCount;
-
-        private const float StopThreshold = 0.01f;
 
         private CancellationTokenSource cancellationToken;
 
@@ -57,11 +60,32 @@ namespace Module.Gimmick.DynamicScaffold
 
         private void Start()
         {
+            foreach (GimmickObject gimmick in observedSwitches)
+            {
+                gimmick.IsEnabled.Skip(1).Subscribe(UpdateMoveState).AddTo(this);
+            }
+
             if (enableOnAwake)
             {
                 Enable();
             }
         }
+
+        private void UpdateMoveState(bool switchEnabled)
+        {
+            switchCount += switchEnabled ? 1 : -1;
+            bool isMove = switchCount >= switchMaxCount;
+
+            if (isMove)
+            {
+                Enable();
+            }
+            else
+            {
+                Disable();
+            }
+        }
+
 
         public override void Enable(bool doEffect = true)
         {
@@ -69,6 +93,8 @@ namespace Module.Gimmick.DynamicScaffold
             {
                 return;
             }
+
+            startEvent.Invoke();
 
             cTokenSource = new CancellationTokenSource();
             MoveLoop().Forget();
@@ -92,6 +118,7 @@ namespace Module.Gimmick.DynamicScaffold
             rigBody.position = pointA.position;
             previousPosition = rigBody.position;
             currentTarget = pointB;
+            resetEvent.Invoke();
         }
 
         private async UniTaskVoid MoveLoop()
@@ -99,6 +126,7 @@ namespace Module.Gimmick.DynamicScaffold
             CancellationToken cancelOnDestroyToken = this.GetCancellationTokenOnDestroy();
             CancellationTokenSource canceller = CancellationTokenSource.CreateLinkedTokenSource(cancelOnDestroyToken, cTokenSource.Token);
             CancellationToken cancellationToken = canceller.Token;
+
             while (!cancellationToken.IsCancellationRequested)
             {
                 bool arrived = false;
@@ -123,6 +151,7 @@ namespace Module.Gimmick.DynamicScaffold
                 //目標地点に到達できたら指定時間待機
                 if (arrived)
                 {
+                    goalEvent.Invoke();
                     await UniTask.WaitForSeconds(stopDuration, delayTiming: PlayerLoopTiming.FixedUpdate, cancellationToken: cancellationToken);
                 }
             }
@@ -130,6 +159,8 @@ namespace Module.Gimmick.DynamicScaffold
 
         private Vector3 GetMoveTarget()
         {
+            const float StopThreshold = 0.01f;
+
             float distance = Vector3.Distance(transform.position, currentTarget.position);
             Vector3 position = Vector3.Lerp(transform.position, currentTarget.position, moveSpeed / distance);
 
@@ -185,7 +216,7 @@ namespace Module.Gimmick.DynamicScaffold
 
         private void OnCollisionEnter(Collision other)
         {
-            if (!isEnabled.Value)
+            if (!other.gameObject.TryGetComponent(out IPushable pushable))
             {
                 return;
             }
@@ -195,13 +226,13 @@ namespace Module.Gimmick.DynamicScaffold
             //床に設置したプレイヤーを取得
             if (contactCount == 1 && other.gameObject.CompareTag(Tag.Player))
             {
-                pushement = other.gameObject.GetComponent<IPushable>();
+                pushement = pushable;
             }
         }
 
         private void OnCollisionExit(Collision other)
         {
-            if (!isEnabled.Value)
+            if (!other.gameObject.TryGetComponent(out IPushable _))
             {
                 return;
             }
@@ -210,8 +241,12 @@ namespace Module.Gimmick.DynamicScaffold
 
             if (contactCount == 0 && other.gameObject.CompareTag(Tag.Player))
             {
-                //コリジョンから離れる時は、慣性を付与する
-                pushement.AddInertia(moveDelta);
+                if (isEnabled.Value)
+                {
+                    //コリジョンから離れる時は、慣性を付与する
+                    pushement.AddInertia(moveDelta);
+                }
+
                 pushement = null;
             }
         }

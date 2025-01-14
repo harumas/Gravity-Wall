@@ -1,6 +1,5 @@
-﻿using System;
-using Module.Character;
-using Module.InputModule;
+﻿using Module.InputModule;
+using Module.Player;
 using R3;
 using UnityEngine;
 using VContainer;
@@ -16,16 +15,20 @@ namespace Presentation
         [Inject]
         public PlayerInputPresenter(
             IGameInput gameInput,
+            InputLocker inputLocker,
             PlayerController playerController,
             CameraController cameraController,
             PlayerTargetSyncer playerTargetSyncer,
             GravitySwitcher gravitySwitcher
         )
         {
+            var lockProperty = playerController.IsDeath.Select(value => value == DeathType.None).ToReadOnlyReactiveProperty();
+            inputLocker.AddCondition(lockProperty, playerController.destroyCancellationToken);
+
             gameInput.Move
                 .Subscribe(moveInput =>
                 {
-                    if (!playerController.IsDeath.CurrentValue)
+                    if (!inputLocker.IsLocked)
                     {
                         playerController.OnMoveInput(moveInput);
                     }
@@ -33,11 +36,18 @@ namespace Presentation
                 .AddTo(playerController);
 
             gameInput.Jump
-                .Subscribe(_ =>
+                .Subscribe(isStarted =>
                 {
-                    if (!playerController.IsDeath.CurrentValue)
+                    if (!inputLocker.IsLocked)
                     {
-                        playerController.OnJumpInput();
+                        if (isStarted)
+                        {
+                            playerController.OnJumpStart();
+                        }
+                        else
+                        {
+                            playerController.OnJumpEnd();
+                        }
                     }
                 })
                 .AddTo(playerController);
@@ -45,7 +55,7 @@ namespace Presentation
             gameInput.LookDelta
                 .Subscribe(lookInput =>
                 {
-                    if (!playerController.IsDeath.CurrentValue)
+                    if (!inputLocker.IsLocked)
                     {
                         cameraController.OnRotateCameraInput(lookInput);
                     }
@@ -55,7 +65,7 @@ namespace Presentation
             gameInput.Move
                 .Subscribe(moveInput =>
                 {
-                    if (!playerController.IsDeath.CurrentValue)
+                    if (!inputLocker.IsLocked)
                     {
                         playerTargetSyncer.OnMoveInput(moveInput);
                     }
@@ -65,7 +75,7 @@ namespace Presentation
             gameInput.Move
                 .Subscribe(moveInput =>
                 {
-                    if (!playerController.IsDeath.CurrentValue)
+                    if (!inputLocker.IsLocked)
                     {
                         gravitySwitcher.OnMoveInput(moveInput);
                     }
@@ -73,6 +83,8 @@ namespace Presentation
                 .AddTo(playerTargetSyncer);
         }
 
-        public void Initialize() { }
+        public void Initialize()
+        {
+        }
     }
 }

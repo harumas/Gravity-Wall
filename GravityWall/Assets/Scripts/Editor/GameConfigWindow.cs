@@ -1,11 +1,12 @@
 ﻿using Container;
 using CoreModule.Save;
+using Module.Config;
 using TriInspector;
 using UnityEditor;
 using UnityEngine;
 using VContainer;
 
-namespace Module.Config
+namespace Editor
 {
     /// <summary>
     /// ゲーム設定をエディタ上で行うクラス
@@ -13,28 +14,33 @@ namespace Module.Config
     public class GameConfigWindow : EditorWindow
     {
         private SerializedObject serializedObject;
+        [SerializeField] private bool lockStartScene = true;
         [SerializeField] private ConfigData configData;
         private SaveManager<ConfigData> saveManager;
 
         [MenuItem("Tools/GameConfigWindow", false, -100)]
         private static void Init()
         {
-            if (!Application.isPlaying)
+            GameConfigWindow window = GetWindow<GameConfigWindow>();
+            window.lockStartScene = EditorPrefs.GetBool("LockStartScene", true);
+            window.serializedObject = new SerializedObject(window);
+
+            if (!UnityEngine.Application.isPlaying)
             {
-                Debug.LogError("再生中のみ表示できます。");
                 return;
             }
 
-            GameConfigWindow window = GetWindow<GameConfigWindow>();
             window.saveManager = ExternalAccessor.Resolver.Resolve<SaveManager<ConfigData>>();
             window.configData = window.saveManager.Data;
-            window.serializedObject = new SerializedObject(window);
             window.Show();
         }
 
         private void OnGUI()
         {
             serializedObject.Update();
+            
+            SerializedProperty lockStartSceneProperty = serializedObject.FindProperty(nameof(lockStartScene));
+            EditorGUILayout.PropertyField(lockStartSceneProperty);
 
             //ConfigDataクラス
             SerializedProperty serializedProperty = serializedObject.FindProperty(nameof(configData));
@@ -51,12 +57,14 @@ namespace Module.Config
 
         private async void Save()
         {
-            if (!Application.isPlaying)
+            EditorPrefs.SetBool("LockStartScene", lockStartScene);
+            
+            if (!UnityEngine.Application.isPlaying)
             {
-                Debug.LogError("再生中のみ変更できます");
+                Debug.LogError("コンフィグは保存されませんでした。");
                 return;
             }
-
+            
             await saveManager.Save();
             Debug.Log("ゲームコンフィグを保存しました。");
         }
