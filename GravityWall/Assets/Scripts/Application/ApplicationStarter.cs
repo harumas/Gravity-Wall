@@ -2,6 +2,7 @@
 using System.Threading;
 using CoreModule.Helper.Attribute;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using Module.Config;
 using VContainer;
 using VContainer.Unity;
@@ -30,6 +31,8 @@ namespace Application
 
         public async UniTask StartAsync(CancellationToken cancellation = new CancellationToken())
         {
+            DOTween.SetTweensCapacity(500, 50);
+
             // スプラッシュ画面を表示
             var splashAwaiter = splashScreen.Show();
 
