@@ -34,8 +34,7 @@ namespace Presentation
         private InputEvent exitEvent;
 
         private readonly ReactiveProperty<bool> doInput;
-        
-        private readonly float endGameDelay = 0.5f;
+
 
         [Inject]
         public PauseBehaviourPresenter(
@@ -98,10 +97,11 @@ namespace Presentation
 
         private async void OnEndGameButtonPressed(Unit _)
         {
-            Debug.Log("End");
-            await UniTask.Delay(TimeSpan.FromSeconds(endGameDelay));
-            Debug.Log("pp");
-            //applicationStopper.Quit();
+            const float endGameDelay = 0.5f;
+            await UniTask.Delay(TimeSpan.FromSeconds(endGameDelay),
+                ignoreTimeScale: true,
+                cancellationToken: pauseBehaviour.destroyCancellationToken);
+            applicationStopper.Quit();
         }
 
         private void OnActiveStateChanged((bool isActive, ViewBehaviourState behaviourType) context)
