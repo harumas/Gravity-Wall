@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using Application;
 using Application.Sequence;
 using CoreModule.Save;
@@ -24,6 +25,8 @@ namespace Presentation
         private readonly PlayerTargetSyncer playerTargetSyncer;
         private readonly SceneGroupTable sceneGroupTable;
         private readonly GameState gameState;
+        
+        private readonly float endGameDelay = 0.5f;
 
         [Inject]
         public TitleBehaviourPresenter(
@@ -52,7 +55,7 @@ namespace Presentation
             TitleView titleView = titleBehaviour.TitleView;
 
             //ゲーム終了は一度だけ入力を受け取る
-            titleView.OnEndGameButtonPressed.Take(1).Subscribe(_ => applicationStopper.Quit());
+            titleView.OnEndGameButtonPressed.Take(1).Subscribe(OnEndGameButtonPressed);
             titleView.OnCreditButtonPressed.Subscribe(_ => navigator.ActivateBehaviour(ViewBehaviourState.Credit));
             titleView.OnNewGameButtonPressed.Subscribe(_ =>
             {
@@ -91,6 +94,12 @@ namespace Presentation
                     playerController.Lock();
                 }
             });
+        }
+
+        private async void OnEndGameButtonPressed(Unit _)
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(endGameDelay));
+            applicationStopper.Quit();
         }
 
         private bool IsNewGame()

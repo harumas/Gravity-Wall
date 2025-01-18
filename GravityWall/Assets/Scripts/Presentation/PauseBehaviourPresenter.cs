@@ -34,6 +34,8 @@ namespace Presentation
         private InputEvent exitEvent;
 
         private readonly ReactiveProperty<bool> doInput;
+        
+        private readonly float endGameDelay = 0.5f;
 
         [Inject]
         public PauseBehaviourPresenter(
@@ -87,11 +89,19 @@ namespace Presentation
             pauseView.OnContinueButtonPressed.Subscribe(_ => navigator.DeactivateBehaviour(ViewBehaviourState.Pause)).AddTo(pauseView);
             pauseView.OnReturnToHubButtonPressed.Subscribe(OnReturnToHubButtonPressed).AddTo(pauseView);
             pauseView.OnGoToSettingsButtonPressed.Subscribe(_ => navigator.ActivateBehaviour(ViewBehaviourState.Option)).AddTo(pauseView);
-            pauseView.OnEndGameButtonPressed.Subscribe(_ => applicationStopper.Quit());
+            pauseView.OnEndGameButtonPressed.Subscribe(OnEndGameButtonPressed);
 
             ClearedLevelView clearedLevelView = pauseBehaviour.ClearedLevelView;
             clearedLevelView.SetClearedLevels(saveManager.Data.ClearedStageList);
             saveManager.OnSaved.Subscribe(SetClearedLevels).AddTo(clearedLevelView);
+        }
+
+        private async void OnEndGameButtonPressed(Unit _)
+        {
+            Debug.Log("End");
+            await UniTask.Delay(TimeSpan.FromSeconds(endGameDelay));
+            Debug.Log("pp");
+            //applicationStopper.Quit();
         }
 
         private void OnActiveStateChanged((bool isActive, ViewBehaviourState behaviourType) context)
