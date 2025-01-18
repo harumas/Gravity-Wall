@@ -28,8 +28,8 @@ namespace Presentation
 
         public void Start()
         {
-            endingView.OnContinueButtonPressed.Subscribe(_ => OnPressedButtonEvent("Hub"));
-            endingView.OnNewGameButtonPressed.Subscribe(_ => OnPressedButtonEvent("Hub-Additive"));
+            endingView.OnContinueButtonPressed.Subscribe(_ => OnPressedButtonEvent("Hub", false));
+            endingView.OnNewGameButtonPressed.Subscribe(_ => OnPressedButtonEvent("Hub-Additive", true));
 
             //‰¹—Êİ’è
             //endingView.VideoPlayer.SetDirectAudioVolume(0,1);
@@ -42,6 +42,7 @@ namespace Presentation
             endingView.VideoPlayer.gameObject.SetActive(false);
             endingView.gameObject.SetActive(true);
             endingView.CanvasGroup.gameObject.SetActive(true);
+
             DOTween.To(() => endingView.CanvasGroup.alpha, (alpha) => endingView.CanvasGroup.alpha = alpha, 1, 1.0f).SetDelay(1).OnComplete(() =>
             {
                 endingView.CanvasGroup.interactable = true;
@@ -49,15 +50,22 @@ namespace Presentation
             });
         }
 
-        private void OnPressedButtonEvent(string sceneName)
+        private void OnPressedButtonEvent(string sceneName, bool doResetSaveData)
         {
-            if (isSelected) return;
+            if (isSelected)
+            {
+                return;
+            }
 
             isSelected = true;
 
             DOTween.To(() => endingView.CanvasGroup.alpha, (alpha) => endingView.CanvasGroup.alpha = alpha, 0, 1.0f).OnComplete(() =>
             {
-                saveManager.Reset();
+                if (doResetSaveData)
+                {
+                    saveManager.Reset();
+                }
+
                 SceneManager.LoadScene(sceneName);
             });
         }
