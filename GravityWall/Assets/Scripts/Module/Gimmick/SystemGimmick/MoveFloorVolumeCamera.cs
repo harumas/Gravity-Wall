@@ -1,3 +1,4 @@
+using System;
 using Cinemachine;
 using Constants;
 using CoreModule.Helper;
@@ -9,50 +10,30 @@ using UnityEngine;
 
 namespace Module.Gimmick.SystemGimmick
 {
-    /// <summary>
-    /// レベルボリュームを俯瞰するカメラ
-    /// </summary>
-    public class LevelVolumeCamera : MonoBehaviour
+    public class MoveFloorVolumeCamera : MonoBehaviour
     {
         [SerializeField] private CinemachineVirtualCamera virtualCamera;
         [SerializeField] private Transform cameraPivot;
         [SerializeField] private Ease easeType;
 
-        [Header("回転のイージング係数")] [SerializeField] private float rotateStep;
-
         [SerializeField] private SerializableReactiveProperty<bool> isEnabled;
         [SerializeField] private SerializableReactiveProperty<bool> isPlayerRotating;
-        [SerializeField] private SerializableReactiveProperty<bool> isInputRotating;
+
+        [Header("回転のイージング係数")] [SerializeField] private float rotateStep;
 
         public ReadOnlyReactiveProperty<bool> IsEnabled => isEnabled;
-        public Observable<bool> IsRotating => Observable.Merge(isPlayerRotating, isInputRotating);
+        public Observable<bool> IsRotating => isPlayerRotating;
         public Observable<Quaternion> Rotation => Observable.EveryValueChanged(cameraPivot, target => target.rotation);
 
         private CinemachineBrain cameraBrain;
         private CameraController cameraController;
-        private VerticalAdjuster3d verticalAdjuster3d;
         private Transform playerTransform;
+        private VerticalAdjuster2d verticalAdjuster;
         private Vector3 currentUpVector;
-
-        public void AssignPlayerTransform(Transform playerTransform, CameraController cameraController)
-        {
-            this.playerTransform = playerTransform;
-            this.cameraController = cameraController;
-        }
-
-        public void SetDirection(Vector3 direction)
-        {
-            //カメラに一番近い前方ベクトルを取得
-            Vector3 forward = verticalAdjuster3d.GetNearestDirection(direction);
-            currentUpVector = verticalAdjuster3d.GetVerticalDirection(playerTransform.up);
-
-            //カメラの前方ベクトルにバーチャルカメラの基準を設定
-            cameraPivot.rotation = Quaternion.LookRotation(forward, currentUpVector);
-        }
 
         private void Start()
         {
-            verticalAdjuster3d = new VerticalAdjuster3d(virtualCamera.transform);
+            verticalAdjuster = new VerticalAdjuster2d(virtualCamera.transform);
             cameraBrain = Camera.main.GetComponent<CinemachineBrain>();
         }
 
@@ -65,18 +46,17 @@ namespace Module.Gimmick.SystemGimmick
 
             EnablePlayerRotate();
 
-            PerformAdditionalRotate();
             PerformPlayerRotate();
         }
 
         private void EnablePlayerRotate()
         {
-            if (isPlayerRotating.Value || isInputRotating.Value)
+            if (isPlayerRotating.Value)
             {
                 return;
             }
 
-            Vector3 direction = verticalAdjuster3d.GetVerticalDirection(playerTransform.up);
+            Vector3 direction = verticalAdjuster.GetVerticalDirection(playerTransform.up);
 
             //90度になったらカメラの向きを変える
             if (direction != Vector3.zero && direction != currentUpVector)
@@ -86,16 +66,19 @@ namespace Module.Gimmick.SystemGimmick
             }
         }
 
-        public void EnableAdditionalRotate(int value)
+        public void AssignPlayerTransform(Transform playerTransform, CameraController cameraController)
         {
-            if (!isEnabled.Value || isPlayerRotating.Value || isInputRotating.Value)
-            {
-                return;
-            }
+            this.playerTransform = playerTransform;
+            this.cameraController = cameraController;
+        }
 
-            //プレイヤーの入力によって回転させる
-            additionalRotation = Quaternion.AngleAxis(value * 90f, cameraPivot.up) * cameraPivot.rotation;
-            isInputRotating.Value = true;
+        public void SetDirection()
+        {
+            //カメラに一番近い前方ベクトルを取得
+            currentUpVector = verticalAdjuster.GetVerticalDirection(playerTransform.up);
+
+            //カメラの前方ベクトルにバーチャルカメラの基準を設定
+            cameraPivot.rotation = Quaternion.LookRotation(virtualCamera.transform.forward, currentUpVector);
         }
 
         private void PerformPlayerRotate()
@@ -112,23 +95,6 @@ namespace Module.Gimmick.SystemGimmick
             if (isLastRotation)
             {
                 isPlayerRotating.Value = false;
-            }
-        }
-
-        private Quaternion additionalRotation;
-
-        private void PerformAdditionalRotate()
-        {
-            if (!isInputRotating.Value)
-            {
-                return;
-            }
-
-            float rotationAngle = Quaternion.Angle(cameraPivot.rotation, additionalRotation);
-            bool isLastRotation = PerformRotate(additionalRotation, rotationAngle);
-            if (isLastRotation)
-            {
-                isInputRotating.Value = false;
             }
         }
 
@@ -157,7 +123,7 @@ namespace Module.Gimmick.SystemGimmick
             return isLastRotation;
         }
 
-        private void OnTriggerEnter(Collider other)
+        public void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag(Tag.Player))
             {
@@ -165,7 +131,7 @@ namespace Module.Gimmick.SystemGimmick
             }
         }
 
-        private void OnTriggerExit(Collider other)
+        public void OnTriggerExit(Collider other)
         {
             if (playerTransform == null)
             {
@@ -181,17 +147,26 @@ namespace Module.Gimmick.SystemGimmick
         private async UniTaskVoid Enable()
         {
             await UniTask.WaitUntil(() => playerTransform != null);
-            
-            SetDirection(cameraBrain.transform.forward);
+
+            SetDirection();
             virtualCamera.Priority = 11;
             isEnabled.Value = true;
         }
 
         private void Disable()
         {
-            cameraController.SetCameraRotation(cameraPivot.rotation);
+            if (cameraController != null)
+            {
+                cameraController.SetCameraRotation(cameraPivot.rotation);
+            }
+
             isEnabled.Value = false;
             virtualCamera.Priority = 0;
+        }
+
+        private void OnDisable()
+        {
+            Disable();
         }
     }
 }

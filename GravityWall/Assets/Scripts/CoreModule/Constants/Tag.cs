@@ -19,5 +19,6 @@ namespace Constants
 		public const string LevelSegment = "LevelSegment";
 		public const string UnJumpable = "UnJumpable";
 		public const string Dither = "Dither";
+		public const string HideTarget = "HideTarget";
 	}
 }

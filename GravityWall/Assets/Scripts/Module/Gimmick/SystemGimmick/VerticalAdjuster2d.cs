@@ -2,20 +2,20 @@
 
 namespace Module.Gimmick.SystemGimmick
 {
-    public class VerticalAdjuster
+    public class VerticalAdjuster2d
     {
         private readonly Vector3[] initialDirections;
 
-        public VerticalAdjuster(Transform cameraTransform)
+        public VerticalAdjuster2d(Transform cameraTransform)
         {
             initialDirections = new Vector3[]
             {
-                cameraTransform.right,
-                -cameraTransform.right,
-                cameraTransform.forward,
-                -cameraTransform.forward,
                 cameraTransform.up,
                 -cameraTransform.up,
+                cameraTransform.forward,
+                -cameraTransform.forward,
+                cameraTransform.right,
+                -cameraTransform.right
             };
         }
 
