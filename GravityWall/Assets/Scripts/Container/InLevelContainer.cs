@@ -31,6 +31,7 @@ namespace Container
 
             builder.RegisterEntryPoint<InLevelSequencer>();
             builder.RegisterEntryPoint<LevelVolumeCameraPresenter>();
+            builder.RegisterEntryPoint<MoveFloorVolumeCameraPresenter>();
             builder.RegisterEntryPoint<GameClearPresenter>();
             builder.RegisterEntryPoint<LevelEventPresenter>();
             

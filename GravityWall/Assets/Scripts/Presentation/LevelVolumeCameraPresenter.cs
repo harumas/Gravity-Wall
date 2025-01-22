@@ -57,14 +57,8 @@ namespace Presentation
 
         private void OnEnableChanged(bool isEnable)
         {
-            if (isEnable)
-            {
-                cameraController.SetFreeCamera(false);
-            }
-            else
-            {
-                cameraController.SetFreeCamera(true);
-            }
+            bool isFreeCamera = !isEnable;
+            cameraController.SetFreeCamera(isFreeCamera);
         }
     }
 }
