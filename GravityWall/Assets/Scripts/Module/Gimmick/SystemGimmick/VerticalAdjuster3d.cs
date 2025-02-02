@@ -26,7 +26,7 @@ namespace Module.Gimmick.SystemGimmick
         /// <returns></returns>
         public Vector3 GetVerticalDirection(Vector3 origin)
         {
-            const float error = 0.01f;
+            const float error = 0.05f;
 
             foreach (Vector3 direction in initialDirections)
             {
