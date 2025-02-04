@@ -77,7 +77,7 @@ namespace Module.Gravity
 
         private (Vector3 direction, RigidbodyConstraints constraint) GetVerticalConstraint(Vector3 gravity)
         {
-            const float error = 0.01f;
+            const float error = 0.05f;
 
             for (var i = 0; i < verticalDirections.Count; i++)
             {
