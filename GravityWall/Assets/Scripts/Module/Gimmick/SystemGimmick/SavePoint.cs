@@ -44,6 +44,7 @@ namespace Module.Gimmick.SystemGimmick
         [SerializeField] private bool canResave = false;
 
         public event Action<SavePoint, RespawnContext> OnEnterPoint;
+        public event Action OnSaveExecuted;
         public RespawnContext LatestContext { get; private set; }
 
         public bool IsSaved => isSaved;
@@ -51,7 +52,8 @@ namespace Module.Gimmick.SystemGimmick
 
         private void Start()
         {
-            levelResetter?.RegisterObjects();
+            levelResetter.RegisterObjects();
+            levelResetter.OnResetLevel += Reset;
         }
 
         private void OnTriggerEnter(Collider other)
