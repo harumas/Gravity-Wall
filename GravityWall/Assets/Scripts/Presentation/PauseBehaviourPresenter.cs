@@ -34,6 +34,7 @@ namespace Presentation
         private InputEvent exitEvent;
 
         private readonly ReactiveProperty<bool> doInput;
+        private bool isReturnToHub;
 
 
         [Inject]
@@ -82,7 +83,9 @@ namespace Presentation
                 .AddTo(pauseBehaviour);
 
             pauseBehaviour.OnActiveStateChanged.Subscribe(OnActiveStateChanged).AddTo(pauseBehaviour);
-            pauseBehaviour.Construct(gameState, playerController.LockState);
+
+            var lockState = playerController.ControlEvent.LockState.AddTo(pauseBehaviour);
+            pauseBehaviour.Construct(gameState, lockState);
 
             PauseView pauseView = pauseBehaviour.PauseView;
             pauseView.OnContinueButtonPressed.Subscribe(_ => navigator.DeactivateBehaviour(ViewBehaviourState.Pause)).AddTo(pauseView);
@@ -129,13 +132,17 @@ namespace Presentation
                 playerTargetSyncer.Unlock();
                 gamepadVibrator.Resume();
 
-                doInput.Value = true;
+                if (!isReturnToHub)
+                {
+                    doInput.Value = true;
+                }
             }
         }
 
         private async void OnReturnToHubButtonPressed(Unit _)
         {
             // ポーズ画面のフェード中の入力をロック
+            isReturnToHub = true;
             doInput.Value = false;
 
             navigator.DeactivateBehaviour(ViewBehaviourState.Pause);
@@ -144,12 +151,14 @@ namespace Presentation
             const float uiLockDuration = 1f;
             await UniTask.Delay(TimeSpan.FromSeconds(uiLockDuration));
 
-            // ロック解除
-            doInput.Value = true;
-
             // ハブにリスポーン
             gameState.SetState(GameState.State.StageSelect);
-            // hubSpawner.Respawn().Forget();
+            isReturnToHub = false;
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(uiLockDuration));
+
+            // ロック解除
+            doInput.Value = true;
         }
 
         private void SetClearedLevels(SaveData saveData)

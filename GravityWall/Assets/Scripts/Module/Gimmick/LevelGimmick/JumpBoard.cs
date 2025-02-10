@@ -42,7 +42,7 @@ namespace Module.Gimmick.LevelGimmick
                         .OnUpdate(() => { meshRenderer.material.SetFloat(jumpOnProperty, jumpOn); });
                 });
 
-            pushable.AddForce(transform.up * jumpPower, ForceMode.VelocityChange, jumpingGravity, false);
+            pushable.DoJump(transform.up * jumpPower, jumpingGravity);
         }
 
         private void OnDestroy()

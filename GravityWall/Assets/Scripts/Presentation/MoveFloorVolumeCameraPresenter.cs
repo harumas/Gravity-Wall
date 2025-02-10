@@ -34,7 +34,7 @@ namespace Presentation
                 cam.AssignPlayerTransform(playerTransform, cameraController);
                 cam.IsEnabled.Skip(1).Subscribe(OnEnableChanged).AddTo(cam);
                 cam.Rotation.Skip(1).Subscribe(cameraController.SetCameraRotation).AddTo(cam);
-                cam.IsRotating.Skip(1).Subscribe(isRotating => playerController.IsRotationLocked = isRotating);
+                cam.IsRotating.Skip(1).Subscribe(isRotating => playerController.Component.PlayerRotator.Enabled = !isRotating);
 
                 respawnManager.IsRespawning.Skip(1).Subscribe(isRespawning =>
                 {

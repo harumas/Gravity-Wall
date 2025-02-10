@@ -3,12 +3,14 @@ using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using R3;
+using UnityEngine;
 
 namespace Module.InputModule
 {
     public class InputLocker
     {
-        public bool IsLocked { get; private set; } = false;
+        public ReadOnlyReactiveProperty<bool> IsLocked => isLocked;
+        private ReactiveProperty<bool> isLocked = new(false);
 
         private readonly List<ReadOnlyReactiveProperty<bool>> conditions = new();
 
@@ -24,7 +26,7 @@ namespace Module.InputModule
                 }
                 else
                 {
-                    IsLocked = true;
+                    isLocked.Value = true;
                 }
             }).AddTo(cancellationToken);
             
@@ -33,7 +35,7 @@ namespace Module.InputModule
         
         private void UpdateLockState()
         {
-            IsLocked = conditions.All(property => !property.CurrentValue);
+            isLocked.Value = conditions.Any(property => !property.CurrentValue);
         }
     }
 }

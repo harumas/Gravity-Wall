@@ -36,16 +36,18 @@ namespace Module.PlayTest
                 depth.aperture.value = defaultDepthAperture;
             }
 
-            await UniTask.Delay(TimeSpan.FromSeconds(endDelay), cancellationToken: destroyCancellationToken);
-
-            OnTutorialGuide().Forget();
+            if (tutorialCanvas != null)
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(endDelay), cancellationToken: destroyCancellationToken);
+                OnTutorialGuide().Forget();
+            }
         }
 
 
         private async UniTaskVoid OnTutorialGuide()
         {
             await UniTask.Delay(TimeSpan.FromSeconds(tutorialGuideDelay), cancellationToken: destroyCancellationToken);
-            
+
             fadeOutTween.Kill();
             FadeInCanvas();
         }

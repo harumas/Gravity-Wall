@@ -30,7 +30,7 @@ namespace Module.Effect.Sound
             Vector3 gravity = WorldGravity.Instance.Gravity;
             
             // 重力方向に一定速度以上で落下しているか
-            bool isFalling = !playerController.IsGrounding.CurrentValue && 
+            bool isFalling = !playerController.ControlEvent.IsGrounding.CurrentValue && 
                              Vector3.Dot(velocity, gravity) > 0 &&
                              velocity.sqrMagnitude >= minVelocity * minVelocity;
 

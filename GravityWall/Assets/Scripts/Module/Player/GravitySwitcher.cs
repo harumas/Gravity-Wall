@@ -47,7 +47,7 @@ namespace Module.Player
             rotateAngleChecker.Enable();
 
             //プレイヤーの回転が終わったらチェッカーを有効化する
-            playerController.IsRotating.Subscribe(value =>
+            playerController.ControlEvent.IsRotating.Subscribe(value =>
                 {
                     if (!value)
                     {
@@ -57,7 +57,7 @@ namespace Module.Player
                 .AddTo(this);
 
             //ジャンプ中はチェッカーを無効化する
-            playerController.IsJumping.Subscribe(value =>
+            playerController.ControlEvent.IsExternalForce.Subscribe(value =>
                 {
                     if (value)
                     {
@@ -68,7 +68,7 @@ namespace Module.Player
                 })
                 .AddTo(this);
 
-            playerController.OnMove.Subscribe(value => { lastMovement = value; }).AddTo(this);
+            playerController.ControlEvent.MoveVelocity.Subscribe(value => { lastMovement = value; }).AddTo(this);
         }
 
         public void OnMoveInput(Vector2 input)
@@ -101,7 +101,7 @@ namespace Module.Player
             angle = Mathf.Max(angle, Mathf.Epsilon);
 
             //角度が一定以下の場合は重力変更を行わない
-            if ((playerController.IsRotating.CurrentValue ||
+            if ((playerController.ControlEvent.IsRotating.CurrentValue ||
                  rotateAngleChecker.IsOverThreshold(angle) && !canRotateProperty.Value ||
                  rotateAngleChecker.TryThresholdCount(angle, isGrounding)) &&
                 isGrounding)

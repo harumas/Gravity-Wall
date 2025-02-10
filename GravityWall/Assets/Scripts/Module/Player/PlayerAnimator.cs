@@ -1,4 +1,5 @@
-﻿using PropertyGenerator.Generated;
+﻿using System;
+using PropertyGenerator.Generated;
 using R3;
 using UnityEngine;
 
@@ -16,46 +17,29 @@ namespace Module.Player
         private float currentSpeed;
         private float prevSpeed;
 
+        private void Awake()
+        {
+            playerController.Parameter.LandingTime = GetLandingTime();
+        }
+
         private void Start()
         {
-            playerController.SetLandingTime(GetLandingTime());
-
             // ジャンプのイベント登録
-            playerController.IsJumping.Subscribe(isJumping =>
-                {
-                    if (isJumping)
-                    {
-                        animator.IsJumping = true;
-                    }
-                })
-                .AddTo(this);
+            playerController.ControlEvent.IsGrounding.Subscribe(isGrounding =>
+            {
+                    animator.IsJumping = !isGrounding;
+            }).AddTo(this);
 
-            playerController.IsGrounding.Subscribe(isGrounding =>
-                {
-                    if (!isGrounding)
-                    {
-                        animator.IsJumping = true;
-                    }
-                })
-                .AddTo(this);
+            //playerController.ControlEvent.IsJumping.Subscribe(isJumping => { animator.IsJumping = isJumping; }).AddTo(this);
 
             // 回転のイベント登録
-            playerController.IsRotating.Subscribe(isRotating =>
-                {
-                    animator.IsRotating = isRotating;
-                })
+            playerController.ControlEvent.IsRotating.Subscribe(isRotating => { animator.IsRotating = isRotating; })
                 .AddTo(this);
 
-            playerController.OnMove.Subscribe(velocity =>
-                {
-                    currentSpeed = velocity.xv.magnitude;
-                })
+            playerController.ControlEvent.MoveVelocity.Subscribe(velocity => { currentSpeed = velocity.xv.magnitude; })
                 .AddTo(this);
 
-            playerController.IsDeath.Subscribe(isDeath =>
-                {
-                    animator.IsDeath = isDeath != DeathType.None;
-                })
+            playerController.ControlEvent.DeathState.Subscribe(isDeath => { animator.IsDeath = isDeath != DeathType.None; })
                 .AddTo(this);
 
             animator.LandingSpeed = landingSpeed;
@@ -72,17 +56,7 @@ namespace Module.Player
 
         private void OnAnimatorMove()
         {
-            UpdateGrounding();
             LerpMoveSpeed();
-        }
-
-        private void UpdateGrounding()
-        {
-            // 地面についたら着地モーションの再生
-            if (playerController.IsGrounding.CurrentValue && animator.IsJumping)
-            {
-                animator.IsJumping = false;
-            }
         }
 
         private void LerpMoveSpeed()

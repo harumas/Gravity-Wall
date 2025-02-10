@@ -36,7 +36,7 @@ namespace Presentation
                 cam.IsEnabled.Skip(1).Subscribe(OnEnableChanged).AddTo(cam);
                 cam.Rotation.Skip(1).Subscribe(cameraController.SetCameraRotation).AddTo(cam);
 
-                cam.IsRotating.Skip(1).Subscribe(isRotating => playerController.IsRotationLocked = isRotating);
+                cam.IsRotating.Skip(1).Subscribe(isRotating => playerController.Component.PlayerRotator.Enabled = !isRotating);
 
                 gameInput.CameraRotate.Skip(1).Subscribe(value => cam.EnableAdditionalRotate(value)).AddTo(cam);
 

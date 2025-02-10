@@ -60,10 +60,10 @@ namespace Application.Spawn
             isRespawning.Value = false;
         }
 
-        public void LockPlayer()
+        public void LockPlayer() 
         {
             playerTargetSyncer.Lock();
-            playerController.Refresh();
+            playerController.ResetPhysics();
             playerController.Lock();
             playerTargetSyncer.Reset();
             gravitySwitcher.Disable();
@@ -88,7 +88,7 @@ namespace Application.Spawn
             if (respawnContext.Velocity != Vector3.zero)
             {
                 float jumpingGravity = playerController.Parameter.JumpingGravity;
-                playerController.AddForce(respawnContext.Velocity, ForceMode.VelocityChange, jumpingGravity, false);
+                playerController.DoJump(respawnContext.Velocity, jumpingGravity);
             }
         }
     }

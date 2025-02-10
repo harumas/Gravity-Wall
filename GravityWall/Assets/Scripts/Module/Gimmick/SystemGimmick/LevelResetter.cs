@@ -27,6 +27,8 @@ namespace Module.Gimmick.SystemGimmick
     public class LevelResetter
     {
         [Header("リスポーン時に復元したいオブジェクト")] [SerializeField] private GameObject[] levelObjects;
+        
+        public event Action OnResetLevel;
 
         private readonly List<(GimmickObject gimmick, bool isEnable)> gimmicks = new List<(GimmickObject gimmick, bool enabled)>();
         private readonly List<TransformData> levelObjectTransforms = new List<TransformData>();
@@ -85,6 +87,8 @@ namespace Module.Gimmick.SystemGimmick
                     gimmick.Disable(false);
                 }
             }
+            
+            OnResetLevel?.Invoke();
         }
     }
 }

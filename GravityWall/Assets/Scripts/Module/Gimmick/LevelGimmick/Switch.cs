@@ -54,15 +54,22 @@ namespace Module.Gimmick.LevelGimmick
         {
             SoundManager.Instance.Play(SoundKey.Switch, MixerType.SE);
             meshRenderer.material.SetFloat(emissionIntensity, 1.0f);
-            RayMeshRenderer.material.SetInt(powerOn, 0);
+            if (RayMeshRenderer != null)
+            {
+                RayMeshRenderer.material.SetInt(powerOn, 0);
+            }
+
             isEnabled.Value = true;
         }
 
         public override void Disable(bool doEffect = true)
         {
-            //offEvent.Invoke();
             meshRenderer.material.SetFloat(emissionIntensity, 0f);
-            RayMeshRenderer.material.SetInt(powerOn, 1);
+            if (RayMeshRenderer != null)
+            {
+                RayMeshRenderer.material.SetInt(powerOn, 1);
+            }
+
             isEnabled.Value = false;
         }
 

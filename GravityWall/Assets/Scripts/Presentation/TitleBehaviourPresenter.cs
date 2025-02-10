@@ -8,6 +8,7 @@ using Module.Config;
 using Module.InputModule;
 using Module.Player;
 using R3;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using VContainer;
 using VContainer.Unity;

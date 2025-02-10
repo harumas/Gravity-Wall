@@ -24,7 +24,7 @@ namespace Module.Player
         public PlayerVibrationPresenter(PlayerController playerController, VibrationParameter parameter, GamepadVibrator gamepadVibrator)
         {
             // 死亡イベント
-            playerController.IsDeath
+            playerController.ControlEvent.DeathState
                 .Subscribe(value =>
                 {
                     if (value != DeathType.None)
@@ -36,12 +36,12 @@ namespace Module.Player
                 .AddTo(playerController);
 
             // 回転角度更新
-            playerController.RotationAngle
+            playerController.ControlEvent.RotatingAngle
                 .Subscribe(value => { lastRotationAngle = value; })
                 .AddTo(playerController);
 
             // 開店イベント
-            playerController.IsRotating
+            playerController.ControlEvent.IsRotating
                 .Subscribe(value =>
                 {
                     // 回転中で一定時間経過している場合バイブレーション
