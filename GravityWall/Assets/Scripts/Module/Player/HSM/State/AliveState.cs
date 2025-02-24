@@ -4,6 +4,9 @@ using R3;
 
 namespace Module.Player.HSM
 {
+    /// <summary>
+    /// 生存状態を表すステート
+    /// </summary>
     public class AliveState : StateMachine.State
     {
         private readonly PlayerControlEvent controlEvent;

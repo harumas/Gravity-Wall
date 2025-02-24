@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Module.Player.HSM
 {
+    /// <summary>
+    /// 落下状態を表すステート
+    /// </summary>
     public class FallingState : StateMachine.State
     {
         public FallingState()

@@ -4,24 +4,24 @@ using UnityEngine;
 
 namespace Module.Player.HSM
 {
+    /// <summary>
+    /// ジャンプ中を表すステート
+    /// </summary>
     public class JumpingState : StateMachine.State
     {
         private readonly InputEventAdapter inputAdapter;
         private readonly PlayerControlParameter parameter;
-        private readonly PlayerControlEvent controlEvent;
         private readonly PlayerControlContext controlContext;
         private readonly PlayerComponent component;
 
         public JumpingState(
             InputEventAdapter inputAdapter,
             PlayerControlParameter parameter,
-            PlayerControlEvent controlEvent,
             PlayerControlContext controlContext,
             PlayerComponent component) 
         {
             this.inputAdapter = inputAdapter;
             this.parameter = parameter;
-            this.controlEvent = controlEvent;
             this.controlContext = controlContext;
             this.component = component;
         }
@@ -40,6 +40,7 @@ namespace Module.Player.HSM
 
         internal override void UpdatePhysics()
         {
+            // ジャンプボタン長押しでジャンプ力を加算
             if (inputAdapter.Jump.CurrentValue)
             {
                 PerformAdditionalJump();

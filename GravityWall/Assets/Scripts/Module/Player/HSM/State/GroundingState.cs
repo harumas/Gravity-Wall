@@ -6,13 +6,15 @@ using UnityEngine;
 
 namespace Module.Player.HSM
 {
+    /// <summary>
+    /// 着地状態を表すステート
+    /// </summary>
     public class GroundingState : StateMachine.State
     {
         private readonly InputEventAdapter inputAdapter;
         private readonly PlayerControlEvent controlEvent;
         private readonly PlayerComponent component;
         private readonly PlayerControlParameter parameter;
-        private readonly SimpleInertia simpleInertia;
         private Vector2 moveInput;
 
         private const int GroundLayerMask = Layer.Mask.Base | Layer.Mask.Gravity | Layer.Mask.IgnoreGravity | Layer.Mask.IgnoreGimmick;
@@ -27,8 +29,6 @@ namespace Module.Player.HSM
             this.controlEvent = controlEvent;
             this.component = component;
             this.parameter = parameter;
-
-            simpleInertia = component.ManualInertia;
         }
 
         internal override void OnEnter()
@@ -56,6 +56,7 @@ namespace Module.Player.HSM
         {
             if (controlEvent.CanJump.Value)
             {
+                // 着地状態を更新する
                 if (!IsGround())
                 {
                     controlEvent.IsGrounding.Value = false;
@@ -63,15 +64,14 @@ namespace Module.Player.HSM
             }
             else
             {
+                // ジャンプ可能状態を更新する
                 if (IsGround())
                 {
                     controlEvent.CanJump.Value = true;
                 }
             }
 
-            // 移動
             component.PlayerMovement.PerformMove(moveInput, 1f);
-
             component.PlayerRotator.Update();
         }
 

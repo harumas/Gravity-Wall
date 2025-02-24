@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace Module.Player.HSM
 {
+    /// <summary>
+    /// ジャンプ待機ステート
+    /// </summary>
     public class StandbyJumpState : StateMachine.State
     {
         private readonly InputEventAdapter inputAdapter;
@@ -59,6 +62,7 @@ namespace Module.Player.HSM
 
         private void OnJumpInput()
         {
+            // ジャンプ可能であれば力を加える
             if (CanJump())
             {
                 PerformJump();

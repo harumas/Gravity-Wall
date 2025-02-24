@@ -60,11 +60,10 @@ namespace Application.Spawn
             isRespawning.Value = false;
         }
 
-        public void LockPlayer() 
+        public void LockPlayer()
         {
             playerTargetSyncer.Lock();
-            playerController.ResetPhysics();
-            playerController.Lock();
+            playerController.Lock(RigidbodyConstraints.FreezeRotation, true);
             playerTargetSyncer.Reset();
             gravitySwitcher.Disable();
             cameraController.SetFreeCamera(false);

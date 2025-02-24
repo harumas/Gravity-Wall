@@ -83,8 +83,7 @@ namespace Module.Gimmick.SystemGimmick
             cameraController.SetFreeCamera(false);
             cameraController.SetCameraRotation(target.rotation);
 
-            playerController.ResetPhysics();
-            playerController.Lock(constraintsFlag);
+            playerController.Lock(constraintsFlag, true);
             gravitySwitcher.Disable();
             playerTargetSyncer.Lock();
 

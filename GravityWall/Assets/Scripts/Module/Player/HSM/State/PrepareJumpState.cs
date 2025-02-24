@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Module.Player.HSM
 {
+    /// <summary>
+    /// ジャンプの準備ステート
+    /// </summary>
     public class PrepareJumpState : StateMachine.State
     {
         private readonly InputEventAdapter inputAdapter;
@@ -28,6 +31,7 @@ namespace Module.Player.HSM
 
         internal override void OnEnter()
         {
+            // 着地時間を記録
             groundTime = Time.time;
         }
 
@@ -41,6 +45,7 @@ namespace Module.Player.HSM
 
         internal override void UpdatePhysics()
         {
+            // ジャンプ可能かチェック
             if (CanJumpAgain())
             {
                 inputAdapter.Jump.Value = false;

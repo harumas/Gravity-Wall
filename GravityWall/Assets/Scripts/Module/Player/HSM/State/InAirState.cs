@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace Module.Player.HSM
 {
+    /// <summary>
+    /// 空中状態を表すステート
+    /// </summary>
     public class InAirState : StateMachine.State
     {
         private readonly InputEventAdapter inputAdapter;
@@ -29,6 +32,8 @@ namespace Module.Player.HSM
 
         internal override void OnEnter()
         {
+            controlEvent.IsExternalForce.Value = true;
+            
             inputAdapter.Move
                 .Subscribe(move => moveInput = move)
                 .AddTo(CancellationToken);
@@ -45,13 +50,16 @@ namespace Module.Player.HSM
 
         internal override void UpdatePhysics()
         {
+            // 移動
             component.PlayerMovement.PerformMove(moveInput, parameter.AirControl);
 
+            // 着地判定
             if (CanGroundingAgain(parameter.LandingTime))
             {
                 controlEvent.IsGrounding.Value = true;
             }
 
+            // 外部から力を加えられたら重力を調整する
             if (controlEvent.IsExternalForce.Value)
             {
                 AdjustGravity();

@@ -32,18 +32,18 @@ namespace Module.Player
 
         private void Start()
         {
-            controlContext = new PlayerControlContext(playerComponent);
+            controlContext = new PlayerControlContext(playerComponent, controlEvent);
             playerComponent.PlayerRotator = new PlayerRotator(parameter, controlContext, controlEvent, playerComponent);
             playerComponent.PlayerMovement = new PlayerMovement(parameter, controlEvent, controlContext, playerComponent);
 
             stateMachine = new StateMachine();
 
             AliveState aliveState = new AliveState(controlEvent, Component);
-            DeathState deathState = new DeathState();
+            DeathState deathState = new DeathState(controlContext);
             GroundingState groundingState = new GroundingState(inputEventAdapter, controlEvent, playerComponent, parameter);
             InAirState inAirState = new InAirState(inputEventAdapter, parameter, controlEvent, controlContext, playerComponent);
             StandbyJumpState standbyJumpState = new StandbyJumpState(inputEventAdapter, parameter, controlContext, playerComponent, controlEvent);
-            JumpingState jumpingState = new JumpingState(inputEventAdapter, parameter, controlEvent, controlContext, playerComponent);
+            JumpingState jumpingState = new JumpingState(inputEventAdapter, parameter, controlContext, playerComponent);
             PrepareJumpState prepareJumpState = new PrepareJumpState(inputEventAdapter, playerComponent, parameter, controlEvent);
             FallingState fallingState = new FallingState();
 
@@ -102,9 +102,8 @@ namespace Module.Player
         public void DoJump(Vector3 force, float forcedGravity)
         {
             // 着地フラグを更新する
-            controlEvent.IsExternalForce.Value = true;
             controlEvent.IsGrounding.Value = false;
-            
+
             // ジャンプ力を加える
             controlContext.AddForce(force, ForceMode.VelocityChange, forcedGravity);
         }
@@ -113,19 +112,6 @@ namespace Module.Player
         {
             // 死亡状態を設定
             ControlEvent.DeathState.Value = type;
-            ResetPhysics();
-        }
-
-        /// <summary>
-        /// プレイヤーの物理状態をリセットします
-        /// </summary>
-        public void ResetPhysics()
-        {
-            controlEvent.IsExternalForce.Value = false;
-            controlEvent.CanJump.Value = false;
-            playerComponent.RigidBody.velocity = Vector3.zero;
-            controlEvent.MoveVelocity.Value = (Vector3.zero, Vector3.zero);
-            playerComponent.ManualInertia.SetInertia(Vector3.zero);
         }
 
         /// <summary>
@@ -139,11 +125,17 @@ namespace Module.Player
         /// <summary>
         /// プレイヤーの動きをロックします
         /// </summary>
-        public void Lock(RigidbodyConstraints freezeOption = RigidbodyConstraints.FreezeRotation)
+        public void Lock(RigidbodyConstraints freezeOption = RigidbodyConstraints.FreezeRotation, bool resetPhysics = false)
         {
+            if (resetPhysics)
+            {
+                controlContext.ResetPhysics();
+            }
+
             ControlEvent.LockState.Value = true;
             playerComponent.RigidBody.constraints = freezeOption;
         }
+
 
         /// <summary>
         /// プレイヤーのロックを解除します
