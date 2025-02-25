@@ -42,6 +42,7 @@ namespace Module.Player
         public float RotateTime => rotateTime;
         public float EasingOffset => easingOffset;
         public float RotatingAngle => rotatingAngle;
+        public float LandingTime { get; set; }
 
         public float GetAdditionalJumpPower(float time)
         {

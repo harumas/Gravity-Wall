@@ -49,7 +49,7 @@ namespace Module.PlayAnalyze.EmotionAnalyzer
 
         public void SetEmotionRate(Emotion emotion, float rate)
         {
-            string text = $"{emotion.ToString()}: {rate}%";
+            string text = $"{emotion.ToString()}: {Mathf.RoundToInt(rate)}%";
             switch (emotion)
             {
                 case Emotion.Happy:

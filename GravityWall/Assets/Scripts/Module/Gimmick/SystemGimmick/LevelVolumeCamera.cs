@@ -30,7 +30,7 @@ namespace Module.Gimmick.SystemGimmick
 
         private CinemachineBrain cameraBrain;
         private CameraController cameraController;
-        private VerticalAdjuster verticalAdjuster;
+        private VerticalAdjuster3d verticalAdjuster3d;
         private Transform playerTransform;
         private Vector3 currentUpVector;
 
@@ -43,8 +43,8 @@ namespace Module.Gimmick.SystemGimmick
         public void SetDirection(Vector3 direction)
         {
             //カメラに一番近い前方ベクトルを取得
-            Vector3 forward = verticalAdjuster.GetNearestDirection(direction);
-            currentUpVector = verticalAdjuster.GetVerticalDirection(playerTransform.up);
+            Vector3 forward = verticalAdjuster3d.GetNearestDirection(direction);
+            currentUpVector = verticalAdjuster3d.GetVerticalDirection(playerTransform.up);
 
             //カメラの前方ベクトルにバーチャルカメラの基準を設定
             cameraPivot.rotation = Quaternion.LookRotation(forward, currentUpVector);
@@ -52,7 +52,7 @@ namespace Module.Gimmick.SystemGimmick
 
         private void Start()
         {
-            verticalAdjuster = new VerticalAdjuster(virtualCamera.transform);
+            verticalAdjuster3d = new VerticalAdjuster3d(virtualCamera.transform);
             cameraBrain = Camera.main.GetComponent<CinemachineBrain>();
         }
 
@@ -76,7 +76,7 @@ namespace Module.Gimmick.SystemGimmick
                 return;
             }
 
-            Vector3 direction = verticalAdjuster.GetVerticalDirection(playerTransform.up);
+            Vector3 direction = verticalAdjuster3d.GetVerticalDirection(playerTransform.up);
 
             //90度になったらカメラの向きを変える
             if (direction != Vector3.zero && direction != currentUpVector)

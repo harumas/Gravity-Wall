@@ -13,9 +13,11 @@ namespace CoreModule.Save
     {
         public T Data { get; private set; }
         public Observable<T> OnSaved => onSaved;
+        public Observable<T> OnReset => onReset;
         
         private T defaultSaveData;
         private readonly Subject<T> onSaved = new Subject<T>();
+        private readonly Subject<T> onReset = new Subject<T>();
         
         public void Initialize(T data, T defaultSaveData)
         {
@@ -37,6 +39,8 @@ namespace CoreModule.Save
             string name = typeof(T).Name;
             SaveUtility.Delete(name);
             Data = defaultSaveData.Clone();
+            
+            onReset.OnNext(Data);
         }
 
         /// <summary>

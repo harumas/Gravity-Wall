@@ -232,7 +232,7 @@ namespace Module.Gimmick.LevelGimmick
 
         private void OnCollisionExit(Collision other)
         {
-            if (!other.gameObject.TryGetComponent(out IPushable _))
+            if (!other.gameObject.TryGetComponent(out SimpleInertia inertia))
             {
                 return;
             }
@@ -244,7 +244,7 @@ namespace Module.Gimmick.LevelGimmick
                 if (isEnabled.Value)
                 {
                     //コリジョンから離れる時は、慣性を付与する
-                    pushement.AddInertia(moveDelta);
+                    inertia.AddInertia(moveDelta);
                 }
 
                 pushement = null;

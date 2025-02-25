@@ -1,19 +1,20 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Module.Player
 {
     /// <summary>
     /// 簡易的な慣性を表すクラス
     /// </summary>
-    public class SimpleInertia
+    public class SimpleInertia : MonoBehaviour
     {
-        private readonly Rigidbody rigidbody;
+        private Rigidbody rigidbody;
 
         private Vector3 inertia;
 
-        public SimpleInertia(Rigidbody rigidbody)
+        private void Start()
         {
-            this.rigidbody = rigidbody;
+            rigidbody = GetComponent<Rigidbody>();
         }
 
         public void PerformInertia()
@@ -28,11 +29,21 @@ namespace Module.Player
 
         public void AddInertia(Vector3 inertia)
         {
+            if (!enabled)
+            {
+                return;
+            }
+
             this.inertia += inertia;
         }
 
         public void SetInertia(Vector3 inertia)
         {
+            if (!enabled)
+            {
+                return;
+            }
+
             this.inertia = inertia;
         }
     }

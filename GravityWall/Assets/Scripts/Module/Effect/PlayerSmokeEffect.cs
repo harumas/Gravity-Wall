@@ -20,7 +20,7 @@ namespace Module.Effect
 
         private void Start()
         {
-            playerController.IsJumping.Subscribe(isJumping =>
+            playerController.ControlEvent.IsExternalForce.Subscribe(isJumping =>
             {
                 if (isJumping)
                 {
@@ -75,12 +75,12 @@ namespace Module.Effect
             (Vector3 vx, Vector3 vy) = GetMovement();
             bool isMoving = vx != Vector3.zero || vy != Vector3.zero;
             
-            return !playerController.IsJumping.CurrentValue && isMoving;
+            return !playerController.ControlEvent.IsExternalForce.CurrentValue && isMoving;
         }
 
         private (Vector3 xv, Vector3 yv) GetMovement()
         {
-            return playerController.OnMove.CurrentValue;
+            return playerController.ControlEvent.MoveVelocity.CurrentValue;
         }
     }
 }

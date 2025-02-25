@@ -23,7 +23,7 @@ namespace Presentation
         private readonly InputBinding keyboardBinding = InputBinding.MaskByGroup("Keyboard");
         private readonly InputBinding gamepadBinding = InputBinding.MaskByGroup("Gamepad");
 
-        private readonly ConfigData configData;
+        private ConfigData configData;
         private readonly InputAction lookAction;
 
         [Inject]

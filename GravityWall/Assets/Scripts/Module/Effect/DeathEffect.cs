@@ -23,7 +23,7 @@ namespace Module.Effect
 
         private void Start()
         {
-            playerController.IsDeath.Subscribe(isDeath =>
+            playerController.ControlEvent.DeathState.Subscribe(isDeath =>
             {
                 // 死亡状態になったらエフェクトを再生
                 if (isDeath != DeathType.None)

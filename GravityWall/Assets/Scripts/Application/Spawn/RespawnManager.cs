@@ -63,8 +63,7 @@ namespace Application.Spawn
         public void LockPlayer()
         {
             playerTargetSyncer.Lock();
-            playerController.Refresh();
-            playerController.Lock();
+            playerController.Lock(RigidbodyConstraints.FreezeRotation, true);
             playerTargetSyncer.Reset();
             gravitySwitcher.Disable();
             cameraController.SetFreeCamera(false);
@@ -88,7 +87,7 @@ namespace Application.Spawn
             if (respawnContext.Velocity != Vector3.zero)
             {
                 float jumpingGravity = playerController.Parameter.JumpingGravity;
-                playerController.AddForce(respawnContext.Velocity, ForceMode.VelocityChange, jumpingGravity, false);
+                playerController.DoJump(respawnContext.Velocity, jumpingGravity);
             }
         }
     }

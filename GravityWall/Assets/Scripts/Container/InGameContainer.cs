@@ -115,7 +115,8 @@ namespace Container
             {
                 RegisterReusableComponent<SavePoint>(builder),
                 RegisterReusableComponent<DeathFloor>(builder),
-                RegisterReusableComponent<LevelVolumeCamera>(builder)
+                RegisterReusableComponent<LevelVolumeCamera>(builder),
+                RegisterReusableComponent<MoveFloorVolumeCamera>(builder)
             };
 
             builder.RegisterInstance(reusableComponents).As<IReadOnlyList<IReusableComponent>>();

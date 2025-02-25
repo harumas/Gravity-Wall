@@ -16,7 +16,7 @@ namespace Module.Effect.Sound
         void Start()
         {
             // 回転のイベント登録
-            playerController.IsRotating.Subscribe(isRotating =>
+            playerController.ControlEvent.IsRotating.Subscribe(isRotating =>
                 {
                     // 再生にクールダウンを設ける
                     if (lastPlayTime + playInterval > Time.time)
@@ -33,7 +33,7 @@ namespace Module.Effect.Sound
                 .AddTo(this);
 
             // ジャンプのイベント登録
-            playerController.IsJumping.Subscribe(isJumping =>
+            playerController.ControlEvent.IsExternalForce.Subscribe(isJumping =>
                 {
                     if (isJumping)
                     {

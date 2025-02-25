@@ -14,8 +14,8 @@ namespace Module.PlayTest
         [SerializeField] private CanvasGroup tutorialCanvas;
         [SerializeField] private float tutorialGuideDelay = 4.5f;
 
+        private Tweener fadeInTween;
         private Tweener fadeOutTween;
-
 
         private async UniTaskVoid OnTutorialGuide()
         {
@@ -37,18 +37,24 @@ namespace Module.PlayTest
         {
             if (other.CompareTag(Tag.Player))
             {
-                fadeOutTween = FadeOutCanvas();
+                FadeOutCanvas();
             }
         }
 
         private void FadeInCanvas()
         {
-            DOTween.To(() => tutorialCanvas.alpha, (v) => tutorialCanvas.alpha = v, 1, 1.0f);
+            fadeInTween = DOTween.To(() => tutorialCanvas.alpha, (v) => tutorialCanvas.alpha = v, 1, 1.0f);
         }
 
-        private Tweener FadeOutCanvas()
+        private void FadeOutCanvas()
         {
-            return DOTween.To(() => tutorialCanvas.alpha, (v) => tutorialCanvas.alpha = v, 0, 1.0f);
+            fadeOutTween = DOTween.To(() => tutorialCanvas.alpha, (v) => tutorialCanvas.alpha = v, 0, 1.0f);
+        }
+
+        private void OnDestroy()
+        {
+            fadeInTween?.Kill();
+            fadeOutTween?.Kill();
         }
     }
 }

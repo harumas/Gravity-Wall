@@ -15,7 +15,7 @@ namespace Application.SceneManagement
     public class AdditiveSceneLoader
     {
         private readonly List<string> additiveScenes = new List<string>(16);
-        private const int AdditiveLoadIntervalFrames = 5;
+        private const int AdditiveLoadIntervalFrames = 1;
 
         /// <summary>
         /// 追加シーン読み込みを一括で行います
@@ -32,7 +32,7 @@ namespace Application.SceneManagement
             int loadCount = 0;
             bool onMainSceneLoaded = false;
 
-            // 数フレームおきに追加シーンを読み込む
+            // 1フレームおきに追加シーンを読み込む
             await foreach ((SceneField sceneField, AsyncOperation operation) context in loadStream.WithCancellation(cancellationToken))
             {
                 loadCount++;

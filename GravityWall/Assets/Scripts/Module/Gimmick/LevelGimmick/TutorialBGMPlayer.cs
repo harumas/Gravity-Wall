@@ -1,3 +1,4 @@
+using System;
 using Constants;
 using DG.Tweening;
 using Module.Gravity;
@@ -78,6 +79,11 @@ namespace Module.Gimmick.LevelGimmick
             }
 
             return Vector3.forward;
+        }
+
+        private void OnDestroy()
+        {
+            tween?.Kill();
         }
     }
 }

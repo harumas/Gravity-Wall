@@ -142,7 +142,7 @@ namespace Module.PlayAnalyze
             if (controller != null)
             {
                 // 回転イベント
-                controller.IsRotating.Subscribe(value =>
+                controller.ControlEvent.IsRotating.Subscribe(value =>
                 {
                     if (value)
                     {
@@ -151,7 +151,7 @@ namespace Module.PlayAnalyze
                 }).AddTo(cancellationTokenSource.Token);
 
                 // 死亡イベント
-                controller.IsDeath.Subscribe(value =>
+                controller.ControlEvent.DeathState.Subscribe(value =>
                 {
                     if (value != DeathType.None)
                     {

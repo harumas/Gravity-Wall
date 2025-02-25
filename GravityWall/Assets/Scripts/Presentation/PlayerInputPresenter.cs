@@ -1,5 +1,7 @@
-﻿using Module.InputModule;
+﻿using System;
+using Module.InputModule;
 using Module.Player;
+using Module.Player.HSM;
 using R3;
 using UnityEngine;
 using VContainer;
@@ -10,8 +12,10 @@ namespace Presentation
     /// <summary>
     /// プレイヤー入力を接続するクラス
     /// </summary>
-    public class PlayerInputPresenter : IInitializable
+    public class PlayerInputPresenter : IInitializable, IDisposable
     {
+        private readonly InputEventAdapter adapter;
+
         [Inject]
         public PlayerInputPresenter(
             IGameInput gameInput,
@@ -22,60 +26,62 @@ namespace Presentation
             GravitySwitcher gravitySwitcher
         )
         {
-            var lockProperty = playerController.IsDeath.Select(value => value == DeathType.None).ToReadOnlyReactiveProperty();
+            var lockProperty = playerController.ControlEvent.LockState.Select(value => !value).ToReadOnlyReactiveProperty();
             inputLocker.AddCondition(lockProperty, playerController.destroyCancellationToken);
 
-            gameInput.Move
-                .Subscribe(moveInput =>
+            adapter = new InputEventAdapter(
+                gameInput,
+                gameInput.Move.Where(_ => !inputLocker.IsLocked.CurrentValue),
+                gameInput.Jump.Where(_ => !inputLocker.IsLocked.CurrentValue),
+                gameInput.LookDelta.Where(_ => !inputLocker.IsLocked.CurrentValue)
+            );
+
+            inputLocker.IsLocked
+                .Subscribe(isLocked =>
                 {
-                    if (!inputLocker.IsLocked)
+                    if (!isLocked)
                     {
-                        playerController.OnMoveInput(moveInput);
+                        adapter.Sync();
                     }
                 })
                 .AddTo(playerController);
 
-            gameInput.Jump
-                .Subscribe(isStarted =>
+            playerController.ControlEvent.DeathState
+                .Subscribe(deathType =>
                 {
-                    if (!inputLocker.IsLocked)
+                    if (deathType != DeathType.None)
                     {
-                        if (isStarted)
-                        {
-                            playerController.OnJumpStart();
-                        }
-                        else
-                        {
-                            playerController.OnJumpEnd();
-                        }
+                        adapter.Sync();
                     }
                 })
                 .AddTo(playerController);
 
-            gameInput.LookDelta
+            playerController.SetInputAdapter(adapter);
+
+            adapter.LookDelta
                 .Subscribe(lookInput =>
                 {
-                    if (!inputLocker.IsLocked)
+                    if (!inputLocker.IsLocked.CurrentValue)
                     {
                         cameraController.OnRotateCameraInput(lookInput);
                     }
                 })
                 .AddTo(cameraController);
 
-            gameInput.Move
+            adapter.Move
                 .Subscribe(moveInput =>
                 {
-                    if (!inputLocker.IsLocked)
+                    if (!inputLocker.IsLocked.CurrentValue)
                     {
                         playerTargetSyncer.OnMoveInput(moveInput);
                     }
                 })
                 .AddTo(playerTargetSyncer);
 
-            gameInput.Move
+            adapter.Move
                 .Subscribe(moveInput =>
                 {
-                    if (!inputLocker.IsLocked)
+                    if (!inputLocker.IsLocked.CurrentValue)
                     {
                         gravitySwitcher.OnMoveInput(moveInput);
                     }
@@ -85,6 +91,11 @@ namespace Presentation
 
         public void Initialize()
         {
+        }
+
+        public void Dispose()
+        {
+            adapter.Dispose();
         }
     }
 }
